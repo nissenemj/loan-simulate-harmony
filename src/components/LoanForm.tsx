@@ -9,6 +9,7 @@ import { Loan, LoanType, InterestType } from '@/utils/loanCalculations';
 import { PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LoanFormProps {
   onAddLoan: (loan: Loan) => void;
@@ -16,6 +17,7 @@ interface LoanFormProps {
 
 const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [interestRate, setInterestRate] = useState('');
@@ -38,8 +40,8 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
   const validateForm = (): boolean => {
     if (!name.trim()) {
       toast({
-        title: "Loan name is required",
-        description: "Please enter a name for the loan",
+        title: t('validation.nameRequired'),
+        description: t('validation.nameRequiredDesc'),
         variant: "destructive",
       });
       return false;
@@ -47,8 +49,8 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     
     if (!amount || parseFloat(amount) <= 0) {
       toast({
-        title: "Invalid loan amount",
-        description: "Please enter a positive number for loan amount",
+        title: t('validation.invalidAmount'),
+        description: t('validation.invalidAmountDesc'),
         variant: "destructive",
       });
       return false;
@@ -56,8 +58,8 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     
     if (!interestRate || parseFloat(interestRate) <= 0) {
       toast({
-        title: "Invalid interest rate",
-        description: "Please enter a positive number for interest rate",
+        title: t('validation.invalidRate'),
+        description: t('validation.invalidRateDesc'),
         variant: "destructive",
       });
       return false;
@@ -65,8 +67,8 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     
     if (!termYears || parseInt(termYears) <= 0) {
       toast({
-        title: "Invalid loan term",
-        description: "Please enter a positive number for loan term in years",
+        title: t('validation.invalidTerm'),
+        description: t('validation.invalidTermDesc'),
         variant: "destructive",
       });
       return false;
@@ -93,11 +95,6 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     
     onAddLoan(newLoan);
     resetForm();
-    
-    toast({
-      title: "Loan Added",
-      description: `${name.trim()} has been added to your loans`,
-    });
   };
   
   return (
@@ -110,17 +107,17 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
         )}
       >
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl sm:text-2xl font-medium text-center">Add New Loan</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl font-medium text-center">{t('form.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pb-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-sm font-medium">
-                Loan Name
+                {t('form.name')}
               </Label>
               <Input
                 id="name"
-                placeholder="e.g., Car Loan, Mortgage"
+                placeholder={t('form.name.placeholder')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -131,14 +128,14 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-sm font-medium">
-                Loan Amount (€)
+                {t('form.amount')}
               </Label>
               <Input
                 id="amount"
                 type="number"
                 min="0"
                 step="100"
-                placeholder="e.g., 10000"
+                placeholder={t('form.amount.placeholder')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -152,14 +149,14 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="interestRate" className="text-sm font-medium">
-                Annual Interest Rate (%)
+                {t('form.interest')}
               </Label>
               <Input
                 id="interestRate"
                 type="number"
                 min="0"
                 step="0.01"
-                placeholder="e.g., 3.5"
+                placeholder={t('form.interest.placeholder')}
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -170,14 +167,14 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="termYears" className="text-sm font-medium">
-                Loan Term (years)
+                {t('form.term')}
               </Label>
               <Input
                 id="termYears"
                 type="number"
                 min="1"
                 step="1"
-                placeholder="e.g., 5"
+                placeholder={t('form.term.placeholder')}
                 value={termYears}
                 onChange={(e) => setTermYears(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -191,7 +188,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="repaymentType" className="text-sm font-medium">
-                Repayment Type
+                {t('form.repaymentType')}
               </Label>
               <Select
                 value={repaymentType}
@@ -205,9 +202,9 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                   <SelectValue placeholder="Select repayment type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="annuity">Annuity</SelectItem>
-                  <SelectItem value="equal-principal">Equal Principal</SelectItem>
-                  <SelectItem value="fixed-installment">Fixed Installment</SelectItem>
+                  <SelectItem value="annuity">{t('repayment.annuity')}</SelectItem>
+                  <SelectItem value="equal-principal">{t('repayment.equalPrincipal')}</SelectItem>
+                  <SelectItem value="fixed-installment">{t('repayment.fixedInstallment')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -215,7 +212,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             {needsInterestType && (
               <div className="space-y-2">
                 <Label htmlFor="interestType" className="text-sm font-medium">
-                  Interest Type
+                  {t('form.interestType')}
                 </Label>
                 <Select
                   value={interestType}
@@ -229,8 +226,8 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                     <SelectValue placeholder="Select interest type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="fixed">Fixed</SelectItem>
-                    <SelectItem value="variable-euribor">Variable - Euribor</SelectItem>
+                    <SelectItem value="fixed">{t('interest.fixed')}</SelectItem>
+                    <SelectItem value="variable-euribor">{t('interest.variableEuribor')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -243,7 +240,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
           >
             <PlusCircle size={18} />
-            <span>Add Loan</span>
+            <span>{t('form.addButton')}</span>
           </Button>
         </CardFooter>
       </Card>

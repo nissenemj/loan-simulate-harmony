@@ -15,6 +15,7 @@ import { ArrowDown, ArrowUp, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import AnimatedNumber from './AnimatedNumber';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LoanTableProps {
   loans: Loan[];
@@ -30,6 +31,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
   onToggleLoan,
   highestTotalInterestId 
 }) => {
+  const { t } = useLanguage();
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   
@@ -79,9 +81,9 @@ const LoanTable: React.FC<LoanTableProps> = ({
   
   const getRepaymentTypeLabel = (type: string): string => {
     switch (type) {
-      case 'annuity': return 'Annuity';
-      case 'equal-principal': return 'Equal Principal';
-      case 'fixed-installment': return 'Fixed Installment';
+      case 'annuity': return t('repayment.annuity');
+      case 'equal-principal': return t('repayment.equalPrincipal');
+      case 'fixed-installment': return t('repayment.fixedInstallment');
       default: return type;
     }
   };
@@ -89,7 +91,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
   if (loans.length === 0) {
     return (
       <div className="mt-6 text-center p-8 bg-white/50 rounded-lg shadow-subtle">
-        <p className="text-muted-foreground">No loans added yet. Add your first loan using the form above.</p>
+        <p className="text-muted-foreground">{t('table.noLoans')}</p>
       </div>
     );
   }
@@ -100,13 +102,13 @@ const LoanTable: React.FC<LoanTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary/50">
-              <TableHead>Loan Name</TableHead>
+              <TableHead>{t('table.name')}</TableHead>
               <TableHead 
                 className="cursor-pointer hover:bg-secondary/80 transition-colors"
                 onClick={() => handleSort('monthlyPayment')}
               >
                 <div className="flex items-center gap-1">
-                  Monthly Payment
+                  {t('table.payment')}
                   {sortField === 'monthlyPayment' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
@@ -117,7 +119,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
                 onClick={() => handleSort('interestRate')}
               >
                 <div className="flex items-center gap-1">
-                  Interest Rate
+                  {t('table.interest')}
                   {sortField === 'interestRate' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
@@ -128,15 +130,15 @@ const LoanTable: React.FC<LoanTableProps> = ({
                 onClick={() => handleSort('totalInterest')}
               >
                 <div className="flex items-center gap-1">
-                  Total Interest
+                  {t('table.totalInterest')}
                   {sortField === 'totalInterest' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
                 </div>
               </TableHead>
-              <TableHead>Term</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Active</TableHead>
+              <TableHead>{t('table.term')}</TableHead>
+              <TableHead>{t('table.type')}</TableHead>
+              <TableHead className="text-right">{t('table.active')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -183,7 +185,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
                       className={isHighestInterest ? "text-destructive font-medium" : ""}
                     />
                   </TableCell>
-                  <TableCell>{loan.termYears} {loan.termYears === 1 ? 'year' : 'years'}</TableCell>
+                  <TableCell>{loan.termYears} {loan.termYears === 1 ? t('table.year') : t('table.years')}</TableCell>
                   <TableCell>{getRepaymentTypeLabel(loan.repaymentType)}</TableCell>
                   <TableCell className="text-right">
                     <Switch

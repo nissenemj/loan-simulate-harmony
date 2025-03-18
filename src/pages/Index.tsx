@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import LoanForm from '@/components/LoanForm';
 import LoanTable from '@/components/LoanTable';
 import LoanSummary from '@/components/LoanSummary';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { Loan, calculateLoan } from '@/utils/loanCalculations';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [loans, setLoans] = useState<Loan[]>([]);
   const [highestTotalInterestId, setHighestTotalInterestId] = useState<string | undefined>(undefined);
   
@@ -38,8 +41,8 @@ const Index = () => {
   const handleAddLoan = (loan: Loan) => {
     setLoans(prevLoans => [...prevLoans, loan]);
     toast({
-      title: "Loan Added",
-      description: `${loan.name} has been added to your loans`,
+      title: t('toast.loanAdded'),
+      description: t('toast.loanAddedDesc').replace('{name}', loan.name),
     });
   };
   
@@ -56,8 +59,10 @@ const Index = () => {
     const loan = loans.find(l => l.id === id);
     if (loan) {
       toast({
-        title: loan.isActive ? "Loan Deactivated" : "Loan Activated",
-        description: `${loan.name} has been ${loan.isActive ? 'removed from' : 'added to'} active loans`,
+        title: loan.isActive ? t('toast.loanDeactivated') : t('toast.loanActivated'),
+        description: t('toast.loanToggleDesc')
+          .replace('{name}', loan.name)
+          .replace('{state}', loan.isActive ? t('toast.removedFrom') : t('toast.addedTo')),
       });
     }
   };
@@ -66,11 +71,14 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <header className="py-12 px-4 sm:px-6 text-center mb-8 bg-white/50 backdrop-blur-subtle border-b border-border">
         <div className="max-w-4xl mx-auto">
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+            <LanguageSwitcher />
+          </div>
           <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-gray-900 mb-2">
-            Loan Simulator
+            {t('app.title')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Plan, compare and optimize your loan strategy with precision and clarity
+            {t('app.subtitle')}
           </p>
         </div>
       </header>
@@ -105,7 +113,7 @@ const Index = () => {
       
       <footer className="py-6 px-4 sm:px-6 border-t border-border bg-white/50 backdrop-blur-subtle">
         <div className="max-w-4xl mx-auto text-center text-sm text-muted-foreground">
-          <p>Loan Simulator • Simple, precise financial planning</p>
+          <p>{t('app.footer')}</p>
         </div>
       </footer>
     </div>

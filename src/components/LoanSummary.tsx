@@ -5,12 +5,14 @@ import { Loan, calculateTotalMonthlyPayment, formatCurrency, generateRecommendat
 import AnimatedNumber from './AnimatedNumber';
 import { TrendingUp, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LoanSummaryProps {
   loans: Loan[];
 }
 
 const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
+  const { t } = useLanguage();
   const activeLoans = loans.filter(loan => loan.isActive);
   
   if (activeLoans.length === 0) {
@@ -26,7 +28,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">Total Monthly Payment</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
                   value={totalPayment} 
@@ -36,7 +38,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
             </div>
             
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">Monthly Principal</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyPrincipal')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
                   value={totalPrincipal} 
@@ -46,7 +48,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
             </div>
             
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">Monthly Interest</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyInterest')}</h3>
               <p className="text-2xl font-semibold text-primary">
                 <AnimatedNumber 
                   value={totalInterest} 
@@ -66,7 +68,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
           <CardContent className="p-6">
             <h3 className="text-lg font-medium flex items-center gap-2 mb-4">
               <TrendingUp size={20} className="text-primary" />
-              <span>Recommendations</span>
+              <span>{t('recommendations.title')}</span>
             </h3>
             
             <div className="space-y-4">
@@ -74,7 +76,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                 <div className="p-4 bg-destructive/5 rounded-lg border border-destructive/20">
                   <h4 className="font-medium flex items-center gap-2 text-destructive mb-2">
                     <AlertCircle size={16} />
-                    <span>Top Priority</span>
+                    <span>{t('recommendations.topPriority')}</span>
                   </h4>
                   <p className="text-sm">
                     {topPriorityLoans.map(loan => (
@@ -83,15 +85,16 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                       return i === 0 ? curr : <>{prev}, {curr}</>;
                     }, <></>)}
                     {" "}
-                    {topPriorityLoans.length === 1 ? 'has' : 'have'} both the highest total interest and highest rate.
-                    This should be your top priority for early repayment.
+                    {topPriorityLoans.length === 1 
+                      ? t('recommendations.topPriorityText')
+                      : t('recommendations.topPriorityTextPlural')}
                   </p>
                 </div>
               )}
               
               {highestTotalInterestLoans.length > 0 && (
                 <div className="p-4 bg-secondary/30 rounded-lg">
-                  <h4 className="font-medium mb-2">Highest Total Interest</h4>
+                  <h4 className="font-medium mb-2">{t('recommendations.highestInterest')}</h4>
                   <p className="text-sm">
                     {highestTotalInterestLoans.map(loan => {
                       const result = calculateTotalMonthlyPayment([loan]);
@@ -106,15 +109,16 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                       return i === 0 ? curr : <>{prev}, {curr}</>;
                     }, <></>)}
                     {" "}
-                    {highestTotalInterestLoans.length === 1 ? 'has' : 'have'} the highest total interest cost.
-                    Consider prioritizing these for early repayment to save on long-term costs.
+                    {highestTotalInterestLoans.length === 1 
+                      ? t('recommendations.highestInterestText')
+                      : t('recommendations.highestInterestTextPlural')}
                   </p>
                 </div>
               )}
               
               {highestInterestRateLoans.length > 0 && (
                 <div className="p-4 bg-secondary/30 rounded-lg">
-                  <h4 className="font-medium mb-2">Highest Interest Rate</h4>
+                  <h4 className="font-medium mb-2">{t('recommendations.highestRate')}</h4>
                   <p className="text-sm">
                     {highestInterestRateLoans.map(loan => (
                       <span key={loan.id}>
@@ -126,8 +130,9 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                       return i === 0 ? curr : <>{prev}, {curr}</>;
                     }, <></>)}
                     {" "}
-                    {highestInterestRateLoans.length === 1 ? 'has' : 'have'} the highest interest rate.
-                    Focus on these for immediate savings on monthly interest costs.
+                    {highestInterestRateLoans.length === 1 
+                      ? t('recommendations.highestRateText')
+                      : t('recommendations.highestRateTextPlural')}
                   </p>
                 </div>
               )}
