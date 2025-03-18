@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -30,12 +29,16 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
   const needsInterestType = repaymentType === 'annuity' || repaymentType === 'fixed-installment';
   const isCustomPayment = repaymentType === 'custom-payment';
   
-  // Reset custom payment when switching away from custom payment type
   useEffect(() => {
     if (!isCustomPayment) {
       setCustomPayment('');
+    } else if (amount) {
+      const loanAmount = parseFloat(amount);
+      const years = parseInt(termYears) || 1;
+      const suggestedPayment = (loanAmount / (years * 12)).toFixed(2);
+      setCustomPayment(suggestedPayment);
     }
-  }, [repaymentType, isCustomPayment]);
+  }, [repaymentType, isCustomPayment, amount, termYears]);
   
   const resetForm = () => {
     setName('');
@@ -91,6 +94,21 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
         variant: "destructive",
       });
       return false;
+    }
+    
+    if (isCustomPayment && amount && interestRate) {
+      const loanAmount = parseFloat(amount);
+      const rate = parseFloat(interestRate);
+      const monthlyInterest = loanAmount * (rate / 12 / 100);
+      
+      if (parseFloat(customPayment) <= monthlyInterest) {
+        toast({
+          title: t('validation.paymentTooSmall'),
+          description: t('validation.paymentTooSmallDesc'),
+          variant: "destructive",
+        });
+        return false;
+      }
     }
     
     return true;

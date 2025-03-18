@@ -1,4 +1,3 @@
-
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -169,24 +168,36 @@ export const calculateCustomPaymentLoan = (
   customPayment: number
 ): LoanCalculationResult => {
   const monthlyInterestRate = calculateMonthlyInterestRate(annualInterestRate);
-  const termMonths = termYears * 12;
   
-  // Check if custom payment is sufficient to cover interest
+  // Check if custom payment is sufficient to cover minimum interest
   const minimumPayment = loanAmount * monthlyInterestRate;
-  const effectivePayment = Math.max(customPayment, minimumPayment);
+  
+  if (customPayment < minimumPayment) {
+    // If payment is too small, return a warning calculation
+    return {
+      monthlyPayment: customPayment,
+      totalInterest: Infinity, // Indicate that the loan will never be paid off
+      principal: 0,
+      interest: minimumPayment,
+      monthlyBreakdown: [{ principal: 0, interest: minimumPayment }]
+    };
+  }
   
   let remainingBalance = loanAmount;
   let totalInterest = 0;
   const monthlyBreakdown: { principal: number; interest: number }[] = [];
+  let monthCount = 0;
+  const maxMonths = termYears * 12 * 2; // Safety limit to prevent infinite loops
   
   // Calculate the monthly breakdown
-  for (let month = 0; month < termMonths; month++) {
+  while (remainingBalance > 0 && monthCount < maxMonths) {
     const interestPayment = remainingBalance * monthlyInterestRate;
-    const principalPayment = effectivePayment - interestPayment;
+    const principalPayment = customPayment - interestPayment;
     
     // If the principal payment would exceed the remaining balance,
     // adjust the principal payment to the remaining balance
     const actualPrincipalPayment = Math.min(principalPayment, remainingBalance);
+    const actualPayment = actualPrincipalPayment + interestPayment;
     
     totalInterest += interestPayment;
     remainingBalance -= actualPrincipalPayment;
@@ -196,16 +207,29 @@ export const calculateCustomPaymentLoan = (
       interest: interestPayment
     });
     
-    // If the loan is paid off, break the loop
-    if (remainingBalance <= 0) {
-      break;
+    monthCount++;
+    
+    // If the remaining balance is very small (due to floating point precision), consider it paid off
+    if (remainingBalance < 0.01) {
+      remainingBalance = 0;
     }
   }
   
+  // If we hit the max months, the loan won't be paid off with the custom payment
+  if (monthCount >= maxMonths) {
+    return {
+      monthlyPayment: customPayment,
+      totalInterest: Infinity, // Indicate that the loan will never be paid off
+      principal: customPayment - (loanAmount * monthlyInterestRate),
+      interest: loanAmount * monthlyInterestRate,
+      monthlyBreakdown: monthlyBreakdown.slice(0, 12) // Just return first year's breakdown
+    };
+  }
+  
   return {
-    monthlyPayment: effectivePayment,
+    monthlyPayment: customPayment,
     totalInterest,
-    principal: effectivePayment - (loanAmount * monthlyInterestRate),
+    principal: customPayment - (loanAmount * monthlyInterestRate),
     interest: loanAmount * monthlyInterestRate,
     monthlyBreakdown
   };
