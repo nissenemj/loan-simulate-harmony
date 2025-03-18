@@ -1,3 +1,4 @@
+
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -11,6 +12,17 @@ export interface Loan {
   interestType?: InterestType;
   customPayment?: number;
   isActive: boolean;
+}
+
+/**
+ * Defines the result structure for loan calculations
+ */
+export interface LoanCalculationResult {
+  monthlyPayment: number;
+  totalInterest: number;
+  principal: number;
+  interest: number;
+  monthlyBreakdown: { principal: number; interest: number }[];
 }
 
 /**
