@@ -17,12 +17,19 @@ export const fiTranslations = {
   "form.term.placeholder": "esim. 5",
   "form.repaymentType": "Takaisinmaksutyyppi",
   "form.interestType": "Korkotyyppi",
+  "form.customPayment": "Kuukausimaksu (€)",
+  "form.customPayment.placeholder": "esim. 200",
+  "form.estimatedTerm": "Arvioitu maksuaika",
+  "form.paymentTooSmall": "Maksu liian pieni (ei maksa lainaa pois)",
+  "form.years": "vuotta",
+  "form.months": "kuukautta",
   "form.addButton": "Lisää laina",
   
   // Repayment types
   "repayment.annuity": "Annuiteetti",
   "repayment.equalPrincipal": "Tasalyhennys",
   "repayment.fixedInstallment": "Kiinteä erä",
+  "repayment.customPayment": "Oma maksuerä",
   
   // Interest types
   "interest.fixed": "Kiinteä",

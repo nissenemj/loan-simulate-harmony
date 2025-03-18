@@ -17,12 +17,19 @@ export const enTranslations = {
   "form.term.placeholder": "e.g., 5",
   "form.repaymentType": "Repayment Type",
   "form.interestType": "Interest Type",
+  "form.customPayment": "Monthly Payment (€)",
+  "form.customPayment.placeholder": "e.g., 200",
+  "form.estimatedTerm": "Estimated payoff time",
+  "form.paymentTooSmall": "Payment too small (won't pay off)",
+  "form.years": "years",
+  "form.months": "months",
   "form.addButton": "Add Loan",
   
   // Repayment types
   "repayment.annuity": "Annuity",
   "repayment.equalPrincipal": "Equal Principal",
   "repayment.fixedInstallment": "Fixed Installment",
+  "repayment.customPayment": "Custom Payment",
   
   // Interest types
   "interest.fixed": "Fixed",
