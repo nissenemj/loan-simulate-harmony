@@ -1,5 +1,4 @@
-
-export type LoanType = "annuity" | "equal-principal" | "fixed-installment";
+export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
 export interface Loan {
@@ -10,15 +9,8 @@ export interface Loan {
   termYears: number;
   repaymentType: LoanType;
   interestType?: InterestType;
+  customPayment?: number;
   isActive: boolean;
-}
-
-export interface LoanCalculationResult {
-  monthlyPayment: number;
-  totalInterest: number;
-  principal: number;
-  interest: number;
-  monthlyBreakdown: { principal: number; interest: number }[];
 }
 
 /**
@@ -156,6 +148,58 @@ export const calculateFixedInstallmentLoan = (
 };
 
 /**
+ * Calculates loan details for custom payment repayment
+ */
+export const calculateCustomPaymentLoan = (
+  loanAmount: number,
+  annualInterestRate: number,
+  termYears: number,
+  customPayment: number
+): LoanCalculationResult => {
+  const monthlyInterestRate = calculateMonthlyInterestRate(annualInterestRate);
+  const termMonths = termYears * 12;
+  
+  // Check if custom payment is sufficient to cover interest
+  const minimumPayment = loanAmount * monthlyInterestRate;
+  const effectivePayment = Math.max(customPayment, minimumPayment);
+  
+  let remainingBalance = loanAmount;
+  let totalInterest = 0;
+  const monthlyBreakdown: { principal: number; interest: number }[] = [];
+  
+  // Calculate the monthly breakdown
+  for (let month = 0; month < termMonths; month++) {
+    const interestPayment = remainingBalance * monthlyInterestRate;
+    const principalPayment = effectivePayment - interestPayment;
+    
+    // If the principal payment would exceed the remaining balance,
+    // adjust the principal payment to the remaining balance
+    const actualPrincipalPayment = Math.min(principalPayment, remainingBalance);
+    
+    totalInterest += interestPayment;
+    remainingBalance -= actualPrincipalPayment;
+    
+    monthlyBreakdown.push({
+      principal: actualPrincipalPayment,
+      interest: interestPayment
+    });
+    
+    // If the loan is paid off, break the loop
+    if (remainingBalance <= 0) {
+      break;
+    }
+  }
+  
+  return {
+    monthlyPayment: effectivePayment,
+    totalInterest,
+    principal: effectivePayment - (loanAmount * monthlyInterestRate),
+    interest: loanAmount * monthlyInterestRate,
+    monthlyBreakdown
+  };
+};
+
+/**
  * Calculates loan details based on the repayment type
  */
 export const calculateLoan = (loan: Loan): LoanCalculationResult => {
@@ -171,6 +215,10 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
       return calculateEqualPrincipalLoan(loan.amount, effectiveInterestRate, loan.termYears);
     case 'fixed-installment':
       return calculateFixedInstallmentLoan(loan.amount, effectiveInterestRate, loan.termYears);
+    case 'custom-payment':
+      // Use a default payment if customPayment is not provided
+      const customPayment = loan.customPayment || loan.amount / (loan.termYears * 12);
+      return calculateCustomPaymentLoan(loan.amount, effectiveInterestRate, loan.termYears, customPayment);
     default:
       throw new Error(`Unknown repayment type: ${loan.repaymentType}`);
   }

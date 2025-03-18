@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -24,9 +24,18 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
   const [termYears, setTermYears] = useState('');
   const [repaymentType, setRepaymentType] = useState<LoanType>('annuity');
   const [interestType, setInterestType] = useState<InterestType>('fixed');
+  const [customPayment, setCustomPayment] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   
   const needsInterestType = repaymentType === 'annuity' || repaymentType === 'fixed-installment';
+  const isCustomPayment = repaymentType === 'custom-payment';
+  
+  // Reset custom payment when switching away from custom payment type
+  useEffect(() => {
+    if (!isCustomPayment) {
+      setCustomPayment('');
+    }
+  }, [repaymentType, isCustomPayment]);
   
   const resetForm = () => {
     setName('');
@@ -35,6 +44,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     setTermYears('');
     setRepaymentType('annuity');
     setInterestType('fixed');
+    setCustomPayment('');
   };
   
   const validateForm = (): boolean => {
@@ -74,6 +84,15 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
       return false;
     }
     
+    if (isCustomPayment && (!customPayment || parseFloat(customPayment) <= 0)) {
+      toast({
+        title: t('validation.invalidPayment'),
+        description: t('validation.invalidPaymentDesc'),
+        variant: "destructive",
+      });
+      return false;
+    }
+    
     return true;
   };
   
@@ -92,6 +111,10 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
       interestType: needsInterestType ? interestType : undefined,
       isActive: true
     };
+    
+    if (isCustomPayment && customPayment) {
+      newLoan.customPayment = parseFloat(customPayment);
+    }
     
     onAddLoan(newLoan);
     resetForm();
@@ -205,6 +228,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                   <SelectItem value="annuity">{t('repayment.annuity')}</SelectItem>
                   <SelectItem value="equal-principal">{t('repayment.equalPrincipal')}</SelectItem>
                   <SelectItem value="fixed-installment">{t('repayment.fixedInstallment')}</SelectItem>
+                  <SelectItem value="custom-payment">{t('repayment.customPayment')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -230,6 +254,27 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                     <SelectItem value="variable-euribor">{t('interest.variableEuribor')}</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+            )}
+            
+            {isCustomPayment && (
+              <div className="space-y-2">
+                <Label htmlFor="customPayment" className="text-sm font-medium">
+                  {t('form.customPayment')}
+                </Label>
+                <Input
+                  id="customPayment"
+                  type="number"
+                  min="0"
+                  step="10"
+                  placeholder={t('form.customPayment.placeholder')}
+                  value={customPayment}
+                  onChange={(e) => setCustomPayment(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                  required={isCustomPayment}
+                />
               </div>
             )}
           </div>
