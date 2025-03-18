@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loan, calculateTotalMonthlyPayment, formatCurrency, generateRecommendations } from '@/utils/loanCalculations';
@@ -10,14 +11,14 @@ interface LoanSummaryProps {
 }
 
 const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
-  const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
-  const { highestInterestRateLoans, highestTotalInterestLoans, topPriorityLoans } = generateRecommendations(loans);
-  
   const activeLoans = loans.filter(loan => loan.isActive);
   
   if (activeLoans.length === 0) {
     return null;
   }
+  
+  const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
+  const { highestInterestRateLoans, highestTotalInterestLoans, topPriorityLoans } = generateRecommendations(loans);
   
   return (
     <div className="space-y-6 mt-6">

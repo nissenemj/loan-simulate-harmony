@@ -37,6 +37,10 @@ const Index = () => {
   
   const handleAddLoan = (loan: Loan) => {
     setLoans(prevLoans => [...prevLoans, loan]);
+    toast({
+      title: "Loan Added",
+      description: `${loan.name} has been added to your loans`,
+    });
   };
   
   const handleToggleLoan = (id: string) => {
@@ -60,7 +64,6 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
       <header className="py-12 px-4 sm:px-6 text-center mb-8 bg-white/50 backdrop-blur-subtle border-b border-border">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-gray-900 mb-2">
@@ -72,15 +75,12 @@ const Index = () => {
         </div>
       </header>
       
-      {/* Main Content */}
       <main className="pb-16 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto space-y-10">
-          {/* Loan Form */}
           <div className="animate-slide-up">
             <LoanForm onAddLoan={handleAddLoan} />
           </div>
           
-          {/* Loan Table */}
           <div 
             className={loans.length > 0 ? "animate-slide-up" : ""}
             style={{ animationDelay: "100ms" }}
@@ -92,7 +92,6 @@ const Index = () => {
             />
           </div>
           
-          {/* Loan Summary */}
           {loans.length > 0 && (
             <div 
               className="animate-slide-up"
@@ -104,7 +103,6 @@ const Index = () => {
         </div>
       </main>
       
-      {/* Footer */}
       <footer className="py-6 px-4 sm:px-6 border-t border-border bg-white/50 backdrop-blur-subtle">
         <div className="max-w-4xl mx-auto text-center text-sm text-muted-foreground">
           <p>Loan Simulator • Simple, precise financial planning</p>
