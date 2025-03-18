@@ -40,6 +40,28 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     }
   }, [repaymentType, isCustomPayment, amount, termYears]);
   
+  const calculateEstimatedTerm = (): string => {
+    if (!isCustomPayment || !amount || !interestRate || !customPayment) return '';
+    
+    const loanAmount = parseFloat(amount);
+    const rate = parseFloat(interestRate);
+    const payment = parseFloat(customPayment);
+    const monthlyInterestRate = rate / 12 / 100;
+    
+    if (payment <= loanAmount * monthlyInterestRate) {
+      return t('form.paymentTooSmall');
+    }
+    
+    const initialPrincipalPortion = payment - (loanAmount * monthlyInterestRate);
+    const roughMonths = Math.ceil(loanAmount / initialPrincipalPortion);
+    const years = Math.floor(roughMonths / 12);
+    const months = roughMonths % 12;
+    
+    return years > 0 
+      ? `${years} ${t('form.years')}${months > 0 ? ` ${months} ${t('form.months')}` : ''}`
+      : `${months} ${t('form.months')}`;
+  };
+  
   const resetForm = () => {
     setName('');
     setAmount('');
@@ -293,6 +315,11 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                   className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
                   required={isCustomPayment}
                 />
+                {isCustomPayment && amount && interestRate && customPayment && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t('form.estimatedTerm')}: {calculateEstimatedTerm()}
+                  </p>
+                )}
               </div>
             )}
           </div>

@@ -22,6 +22,7 @@ export interface LoanCalculationResult {
   principal: number;
   interest: number;
   monthlyBreakdown: { principal: number; interest: number }[];
+  actualTermMonths?: number; // Added for custom payment to show actual term
 }
 
 /**
@@ -172,14 +173,15 @@ export const calculateCustomPaymentLoan = (
   // Check if custom payment is sufficient to cover minimum interest
   const minimumPayment = loanAmount * monthlyInterestRate;
   
-  if (customPayment < minimumPayment) {
+  if (customPayment <= minimumPayment) {
     // If payment is too small, return a warning calculation
     return {
       monthlyPayment: customPayment,
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       principal: 0,
       interest: minimumPayment,
-      monthlyBreakdown: [{ principal: 0, interest: minimumPayment }]
+      monthlyBreakdown: [{ principal: 0, interest: minimumPayment }],
+      actualTermMonths: Infinity
     };
   }
   
@@ -195,7 +197,7 @@ export const calculateCustomPaymentLoan = (
     const principalPayment = customPayment - interestPayment;
     
     // If the principal payment would exceed the remaining balance,
-    // adjust the principal payment to the remaining balance
+    // adjust the final payment
     const actualPrincipalPayment = Math.min(principalPayment, remainingBalance);
     const actualPayment = actualPrincipalPayment + interestPayment;
     
@@ -222,7 +224,8 @@ export const calculateCustomPaymentLoan = (
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       principal: customPayment - (loanAmount * monthlyInterestRate),
       interest: loanAmount * monthlyInterestRate,
-      monthlyBreakdown: monthlyBreakdown.slice(0, 12) // Just return first year's breakdown
+      monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
+      actualTermMonths: Infinity
     };
   }
   
@@ -231,7 +234,8 @@ export const calculateCustomPaymentLoan = (
     totalInterest,
     principal: customPayment - (loanAmount * monthlyInterestRate),
     interest: loanAmount * monthlyInterestRate,
-    monthlyBreakdown
+    monthlyBreakdown,
+    actualTermMonths: monthCount
   };
 };
 
@@ -358,4 +362,39 @@ export const calculateTotalMonthlyPayment = (loans: Loan[]): {
     totalPrincipal,
     totalInterest
   };
+};
+
+/**
+ * Estimate the total term in months based on custom payment
+ */
+export const estimateTermForCustomPayment = (
+  loanAmount: number,
+  annualInterestRate: number,
+  customPayment: number
+): number | null => {
+  const monthlyInterestRate = calculateMonthlyInterestRate(annualInterestRate);
+  
+  // If payment doesn't cover interest, loan will never be paid off
+  if (customPayment <= loanAmount * monthlyInterestRate) {
+    return null;
+  }
+  
+  // Simple approximation
+  let balance = loanAmount;
+  let months = 0;
+  const maxMonths = 1200; // 100 years as safety
+  
+  while (balance > 0 && months < maxMonths) {
+    const interest = balance * monthlyInterestRate;
+    const principal = customPayment - interest;
+    balance -= principal;
+    months++;
+    
+    // Handle floating point precision
+    if (balance < 0.01) {
+      balance = 0;
+    }
+  }
+  
+  return months < maxMonths ? months : null;
 };
