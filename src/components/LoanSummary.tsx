@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loan, calculateTotalMonthlyPayment, formatCurrency, generateRecommendations } from '@/utils/loanCalculations';
 import AnimatedNumber from './AnimatedNumber';
-import { ArrowTrendingUp, AlertCircle } from 'lucide-react';
+import { TrendingUp, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface LoanSummaryProps {
@@ -65,7 +64,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
         )}>
           <CardContent className="p-6">
             <h3 className="text-lg font-medium flex items-center gap-2 mb-4">
-              <ArrowTrendingUp size={20} className="text-primary" />
+              <TrendingUp size={20} className="text-primary" />
               <span>Recommendations</span>
             </h3>
             
