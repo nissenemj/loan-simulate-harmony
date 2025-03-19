@@ -1,3 +1,4 @@
+
 export default {
   app: {
     title: "Lainalaskuri",
@@ -94,6 +95,7 @@ export default {
   toast: {
     loanActivated: "Laina aktivoitu",
     loanDeactivated: "Laina deaktivoitu",
+    loanPaidOff: "Laina maksettu pois",
   },
   savings: {
     title: "Säästövaikutus",
@@ -101,7 +103,8 @@ export default {
     payOff: "Maksa Pois",
     description: "Nämä laskelmat näyttävät, kuinka paljon korkoa säästäisit maksamalla lainasi pois aikaisin.",
   },
-  toast: {
-    loanPaidOff: "Laina maksettu pois",
-  },
+  language: {
+    en: "Englanti",
+    fi: "Suomi"
+  }
 } as const;

@@ -1,3 +1,4 @@
+
 export default {
   app: {
     title: "Loan Calculator",
@@ -104,6 +105,7 @@ export default {
   toast: {
     loanActivated: "Loan activated",
     loanDeactivated: "Loan deactivated",
+    loanPaidOff: "Loan paid off",
   },
   savings: {
     title: "Savings Impact",
@@ -111,10 +113,8 @@ export default {
     payOff: "Pay Off",
     description: "These calculations show how much interest you would save by paying off your loans early.",
   },
-  
-  toast: {
-    loanActivated: "Loan activated",
-    loanDeactivated: "Loan deactivated",
-    loanPaidOff: "Loan paid off",
-  },
+  language: {
+    en: "English",
+    fi: "Finnish"
+  }
 } as const;

@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { enTranslations } from '@/translations/en';
-import { fiTranslations } from '@/translations/fi';
+import enTranslationsObject from '@/translations/en';
+import fiTranslationsObject from '@/translations/fi';
 
 type Translations = {
   [key: string]: string;
@@ -13,6 +13,24 @@ type LanguageContextType = {
   setLanguage: (language: 'en' | 'fi') => void;
   t: (key: string) => string;
 };
+
+// Convert the nested translations object into a flat structure for easier lookup
+const flattenTranslations = (obj: any, prefix = ''): Translations => {
+  return Object.keys(obj).reduce((acc: Translations, key) => {
+    const prefixedKey = prefix ? `${prefix}.${key}` : key;
+    
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      Object.assign(acc, flattenTranslations(obj[key], prefixedKey));
+    } else {
+      acc[prefixedKey] = obj[key];
+    }
+    
+    return acc;
+  }, {});
+};
+
+const enTranslations = flattenTranslations(enTranslationsObject);
+const fiTranslations = flattenTranslations(fiTranslationsObject);
 
 const LanguageContext = createContext<LanguageContextType>({
   language: 'en',
