@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -20,9 +19,10 @@ interface DebtSummaryProps {
   loans: Loan[];
   creditCards: CreditCard[];
   onPayoffLoan: (id: string) => void;
+  onPayoffCreditCard: (id: string) => void;
 }
 
-export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSummaryProps) {
+export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoffCreditCard }: DebtSummaryProps) {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [budget, setBudget] = useState<number>(500);
@@ -202,7 +202,11 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSu
 
           <section aria-labelledby="credit-cards-heading">
             <h2 id="credit-cards-heading" className="text-2xl font-bold mb-4">{t("debtSummary.creditCardsSection")}</h2>
-            <CreditCardSummaryTable creditCards={cardsToDisplay} isDemo={activeCards.length === 0} />
+            <CreditCardSummaryTable 
+              creditCards={cardsToDisplay} 
+              isDemo={activeCards.length === 0}
+              onPayoffCreditCard={onPayoffCreditCard}
+            />
           </section>
 
           <section aria-labelledby="total-summary-heading">
@@ -217,6 +221,7 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSu
               <BudgetInput 
                 onCalculate={calculateRepaymentPlan} 
                 defaultBudget={budget} 
+                method={method}
               />
             </div>
             <div className="md:col-span-3">
@@ -243,7 +248,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSu
   );
 }
 
-// Sample data functions
 function getSampleLoans(): Loan[] {
   return [
     {

@@ -22,5 +22,21 @@ export default function DebtSummaryPage() {
     toast.success(t('toast.loanPaidOff') + ': ' + loanName);
   };
 
-  return <DebtSummary loans={loans} creditCards={creditCards} onPayoffLoan={handlePayoffLoan} />;
+  const handlePayoffCreditCard = (id: string) => {
+    setCreditCards((prev) =>
+      prev.map((card) => (card.id === id ? { ...card, balance: 0, isActive: false } : card))
+    );
+    
+    const cardName = creditCards.find(card => card.id === id)?.name || '';
+    toast.success(t('toast.cardPaidOff') + ': ' + cardName);
+  };
+
+  return (
+    <DebtSummary 
+      loans={loans} 
+      creditCards={creditCards} 
+      onPayoffLoan={handlePayoffLoan}
+      onPayoffCreditCard={handlePayoffCreditCard}
+    />
+  );
 }

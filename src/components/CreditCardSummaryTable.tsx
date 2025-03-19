@@ -21,13 +21,19 @@ import {
 import { Card } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import AnimatedNumber from "@/components/AnimatedNumber";
+import { Button } from "@/components/ui/button";
 
 interface CreditCardSummaryTableProps {
   creditCards: CreditCard[];
   isDemo?: boolean;
+  onPayoffCreditCard?: (id: string) => void;
 }
 
-export default function CreditCardSummaryTable({ creditCards, isDemo = false }: CreditCardSummaryTableProps) {
+export default function CreditCardSummaryTable({ 
+  creditCards, 
+  isDemo = false,
+  onPayoffCreditCard
+}: CreditCardSummaryTableProps) {
   const { t } = useLanguage();
 
   // Calculate totals
@@ -66,13 +72,16 @@ export default function CreditCardSummaryTable({ creditCards, isDemo = false }: 
               <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
               <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
               <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
+              {onPayoffCreditCard && !isDemo && (
+                <TableHead className="text-right">{t("debtSummary.actions")}</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           
           <TableBody>
             {cardData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-8">
+                <TableCell colSpan={onPayoffCreditCard && !isDemo ? 5 : 4} className="text-center py-8">
                   {t("debtSummary.noCardsMessage")}
                 </TableCell>
               </TableRow>
@@ -104,6 +113,17 @@ export default function CreditCardSummaryTable({ creditCards, isDemo = false }: 
                       />
                     )}
                   </TableCell>
+                  {onPayoffCreditCard && !isDemo && (
+                    <TableCell className="text-right">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => onPayoffCreditCard(card.id)}
+                      >
+                        {t("debtSummary.payoffButton")}
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}
@@ -137,6 +157,7 @@ export default function CreditCardSummaryTable({ creditCards, isDemo = false }: 
                     />
                   )}
                 </TableCell>
+                {onPayoffCreditCard && !isDemo && <TableCell />}
               </TableRow>
             </TableFooter>
           )}
