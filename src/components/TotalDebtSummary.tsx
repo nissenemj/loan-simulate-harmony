@@ -153,16 +153,16 @@ function DebtMetricCard({
       
       <div className="text-2xl font-bold h-10 flex items-center">
         {isInfinite ? (
-          <span className="text-destructive flex items-center h-full">
+          <div className="text-destructive w-full flex items-center">
             {infiniteText}
-          </span>
+          </div>
         ) : (
-          <span className="flex items-center h-full">
+          <div className="w-full flex items-center">
             <AnimatedNumber
               value={typeof value === 'number' ? value : 0}
               formatter={formatCurrency}
             />
-          </span>
+          </div>
         )}
       </div>
       
