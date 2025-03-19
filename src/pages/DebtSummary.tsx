@@ -73,6 +73,11 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
   const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
   const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
 
+  // Calculate total loan and credit card balances
+  const totalLoanBalance = loansToDisplay.reduce((sum, loan) => sum + loan.amount, 0);
+  const totalCardBalance = cardsToDisplay.reduce((sum, card) => sum + card.balance, 0);
+  const totalDebtBalance = totalLoanBalance + totalCardBalance;
+
   // Calculate repayment plan
   const calculateRepaymentPlan = (budgetAmount: number, prioritizationMethod: PrioritizationMethod) => {
     setBudget(budgetAmount);
@@ -135,7 +140,7 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
                 <span className="text-sm font-medium text-muted-foreground">{t("creditCard.summary.totalBalance")}</span>
               </div>
               <div className="text-2xl font-bold">
-                {formatCurrency(cardsToDisplay.reduce((sum, card) => sum + card.balance, 0))}
+                {formatCurrency(totalDebtBalance)}
               </div>
             </div>
             
@@ -194,6 +199,9 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
               <section aria-labelledby="loans-heading">
                 <h2 id="loans-heading" className="text-2xl font-bold mb-4">{t("debtSummary.loansSection")}</h2>
                 <LoanSummaryTable loans={loansToDisplay} isDemo={activeLoans.length === 0} />
+                <div className="mt-4 p-4 bg-muted rounded-lg">
+                  <div className="font-medium">{t("debtSummary.totalLoans")}: {formatCurrency(totalLoanBalance)}</div>
+                </div>
               </section>
             </div>
             <div>
@@ -208,11 +216,14 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
               isDemo={activeCards.length === 0}
               onPayoffCreditCard={onPayoffCreditCard}
             />
+            <div className="mt-4 p-4 bg-muted rounded-lg">
+              <div className="font-medium">{t("debtSummary.totalCards")}: {formatCurrency(totalCardBalance)}</div>
+            </div>
           </section>
 
           <section aria-labelledby="total-summary-heading">
             <h2 id="total-summary-heading" className="text-2xl font-bold mb-4">{t("debtSummary.totalSummarySection")}</h2>
-            <TotalDebtSummary loans={loansToDisplay} creditCards={cardsToDisplay} isDemo={isDemo} />
+            <TotalDebtSummary loans={loansToDisplay} creditCards={cardsToDisplay} isDemo={isDemo} totalDebtBalance={totalDebtBalance} />
           </section>
         </TabsContent>
         

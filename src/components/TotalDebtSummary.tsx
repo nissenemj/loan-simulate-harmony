@@ -17,9 +17,10 @@ interface TotalDebtSummaryProps {
   loans: Loan[];
   creditCards: CreditCard[];
   isDemo?: boolean;
+  totalDebtBalance?: number;
 }
 
-export default function TotalDebtSummary({ loans, creditCards, isDemo = false }: TotalDebtSummaryProps) {
+export default function TotalDebtSummary({ loans, creditCards, isDemo = false, totalDebtBalance }: TotalDebtSummaryProps) {
   const { t } = useLanguage();
 
   // Calculate loan totals
@@ -56,6 +57,10 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false }:
   const totalMonthlyPayment = totalLoanMonthlyPayment + totalCardMonthlyPayment;
   const totalMonthlyInterest = totalLoanMonthlyInterest + totalCardMonthlyInterest;
   const totalInterestEstimate = hasInfiniteInterest ? Infinity : totalLoanInterestEstimate + totalCardInterestEstimate;
+  
+  // For total balance, either use the provided value or calculate
+  const totalBalance = totalDebtBalance ?? loans.reduce((sum, loan) => sum + loan.amount, 0) + 
+    creditCards.reduce((sum, card) => sum + card.balance, 0);
 
   return (
     <Card className="overflow-hidden">
@@ -67,7 +72,7 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false }:
       )}
       
       <CardContent className="p-6">
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-4">
           <div className="space-y-2">
             <h3 className="text-lg font-medium">{t("debtSummary.totalMonthlyPayment")}</h3>
             <div className="text-3xl font-bold">
@@ -101,6 +106,16 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false }:
                   formatter={formatCurrency}
                 />
               )}
+            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h3 className="text-lg font-medium">{t("debtSummary.totalBalance")}</h3>
+            <div className="text-3xl font-bold">
+              <AnimatedNumber
+                value={totalBalance}
+                formatter={formatCurrency}
+              />
             </div>
           </div>
         </div>
