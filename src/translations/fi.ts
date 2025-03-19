@@ -1,4 +1,3 @@
-
 export default {
   app: {
     title: "Lainalaskuri",
@@ -78,6 +77,7 @@ export default {
   tabs: {
     loans: "Lainat",
     creditCards: "Luottokortit",
+    affiliate: "Tarjoukset"
   },
   creditCard: {
     title: "Lisää luottokortti",
@@ -149,5 +149,18 @@ export default {
   language: {
     en: "Englanti",
     fi: "Suomi"
+  },
+  affiliate: {
+    title: "Erikoistarjoukset",
+    subtitle: "Yksinoikeudella tarjouksia luotettavilta kumppaneiltamme",
+    compareLoans: "Vertaile lainatarjouksia",
+    refinanceTitle: "Harkitsetko lainan uudelleenrahoitusta?",
+    refinanceText: "Tarkista nämä luotetut palveluntarjoajat kilpailukykyisin hinnoin",
+    creditCardTitle: "Löydä paras luottokortti",
+    creditCardText: "Vertaile palkintoja, korkoja ja etuja",
+    mortgageTitle: "Asuntolaina ratkaisut",
+    mortgageText: "Löydä täydellinen asuntolaina tarpeisiisi",
+    cta: "Lue lisää",
+    disclaimer: "Huomautus: Saatamme saada korvausta, kun klikkaat tuotelinkkejä. Tämä ei vaikuta suosituksiimme tai arviointeihimme."
   }
 } as const;

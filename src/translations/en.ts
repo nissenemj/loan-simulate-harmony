@@ -1,4 +1,3 @@
-
 export default {
   app: {
     title: "Loan Calculator",
@@ -64,6 +63,7 @@ export default {
   tabs: {
     loans: "Loans",
     creditCards: "Credit Cards",
+    affiliate: "Offers"
   },
   creditCard: {
     form: {
@@ -116,5 +116,18 @@ export default {
   language: {
     en: "English",
     fi: "Finnish"
+  },
+  affiliate: {
+    title: "Special Offers",
+    subtitle: "Exclusive deals from our trusted partners",
+    compareLoans: "Compare Loan Offers",
+    refinanceTitle: "Looking to refinance?",
+    refinanceText: "Check these trusted providers for competitive rates",
+    creditCardTitle: "Find the best credit card",
+    creditCardText: "Compare rewards, rates, and benefits",
+    mortgageTitle: "Home Loan Solutions",
+    mortgageText: "Find the perfect mortgage for your needs",
+    cta: "Learn More",
+    disclaimer: "Disclosure: We may receive compensation when you click on links to products. This does not affect our recommendations or evaluations."
   }
 } as const;

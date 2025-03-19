@@ -17,6 +17,7 @@ import CreditCardForm from "@/components/CreditCardForm";
 import CreditCardTable from "@/components/CreditCardTable";
 import CreditCardSummary from "@/components/CreditCardSummary";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Index() {
@@ -71,9 +72,10 @@ export default function Index() {
       </div>
 
       <Tabs defaultValue="loans" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-8">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
           <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
+          <TabsTrigger value="affiliate">{t("tabs.affiliate")}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="loans" className="space-y-8">
@@ -104,6 +106,10 @@ export default function Index() {
           />
           
           <CreditCardSummary creditCards={creditCards} />
+        </TabsContent>
+
+        <TabsContent value="affiliate" className="space-y-4">
+          <AffiliateSection />
         </TabsContent>
       </Tabs>
 
