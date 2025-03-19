@@ -258,7 +258,7 @@ const CookiePolicy = () => {
               Jos sinulla on kysyttävää evästekäytännöstämme, ota yhteyttä: 
             </p>
             <p className="mb-4">
-              Sähköposti: support@loansimulateharmony.fi
+              Sähköposti: support@velkavapaus.fi
             </p>
           </section>
 

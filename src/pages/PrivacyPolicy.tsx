@@ -206,7 +206,7 @@ const PrivacyPolicy = () => {
               Jos sinulla on kysyttävää tietosuojaselosteestamme tai tietojesi käsittelystä, ota yhteyttä: 
             </p>
             <p className="mb-4">
-              Sähköposti: support@loansimulateharmony.fi
+              Sähköposti: support@velkavapaus.fi
             </p>
           </section>
 
