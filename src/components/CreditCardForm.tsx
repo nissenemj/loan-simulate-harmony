@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -68,6 +68,19 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
     },
   });
 
+  // Watch for balance and minPaymentPercent changes to calculate minPayment
+  const balance = form.watch("balance");
+  const minPaymentPercent = form.watch("minPaymentPercent");
+  const fullPaymentValue = form.watch("fullPayment");
+
+  // Update minPayment whenever balance or minPaymentPercent changes
+  useEffect(() => {
+    if (balance && minPaymentPercent && !fullPaymentValue) {
+      const calculatedMinPayment = (balance * minPaymentPercent / 100).toFixed(2);
+      form.setValue("minPayment", parseFloat(calculatedMinPayment));
+    }
+  }, [balance, minPaymentPercent, fullPaymentValue, form]);
+
   const onSubmit = (values: FormValues) => {
     const newCreditCard: CreditCard = {
       id: uuidv4(),
@@ -97,8 +110,6 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
       fullPayment: false,
     });
   };
-
-  const fullPaymentValue = form.watch("fullPayment");
 
   return (
     <Card className="bg-card">
@@ -211,34 +222,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 )}
               />
 
-              {/* Min Payment (€) */}
-              <FormField
-                control={form.control}
-                name="minPayment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("creditCard.form.minPayment")}</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-                          <DollarSign className="h-4 w-4" />
-                        </div>
-                        <Input 
-                          type="number" 
-                          placeholder={t("creditCard.form.placeholderMinPayment")} 
-                          className="pl-10" 
-                          step="0.01"
-                          disabled={fullPaymentValue}
-                          {...field} 
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Min Payment (%) */}
+              {/* Min Payment Percent */}
               <FormField
                 control={form.control}
                 name="minPaymentPercent"
@@ -260,6 +244,37 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         />
                       </div>
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Min Payment (€) - Now read-only based on percentage */}
+              <FormField
+                control={form.control}
+                name="minPayment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("creditCard.form.minPayment")}</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+                          <DollarSign className="h-4 w-4" />
+                        </div>
+                        <Input 
+                          type="number" 
+                          placeholder={t("creditCard.form.placeholderMinPayment")} 
+                          className="pl-10 bg-gray-50" 
+                          step="0.01"
+                          disabled={true}
+                          readOnly
+                          {...field} 
+                        />
+                      </div>
+                    </FormControl>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {t("creditCard.form.autoCalculated")}
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}
