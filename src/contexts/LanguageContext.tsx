@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import enTranslationsObject from '@/translations/en';
-import fiTranslationsObject from '@/translations/fi';
+import { en as enTranslationsObject } from '@/translations/en';
+import { fi as fiTranslationsObject } from '@/translations/fi';
 
 type Translations = {
   [key: string]: string;
