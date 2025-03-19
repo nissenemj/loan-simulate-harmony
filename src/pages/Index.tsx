@@ -7,7 +7,7 @@ import {
   generateRecommendations 
 } from "@/utils/loanCalculations";
 import { CreditCard } from "@/utils/creditCardCalculations";
-import { useTranslation } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import LoanForm from "@/components/LoanForm";
 import LoanTable from "@/components/LoanTable";
@@ -21,7 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function Index() {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   const handleAddLoan = (loan: Loan) => {
     setLoans((prev) => [...prev, loan]);
@@ -57,7 +57,7 @@ export default function Index() {
               {t("app.subtitle")}
             </p>
           </div>
-          <LanguageSwitcher className="mt-4 md:mt-0" />
+          <LanguageSwitcher />
         </div>
       </div>
 
@@ -70,16 +70,11 @@ export default function Index() {
         <TabsContent value="loans" className="space-y-8">
           <LoanForm onAddLoan={handleAddLoan} />
           
-          <LoanTable loans={loans} onToggleActive={handleToggleLoanActive} />
+          <LoanTable loans={loans} onToggleLoan={handleToggleLoanActive} />
           
           {activeLoans.length > 0 && (
             <>
-              <LoanSummary
-                totalPayment={totalPayment}
-                totalPrincipal={totalPrincipal}
-                totalInterest={totalInterest}
-                recommendations={recommendations}
-              />
+              <LoanSummary loans={activeLoans} />
             </>
           )}
         </TabsContent>

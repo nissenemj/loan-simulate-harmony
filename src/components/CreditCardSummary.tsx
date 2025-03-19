@@ -1,7 +1,7 @@
 
 import { CreditCard, calculateCreditCardSummary, formatUtilizationRate } from "@/utils/creditCardCalculations";
 import { formatCurrency } from "@/utils/loanCalculations";
-import { useTranslation } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import AnimatedNumber from "@/components/AnimatedNumber";
 
 import {
@@ -16,7 +16,7 @@ interface CreditCardSummaryProps {
 }
 
 export default function CreditCardSummary({ creditCards }: CreditCardSummaryProps) {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const activeCreditCards = creditCards.filter(card => card.isActive);
   
   if (activeCreditCards.length === 0) {

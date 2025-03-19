@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { toast } from "sonner";
 import { 
@@ -9,7 +8,7 @@ import {
 } from "@/utils/creditCardCalculations";
 import { formatCurrency, formatPercentage } from "@/utils/loanCalculations";
 import { Check, X } from "lucide-react";
-import { useTranslation } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import {
   Table,
@@ -28,7 +27,7 @@ interface CreditCardTableProps {
 }
 
 export default function CreditCardTable({ creditCards, onToggleActive }: CreditCardTableProps) {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
 
   const handleToggleActive = (id: string, isActive: boolean) => {
     onToggleActive(id, isActive);

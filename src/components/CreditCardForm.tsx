@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import { CreditCard } from "@/utils/creditCardCalculations";
 import { CreditCard as CreditCardIcon, DollarSign, Percent } from "lucide-react";
-import { useTranslation } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import {
   Form,
@@ -27,7 +26,7 @@ interface CreditCardFormProps {
 }
 
 export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps) {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   
   // Define the validation schema
   const formSchema = z.object({

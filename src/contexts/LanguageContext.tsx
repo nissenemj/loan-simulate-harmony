@@ -42,3 +42,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useLanguage = () => useContext(LanguageContext);
+
+// Add the missing export for useTranslation as an alias for useLanguage
+export const useTranslation = useLanguage;
