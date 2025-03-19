@@ -1,7 +1,7 @@
 
 import React from "react";
 import DebtSummary from "./DebtSummary";
-import useLocalStorage from "@/hooks/use-local-storage";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { Loan } from "@/utils/loanCalculations";
 import { CreditCard } from "@/utils/creditCardCalculations";
 
