@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
@@ -34,10 +33,6 @@ const Dashboard = () => {
   const totalDebt = 
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
-  
-  const paidDebt = totalDebt * 0.25; 
-  const remainingDebt = totalDebt - paidDebt;
-  const progressPercentage = totalDebt > 0 ? Math.round((paidDebt / totalDebt) * 100) : 0;
   
   const now = new Date();
   const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 3));
@@ -92,32 +87,12 @@ const Dashboard = () => {
         
         <Card className="bg-gradient-to-br from-muted/50 to-background border shadow-md">
           <CardContent className="pt-6">
-            <div className="grid gap-6 md:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-3">
               <div className="space-y-2">
                 <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.totalDebt')}</h3>
                 <div className="text-2xl font-bold">
                   <AnimatedNumber
                     value={totalDebt}
-                    formatter={formatCurrency}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.paidDebt')}</h3>
-                <div className="text-2xl font-bold text-green-600 dark:text-green-500">
-                  <AnimatedNumber
-                    value={paidDebt}
-                    formatter={formatCurrency}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.remainingDebt')}</h3>
-                <div className="text-2xl font-bold">
-                  <AnimatedNumber
-                    value={remainingDebt}
                     formatter={formatCurrency}
                   />
                 </div>
@@ -130,21 +105,16 @@ const Dashboard = () => {
                   {formattedDebtFreeDate}
                 </div>
               </div>
-            </div>
-            
-            <div className="mt-6 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>{t('dashboard.progress')}</span>
-                <span className="font-medium">{progressPercentage}%</span>
-              </div>
-              <Progress value={progressPercentage} className="h-2" />
               
-              {progressPercentage > 0 && (
-                <p className="text-sm text-green-600 dark:text-green-500 font-medium mt-2">
-                  <Award className="inline-block mr-1 h-4 w-4" />
-                  {t('dashboard.progressMessage').replace('{{percentage}}', progressPercentage.toString())}
-                </p>
-              )}
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.monthlyPayment')}</h3>
+                <div className="text-2xl font-bold">
+                  <AnimatedNumber
+                    value={totalMinPayments}
+                    formatter={formatCurrency}
+                  />
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
