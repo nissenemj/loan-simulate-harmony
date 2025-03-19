@@ -37,8 +37,10 @@ const NavigationHeader: React.FC = () => {
     <header className="border-b mb-6">
       <div className="container py-4 px-4 md:px-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">{t('app.title')}</h1>
-          <p className="text-sm text-muted-foreground max-w-xs md:max-w-none">{t('app.subtitle')}</p>
+          <Link to="/" className="inline-block">
+            <h1 className="text-2xl font-bold">{t('app.title')}</h1>
+            <p className="text-sm text-muted-foreground max-w-xs md:max-w-none">{t('app.subtitle')}</p>
+          </Link>
         </div>
         
         {isMobile ? (

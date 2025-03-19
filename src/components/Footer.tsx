@@ -95,7 +95,7 @@ const Footer = () => {
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
           <p>© {currentYear} Loan Simulate Harmony. {t("landing.footer.copyright")}</p>
           <div className="mt-2">
-            <CookieSettingsButton id="cookie-settings-button" className="text-xs h-auto p-0 mx-2" />
+            <CookieSettingsButton className="text-xs h-auto p-0 mx-2" />
           </div>
         </div>
       </div>
