@@ -52,7 +52,7 @@ export const en = {
     loanActivated: "Loan activated",
     loanDeactivated: "Loan deactivated",
     loanPaidOff: "Loan paid off",
-    cardPaidOff: "Card paid off",
+    cardPaidOff: "Card paid off"
   },
   landing: {
     seo: {
