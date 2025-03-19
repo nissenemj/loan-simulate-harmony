@@ -78,7 +78,8 @@ export default {
     loans: "Lainat",
     creditCards: "Luottokortit",
     affiliate: "Tarjoukset",
-    loanTerms: "Lainasanasto"
+    loanTerms: "Lainasanasto",
+    debtSummary: "Velkojen yhteenveto"
   },
   creditCard: {
     title: "Lisää luottokortti",
@@ -206,5 +207,22 @@ export default {
       title: "Kiinteä maksuerä",
       description: "Takaisinmaksutapa, jossa maksat saman kokonaissumman joka kuukausi, samankaltaisesti kuin annuiteetissa. Tämä menetelmä kuitenkin mahdollistaa tarkan maksuerän määrittämisen, mikä saattaa vaikuttaa laina-aikaan."
     }
+  },
+  debtSummary: {
+    pageTitle: "Velkojen yhteenveto",
+    metaDescription: "Tarkastele lainojen ja luottokorttien maksuja, korkoja ja kokonaiskustannuksia yhdellä silmäyksellä.",
+    backButton: "Takaisin",
+    pageDescription: "Tarkastele kaikkien velkojen yhteenvetoa yhdellä silmäyksellä.",
+    loansSection: "Lainat",
+    creditCardsSection: "Luottokortit",
+    totalSummarySection: "Velkojen kokonaissumma",
+    cardName: "Kortin nimi",
+    monthlyPayment: "Kuukausimaksu",
+    monthlyInterest: "Kuukausikorko",
+    totalInterestEstimate: "Kokonaiskorkoarvio",
+    noCardsMessage: "Ei lisättyjä luottokortteja.",
+    totalCards: "Luottokortit yhteensä",
+    neverPaidOff: "Ei makseta pois",
+    demoDataMessage: "Tämä on esimerkkidata. Lisää omia lainoja ja luottokortteja nähdäksesi henkilökohtaisen yhteenvedon."
   }
 } as const;
