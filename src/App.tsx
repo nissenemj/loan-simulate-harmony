@@ -9,6 +9,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoanTerms from "./pages/LoanTerms";
+import DebtSummaryPage from "./pages/DebtSummaryPage";
 import NavigationHeader from "./components/NavigationHeader";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,12 @@ const App = () => (
                 <>
                   <NavigationHeader />
                   <LoanTerms />
+                </>
+              } />
+              <Route path="/debt-summary" element={
+                <>
+                  <NavigationHeader />
+                  <DebtSummaryPage />
                 </>
               } />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

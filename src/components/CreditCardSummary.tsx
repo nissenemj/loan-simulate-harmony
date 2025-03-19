@@ -57,7 +57,7 @@ export default function CreditCardSummary({ creditCards }: CreditCardSummaryProp
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl text-left">{t("creditCard.summary.title") || t("recommendations.title")}</CardTitle>
+        <CardTitle className="text-xl text-left">{t("creditCard.summary.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

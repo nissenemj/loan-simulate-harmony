@@ -1,4 +1,3 @@
-
 export default {
   app: {
     title: "Loan Calculator",
@@ -65,7 +64,8 @@ export default {
     loans: "Loans",
     creditCards: "Credit Cards",
     affiliate: "Offers",
-    loanTerms: "Loan Terms"
+    loanTerms: "Loan Terms",
+    debtSummary: "Debt Summary"
   },
   creditCard: {
     form: {
@@ -174,5 +174,29 @@ export default {
       title: "Fixed Installment",
       description: "A repayment method where you pay the same total amount each month, similar to an annuity. However, this method allows you to specify the exact payment amount, which may affect your loan term."
     }
+  },
+  debtSummary: {
+    pageTitle: "Debt Summary",
+    metaDescription: "View your monthly loan and credit card payments, interest, and total costs in one place.",
+    pageDescription: "Get a comprehensive overview of your debt obligations and total costs.",
+    backButton: "Back to Calculator",
+    loansSection: "Loans",
+    creditCardsSection: "Credit Cards",
+    totalSummarySection: "Total Debt Summary",
+    loanName: "Loan Name",
+    cardName: "Card Name",
+    monthlyPayment: "Monthly Payment",
+    monthlyInterest: "Monthly Interest",
+    totalInterestEstimate: "Total Interest Estimate",
+    totalLoans: "Total (Loans)",
+    totalCards: "Total (Cards)",
+    totalMonthlyPayment: "Total Monthly Payment",
+    totalMonthlyInterest: "Total Monthly Interest",
+    totalLifetimeInterest: "Total Lifetime Interest",
+    summaryExplanation: "This summary combines all your active debts to show your total monthly obligations and the estimated total interest you'll pay over the life of your debts.",
+    demoDataMessage: "Showing sample data. Add actual loans and credit cards to see your own summary.",
+    noLoansMessage: "No loans added yet. Add loans to see your summary.",
+    noCardsMessage: "No credit cards added yet. Add credit cards to see your summary.",
+    neverPaidOff: "Never paid off"
   }
 } as const;
