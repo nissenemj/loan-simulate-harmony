@@ -16,7 +16,6 @@ import SavingsImpact from "@/components/SavingsImpact";
 import CreditCardForm from "@/components/CreditCardForm";
 import CreditCardTable from "@/components/CreditCardTable";
 import CreditCardSummary from "@/components/CreditCardSummary";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -59,18 +58,6 @@ export default function Index() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
-      <div className="flex flex-col space-y-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div className="text-left">
-            <h1 className="text-3xl font-bold tracking-tight">{t("app.title")}</h1>
-            <p className="text-muted-foreground">
-              {t("app.subtitle")}
-            </p>
-          </div>
-          <LanguageSwitcher />
-        </div>
-      </div>
-
       <Tabs defaultValue="loans" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
