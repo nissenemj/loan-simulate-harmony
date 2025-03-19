@@ -28,7 +28,8 @@ const NavigationHeader: React.FC = () => {
   const isMobile = useIsMobile();
   
   const menuItems = [
-    { path: "/dashboard", label: t('tabs.loans') },
+    { path: "/dashboard", label: t('tabs.dashboard') },
+    { path: "/loans", label: t('tabs.loans') },
     { path: "/debt-summary", label: t('tabs.debtSummary') },
     { path: "/terms", label: t('tabs.glossary') }
   ];

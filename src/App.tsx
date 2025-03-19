@@ -19,6 +19,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import CookieConsentBanner from "./components/CookieConsentBanner";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,12 @@ const App = () => (
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <NavigationHeader />
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/loans" element={
                   <ProtectedRoute>
                     <NavigationHeader />
                     <Index />
