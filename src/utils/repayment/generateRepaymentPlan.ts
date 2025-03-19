@@ -45,7 +45,7 @@ export const generateRepaymentPlan = (
     totalPayment: debt.minPayment
   }));
   
-  // Allocate extra budget to highest priority debt only
+  // Allocate extra budget to highest priority debt(s) according to the prioritization method
   if (prioritizedDebts.length > 0 && extraBudget > 0) {
     // Get the highest priority debt based on the selected method
     const highestPriorityDebtId = prioritizedDebts[0].id;
