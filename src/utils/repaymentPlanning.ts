@@ -1,4 +1,3 @@
-
 import { Loan, calculateLoan } from './loanCalculations';
 import { CreditCard, calculateCreditCard } from './creditCardCalculations';
 
@@ -154,19 +153,16 @@ export const generateRepaymentPlan = (
     totalPayment: debt.minPayment
   }));
   
-  // Allocate extra budget to highest priority debts
-  let remainingExtra = extraBudget;
-  
-  // Loop through prioritized debts and allocate extra payments
-  for (const priorityDebt of prioritizedDebts) {
-    if (remainingExtra <= 0) break;
+  // Allocate extra budget to highest priority debt only
+  if (prioritizedDebts.length > 0 && extraBudget > 0) {
+    // Get the highest priority debt based on the selected method
+    const highestPriorityDebtId = prioritizedDebts[0].id;
+    const allocation = monthlyAllocation.find(a => a.id === highestPriorityDebtId);
     
-    const allocation = monthlyAllocation.find(a => a.id === priorityDebt.id);
     if (allocation) {
-      allocation.extraPayment = remainingExtra;
+      // Allocate all extra budget to the highest priority debt
+      allocation.extraPayment = extraBudget;
       allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
-      // All remaining budget goes to the highest priority debt
-      remainingExtra = 0;
     }
   }
   
