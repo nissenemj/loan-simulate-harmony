@@ -27,16 +27,18 @@ interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
   className?: string;
   defaultBudget?: number;
+  method?: PrioritizationMethod;
 }
 
 const BudgetInput: React.FC<BudgetInputProps> = ({ 
   onCalculate, 
   className,
-  defaultBudget = 500
+  defaultBudget = 500,
+  method: initialMethod = 'avalanche'
 }) => {
   const { t } = useLanguage();
   const [budget, setBudget] = useState<number>(defaultBudget);
-  const [method, setMethod] = useState<PrioritizationMethod>('avalanche');
+  const [method, setMethod] = useState<PrioritizationMethod>(initialMethod);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
