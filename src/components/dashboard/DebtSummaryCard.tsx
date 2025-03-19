@@ -38,7 +38,7 @@ const DebtSummaryCard = ({ totalDebt, debtFreeDate, totalMinPayments }: DebtSumm
           </div>
           
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.monthlyPayments')}</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyPayment')}</h3>
             <div className="text-2xl font-bold">
               <AnimatedNumber
                 value={totalMinPayments}
