@@ -116,12 +116,12 @@ export const en = {
     faq: {
       title: 'Frequently Asked Questions',
       question1: 'How does the app work?',
-      answer1: 'Simply input your debts, including loan amounts, interest rates, and minimum payments. The app will calculate the optimal repayment plan based on your chosen method (avalanche or snowball) and show you when you'll be debt-free.',
+      answer1: 'Simply input your debts, including loan amounts, interest rates, and minimum payments. The app will calculate the optimal repayment plan based on your chosen method (avalanche or snowball) and show you when you\'ll be debt-free.',
       question2: 'Is using the app free?',
       answer2: 'Yes! Loan Simulate Harmony is completely free to use. We believe everyone should have access to tools that help improve their financial situation.',
       question3: 'Can I use the app for student loans?',
       answer3: 'Absolutely! The app works with any type of loan, including student loans, credit cards, personal loans, car loans, and mortgages.',
-      question4: 'What's the difference between the avalanche and snowball methods?',
+      question4: 'What\'s the difference between the avalanche and snowball methods?',
       answer4: 'The avalanche method prioritizes paying off high-interest debts first to save the most money in interest. The snowball method focuses on paying off the smallest debts first to build momentum and motivation.',
     },
     finalCta: {
