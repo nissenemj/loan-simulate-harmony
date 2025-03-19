@@ -1,6 +1,7 @@
-import { enTranslations } from "./en";
 
-export const fiTranslations: typeof enTranslations = {
+import { en } from "./en";
+
+export const fi = {
   app: {
     title: 'Laina Simulaattori',
     subtitle: 'Hallitse lainojasi ja suunnittele velanmaksu.',
@@ -295,4 +296,4 @@ export const fiTranslations: typeof enTranslations = {
   },
 };
 
-export default fiTranslations;
+export default fi;

@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -442,4 +443,5 @@ export const en = {
   }
 };
 
-export default enTranslations;
+export const enTranslations = en;
+export default en;

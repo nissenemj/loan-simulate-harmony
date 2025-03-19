@@ -24,7 +24,7 @@ import AnimatedNumber from '@/components/AnimatedNumber';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
-  const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  const [creditCards, setCreditCards] = useLocalStorage<CreditCardType[]>("creditCards", []);
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -155,7 +155,7 @@ const Dashboard = () => {
               {progressPercentage > 0 && (
                 <p className="text-sm text-green-600 dark:text-green-500 font-medium mt-2">
                   <Award className="inline-block mr-1 h-4 w-4" />
-                  {t('dashboard.progressMessage', { percentage: progressPercentage })}
+                  {t('dashboard.progressMessage').replace('{{percentage}}', progressPercentage.toString())}
                 </p>
               )}
             </div>
@@ -200,7 +200,7 @@ const Dashboard = () => {
                 </p>
                 {extraBudget > 0 && (
                   <p className="text-sm mt-2">
-                    {t('dashboard.allocatingExtra', { amount: formatCurrency(extraBudget) })}
+                    {t('dashboard.allocatingExtra').replace('{{amount}}', formatCurrency(extraBudget))}
                   </p>
                 )}
               </div>
@@ -313,7 +313,7 @@ const Dashboard = () => {
                       <CreditCard className="h-3 w-3" />
                     </div>
                     <h4 className="font-medium">{t('dashboard.creditCardsFree')}</h4>
-                    <p className="text-sm text-muted-foreground mt-1">{t('dashboard.projectDate')}: +1 {t('year')}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t('dashboard.projectDate')}: +1 {t('dashboard.year')}</p>
                   </div>
                 )}
                 

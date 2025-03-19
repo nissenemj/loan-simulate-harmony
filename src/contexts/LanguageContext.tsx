@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { en as enTranslationsObject } from '@/translations/en';
-import { fi as fiTranslationsObject } from '@/translations/fi';
+import { en } from '@/translations/en';
+import { fi } from '@/translations/fi';
 
 type Translations = {
   [key: string]: string;
@@ -29,8 +29,8 @@ const flattenTranslations = (obj: any, prefix = ''): Translations => {
   }, {});
 };
 
-const enTranslations = flattenTranslations(enTranslationsObject);
-const fiTranslations = flattenTranslations(fiTranslationsObject);
+const enTranslations = flattenTranslations(en);
+const fiTranslations = flattenTranslations(fi);
 
 const LanguageContext = createContext<LanguageContextType>({
   language: 'fi',
