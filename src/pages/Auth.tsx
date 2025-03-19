@@ -85,7 +85,7 @@ const Auth = () => {
         <Tabs defaultValue="login" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">{t("auth.login")}</TabsTrigger>
-            <TabsTrigger value="signup">{t("auth.signup")}</TabsTrigger>
+            <TabsTrigger value="signup">{t("auth.signUp")}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="login">
@@ -148,7 +148,7 @@ const Auth = () => {
               </CardContent>
               <CardFooter>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? t("auth.signingUp") : t("auth.signup")}
+                  {loading ? t("auth.signingUp") : t("auth.signUp")}
                 </Button>
               </CardFooter>
             </form>
