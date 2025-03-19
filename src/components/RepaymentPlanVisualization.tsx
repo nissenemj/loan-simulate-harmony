@@ -188,16 +188,12 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
           <CardDescription>{t("repayment.balanceTimelineDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-72">
-            <ChartContainer 
-              config={{
-                totalRemaining: {
-                  label: t("repayment.totalRemaining"),
-                  color: "hsl(var(--primary))",
-                },
-              }}
-            >
-              <AreaChart data={balanceTimelineData} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+          <div className="h-72 w-full overflow-hidden">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart 
+                data={balanceTimelineData} 
+                margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="month" 
@@ -213,15 +209,12 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
                     value: t("repayment.balance"), 
                     angle: -90, 
                     position: 'insideLeft', 
-                    offset: -15 
+                    offset: -5 
                   }}  
                 />
-                <ChartTooltip 
-                  content={
-                    <ChartTooltipContent 
-                      formatter={(value) => formatCurrency(Number(value))}
-                    />
-                  } 
+                <Tooltip 
+                  formatter={(value) => [formatCurrency(Number(value)), t("repayment.totalRemaining")]}
+                  labelFormatter={(label) => `${t("form.months")}: ${label}`}
                 />
                 <Area 
                   type="monotone" 
@@ -231,7 +224,7 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
                   strokeWidth={2} 
                 />
               </AreaChart>
-            </ChartContainer>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
@@ -243,12 +236,12 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
           <CardDescription>{t("repayment.payoffScheduleDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-72">
+          <div className="h-72 w-full overflow-hidden">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={debtPayoffData}
                 layout="vertical"
-                margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
+                margin={{ top: 10, right: 10, left: 100, bottom: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
@@ -259,7 +252,7 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
                     offset: -15 
                   }} 
                 />
-                <YAxis dataKey="name" type="category" />
+                <YAxis dataKey="name" type="category" width={90} />
                 <Tooltip 
                   formatter={(value) => [`${value} ${t("form.months")}`, t("repayment.payoffTime")]}
                   labelFormatter={(label) => label}
