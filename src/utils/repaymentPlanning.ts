@@ -144,7 +144,7 @@ export const generateRepaymentPlan = (
   // Prioritize debts
   const prioritizedDebts = prioritizeDebts(activeDebts, method);
   
-  // Initialize repayment plan with minimum payments for all debts
+  // Initialize monthly allocation with minimum payments for all debts
   const monthlyAllocation = activeDebts.map(debt => ({
     id: debt.id,
     name: debt.name,
@@ -154,13 +154,19 @@ export const generateRepaymentPlan = (
     totalPayment: debt.minPayment
   }));
   
-  // Allocate extra budget to highest priority debt
-  if (prioritizedDebts.length > 0 && extraBudget > 0) {
-    const highestPriorityDebtId = prioritizedDebts[0].id;
-    const allocation = monthlyAllocation.find(a => a.id === highestPriorityDebtId);
+  // Allocate extra budget to highest priority debts
+  let remainingExtra = extraBudget;
+  
+  // Loop through prioritized debts and allocate extra payments
+  for (const priorityDebt of prioritizedDebts) {
+    if (remainingExtra <= 0) break;
+    
+    const allocation = monthlyAllocation.find(a => a.id === priorityDebt.id);
     if (allocation) {
-      allocation.extraPayment = extraBudget;
-      allocation.totalPayment = allocation.minPayment + extraBudget;
+      allocation.extraPayment = remainingExtra;
+      allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
+      // All remaining budget goes to the highest priority debt
+      remainingExtra = 0;
     }
   }
   
