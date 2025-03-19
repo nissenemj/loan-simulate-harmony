@@ -9,9 +9,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Card,
   CardContent,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, DollarSign, Percent, Calendar, CreditCard as CreditCardIcon } from "lucide-react";
 import AnimatedNumber from "@/components/AnimatedNumber";
+import { cn } from "@/lib/utils";
 
 interface TotalDebtSummaryProps {
   loans: Loan[];
@@ -69,7 +72,7 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
     creditCards.reduce((sum, card) => sum + card.balance, 0);
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden shadow-md border-border">
       {isDemo && (
         <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300">
           <AlertCircle size={16} />
@@ -77,64 +80,95 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
         </div>
       )}
       
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl font-semibold flex items-center gap-2">
+          <DollarSign className="h-5 w-5 text-primary" />
+          {t("debtSummary.title")}
+        </CardTitle>
+      </CardHeader>
+      
       <CardContent className="p-6">
-        <div className="grid gap-6 md:grid-cols-4">
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">{t("debtSummary.totalMonthlyPayment")}</h3>
-            <div className="text-3xl font-bold">
-              <AnimatedNumber
-                value={totalMonthlyPayment}
-                formatter={formatCurrency}
-              />
-            </div>
-            {totalLoanMonthlyFee > 0 && (
-              <p className="text-xs text-muted-foreground">
-                {t("debtSummary.includesFees")}: {formatCurrency(totalLoanMonthlyFee)}
-              </p>
-            )}
-          </div>
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+          <DebtMetricCard 
+            title={t("debtSummary.totalMonthlyPayment")}
+            value={totalMonthlyPayment}
+            icon={<Calendar className="h-5 w-5 text-primary" />}
+            note={totalLoanMonthlyFee > 0 ? t("debtSummary.includesFees") + ': ' + formatCurrency(totalLoanMonthlyFee) : undefined}
+          />
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">{t("debtSummary.totalMonthlyInterest")}</h3>
-            <div className="text-3xl font-bold">
-              <AnimatedNumber
-                value={totalMonthlyInterest}
-                formatter={formatCurrency}
-              />
-            </div>
-          </div>
+          <DebtMetricCard 
+            title={t("debtSummary.totalMonthlyInterest")}
+            value={totalMonthlyInterest}
+            icon={<Percent className="h-5 w-5 text-primary" />}
+          />
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">{t("debtSummary.totalLifetimeInterest")}</h3>
-            <div className="text-3xl font-bold">
-              {totalInterestEstimate === Infinity ? (
-                <span className="text-destructive">
-                  {t("debtSummary.neverPaidOff")}
-                </span>
-              ) : (
-                <AnimatedNumber
-                  value={totalInterestEstimate}
-                  formatter={formatCurrency}
-                />
-              )}
-            </div>
-          </div>
+          <DebtMetricCard 
+            title={t("debtSummary.totalLifetimeInterest")}
+            value={totalInterestEstimate}
+            icon={<Calendar className="h-5 w-5 text-primary" />}
+            isInfinite={totalInterestEstimate === Infinity}
+            infiniteText={t("debtSummary.neverPaidOff")}
+          />
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-medium">{t("debtSummary.totalBalance")}</h3>
-            <div className="text-3xl font-bold">
-              <AnimatedNumber
-                value={totalBalance}
-                formatter={formatCurrency}
-              />
-            </div>
-          </div>
+          <DebtMetricCard 
+            title={t("debtSummary.totalBalance")}
+            value={totalBalance}
+            icon={<CreditCardIcon className="h-5 w-5 text-primary" />}
+          />
         </div>
         
-        <div className="mt-6 text-muted-foreground text-sm">
+        <div className="mt-6 p-4 bg-muted/50 rounded-lg text-muted-foreground text-sm">
           <p>{t("debtSummary.summaryExplanation")}</p>
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+interface DebtMetricCardProps {
+  title: string;
+  value: number | string;
+  icon?: React.ReactNode;
+  note?: string;
+  isInfinite?: boolean;
+  infiniteText?: string;
+  className?: string;
+}
+
+function DebtMetricCard({ 
+  title, 
+  value, 
+  icon, 
+  note, 
+  isInfinite = false,
+  infiniteText = "∞",
+  className 
+}: DebtMetricCardProps) {
+  return (
+    <div className={cn("space-y-2 p-4 rounded-lg bg-card/50 border border-border/50 hover:border-primary/30 transition-colors", className)}>
+      <div className="flex items-center gap-2">
+        {icon}
+        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+      </div>
+      
+      <div className="text-2xl font-bold">
+        {isInfinite ? (
+          <span className="text-destructive">
+            {infiniteText}
+          </span>
+        ) : (
+          <AnimatedNumber
+            value={typeof value === 'number' ? value : 0}
+            formatter={formatCurrency}
+          />
+        )}
+      </div>
+      
+      {note && (
+        <p className="text-xs text-muted-foreground">
+          {note}
+        </p>
+      )}
+    </div>
   );
 }
