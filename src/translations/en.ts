@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -350,7 +349,7 @@ export const en = {
   savings: {
     title: "Potential Savings",
     description: "Paying off loans faster can save you a significant amount on interest.",
-    payingOffNow: "Paying off now",
+    payingOffNow: "Paying off now saves",
     payOff: "Pay Off",
   },
   table: {
