@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Loan, LoanType, InterestType } from '@/utils/loanCalculations';
-import { PlusCircle, Edit, X, Percent, DollarSign, Clock, Bank } from 'lucide-react';
+import { PlusCircle, Edit, X, Percent, DollarSign, Clock, Banknote } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -234,7 +233,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
-                <Bank size={16} className="text-primary" />
+                <Banknote size={16} className="text-primary" />
                 {t('form.name')}
               </Label>
               <Input
