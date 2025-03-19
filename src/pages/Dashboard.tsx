@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +14,6 @@ import TotalDebtSummary from '@/components/TotalDebtSummary';
 import LoanSummary from '@/components/LoanSummary';
 import LoanSummaryTable from '@/components/LoanSummaryTable';
 import CreditCardSummaryTable from '@/components/CreditCardSummaryTable';
-import AffiliateSection from '@/components/affiliate/AffiliateSection';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
 import { formatCurrency } from '@/utils/loanCalculations';
@@ -29,43 +27,33 @@ const Dashboard = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   
-  // Filter active debts
   const activeLoans = loans.filter(loan => loan.isActive);
   const activeCards = creditCards.filter(card => card.isActive);
   
-  // Calculate totals
   const totalDebt = 
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
   
-  // Assuming 25% of debt has been paid off (this would be calculated from payment history in a real app)
   const paidDebt = totalDebt * 0.25; 
   const remainingDebt = totalDebt - paidDebt;
   const progressPercentage = totalDebt > 0 ? Math.round((paidDebt / totalDebt) * 100) : 0;
   
-  // Calculate estimated debt-free date (simple estimation)
   const now = new Date();
-  // Assuming current payment pace would clear debt in 3 years (this would be calculated from actual payment plan)
   const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 3));
   const formattedDebtFreeDate = debtFreeDate.toLocaleDateString('fi-FI');
   
-  // Monthly budget (this would be user-set in a real app)
   const monthlyBudget = 1500;
   
-  // Calculate minimum payments
   const totalMinPayments = 
     activeLoans.reduce((sum, loan) => {
-      // Simple calculation for demo purposes
       return sum + (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12));
     }, 0) + 
     activeCards.reduce((sum, card) => {
-      // Simple minimum payment calculation
       return sum + Math.max(card.minPayment, card.balance * card.minPaymentPercent / 100);
     }, 0);
   
   const extraBudget = Math.max(0, monthlyBudget - totalMinPayments);
   
-  // Find highest interest debt (simplified)
   let highestInterestDebt = { name: "", rate: 0 };
   
   activeLoans.forEach(loan => {
@@ -87,7 +75,6 @@ const Dashboard = () => {
       </Helmet>
       
       <div className="flex flex-col gap-8">
-        {/* Welcome section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.welcome')}, {user?.email?.split('@')[0] || t('dashboard.user')}</h1>
@@ -102,7 +89,6 @@ const Dashboard = () => {
           </div>
         </div>
         
-        {/* Overall progress section */}
         <Card className="bg-gradient-to-br from-muted/50 to-background border shadow-md">
           <CardContent className="pt-6">
             <div className="grid gap-6 md:grid-cols-4">
@@ -162,7 +148,6 @@ const Dashboard = () => {
           </CardContent>
         </Card>
         
-        {/* Payment plan summary */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -214,7 +199,6 @@ const Dashboard = () => {
           </CardFooter>
         </Card>
         
-        {/* Debt breakdown section */}
         <div>
           <h2 className="text-2xl font-bold tracking-tight mb-4">{t('dashboard.debtBreakdown')}</h2>
           
@@ -248,12 +232,10 @@ const Dashboard = () => {
           </Tabs>
         </div>
         
-        {/* Loan summary with recommendations */}
         {activeLoans.length > 0 && (
           <LoanSummary loans={activeLoans} />
         )}
         
-        {/* Financial tips */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -285,7 +267,6 @@ const Dashboard = () => {
           </CardFooter>
         </Card>
         
-        {/* Timeline preview */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -334,16 +315,5 @@ const Dashboard = () => {
             </Button>
           </CardFooter>
         </Card>
-        
-        {/* Affiliate section */}
-        <div className="mt-6">
-          <Separator className="my-8" />
-          <h2 className="text-2xl font-bold tracking-tight mb-6">{t('dashboard.helpWithDebt')}</h2>
-          <AffiliateSection />
-        </div>
-      </div>
-    </div>
-  );
-};
+     
 
-export default Dashboard;
