@@ -85,5 +85,46 @@ export const fiTranslations = {
   
   // Language
   "language.en": "Englanti",
-  "language.fi": "Suomi"
+  "language.fi": "Suomi",
+  
+  // Tabs
+  "tabs.loans": "Lainat",
+  "tabs.creditCards": "Luottokortit",
+  
+  // Credit Card Section
+  "creditCard.title": "Lisää uusi luottokortti",
+  "creditCard.name": "Kortin nimi",
+  "creditCard.name.placeholder": "esim. Visa Platinum, Mastercard Gold",
+  "creditCard.balance": "Nykyinen saldo (€)",
+  "creditCard.balance.placeholder": "esim. 1500",
+  "creditCard.limit": "Luottoraja (€)",
+  "creditCard.limit.placeholder": "esim. 5000",
+  "creditCard.apr": "Vuosikorko (APR %)",
+  "creditCard.apr.placeholder": "esim. 19.99",
+  "creditCard.minPayment": "Vähimmäismaksu (€)",
+  "creditCard.minPayment.placeholder": "esim. 50",
+  "creditCard.minPaymentPercent": "tai Vähimmäismaksu (%)",
+  "creditCard.minPaymentPercent.placeholder": "esim. 3",
+  "creditCard.fullPayment": "Maksa saldo kokonaan",
+  "creditCard.addButton": "Lisää luottokortti",
+  
+  // Credit Card Table
+  "creditCard.table.name": "Kortin nimi",
+  "creditCard.table.balance": "Saldo",
+  "creditCard.table.limit": "Luottoraja",
+  "creditCard.table.apr": "Vuosikorko",
+  "creditCard.table.minPayment": "Vähimmäismaksu",
+  "creditCard.table.monthlyInterest": "Kuukausikorko",
+  "creditCard.table.payoffTime": "Maksuaika",
+  "creditCard.table.totalInterest": "Kokonaiskorko",
+  "creditCard.table.utilization": "Käyttöaste",
+  "creditCard.table.active": "Aktiivinen",
+  "creditCard.table.noCards": "Ei lisättyjä luottokortteja. Lisää ensimmäinen kortti yllä olevalla lomakkeella.",
+  
+  // Credit Card Summary
+  "creditCard.summary.totalBalance": "Luottokorttien kokonaissaldo",
+  "creditCard.summary.totalLimit": "Luottokorttien kokonaisluottoraja",
+  "creditCard.summary.totalUtilization": "Kokonaiskäyttöaste",
+  "creditCard.summary.totalMinPayment": "Vähimmäismaksut yhteensä",
+  "creditCard.summary.totalInterest": "Kuukausikorot yhteensä",
 };

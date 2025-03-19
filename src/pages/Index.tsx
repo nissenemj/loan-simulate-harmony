@@ -1,123 +1,104 @@
 
-import React, { useState, useEffect } from 'react';
-import LoanForm from '@/components/LoanForm';
-import LoanTable from '@/components/LoanTable';
-import LoanSummary from '@/components/LoanSummary';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { Loan, calculateLoan } from '@/utils/loanCalculations';
-import { useToast } from '@/components/ui/use-toast';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useState, useEffect } from "react";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { 
+  Loan, 
+  calculateTotalMonthlyPayment, 
+  generateRecommendations 
+} from "@/utils/loanCalculations";
+import { CreditCard } from "@/utils/creditCardCalculations";
+import { useTranslation } from "@/contexts/LanguageContext";
 
-const Index = () => {
-  const { toast } = useToast();
-  const { t } = useLanguage();
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [highestTotalInterestId, setHighestTotalInterestId] = useState<string | undefined>(undefined);
-  
-  useEffect(() => {
-    // Find the loan with the highest total interest
-    if (loans.length > 0) {
-      const activeLoans = loans.filter(loan => loan.isActive);
-      
-      if (activeLoans.length > 0) {
-        let maxInterestId: string | undefined = undefined;
-        let maxInterestValue = -1;
-        
-        activeLoans.forEach(loan => {
-          const result = calculateLoan(loan);
-          if (result.totalInterest > maxInterestValue) {
-            maxInterestValue = result.totalInterest;
-            maxInterestId = loan.id;
-          }
-        });
-        
-        setHighestTotalInterestId(maxInterestId);
-      } else {
-        setHighestTotalInterestId(undefined);
-      }
-    }
-  }, [loans]);
-  
+import LoanForm from "@/components/LoanForm";
+import LoanTable from "@/components/LoanTable";
+import LoanSummary from "@/components/LoanSummary";
+import CreditCardForm from "@/components/CreditCardForm";
+import CreditCardTable from "@/components/CreditCardTable";
+import CreditCardSummary from "@/components/CreditCardSummary";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+export default function Index() {
+  const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
+  const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  const { t } = useTranslation();
+
   const handleAddLoan = (loan: Loan) => {
-    setLoans(prevLoans => [...prevLoans, loan]);
-    toast({
-      title: t('toast.loanAdded'),
-      description: t('toast.loanAddedDesc').replace('{name}', loan.name),
-    });
+    setLoans((prev) => [...prev, loan]);
   };
-  
-  const handleToggleLoan = (id: string) => {
-    setLoans(prevLoans => 
-      prevLoans.map(loan => 
-        loan.id === id 
-          ? { ...loan, isActive: !loan.isActive } 
-          : loan
-      )
+
+  const handleToggleLoanActive = (id: string, isActive: boolean) => {
+    setLoans((prev) =>
+      prev.map((loan) => (loan.id === id ? { ...loan, isActive } : loan))
     );
-    
-    // Find the toggled loan
-    const loan = loans.find(l => l.id === id);
-    if (loan) {
-      toast({
-        title: loan.isActive ? t('toast.loanDeactivated') : t('toast.loanActivated'),
-        description: t('toast.loanToggleDesc')
-          .replace('{name}', loan.name)
-          .replace('{state}', loan.isActive ? t('toast.removedFrom') : t('toast.addedTo')),
-      });
-    }
   };
-  
+
+  const handleAddCreditCard = (card: CreditCard) => {
+    setCreditCards((prev) => [...prev, card]);
+  };
+
+  const handleToggleCreditCardActive = (id: string, isActive: boolean) => {
+    setCreditCards((prev) =>
+      prev.map((card) => (card.id === id ? { ...card, isActive } : card))
+    );
+  };
+
+  const activeLoans = loans.filter((loan) => loan.isActive);
+  const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
+  const recommendations = generateRecommendations(loans);
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="py-12 px-4 sm:px-6 text-center mb-8 bg-white/50 backdrop-blur-subtle border-b border-border">
-        <div className="max-w-4xl mx-auto">
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-            <LanguageSwitcher />
+    <div className="container mx-auto py-8 space-y-8">
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+          <div className="text-left">
+            <h1 className="text-3xl font-bold tracking-tight">{t("app.title")}</h1>
+            <p className="text-muted-foreground">
+              {t("app.subtitle")}
+            </p>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-gray-900 mb-2">
-            {t('app.title')}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('app.subtitle')}
-          </p>
+          <LanguageSwitcher className="mt-4 md:mt-0" />
         </div>
-      </header>
-      
-      <main className="pb-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto space-y-10">
-          <div className="animate-slide-up">
-            <LoanForm onAddLoan={handleAddLoan} />
-          </div>
+      </div>
+
+      <Tabs defaultValue="loans" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
+          <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="loans" className="space-y-8">
+          <LoanForm onAddLoan={handleAddLoan} />
           
-          <div 
-            className={loans.length > 0 ? "animate-slide-up" : ""}
-            style={{ animationDelay: "100ms" }}
-          >
-            <LoanTable 
-              loans={loans} 
-              onToggleLoan={handleToggleLoan} 
-              highestTotalInterestId={highestTotalInterestId}
-            />
-          </div>
+          <LoanTable loans={loans} onToggleActive={handleToggleLoanActive} />
           
-          {loans.length > 0 && (
-            <div 
-              className="animate-slide-up"
-              style={{ animationDelay: "200ms" }}
-            >
-              <LoanSummary loans={loans} />
-            </div>
+          {activeLoans.length > 0 && (
+            <>
+              <LoanSummary
+                totalPayment={totalPayment}
+                totalPrincipal={totalPrincipal}
+                totalInterest={totalInterest}
+                recommendations={recommendations}
+              />
+            </>
           )}
-        </div>
-      </main>
-      
-      <footer className="py-6 px-4 sm:px-6 border-t border-border bg-white/50 backdrop-blur-subtle">
-        <div className="max-w-4xl mx-auto text-center text-sm text-muted-foreground">
-          <p>{t('app.footer')}</p>
-        </div>
+        </TabsContent>
+        
+        <TabsContent value="creditCards" className="space-y-8">
+          <CreditCardForm onAddCreditCard={handleAddCreditCard} />
+          
+          <CreditCardTable 
+            creditCards={creditCards} 
+            onToggleActive={handleToggleCreditCardActive} 
+          />
+          
+          <CreditCardSummary creditCards={creditCards} />
+        </TabsContent>
+      </Tabs>
+
+      <footer className="text-center text-sm text-muted-foreground pt-8 border-t">
+        <p>{t("app.footer")}</p>
       </footer>
     </div>
   );
-};
-
-export default Index;
+}

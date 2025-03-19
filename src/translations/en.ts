@@ -85,5 +85,46 @@ export const enTranslations = {
   
   // Language
   "language.en": "English",
-  "language.fi": "Finnish"
+  "language.fi": "Finnish",
+  
+  // Tabs
+  "tabs.loans": "Loans",
+  "tabs.creditCards": "Credit Cards",
+  
+  // Credit Card Section
+  "creditCard.title": "Add New Credit Card",
+  "creditCard.name": "Card Name",
+  "creditCard.name.placeholder": "e.g., Visa Platinum, Mastercard Gold",
+  "creditCard.balance": "Current Balance (€)",
+  "creditCard.balance.placeholder": "e.g., 1500",
+  "creditCard.limit": "Credit Limit (€)",
+  "creditCard.limit.placeholder": "e.g., 5000",
+  "creditCard.apr": "Annual Percentage Rate (APR %)",
+  "creditCard.apr.placeholder": "e.g., 19.99",
+  "creditCard.minPayment": "Minimum Payment (€)",
+  "creditCard.minPayment.placeholder": "e.g., 50",
+  "creditCard.minPaymentPercent": "or Minimum Payment (%)",
+  "creditCard.minPaymentPercent.placeholder": "e.g., 3",
+  "creditCard.fullPayment": "Pay balance in full",
+  "creditCard.addButton": "Add Credit Card",
+  
+  // Credit Card Table
+  "creditCard.table.name": "Card Name",
+  "creditCard.table.balance": "Balance",
+  "creditCard.table.limit": "Credit Limit",
+  "creditCard.table.apr": "APR",
+  "creditCard.table.minPayment": "Min. Payment",
+  "creditCard.table.monthlyInterest": "Monthly Interest",
+  "creditCard.table.payoffTime": "Payoff Time",
+  "creditCard.table.totalInterest": "Total Interest",
+  "creditCard.table.utilization": "Utilization",
+  "creditCard.table.active": "Active",
+  "creditCard.table.noCards": "No credit cards added yet. Add your first card using the form above.",
+  
+  // Credit Card Summary
+  "creditCard.summary.totalBalance": "Total Credit Card Balance",
+  "creditCard.summary.totalLimit": "Total Credit Limit",
+  "creditCard.summary.totalUtilization": "Overall Utilization",
+  "creditCard.summary.totalMinPayment": "Total Min. Payment",
+  "creditCard.summary.totalInterest": "Total Monthly Interest",
 };
