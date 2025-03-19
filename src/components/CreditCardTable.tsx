@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { 
@@ -34,12 +35,11 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
     
     const card = creditCards.find(card => card.id === id);
     if (card) {
-      toast(isActive ? t("toast.loanActivated") : t("toast.loanDeactivated"), {
-        description: t("toast.loanToggleDesc", { 
-          name: card.name, 
-          state: isActive ? t("toast.addedTo") : t("toast.removedFrom") 
-        }),
-      });
+      // Fix toast error: update to use a single parameter
+      toast(isActive ? 
+        `${t("toast.loanActivated")}: ${card.name}` : 
+        `${t("toast.loanDeactivated")}: ${card.name}`
+      );
     }
   };
 

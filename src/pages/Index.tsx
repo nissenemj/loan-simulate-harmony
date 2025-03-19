@@ -27,9 +27,10 @@ export default function Index() {
     setLoans((prev) => [...prev, loan]);
   };
 
-  const handleToggleLoanActive = (id: string, isActive: boolean) => {
+  // Update this function to accept isActive parameter to match LoanTable prop
+  const handleToggleLoanActive = (id: string, isActive?: boolean) => {
     setLoans((prev) =>
-      prev.map((loan) => (loan.id === id ? { ...loan, isActive } : loan))
+      prev.map((loan) => (loan.id === id ? { ...loan, isActive: isActive !== undefined ? isActive : !loan.isActive } : loan))
     );
   };
 
