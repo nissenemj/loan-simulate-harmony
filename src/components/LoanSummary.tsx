@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loan, calculateTotalMonthlyPayment, formatCurrency, generateRecommendations } from '@/utils/loanCalculations';
@@ -118,7 +117,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               
               {highestInterestRateLoans.length > 0 && (
                 <div className="p-4 bg-secondary/30 rounded-lg">
-                  <h4 className="font-medium mb-2">{t('recommendations.highestRate')}</h4>
+                  <h4 className="font-medium mb-2">{t('recommendations.highInterest')}</h4>
                   <p className="text-sm">
                     {highestInterestRateLoans.map(loan => (
                       <span key={loan.id}>
@@ -131,8 +130,8 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                     }, <></>)}
                     {" "}
                     {highestInterestRateLoans.length === 1 
-                      ? t('recommendations.highestRateText')
-                      : t('recommendations.highestRateTextPlural')}
+                      ? t('recommendations.highInterestText')
+                      : t('recommendations.highInterestTextPlural')}
                   </p>
                 </div>
               )}
