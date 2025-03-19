@@ -1,3 +1,4 @@
+
 export default {
   app: {
     title: "Lainalaskuri",
@@ -216,13 +217,20 @@ export default {
     loansSection: "Lainat",
     creditCardsSection: "Luottokortit",
     totalSummarySection: "Velkojen kokonaissumma",
+    loanName: "Lainan nimi",
     cardName: "Kortin nimi",
     monthlyPayment: "Kuukausimaksu",
     monthlyInterest: "Kuukausikorko",
     totalInterestEstimate: "Kokonaiskorkoarvio",
-    noCardsMessage: "Ei lisättyjä luottokortteja.",
+    totalLoans: "Lainat yhteensä",
     totalCards: "Luottokortit yhteensä",
-    neverPaidOff: "Ei makseta pois",
-    demoDataMessage: "Tämä on esimerkkidata. Lisää omia lainoja ja luottokortteja nähdäksesi henkilökohtaisen yhteenvedon."
+    totalMonthlyPayment: "Kuukausimaksut yhteensä",
+    totalMonthlyInterest: "Kuukausikorot yhteensä",
+    totalLifetimeInterest: "Kokonaiskorko elinaikana",
+    summaryExplanation: "Tämä yhteenveto yhdistää kaikki aktiiviset velkasi näyttääkseen kuukausimaksusi ja arvioidun kokonaiskoron, jonka maksat velkojen elinaikana.",
+    demoDataMessage: "Tämä on esimerkkidata. Lisää omia lainoja ja luottokortteja nähdäksesi henkilökohtaisen yhteenvedon.",
+    noLoansMessage: "Ei lisättyjä lainoja. Lisää lainoja nähdäksesi yhteenvedon.",
+    noCardsMessage: "Ei lisättyjä luottokortteja. Lisää luottokortteja nähdäksesi yhteenvedon.",
+    neverPaidOff: "Ei makseta pois"
   }
 } as const;
