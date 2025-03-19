@@ -151,7 +151,7 @@ function DebtMetricCard({
         <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
       </div>
       
-      <div className="text-2xl font-bold">
+      <div className="text-2xl font-bold h-10 flex items-center">
         {isInfinite ? (
           <span className="text-destructive">
             {infiniteText}
