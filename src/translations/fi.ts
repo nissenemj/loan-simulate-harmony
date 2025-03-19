@@ -115,7 +115,7 @@ export const fi = {
       totalInterest: "Kokonaiskorko",
       payoffTime: "Takaisinmaksuaika",
       active: "Aktiivinen",
-      noLoans: "Ei vielä lisättyjä lainoja.",
+      noLoans: "Ei kirjattuja lainoja.",
     },
   },
   creditCard: {
