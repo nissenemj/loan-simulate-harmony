@@ -91,7 +91,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
   if (loans.length === 0) {
     return (
       <div className="mt-6 text-center p-8 bg-white/50 rounded-lg shadow-subtle">
-        <p className="text-muted-foreground">{t('table.noLoans')}</p>
+        <p className="text-primary font-medium">{t('table.noLoans')}</p>
       </div>
     );
   }
