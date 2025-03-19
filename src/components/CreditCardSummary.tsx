@@ -63,8 +63,8 @@ export default function CreditCardSummary({ creditCards }: CreditCardSummaryProp
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {summaryItems.map((item) => (
             <div key={item.label} className="bg-muted p-4 rounded-lg text-left">
-              <div className="text-sm text-muted-foreground">{item.label}</div>
-              <div className="text-2xl font-bold mt-1">
+              <div className="text-sm font-medium text-muted-foreground mb-1">{item.label}</div>
+              <div className="text-2xl font-bold">
                 <AnimatedNumber
                   value={item.value}
                   formatter={item.formatter}

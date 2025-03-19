@@ -97,6 +97,7 @@ export default {
       placeholderApr: "esim. 18.0",
       placeholderMinPayment: "esim. 25",
       placeholderCreditLimit: "esim. 10000",
+      autoCalculated: "Lasketaan automaattisesti prosentista",
     },
     table: {
       name: "Nimi",
@@ -114,6 +115,7 @@ export default {
       totalLimit: "Luottokorttien kokonaisluottoraja",
       totalMinPayment: "Luottokorttien minimimaksu yhteensä",
       totalAvailableCredit: "Kokonaisluottoraja",
+      totalUtilization: "Kokonaiskäyttöaste",
     },
   },
   utilization: {
