@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: "Budgeting App",
@@ -220,5 +219,44 @@ export const en = {
     loans: "Loans",
     debtSummary: "Debt Summary",
     loanTerms: "Loan Terms"
+  },
+  loanTerms: {
+    pageTitle: "Loan Terms Explained Simply",
+    backButton: "Back",
+    introduction: "Loan terms explained in simple terms. Understand financial terms easily.",
+    searchPlaceholder: "Search for a term...",
+    noResults: "No results found. Try a different search term.",
+    interestRate: {
+      title: "Interest Rate",
+      description: "The interest rate is the amount you pay to the lender for the use of their money. It's expressed as a percentage of the loan principal and is typically paid monthly."
+    },
+    annuity: {
+      title: "Annuity",
+      description: "With an annuity loan, you pay the same amount every month throughout the loan term. Initially, a larger portion of your payment goes toward interest, and over time, more goes toward reducing the principal amount."
+    },
+    principal: {
+      title: "Principal",
+      description: "The principal is the original amount of money you borrowed. Your monthly payment consists of repaying this principal plus interest."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "Euribor (Euro Interbank Offered Rate) is a reference rate to which many variable-rate loans are tied. It reflects the rate at which European banks lend to each other and can change over time, affecting your total loan interest rate."
+    },
+    totalInterest: {
+      title: "Total Interest",
+      description: "Total interest is the sum of all interest payments you make over the life of the loan. It depends on the loan amount, interest rate, term length, and repayment type."
+    },
+    termYears: {
+      title: "Term (Years)",
+      description: "The loan term is the period over which you agree to repay the loan. A longer term typically means lower monthly payments but more total interest paid."
+    },
+    equalPrincipal: {
+      title: "Equal Principal",
+      description: "With an equal principal loan, you pay the same amount of principal every month, but the interest portion decreases over time. Thus, your monthly payments are higher at the beginning and decrease over time."
+    },
+    fixedInstallment: {
+      title: "Fixed Installment",
+      description: "With a fixed installment loan, you pay the same amount every month. This payment type is similar to annuity but is often used when the interest rate may vary."
+    }
   }
 }

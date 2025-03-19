@@ -1,4 +1,3 @@
-
 export const fi = {
   app: {
     title: "Budjettisovellus",
@@ -220,5 +219,44 @@ export const fi = {
     loans: "Lainat",
     debtSummary: "Velkatiivistelmä",
     loanTerms: "Lainaehdot"
+  },
+  loanTerms: {
+    pageTitle: "Lainaehdot selitettynä yksinkertaisesti",
+    backButton: "Takaisin",
+    introduction: "Lainojen ehdot yksinkertaisesti selitettynä. Ymmärrä lainojen termit helposti.",
+    searchPlaceholder: "Etsi termiä...",
+    noResults: "Ei hakutuloksia. Kokeile eri hakusanaa.",
+    interestRate: {
+      title: "Korkoprosentti",
+      description: "Korkoprosentti on summa, jonka maksat lainanantajalle lainan käytöstä. Se ilmaistaan prosenttiosuutena lainapääomasta ja maksetaan yleensä kuukausittain."
+    },
+    annuity: {
+      title: "Annuiteetti",
+      description: "Annuiteettilainassa maksat saman summan joka kuukausi koko laina-ajan. Alussa suurempi osa maksusta menee korkoihin, ja ajan myötä suurempi osa lyhentää varsinaista lainasummaa."
+    },
+    principal: {
+      title: "Pääoma",
+      description: "Pääoma on alkuperäinen summa, jonka olet lainannut. Kuukausimaksusi koostuu tämän pääoman takaisinmaksusta sekä koroista."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "Euribor (Euro Interbank Offered Rate) on viitekorko, johon monet vaihtuvakorkoiset lainat on sidottu. Se heijastaa korkoa, jolla eurooppalaiset pankit lainaavat toisilleen, ja se voi muuttua ajan myötä vaikuttaen lainasi kokonaiskorkoon."
+    },
+    totalInterest: {
+      title: "Kokonaiskorko",
+      description: "Kokonaiskorko on kaikkien laina-aikana maksamiesi korkojen summa. Se riippuu lainan määrästä, korosta, laina-ajasta ja takaisinmaksutyypistä."
+    },
+    termYears: {
+      title: "Laina-aika (vuosina)",
+      description: "Laina-aika on ajanjakso, jonka aikana sitoudut maksamaan lainan takaisin. Pidempi laina-aika yleensä pienentää kuukausimaksuja, mutta lisää kokonaiskorkosummaa."
+    },
+    equalPrincipal: {
+      title: "Tasalyhennys",
+      description: "Tasalyhennyslainassa maksat saman verran pääomaa takaisin joka kuukausi, mutta koron määrä pienenee ajan myötä. Näin ollen kuukausimaksusi ovat korkeampia alussa ja pienenevät ajan myötä."
+    },
+    fixedInstallment: {
+      title: "Kiinteät maksut",
+      description: "Kiinteän maksun lainassa maksat saman summan joka kuukausi. Tämä maksutyyppi on samankaltainen kuin annuiteetti, mutta sitä käytetään usein kun korko voi vaihdella."
+    }
   }
 };
