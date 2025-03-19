@@ -326,7 +326,8 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Affiliate Marketing Section */}
+        {/* Affiliate Marketing Section - Hidden until we have content */}
+        {/* 
         <section className="py-16 bg-background">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
@@ -343,8 +344,9 @@ const LandingPage = () => {
             </p>
           </div>
         </section>
+        */}
 
-        {/* Testimonials Section - Hidden per request */}
+        {/* Testimonials Section - Hidden */}
         {/* Hidden testimonials section */}
 
         {/* FAQ Section */}
