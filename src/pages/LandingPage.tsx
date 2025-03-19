@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
@@ -10,66 +9,73 @@ import {
   LineChart,
   SmilePlus,
   ArrowRight,
-  MessageCircle,
   HelpCircle,
-  ChevronRight,
-  Clipboard,
-  Shield,
   CheckCircle,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AffiliateLink } from "@/utils/affiliateData";
-import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import Footer from "@/components/Footer";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
 
+  // Debug käännöksiä
+  useEffect(() => {
+    console.log("Current language:", language);
+    console.log("Hero headline translation:", t("landing.hero.headline"));
+  }, [language, t]);
+
+  // Generoi testidata käännöksistä, fallback-arvot tarvittaessa
+  const getTranslatedText = (key: string, fallback: string) => {
+    const translation = t(key);
+    // Jos käännös on sama kuin avain, käytetään fallbackia
+    return translation === key ? fallback : translation;
+  };
+
   // Fictional testimonials
   const testimonials = [
     {
       id: 1,
       name: "Anna, Helsinki",
-      text: t("landing.testimonial1"),
+      text: getTranslatedText("landing.testimonial1", "Tämä sovellus auttoi minua maksamaan 5 000 € velkaa vain vuodessa! Visualisointi piti minut motivoituneena."),
       img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&h=100&auto=format&fit=crop",
     },
     {
       id: 2,
       name: "Mikko, Tampere",
-      text: t("landing.testimonial2"),
+      text: getTranslatedText("landing.testimonial2", "Olen kokeillut monia budjetointisovelluksia, mutta tämä on ainoa, joka todella auttoi luomaan realistisen velanmaksusuunnitelman."),
       img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&h=100&auto=format&fit=crop",
     },
     {
       id: 3,
       name: "Laura, Turku",
-      text: t("landing.testimonial3"),
+      text: getTranslatedText("landing.testimonial3", "Velkalumipallomenetelmä muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuoteen mennessä!"),
       img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=100&h=100&auto=format&fit=crop",
     },
   ];
 
-  // FAQ items
+  // FAQ items with fallbacks
   const faqItems = [
     {
       id: 1,
-      question: t("landing.faq.question1"),
-      answer: t("landing.faq.answer1"),
+      question: getTranslatedText("landing.faq.question1", "Miten sovellus toimii?"),
+      answer: getTranslatedText("landing.faq.answer1", "Syötä velkasi, mukaan lukien lainan määrät, korot ja vähimmäismaksut. Sovellus laskee optimaalisen takaisinmaksusuunnitelman valitsemasi menetelmän (lumivyöry tai lumipallo) perusteella ja näyttää, milloin olet velaton."),
     },
     {
       id: 2,
-      question: t("landing.faq.question2"),
-      answer: t("landing.faq.answer2"),
+      question: getTranslatedText("landing.faq.question2", "Onko sovelluksen käyttö ilmaista?"),
+      answer: getTranslatedText("landing.faq.answer2", "Kyllä! Laina Simulaattori on täysin ilmainen käyttää. Uskomme, että kaikilla tulisi olla pääsy työkaluihin, jotka auttavat parantamaan taloudellista tilannettaan."),
     },
     {
       id: 3,
-      question: t("landing.faq.question3"),
-      answer: t("landing.faq.answer3"),
+      question: getTranslatedText("landing.faq.question3", "Voinko käyttää sovellusta opintolainoihin?"),
+      answer: getTranslatedText("landing.faq.answer3", "Ehdottomasti! Sovellus toimii minkä tahansa tyyppisen lainan kanssa, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat."),
     },
     {
       id: 4,
-      question: t("landing.faq.question4"),
-      answer: t("landing.faq.answer4"),
+      question: getTranslatedText("landing.faq.question4", "Mikä on lumivyöry- ja lumipallomenetelmien ero?"),
+      answer: getTranslatedText("landing.faq.answer4", "Lumivyörymenetelmässä priorisoidaan korkeakorkoisten velkojen maksaminen ensin säästääksesi eniten korkokuluissa. Lumipallomenetelmässä keskitytään pienimpien velkojen maksamiseen ensin, mikä luo momentin ja motivaation."),
     },
   ];
 
@@ -81,9 +87,9 @@ const LandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>{t("landing.seo.title")}</title>
-        <meta name="description" content={t("landing.seo.description")} />
-        <meta name="keywords" content={t("landing.seo.keywords")} />
+        <title>{getTranslatedText("landing.seo.title", "Velanmaksu helpoksi - Ilmainen taloustyökalu | Laina Simulaattori")}</title>
+        <meta name="description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Laina Simulaattorilla. Aloita velaton matkasi tänään!")} />
+        <meta name="keywords" content={getTranslatedText("landing.seo.keywords", "velanmaksu, lainahallinta, taloustyökalut, velkalumipallovaikutus, velkavyörymetodi, taloudellinen vapaus, velaton")} />
         <script type="application/ld+json">
           {`
             {
@@ -91,7 +97,7 @@ const LandingPage = () => {
               "@type": "WebApplication",
               "name": "Loan Simulate Harmony",
               "url": "https://loansimulateharmony.fi",
-              "description": "${t("landing.seo.description")}",
+              "description": "${getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Laina Simulaattorilla. Aloita velaton matkasi tänään!")}",
               "applicationCategory": "FinanceApplication",
               "offers": {
                 "@type": "Offer",
@@ -132,10 +138,10 @@ const LandingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                    {t("landing.hero.headline")}
-                  </h1>
+                  {getTranslatedText("landing.hero.headline", "Maksa velkasi nopeammin - Aloita taloudenhoito tänään!")}
+                </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-md">
-                  {t("landing.hero.subheadline")}
+                  {getTranslatedText("landing.hero.subheadline", "Luo ilmainen henkilökohtainen velanmaksusuunnitelma ja ota hallinta taloudestasi.")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
@@ -143,7 +149,7 @@ const LandingPage = () => {
                     className="bg-primary hover:bg-primary/90 transition-colors"
                     onClick={handleCTAClick}
                   >
-                    {t("landing.hero.cta")}
+                    {getTranslatedText("landing.hero.cta", "Kirjaudu tai rekisteröidy nyt")}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <Button
@@ -151,14 +157,14 @@ const LandingPage = () => {
                     size="lg"
                     onClick={() => navigate("/terms")}
                   >
-                    {t("landing.hero.secondaryCta")}
+                    {getTranslatedText("landing.hero.secondaryCta", "Lue lisää")}
                   </Button>
                 </div>
               </div>
               <div className="rounded-lg shadow-xl overflow-hidden hidden md:block">
                 <img
                   src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600"
-                  alt={t("landing.hero.imageAlt")}
+                  alt={getTranslatedText("landing.hero.imageAlt", "Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella")}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -171,7 +177,7 @@ const LandingPage = () => {
         <section className="py-16 bg-background">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-              {t("landing.benefits.title")}
+              {getTranslatedText("landing.benefits.title", "Ota hallinta taloudellisesta tulevaisuudestasi")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card className="border-0 shadow-lg transition-all duration-300 hover:translate-y-[-5px]">
@@ -181,10 +187,10 @@ const LandingPage = () => {
                       <HandCoins className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="text-xl font-semibold">
-                      {t("landing.benefits.item1.title")}
+                      {getTranslatedText("landing.benefits.item1.title", "Personoitu takaisinmaksusuunnitelma")}
                     </h3>
                     <p className="text-muted-foreground">
-                      {t("landing.benefits.item1.description")}
+                      {getTranslatedText("landing.benefits.item1.description", "Luo räätälöity velanmaksusuunnitelma käyttäen lumivyöry- tai lumipallomenetelmää.")}
                     </p>
                   </div>
                 </CardContent>
@@ -197,10 +203,10 @@ const LandingPage = () => {
                       <LineChart className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="text-xl font-semibold">
-                      {t("landing.benefits.item2.title")}
+                      {getTranslatedText("landing.benefits.item2.title", "Seuraa edistymistäsi")}
                     </h3>
                     <p className="text-muted-foreground">
-                      {t("landing.benefits.item2.description")}
+                      {getTranslatedText("landing.benefits.item2.description", "Visualisoi edistymistäsi interaktiivisella aikajanalla ja pysy motivoituneena.")}
                     </p>
                   </div>
                 </CardContent>
@@ -213,10 +219,10 @@ const LandingPage = () => {
                       <SmilePlus className="h-8 w-8 text-primary" />
                     </div>
                     <h3 className="text-xl font-semibold">
-                      {t("landing.benefits.item3.title")}
+                      {getTranslatedText("landing.benefits.item3.title", "Vähennä taloudellista stressiä")}
                     </h3>
                     <p className="text-muted-foreground">
-                      {t("landing.benefits.item3.description")}
+                      {getTranslatedText("landing.benefits.item3.description", "Saavuta taloudellinen vapaus nopeammin ja vähennä taloudellista stressiäsi.")}
                     </p>
                   </div>
                 </CardContent>
@@ -229,19 +235,19 @@ const LandingPage = () => {
         <section className="py-16 bg-accent/50">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-              {t("landing.methods.title")}
+              {getTranslatedText("landing.methods.title", "Valitse velanmaksustrategiasi")}
             </h2>
             <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-              {t("landing.methods.subtitle")}
+              {getTranslatedText("landing.methods.subtitle", "Eri menetelmät toimivat eri ihmisille. Löydä mikä toimii sinulle.")}
             </p>
 
             <Tabs defaultValue="avalanche" className="w-full">
               <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
                 <TabsTrigger value="avalanche">
-                  {t("landing.methods.avalanche.title")}
+                  {getTranslatedText("landing.methods.avalanche.title", "Velkavyöry")}
                 </TabsTrigger>
                 <TabsTrigger value="snowball">
-                  {t("landing.methods.snowball.title")}
+                  {getTranslatedText("landing.methods.snowball.title", "Velkalumipalllo")}
                 </TabsTrigger>
               </TabsList>
 
@@ -251,30 +257,30 @@ const LandingPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                       <div>
                         <h3 className="text-xl font-semibold mb-4">
-                          {t("landing.methods.avalanche.title")}
+                          {getTranslatedText("landing.methods.avalanche.title", "Velkavyöry")}
                         </h3>
                         <p className="text-muted-foreground mb-4">
-                          {t("landing.methods.avalanche.description")}
+                          {getTranslatedText("landing.methods.avalanche.description", "Velkavyörymenetelmä keskittyy maksamaan korkeakorkoisimmat velat ensin ja tekemään vähimmäismaksut muille veloille.")}
                         </p>
                         <ul className="space-y-2">
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.avalanche.benefit1")}</span>
+                            <span>{getTranslatedText("landing.methods.avalanche.benefit1", "Matemaattisesti optimaalinen - säästää eniten korkokuluja")}</span>
                           </li>
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.avalanche.benefit2")}</span>
+                            <span>{getTranslatedText("landing.methods.avalanche.benefit2", "Vähentää kokonaismaksuaikaa")}</span>
                           </li>
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.avalanche.benefit3")}</span>
+                            <span>{getTranslatedText("landing.methods.avalanche.benefit3", "Paras niille, joita motivoi pitkän aikavälin säästöt")}</span>
                           </li>
                         </ul>
                       </div>
                       <div className="rounded-lg overflow-hidden shadow-md">
                         <img
                           src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-                          alt={t("landing.methods.avalanche.imageAlt")}
+                          alt={getTranslatedText("landing.methods.avalanche.imageAlt", "Kaavio, joka näyttää korkomaksujen vähentymisen ajan myötä")}
                           className="w-full h-auto"
                           loading="lazy"
                         />
@@ -290,30 +296,30 @@ const LandingPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                       <div>
                         <h3 className="text-xl font-semibold mb-4">
-                          {t("landing.methods.snowball.title")}
+                          {getTranslatedText("landing.methods.snowball.title", "Velkalumipalllo")}
                         </h3>
                         <p className="text-muted-foreground mb-4">
-                          {t("landing.methods.snowball.description")}
+                          {getTranslatedText("landing.methods.snowball.description", "Velkalumipalllo-menetelmä keskittyy maksamaan pienimmät velat ensin momentin ja motivaation luomiseksi.")}
                         </p>
                         <ul className="space-y-2">
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.snowball.benefit1")}</span>
+                            <span>{getTranslatedText("landing.methods.snowball.benefit1", "Luo varhaisia voittoja motivaation rakentamiseksi")}</span>
                           </li>
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.snowball.benefit2")}</span>
+                            <span>{getTranslatedText("landing.methods.snowball.benefit2", "Yksinkertaistaa taloutta vähentämällä maksujen määrää")}</span>
                           </li>
                           <li className="flex items-start">
                             <CheckCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                            <span>{t("landing.methods.snowball.benefit3")}</span>
+                            <span>{getTranslatedText("landing.methods.snowball.benefit3", "Paras niille, jotka tarvitsevat psykologisia voittoja")}</span>
                           </li>
                         </ul>
                       </div>
                       <div className="rounded-lg overflow-hidden shadow-md">
                         <img
                           src="https://images.unsplash.com/photo-1586892477838-2b96e85e0f96?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
-                          alt={t("landing.methods.snowball.imageAlt")}
+                          alt={getTranslatedText("landing.methods.snowball.imageAlt", "Kolikkojen kasa, joka kasvaa suuremmaksi kuvaten lumipallovaikutusta")}
                           className="w-full h-auto"
                           loading="lazy"
                         />
@@ -326,34 +332,11 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Affiliate Marketing Section - Hidden until we have content */}
-        {/* 
-        <section className="py-16 bg-background">
-          <div className="container mx-auto max-w-5xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-              {t("landing.affiliate.title")}
-            </h2>
-            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-              {t("landing.affiliate.subtitle")}
-            </p>
-
-            <AffiliateSection />
-
-            <p className="text-sm text-muted-foreground text-center mt-8">
-              {t("landing.affiliate.disclaimer")}
-            </p>
-          </div>
-        </section>
-        */}
-
-        {/* Testimonials Section - Hidden */}
-        {/* Hidden testimonials section */}
-
         {/* FAQ Section */}
         <section className="py-16 bg-background">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-              {t("landing.faq.title")}
+              {getTranslatedText("landing.faq.title", "Usein kysytyt kysymykset")}
             </h2>
             <div className="space-y-6 max-w-3xl mx-auto">
               {faqItems.map((item) => (
@@ -375,17 +358,17 @@ const LandingPage = () => {
         <section className="py-20 bg-gradient-to-r from-primary/10 to-primary/5">
           <div className="container mx-auto max-w-5xl text-center">
             <h2 className="text-2xl md:text-4xl font-bold mb-6">
-              {t("landing.finalCta.title")}
+              {getTranslatedText("landing.finalCta.title", "Aloita velaton matkasi tänään")}
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              {t("landing.finalCta.subtitle")}
+              {getTranslatedText("landing.finalCta.subtitle", "Liity tuhansien käyttäjien joukkoon, jotka ovat jo ottaneet taloudellisen tulevaisuutensa haltuun.")}
             </p>
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 transition-colors"
               onClick={handleCTAClick}
             >
-              {t("landing.finalCta.buttonText")}
+              {getTranslatedText("landing.finalCta.buttonText", "Rekisteröidy nyt - Se on ilmaista")}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
