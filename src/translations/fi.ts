@@ -280,6 +280,19 @@ export const fi = {
     year: 'vuosi',
     years: 'vuotta',
   },
+    landing: {
+    seo: {
+      title: 'Velanmaksu helpoksi - Ilmainen taloustyökalu | Laina Simulaattori',
+      description: 'Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Laina Simulaattorilla. Aloita velaton matkasi tänään!',
+      keywords: 'velanmaksu, lainahallinta, taloustyökalut, velkalumipallovaikutus, velkavyörymetodi, taloudellinen vapaus, velaton',
+    },
+    hero: {
+      headline: 'Maksa velkasi nopeammin - Aloita taloudenhoito tänään!',
+      subheadline: 'Luo ilmainen henkilökohtainen velanmaksusuunnitelma ja ota hallinta taloudestasi.',
+      cta: 'Kirjaudu tai rekisteröidy nyt',
+      secondaryCta: 'Lue lisää',
+      imageAlt: 'Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella',
+    },
   loanTerms: {
     pageTitle: "Taloussanasto",
     backButton: "Takaisin",
