@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,7 @@ import TotalDebtSummary from "@/components/TotalDebtSummary";
 import SavingsImpact from "@/components/SavingsImpact";
 import BudgetInput from "@/components/BudgetInput";
 import RepaymentPlanVisualization from "@/components/RepaymentPlanVisualization";
-import { combineDebts, generateRepaymentPlan, PrioritizationMethod } from "@/utils/repaymentPlanning";
+import { combineDebts, generateRepaymentPlan, PrioritizationMethod } from "@/utils/repayment";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface DebtSummaryProps {

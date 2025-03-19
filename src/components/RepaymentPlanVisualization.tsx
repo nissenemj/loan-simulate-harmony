@@ -19,7 +19,7 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { AlertCircle, TrendingDown, CalendarClock, DollarSign } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { RepaymentPlan } from "@/utils/repaymentPlanning";
+import { RepaymentPlan } from "@/utils/repayment";
 import { formatCurrency } from "@/utils/loanCalculations";
 import { 
   Area, 

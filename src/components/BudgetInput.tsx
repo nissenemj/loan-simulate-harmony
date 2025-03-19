@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +20,7 @@ import {
 import { PiggyBank, Calculator } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
-import { PrioritizationMethod } from "@/utils/repaymentPlanning";
+import { PrioritizationMethod } from "@/utils/repayment";
 
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
