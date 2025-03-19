@@ -30,6 +30,16 @@ export const fi = {
     resetPassword: 'Nollaa salasana',
     resetPasswordEmailSent: 'Salasanan nollausviesti on lähetetty.',
     verificationEmailSent: 'Vahvistussähköposti on lähetetty. Tarkista saapuneet-kansio.',
+    welcome: "Tervetuloa Lainalaskuriin",
+    description: "Kirjaudu sisään tai luo uusi tili",
+    loggingIn: "Kirjaudutaan...",
+    signingUp: "Rekisteröidytään...",
+    loginSuccess: "Kirjautuminen onnistui",
+    welcomeBack: "Tervetuloa takaisin!",
+    loginError: "Kirjautuminen epäonnistui",
+    signupSuccess: "Rekisteröityminen onnistui",
+    checkEmail: "Tarkista sähköpostisi varmistaaksesi tilisi",
+    signupError: "Rekisteröityminen epäonnistui"
   },
   toast: {
     loanAdded: 'Laina lisätty onnistuneesti',
@@ -38,6 +48,10 @@ export const fi = {
     cardAdded: 'Luottokortti lisätty onnistuneesti',
     cardUpdated: 'Luottokortti päivitetty onnistuneesti',
     cardDeleted: 'Luottokortti poistettu onnistuneesti',
+    loanActivated: "Laina aktivoitu",
+    loanDeactivated: "Laina deaktivoitu",
+    loanPaidOff: "Laina maksettu",
+    cardPaidOff: "Kortti maksettu pois",
   },
   landing: {
     seo: {
@@ -336,24 +350,6 @@ export const fi = {
     year: "vuosi",
     years: "vuotta",
   },
-  toast: {
-    loanActivated: "Laina aktivoitu",
-    loanDeactivated: "Laina deaktivoitu",
-    loanPaidOff: "Laina maksettu",
-    loanAdded: "Laina lisätty",
-    cardPaidOff: "Kortti maksettu pois",
-  },
-  language: {
-    en: "English",
-    fi: "Suomi"
-  },
-  tabs: {
-    loans: "Lainat",
-    creditCards: "Luottokortit",
-    affiliate: "Tarjouksia",
-    debtSummary: "Velkatiivistelmä",
-    loanTerms: "Lainaehdot"
-  },
   loanTerms: {
     pageTitle: "Lainaehdot selitettynä yksinkertaisesti",
     backButton: "Takaisin",
@@ -393,21 +389,8 @@ export const fi = {
       description: "Kiinteän maksun lainassa maksat saman summan joka kuukausi. Tämä maksutyyppi on samankaltainen kuin annuiteetti, mutta sitä käytetään usein kun korko voi vaihdella."
     }
   },
-  auth: {
-    welcome: "Tervetuloa Lainalaskuriin",
-    description: "Kirjaudu sisään tai luo uusi tili",
-    login: "Kirjaudu",
-    signup: "Rekisteröidy",
-    email: "Sähköposti",
-    password: "Salasana",
-    loggingIn: "Kirjaudutaan...",
-    signingUp: "Rekisteröidytään...",
-    logout: "Kirjaudu ulos",
-    loginSuccess: "Kirjautuminen onnistui",
-    welcomeBack: "Tervetuloa takaisin!",
-    loginError: "Kirjautuminen epäonnistui",
-    signupSuccess: "Rekisteröityminen onnistui",
-    checkEmail: "Tarkista sähköpostisi varmistaaksesi tilisi",
-    signupError: "Rekisteröityminen epäonnistui"
+  language: {
+    en: "English",
+    fi: "Suomi"
   }
 };

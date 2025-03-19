@@ -394,4 +394,4 @@ export const en = {
     en: "English",
     fi: "Suomi"
   }
-}
+};
