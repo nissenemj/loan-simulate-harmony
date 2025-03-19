@@ -132,8 +132,8 @@ const LandingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                  {t("landing.hero.headline")}
-                </h1>
+                    {t("landing.hero.headline")}
+                  </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-md">
                   {t("landing.hero.subheadline")}
                 </p>
