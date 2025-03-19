@@ -180,7 +180,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
               </Label>
               <Input
                 id="name"
-                placeholder={t('form.name.placeholder')}
+                placeholder={t('form.placeholderName')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -198,7 +198,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                 type="number"
                 min="0"
                 step="100"
-                placeholder={t('form.amount.placeholder')}
+                placeholder={t('form.placeholderAmount')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -212,14 +212,14 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="interestRate" className="text-sm font-medium">
-                {t('form.interest')}
+                {t('form.interestRate')}
               </Label>
               <Input
                 id="interestRate"
                 type="number"
                 min="0"
                 step="0.01"
-                placeholder={t('form.interest.placeholder')}
+                placeholder={t('form.placeholderInterestRate')}
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -230,14 +230,14 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="termYears" className="text-sm font-medium">
-                {t('form.term')}
+                {t('form.termYears')}
               </Label>
               <Input
                 id="termYears"
                 type="number"
                 min="1"
                 step="1"
-                placeholder={t('form.term.placeholder')}
+                placeholder={t('form.placeholderTermYears')}
                 value={termYears}
                 onChange={(e) => setTermYears(e.target.value)}
                 onFocus={() => setIsFocused(true)}
@@ -307,7 +307,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
                   type="number"
                   min="0"
                   step="10"
-                  placeholder={t('form.customPayment.placeholder')}
+                  placeholder={t('form.placeholderCustomPayment')}
                   value={customPayment}
                   onChange={(e) => setCustomPayment(e.target.value)}
                   onFocus={() => setIsFocused(true)}
@@ -330,7 +330,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
             className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
           >
             <PlusCircle size={18} />
-            <span>{t('form.addButton')}</span>
+            <span>{t('form.submit')}</span>
           </Button>
         </CardFooter>
       </Card>

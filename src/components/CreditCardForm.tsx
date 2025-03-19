@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -114,14 +115,14 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.name")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.name")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                           <CreditCardIcon className="h-4 w-4" />
                         </div>
                         <Input 
-                          placeholder={t("creditCard.name.placeholder")} 
+                          placeholder={t("creditCard.form.placeholderName")} 
                           className="pl-10" 
                           {...field} 
                         />
@@ -138,7 +139,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="balance"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.balance")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.balance")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -146,7 +147,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.balance.placeholder")} 
+                          placeholder={t("creditCard.form.placeholderBalance")} 
                           className="pl-10" 
                           step="0.01"
                           {...field} 
@@ -164,7 +165,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="limit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.limit")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.limit")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -172,7 +173,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.limit.placeholder")} 
+                          placeholder={t("creditCard.form.placeholderCreditLimit")} 
                           className="pl-10" 
                           step="0.01"
                           {...field} 
@@ -190,7 +191,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="apr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.apr")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.apr")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -198,7 +199,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.apr.placeholder")} 
+                          placeholder={t("creditCard.form.placeholderApr")} 
                           className="pl-10"
                           step="0.01" 
                           {...field} 
@@ -216,7 +217,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPayment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.minPayment")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.minPayment")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -224,7 +225,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.minPayment.placeholder")} 
+                          placeholder={t("creditCard.form.placeholderMinPayment")} 
                           className="pl-10" 
                           step="0.01"
                           disabled={fullPaymentValue}
@@ -243,7 +244,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPaymentPercent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.minPaymentPercent")}</FormLabel>
+                    <FormLabel>{t("creditCard.form.minPaymentPercent")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -251,7 +252,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.minPaymentPercent.placeholder")} 
+                          placeholder={t("creditCard.form.minPaymentPercent")} 
                           className="pl-10" 
                           step="0.01"
                           disabled={fullPaymentValue}
@@ -278,13 +279,13 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    {t("creditCard.fullPayment")}
+                    {t("creditCard.form.fullPayment")}
                   </FormLabel>
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full">{t("creditCard.addButton")}</Button>
+            <Button type="submit" className="w-full">{t("creditCard.form.submit")}</Button>
           </form>
         </Form>
       </CardContent>
