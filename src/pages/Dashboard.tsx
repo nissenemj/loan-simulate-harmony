@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
@@ -315,5 +316,9 @@ const Dashboard = () => {
             </Button>
           </CardFooter>
         </Card>
-     
+      </div>
+    </div>
+  );
+};
 
+export default Dashboard;
