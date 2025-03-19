@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -343,36 +344,8 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="py-16 bg-accent/50">
-          <div className="container mx-auto max-w-5xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-              {t("landing.testimonials.title")}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial) => (
-                <Card key={testimonial.id} className="border-0 shadow-lg">
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <div className="w-16 h-16 rounded-full overflow-hidden">
-                        <img
-                          src={testimonial.img}
-                          alt={testimonial.name}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <p className="text-muted-foreground italic">
-                        "{testimonial.text}"
-                      </p>
-                      <p className="font-semibold">{testimonial.name}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Testimonials Section - Hidden per request */}
+        {/* Hidden testimonials section */}
 
         {/* FAQ Section */}
         <section className="py-16 bg-background">
