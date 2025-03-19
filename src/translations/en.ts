@@ -217,6 +217,8 @@ export const en = {
   },
   tabs: {
     loans: "Loans",
+    creditCards: "Credit Cards",
+    affiliate: "Offers",
     debtSummary: "Debt Summary",
     loanTerms: "Loan Terms"
   },

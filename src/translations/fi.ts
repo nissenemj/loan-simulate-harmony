@@ -217,6 +217,8 @@ export const fi = {
   },
   tabs: {
     loans: "Lainat",
+    creditCards: "Luottokortit",
+    affiliate: "Tarjouksia",
     debtSummary: "Velkatiivistelmä",
     loanTerms: "Lainaehdot"
   },

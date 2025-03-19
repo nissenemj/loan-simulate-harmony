@@ -61,7 +61,7 @@ export default function Index() {
       <Tabs defaultValue="loans" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
-          <TabsTrigger value="creditCards">{t("creditCard.table.name")}</TabsTrigger>
+          <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
           <TabsTrigger value="affiliate">{t("tabs.affiliate")}</TabsTrigger>
         </TabsList>
         
