@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
@@ -107,7 +108,7 @@ const Dashboard = () => {
               </div>
               
               <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.monthlyPayment')}</h3>
+                <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.monthlyPayments')}</h3>
                 <div className="text-2xl font-bold">
                   <AnimatedNumber
                     value={totalMinPayments}
