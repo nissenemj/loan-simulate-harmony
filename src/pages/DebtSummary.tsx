@@ -1,16 +1,20 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { Loan, calculateLoan, formatCurrency, generateRecommendations, calculateTotalMonthlyPayment } from "@/utils/loanCalculations";
 import { CreditCard, calculateCreditCard, formatPayoffTime } from "@/utils/creditCardCalculations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CreditCard as CreditCardIcon, Wallet, AlertTriangle } from "lucide-react";
+import { ArrowLeft, CreditCard as CreditCardIcon, Wallet, AlertTriangle, CalculatorIcon } from "lucide-react";
 import LoanSummaryTable from "@/components/LoanSummaryTable";
 import CreditCardSummaryTable from "@/components/CreditCardSummaryTable";
 import TotalDebtSummary from "@/components/TotalDebtSummary";
 import SavingsImpact from "@/components/SavingsImpact";
+import BudgetInput from "@/components/BudgetInput";
+import RepaymentPlanVisualization from "@/components/RepaymentPlanVisualization";
+import { combineDebts, generateRepaymentPlan, PrioritizationMethod } from "@/utils/repaymentPlanning";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface DebtSummaryProps {
   loans: Loan[];
@@ -21,6 +25,10 @@ interface DebtSummaryProps {
 export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSummaryProps) {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const [budget, setBudget] = useState<number>(500);
+  const [method, setMethod] = useState<PrioritizationMethod>('avalanche');
+  const [repaymentPlan, setRepaymentPlan] = useState<ReturnType<typeof generateRepaymentPlan> | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("summary");
   
   const activeLoans = loans.filter(loan => loan.isActive);
   const activeCards = creditCards.filter(card => card.isActive);
@@ -64,11 +72,16 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSu
   const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
   const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
 
-  // Handle loan payoff for SavingsImpact component
-  const handlePayoffLoan = (id: string) => {
-    // This is just a placeholder since we can't modify the actual loans array
-    // In a real implementation, this would update the loans state
-    console.log(`Loan ${id} would be paid off here`);
+  // Calculate repayment plan
+  const calculateRepaymentPlan = (budgetAmount: number, prioritizationMethod: PrioritizationMethod) => {
+    setBudget(budgetAmount);
+    setMethod(prioritizationMethod);
+    
+    const combinedDebts = combineDebts(loansToDisplay, cardsToDisplay);
+    const plan = generateRepaymentPlan(combinedDebts, budgetAmount, prioritizationMethod);
+    
+    setRepaymentPlan(plan);
+    setActiveTab("repayment-plan");
   };
 
   return (
@@ -167,30 +180,65 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSu
         )}
       </div>
 
-      <div className="space-y-8">
-        {/* Loans and Savings Impact */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="md:col-span-2">
-            <section aria-labelledby="loans-heading">
-              <h2 id="loans-heading" className="text-2xl font-bold mb-4">{t("debtSummary.loansSection")}</h2>
-              <LoanSummaryTable loans={loansToDisplay} isDemo={activeLoans.length === 0} />
-            </section>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="summary">{t("repayment.summaryTab")}</TabsTrigger>
+          <TabsTrigger value="repayment-plan">{t("repayment.planTab")}</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="summary" className="space-y-8">
+          {/* Loans and Savings Impact */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div className="md:col-span-2">
+              <section aria-labelledby="loans-heading">
+                <h2 id="loans-heading" className="text-2xl font-bold mb-4">{t("debtSummary.loansSection")}</h2>
+                <LoanSummaryTable loans={loansToDisplay} isDemo={activeLoans.length === 0} />
+              </section>
+            </div>
+            <div>
+              <SavingsImpact loans={loansToDisplay} onPayoffLoan={onPayoffLoan} />
+            </div>
           </div>
-          <div>
-            <SavingsImpact loans={loansToDisplay} onPayoffLoan={onPayoffLoan} />
+
+          <section aria-labelledby="credit-cards-heading">
+            <h2 id="credit-cards-heading" className="text-2xl font-bold mb-4">{t("debtSummary.creditCardsSection")}</h2>
+            <CreditCardSummaryTable creditCards={cardsToDisplay} isDemo={activeCards.length === 0} />
+          </section>
+
+          <section aria-labelledby="total-summary-heading">
+            <h2 id="total-summary-heading" className="text-2xl font-bold mb-4">{t("debtSummary.totalSummarySection")}</h2>
+            <TotalDebtSummary loans={loansToDisplay} creditCards={cardsToDisplay} isDemo={isDemo} />
+          </section>
+        </TabsContent>
+        
+        <TabsContent value="repayment-plan" className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="md:col-span-1">
+              <BudgetInput 
+                onCalculate={calculateRepaymentPlan} 
+                defaultBudget={budget} 
+              />
+            </div>
+            <div className="md:col-span-3">
+              {repaymentPlan ? (
+                <RepaymentPlanVisualization plan={repaymentPlan} />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full p-10 text-center bg-muted rounded-lg border">
+                  <CalculatorIcon className="h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium mb-2">{t("repayment.noPlanYet")}</h3>
+                  <p className="text-muted-foreground mb-4">
+                    {t("repayment.enterBudgetPrompt")}
+                  </p>
+                  <Button onClick={() => calculateRepaymentPlan(budget, method)}>
+                    <CalculatorIcon className="mr-2 h-4 w-4" />
+                    {t("repayment.calculateNow")}
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-
-        <section aria-labelledby="credit-cards-heading">
-          <h2 id="credit-cards-heading" className="text-2xl font-bold mb-4">{t("debtSummary.creditCardsSection")}</h2>
-          <CreditCardSummaryTable creditCards={cardsToDisplay} isDemo={activeCards.length === 0} />
-        </section>
-
-        <section aria-labelledby="total-summary-heading">
-          <h2 id="total-summary-heading" className="text-2xl font-bold mb-4">{t("debtSummary.totalSummarySection")}</h2>
-          <TotalDebtSummary loans={loansToDisplay} creditCards={cardsToDisplay} isDemo={isDemo} />
-        </section>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
