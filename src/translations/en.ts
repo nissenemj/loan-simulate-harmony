@@ -8,7 +8,7 @@ export const en = {
     loans: 'Loans',
     creditCards: 'Credit Cards',
     debtSummary: 'Debt Summary',
-    loanTerms: 'Loan Terms',
+    glossary: 'Glossary',
     affiliate: 'Affiliate',
   },
   auth: {
@@ -356,9 +356,9 @@ export const en = {
     years: "years",
   },
   loanTerms: {
-    pageTitle: "Loan Terms Explained Simply",
+    pageTitle: "Financial Glossary",
     backButton: "Back",
-    introduction: "Loan terms explained in simple terms. Understand financial terms easily.",
+    introduction: "Financial terms explained in simple terms. Understand financial terms easily.",
     searchPlaceholder: "Search for a term...",
     noResults: "No results found. Try a different search term.",
     interestRate: {

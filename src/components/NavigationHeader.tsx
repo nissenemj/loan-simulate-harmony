@@ -30,7 +30,7 @@ const NavigationHeader: React.FC = () => {
   const menuItems = [
     { path: "/dashboard", label: t('tabs.loans') },
     { path: "/debt-summary", label: t('tabs.debtSummary') },
-    { path: "/terms", label: t('tabs.loanTerms') }
+    { path: "/terms", label: t('tabs.glossary') }
   ];
   
   return (

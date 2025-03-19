@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -64,7 +63,6 @@ const LoanTerms: React.FC = () => {
     term.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Generate FAQ schema for structured data
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -79,15 +77,14 @@ const LoanTerms: React.FC = () => {
   };
 
   useEffect(() => {
-    // Scroll to top when page loads
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <>
       <Helmet>
-        <title>Loan Terms Explained Simply | Loan Calculator</title>
-        <meta name="description" content="Understand loan terms like interest rate and annuity in plain English. Learn what Euribor means, how loan principal works, and more." />
+        <title>{t('loanTerms.pageTitle')} | Loan Calculator</title>
+        <meta name="description" content="Understand financial terms like interest rate and annuity in plain English. Learn what Euribor means, how loan principal works, and more." />
         <script type="application/ld+json">
           {JSON.stringify(faqSchema)}
         </script>

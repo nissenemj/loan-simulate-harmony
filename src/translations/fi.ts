@@ -8,7 +8,7 @@ export const fi = {
     loans: 'Lainat',
     creditCards: 'Luottokortit',
     debtSummary: 'Velkayhteenveto',
-    loanTerms: 'Lainaehdot',
+    glossary: 'Sanastoa',
     affiliate: 'Yhteistyökumppanit',
   },
   auth: {
@@ -356,9 +356,9 @@ export const fi = {
     years: "vuotta",
   },
   loanTerms: {
-    pageTitle: "Lainaehdot selitettynä yksinkertaisesti",
+    pageTitle: "Taloussanastoa",
     backButton: "Takaisin",
-    introduction: "Lainojen ehdot yksinkertaisesti selitettynä. Ymmärrä lainojen termit helposti.",
+    introduction: "Taloudelliset termit selitettynä yksinkertaisesti. Ymmärrä taloudelliset termit helposti.",
     searchPlaceholder: "Etsi termiä...",
     noResults: "Ei hakutuloksia. Kokeile eri hakusanaa.",
     interestRate: {
