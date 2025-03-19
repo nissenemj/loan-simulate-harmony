@@ -63,7 +63,8 @@ export default {
   tabs: {
     loans: "Loans",
     creditCards: "Credit Cards",
-    affiliate: "Offers"
+    affiliate: "Offers",
+    loanTerms: "Loan Terms"
   },
   creditCard: {
     form: {
@@ -129,5 +130,44 @@ export default {
     mortgageText: "Find the perfect mortgage for your needs",
     cta: "Learn More",
     disclaimer: "Disclosure: We may receive compensation when you click on links to products. This does not affect our recommendations or evaluations."
+  },
+  loanTerms: {
+    pageTitle: "Loan Terms Explained",
+    introduction: "Understanding financial terminology helps you make better decisions about your loans. Here's a simple explanation of the key terms used in our calculator.",
+    searchPlaceholder: "Search terms...",
+    backButton: "Back",
+    noResults: "No terms match your search.",
+    interestRate: {
+      title: "Interest Rate",
+      description: "The extra cost you pay for borrowing money, expressed as a percentage. For example, a 5% interest rate on a $10,000 loan means you pay an extra $500 per year for borrowing that money."
+    },
+    annuity: {
+      title: "Annuity",
+      description: "A repayment plan where you pay the same total amount every month throughout the loan term. Each payment includes both principal (the original loan amount) and interest, with the proportion of principal increasing over time."
+    },
+    principal: {
+      title: "Principal",
+      description: "The original amount you borrowed before any interest is added. When you make loan payments, part goes toward reducing this principal, and part pays the interest."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "The Euro Interbank Offered Rate - a benchmark interest rate used across Europe. If your loan has a variable rate tied to Euribor, your interest payments may go up or down as this rate changes in the market."
+    },
+    totalInterest: {
+      title: "Total Interest",
+      description: "The full extra amount you'll pay over the entire life of the loan on top of what you borrowed. For example, if you borrow $100,000 and end up paying back $150,000 total, the total interest is $50,000."
+    },
+    termYears: {
+      title: "Loan Term",
+      description: "The length of time you have to repay the loan, usually expressed in years. A longer term means lower monthly payments but more interest paid overall."
+    },
+    equalPrincipal: {
+      title: "Equal Principal Payments",
+      description: "A repayment method where you pay back the same amount of principal each month, plus interest. Your total payment decreases over time as the interest portion gets smaller."
+    },
+    fixedInstallment: {
+      title: "Fixed Installment",
+      description: "A repayment method where you pay the same total amount each month, similar to an annuity. However, this method allows you to specify the exact payment amount, which may affect your loan term."
+    }
   }
 } as const;

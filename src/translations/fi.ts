@@ -77,7 +77,8 @@ export default {
   tabs: {
     loans: "Lainat",
     creditCards: "Luottokortit",
-    affiliate: "Tarjoukset"
+    affiliate: "Tarjoukset",
+    loanTerms: "Lainasanasto"
   },
   creditCard: {
     title: "Lisää luottokortti",
@@ -162,5 +163,44 @@ export default {
     mortgageText: "Löydä täydellinen asuntolaina tarpeisiisi",
     cta: "Lue lisää",
     disclaimer: "Huomautus: Saatamme saada korvausta, kun klikkaat tuotelinkkejä. Tämä ei vaikuta suosituksiimme tai arviointeihimme."
+  },
+  loanTerms: {
+    pageTitle: "Lainasanasto",
+    introduction: "Rahoitusterminologian ymmärtäminen auttaa tekemään parempia päätöksiä lainoista. Tässä on yksinkertainen selitys laskurissamme käytetyistä keskeisistä termeistä.",
+    searchPlaceholder: "Hae termejä...",
+    backButton: "Takaisin",
+    noResults: "Hakusanalla ei löytynyt termejä.",
+    interestRate: {
+      title: "Korko",
+      description: "Ylimääräinen kustannus, jonka maksat rahan lainaamisesta, ilmaistuna prosentteina. Esimerkiksi 5 %:n korko 10 000 euron lainasta tarkoittaa, että maksat 500 euroa ylimääräistä vuodessa lainatun rahan käytöstä."
+    },
+    annuity: {
+      title: "Annuiteetti",
+      description: "Takaisinmaksusuunnitelma, jossa maksat saman verran joka kuukausi koko laina-ajan. Jokainen maksu sisältää sekä pääoman (alkuperäisen lainasumman) että koron, ja pääoman osuus kasvaa ajan myötä."
+    },
+    principal: {
+      title: "Pääoma",
+      description: "Alkuperäinen summa, jonka lainasit ennen korkojen lisäämistä. Kun maksat lainaa takaisin, osa maksusta menee tämän pääoman vähentämiseen ja osa koron maksamiseen."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "Euro Interbank Offered Rate - Euroopassa käytetty viitekorko. Jos lainallasi on Euriboriin sidottu vaihtuva korko, korkosi voivat nousta tai laskea tämän markkinakoron muuttuessa."
+    },
+    totalInterest: {
+      title: "Kokonaiskorko",
+      description: "Täysi ylimääräinen summa, jonka maksat koko laina-aikana lainatun summan lisäksi. Esimerkiksi, jos lainaat 100 000 euroa ja maksat takaisin yhteensä 150 000 euroa, kokonaiskorko on 50 000 euroa."
+    },
+    termYears: {
+      title: "Laina-aika",
+      description: "Aika, jonka kuluessa laina on maksettava takaisin, yleensä ilmaistuna vuosina. Pidempi laina-aika tarkoittaa pienempiä kuukausimaksuja, mutta enemmän maksettua korkoa kokonaisuudessaan."
+    },
+    equalPrincipal: {
+      title: "Tasalyhennys",
+      description: "Takaisinmaksutapa, jossa maksat saman verran pääomaa takaisin joka kuukausi sekä lisäksi korot. Kokonaismaksusi pienenee ajan myötä, kun koron osuus pienenee."
+    },
+    fixedInstallment: {
+      title: "Kiinteä maksuerä",
+      description: "Takaisinmaksutapa, jossa maksat saman kokonaissumman joka kuukausi, samankaltaisesti kuin annuiteetissa. Tämä menetelmä kuitenkin mahdollistaa tarkan maksuerän määrittämisen, mikä saattaa vaikuttaa laina-aikaan."
+    }
   }
 } as const;
