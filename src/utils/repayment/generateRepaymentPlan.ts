@@ -24,7 +24,7 @@ export const generateRepaymentPlan = (
   }
 
   // Step 1: Calculate minimum payments for all debts
-  const totalMinPayment = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
+  const totalMinPayment = debts.reduce((sum, debt) => sum + debt.minPayment, 0);
 
   // Step 2: Check if budget is sufficient to cover all minimum payments
   if (monthlyBudget < totalMinPayment) {
@@ -45,9 +45,10 @@ export const generateRepaymentPlan = (
   const initialAllocation: RepaymentPlan['monthlyAllocation'] = debts.map(debt => ({
     id: debt.id,
     name: debt.name,
-    minPayment: debt.minimumPayment,
+    type: debt.type,
+    minPayment: debt.minPayment,
     extraPayment: 0,
-    totalPayment: debt.minimumPayment
+    totalPayment: debt.minPayment
   }));
 
   // Step 5: Allocate extra funds to the highest priority debt
