@@ -10,13 +10,15 @@ import { ArrowLeft, CreditCard as CreditCardIcon, Wallet, AlertTriangle } from "
 import LoanSummaryTable from "@/components/LoanSummaryTable";
 import CreditCardSummaryTable from "@/components/CreditCardSummaryTable";
 import TotalDebtSummary from "@/components/TotalDebtSummary";
+import SavingsImpact from "@/components/SavingsImpact";
 
 interface DebtSummaryProps {
   loans: Loan[];
   creditCards: CreditCard[];
+  onPayoffLoan: (id: string) => void;
 }
 
-export default function DebtSummary({ loans, creditCards }: DebtSummaryProps) {
+export default function DebtSummary({ loans, creditCards, onPayoffLoan }: DebtSummaryProps) {
   const { t } = useLanguage();
   const navigate = useNavigate();
   
@@ -27,8 +29,21 @@ export default function DebtSummary({ loans, creditCards }: DebtSummaryProps) {
   const loansToDisplay = activeLoans.length > 0 ? activeLoans : getSampleLoans();
   const cardsToDisplay = activeCards.length > 0 ? activeCards : getSampleCreditCards();
   
-  // Calculate recommendations
-  const recommendations = generateRecommendations(loansToDisplay);
+  // Calculate recommendations - get the actual arrays from the return value
+  const recommendationsObj = generateRecommendations(loansToDisplay);
+  // Convert recommendations object to array for rendering
+  const recommendations = [
+    ...(recommendationsObj.topPriorityLoans.length > 0 
+      ? [{ type: 'topPriority', loans: recommendationsObj.topPriorityLoans.map(loan => loan.id) }] 
+      : []),
+    ...(recommendationsObj.highestInterestRateLoans.length > 0 
+      ? [{ type: 'highInterest', loans: recommendationsObj.highestInterestRateLoans.map(loan => loan.id) }] 
+      : []),
+    ...(recommendationsObj.highestTotalInterestLoans.length > 0 
+      ? [{ type: 'highTotalInterest', loans: recommendationsObj.highestTotalInterestLoans.map(loan => loan.id) }] 
+      : [])
+  ];
+  
   const hasActiveDebts = activeLoans.length > 0 || activeCards.length > 0;
   const isDemo = activeLoans.length === 0 && activeCards.length === 0;
   
@@ -48,6 +63,13 @@ export default function DebtSummary({ loans, creditCards }: DebtSummaryProps) {
   // Combined totals
   const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
   const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
+
+  // Handle loan payoff for SavingsImpact component
+  const handlePayoffLoan = (id: string) => {
+    // This is just a placeholder since we can't modify the actual loans array
+    // In a real implementation, this would update the loans state
+    console.log(`Loan ${id} would be paid off here`);
+  };
 
   return (
     <div className="container px-4 py-8 mx-auto">
@@ -146,10 +168,18 @@ export default function DebtSummary({ loans, creditCards }: DebtSummaryProps) {
       </div>
 
       <div className="space-y-8">
-        <section aria-labelledby="loans-heading">
-          <h2 id="loans-heading" className="text-2xl font-bold mb-4">{t("debtSummary.loansSection")}</h2>
-          <LoanSummaryTable loans={loansToDisplay} isDemo={activeLoans.length === 0} />
-        </section>
+        {/* Loans and Savings Impact */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="md:col-span-2">
+            <section aria-labelledby="loans-heading">
+              <h2 id="loans-heading" className="text-2xl font-bold mb-4">{t("debtSummary.loansSection")}</h2>
+              <LoanSummaryTable loans={loansToDisplay} isDemo={activeLoans.length === 0} />
+            </section>
+          </div>
+          <div>
+            <SavingsImpact loans={loansToDisplay} onPayoffLoan={onPayoffLoan} />
+          </div>
+        </div>
 
         <section aria-labelledby="credit-cards-heading">
           <h2 id="credit-cards-heading" className="text-2xl font-bold mb-4">{t("debtSummary.creditCardsSection")}</h2>
