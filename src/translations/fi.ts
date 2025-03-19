@@ -4,6 +4,7 @@ export const fi = {
   app: {
     title: 'Laina Simulaattori',
     subtitle: 'Hallitse lainojasi ja suunnittele velanmaksu.',
+    footer: 'Tehty ❤️ Finance Wizards',
     language: 'Kieli',
     english: 'Englanti',
     finnish: 'Suomi',
@@ -345,4 +346,3 @@ export const fi = {
 };
 
 export default fi;
-
