@@ -1,7 +1,138 @@
 export const en = {
   app: {
-    title: "Budgeting App",
-    subtitle: "Easily manage your loans and credit cards"
+    title: 'Loan Simulate Harmony',
+    subtitle: 'Your Path to Financial Freedom',
+    footer: 'Made with ❤️ by Finance Wizards',
+  },
+  tabs: {
+    loans: 'Loans',
+    creditCards: 'Credit Cards',
+    debtSummary: 'Debt Summary',
+    loanTerms: 'Loan Terms',
+    affiliate: 'Affiliate',
+  },
+  auth: {
+    login: 'Login',
+    logout: 'Logout',
+    dashboard: 'Dashboard',
+    email: 'Email',
+    password: 'Password',
+    signIn: 'Sign In',
+    signUp: 'Sign Up',
+    forgotPassword: 'Forgot Password?',
+    noAccount: 'Don\'t have an account?',
+    createAccount: 'Create Account',
+    alreadyHaveAccount: 'Already have an account?',
+    successTitle: 'Welcome!',
+    successMessage: 'You are now logged in.',
+    errorTitle: 'Error',
+    invalidCredentials: 'Invalid email or password.',
+    resetPassword: 'Reset Password',
+    resetPasswordEmailSent: 'Password reset email has been sent.',
+    verificationEmailSent: 'Verification email has been sent. Please check your inbox.',
+  },
+  toast: {
+    loanAdded: 'Loan added successfully',
+    loanUpdated: 'Loan updated successfully',
+    loanDeleted: 'Loan deleted successfully',
+    cardAdded: 'Credit card added successfully',
+    cardUpdated: 'Credit card updated successfully',
+    cardDeleted: 'Credit card deleted successfully',
+  },
+  landing: {
+    seo: {
+      title: 'Debt Repayment Made Easy - Free Financial Tool | Loan Simulate Harmony',
+      description: 'Create a free debt repayment plan and take control of your finances with Loan Simulate Harmony. Start your debt-free journey today!',
+      keywords: 'debt repayment, loan management, financial tools, debt snowball, debt avalanche, financial freedom, debt free',
+    },
+    hero: {
+      headline: 'Pay Off Your Debts Faster - Start Managing Your Finances Today!',
+      subheadline: 'Create a free personalized debt repayment plan and take control of your finances.',
+      cta: 'Login or Sign Up Now',
+      secondaryCta: 'Learn More',
+      imageAlt: 'Person smiling while reviewing finances on a laptop',
+    },
+    benefits: {
+      title: 'Take Control of Your Financial Future',
+      item1: {
+        title: 'Personalized Repayment Plan',
+        description: 'Create a tailored debt repayment plan using the avalanche or snowball method.'
+      },
+      item2: {
+        title: 'Track Your Progress',
+        description: 'Visualize your progress on an interactive timeline and stay motivated.'
+      },
+      item3: {
+        title: 'Reduce Financial Stress',
+        description: 'Achieve financial freedom faster and reduce your financial stress.'
+      }
+    },
+    methods: {
+      title: 'Choose Your Debt Repayment Strategy',
+      subtitle: 'Different methods work for different people. Find what works for you.',
+      avalanche: {
+        title: 'Debt Avalanche',
+        description: 'The debt avalanche method focuses on paying off debts with the highest interest rates first while making minimum payments on all other debts.',
+        benefit1: 'Mathematically optimal - saves the most money in interest',
+        benefit2: 'Reduces total repayment time',
+        benefit3: 'Best for those motivated by long-term savings',
+        imageAlt: 'Graph showing decreasing interest payments over time'
+      },
+      snowball: {
+        title: 'Debt Snowball',
+        description: 'The debt snowball method focuses on paying off the smallest debts first to build momentum and motivation.',
+        benefit1: 'Creates early wins to build motivation',
+        benefit2: 'Simplifies finances by reducing the number of payments',
+        benefit3: 'Best for those who need psychological victories',
+        imageAlt: 'Stack of coins growing larger representing the snowball effect'
+      }
+    },
+    affiliate: {
+      title: 'Need Additional Help Managing Your Debts?',
+      subtitle: 'These trusted partners offer services that can complement your debt repayment journey.',
+      disclaimer: 'We may earn a commission if you use these links, but this doesn\'t affect the price you pay.',
+    },
+    testimonials: {
+      title: 'Success Stories',
+      testimonial1: 'This app helped me pay off €5,000 in debt in just one year! The visualization really kept me motivated.',
+      testimonial2: 'I tried many budgeting apps, but this is the only one that actually helped me create a realistic debt repayment plan.',
+      testimonial3: 'The debt snowball method changed my life. I\'ve paid off three credit cards already and am on track to be debt-free by next year!',
+    },
+    faq: {
+      title: 'Frequently Asked Questions',
+      question1: 'How does the app work?',
+      answer1: 'Simply input your debts, including loan amounts, interest rates, and minimum payments. The app will calculate the optimal repayment plan based on your chosen method (avalanche or snowball) and show you when you'll be debt-free.',
+      question2: 'Is using the app free?',
+      answer2: 'Yes! Loan Simulate Harmony is completely free to use. We believe everyone should have access to tools that help improve their financial situation.',
+      question3: 'Can I use the app for student loans?',
+      answer3: 'Absolutely! The app works with any type of loan, including student loans, credit cards, personal loans, car loans, and mortgages.',
+      question4: 'What's the difference between the avalanche and snowball methods?',
+      answer4: 'The avalanche method prioritizes paying off high-interest debts first to save the most money in interest. The snowball method focuses on paying off the smallest debts first to build momentum and motivation.',
+    },
+    finalCta: {
+      title: 'Start Your Debt-Free Journey Today',
+      subtitle: 'Join thousands of users who have already taken control of their financial future.',
+      buttonText: 'Sign Up Now - It\'s Free',
+    },
+    footer: {
+      about: {
+        title: 'About Loan Simulate Harmony',
+        description: 'Loan Simulate Harmony is a free tool designed to help you create and follow a personalized debt repayment plan.',
+      },
+      links: {
+        title: 'Quick Links',
+        item1: 'Dashboard',
+        item2: 'Loan Terms',
+        item3: 'Debt Summary',
+      },
+      legal: {
+        title: 'Legal',
+        privacy: 'Privacy Policy',
+        terms: 'Terms of Service',
+        cookies: 'Cookie Policy',
+      },
+      copyright: 'All rights reserved.',
+    },
   },
   form: {
     name: "Name",
@@ -215,13 +346,6 @@ export const en = {
   language: {
     en: "English",
     fi: "Suomi"
-  },
-  tabs: {
-    loans: "Loans",
-    creditCards: "Credit Cards",
-    affiliate: "Offers",
-    debtSummary: "Debt Summary",
-    loanTerms: "Loan Terms"
   },
   loanTerms: {
     pageTitle: "Loan Terms Explained Simply",

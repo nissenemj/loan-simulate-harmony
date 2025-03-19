@@ -14,6 +14,7 @@ import DebtSummaryPage from "./pages/DebtSummaryPage";
 import Auth from "./pages/Auth";
 import NavigationHeader from "./components/NavigationHeader";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -27,8 +28,9 @@ const App = () => (
               <Toaster />
               <Sonner />
               <Routes>
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={
+                <Route path="/dashboard" element={
                   <ProtectedRoute>
                     <NavigationHeader />
                     <Index />

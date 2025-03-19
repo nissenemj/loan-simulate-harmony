@@ -1,7 +1,138 @@
 export const fi = {
   app: {
-    title: "Budjettisovellus",
-    subtitle: "Hallitse lainoja ja luottokortteja helposti"
+    title: 'Lainalaskuri Harmonia',
+    subtitle: 'Tie taloudelliseen vapauteen',
+    footer: 'Tehty ❤️ Finance Wizards',
+  },
+  tabs: {
+    loans: 'Lainat',
+    creditCards: 'Luottokortit',
+    debtSummary: 'Velkayhteenveto',
+    loanTerms: 'Lainaehdot',
+    affiliate: 'Yhteistyökumppanit',
+  },
+  auth: {
+    login: 'Kirjaudu',
+    logout: 'Kirjaudu ulos',
+    dashboard: 'Kojelauta',
+    email: 'Sähköposti',
+    password: 'Salasana',
+    signIn: 'Kirjaudu sisään',
+    signUp: 'Rekisteröidy',
+    forgotPassword: 'Unohditko salasanan?',
+    noAccount: 'Eikö sinulla ole tiliä?',
+    createAccount: 'Luo tili',
+    alreadyHaveAccount: 'Onko sinulla jo tili?',
+    successTitle: 'Tervetuloa!',
+    successMessage: 'Olet nyt kirjautunut sisään.',
+    errorTitle: 'Virhe',
+    invalidCredentials: 'Virheellinen sähköposti tai salasana.',
+    resetPassword: 'Nollaa salasana',
+    resetPasswordEmailSent: 'Salasanan nollausviesti on lähetetty.',
+    verificationEmailSent: 'Vahvistussähköposti on lähetetty. Tarkista saapuneet-kansio.',
+  },
+  toast: {
+    loanAdded: 'Laina lisätty onnistuneesti',
+    loanUpdated: 'Laina päivitetty onnistuneesti',
+    loanDeleted: 'Laina poistettu onnistuneesti',
+    cardAdded: 'Luottokortti lisätty onnistuneesti',
+    cardUpdated: 'Luottokortti päivitetty onnistuneesti',
+    cardDeleted: 'Luottokortti poistettu onnistuneesti',
+  },
+  landing: {
+    seo: {
+      title: 'Velanmaksu Helposti - Ilmainen Taloudenhallintasovellus | Lainalaskuri Harmonia',
+      description: 'Luo ilmainen velanmaksusuunnitelma ja hallitse talouttasi Lainalaskuri Harmonian avulla. Aloita velattomuusmatkasi jo tänään!',
+      keywords: 'velanmaksu, taloudenhallinta, velkajärjestely Suomessa, ilmainen velanmaksusuunnitelma, lumivyörymenetelmä, lumipallomenetelmä',
+    },
+    hero: {
+      headline: 'Maksa Velkasi Nopeammin – Aloita Taloudenhallinta Tänään!',
+      subheadline: 'Luo ilmainen velanmaksusuunnitelma ja ota taloutesi hallintaan.',
+      cta: 'Kirjaudu tai Rekisteröidy Nyt',
+      secondaryCta: 'Lue Lisää',
+      imageAlt: 'Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella',
+    },
+    benefits: {
+      title: 'Ota taloutesi hallintaan',
+      item1: {
+        title: 'Räätälöity maksusuunnitelma',
+        description: 'Luo räätälöity velanmaksusuunnitelma lumivyöry- tai lumipallomenetelmällä.'
+      },
+      item2: {
+        title: 'Seuraa edistymistäsi',
+        description: 'Seuraa edistymistäsi visuaalisella aikajanalla ja pysy motivoituneena.'
+      },
+      item3: {
+        title: 'Vähennä taloudellista stressiä',
+        description: 'Saavuta taloudellinen vapaus nopeammin ja vähennä taloudellista stressiä.'
+      }
+    },
+    methods: {
+      title: 'Valitse velanmaksustrategiasi',
+      subtitle: 'Eri menetelmät toimivat eri ihmisille. Löydä sinulle sopiva tapa.',
+      avalanche: {
+        title: 'Lumivyörymenetelmä',
+        description: 'Lumivyörymenetelmä keskittyy maksamaan ensin pois korkeakorkoisimmat velat, samalla kun muista veloista maksetaan vain minimisuoritukset.',
+        benefit1: 'Matemaattisesti optimaalinen - säästää eniten korkokuluissa',
+        benefit2: 'Vähentää kokonaismaksuaikaa',
+        benefit3: 'Paras niille, joita motivoi pitkän aikavälin säästöt',
+        imageAlt: 'Kaavio, joka näyttää laskevat korkomaksut ajan myötä'
+      },
+      snowball: {
+        title: 'Lumipallomenetelmä',
+        description: 'Lumipallomenetelmä keskittyy maksamaan ensin pois pienimmät velat motivaation ja momentumin rakentamiseksi.',
+        benefit1: 'Luo varhaisia voittoja motivaation rakentamiseksi',
+        benefit2: 'Yksinkertaistaa taloutta vähentämällä maksujen määrää',
+        benefit3: 'Paras niille, jotka tarvitsevat psykologisia voittoja',
+        imageAlt: 'Kasvava kolikkopino, joka kuvastaa lumipalloefektiä'
+      }
+    },
+    affiliate: {
+      title: 'Tarvitsetko Lisäapua Velkojen Hallintaan?',
+      subtitle: 'Nämä luotetut kumppanimme tarjoavat palveluita, jotka voivat täydentää velanmaksumatkaasi.',
+      disclaimer: 'Saatamme ansaita provision, jos käytät näitä linkkejä, mutta se ei vaikuta hintaan sinulle.',
+    },
+    testimonials: {
+      title: 'Menestystarinoita',
+      testimonial1: 'Tämä sovellus auttoi minua maksamaan 5 000 € velkaa vuodessa! Visualisointi todella piti minut motivoituneena.',
+      testimonial2: 'Olen kokeillut monia budjetointisovelluksia, mutta tämä on ainoa, joka todella auttoi minua luomaan realistisen velanmaksusuunnitelman.',
+      testimonial3: 'Lumipallomenetelmä muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuonna!',
+    },
+    faq: {
+      title: 'Usein Kysytyt Kysymykset',
+      question1: 'Miten sovellus toimii?',
+      answer1: 'Syötä velkasi, mukaan lukien lainamäärät, korot ja vähimmäismaksut. Sovellus laskee optimaalisen maksusuunnitelman valitsemasi menetelmän (lumivyöry tai lumipallo) perusteella ja näyttää, milloin olet velaton.',
+      question2: 'Onko sovelluksen käyttö ilmaista?',
+      answer2: 'Kyllä! Lainalaskuri Harmonia on täysin ilmainen käyttää. Uskomme, että kaikilla pitäisi olla pääsy työkaluihin, jotka auttavat parantamaan taloudellista tilannetta.',
+      question3: 'Voinko käyttää sovellusta opintolainojen hallintaan?',
+      answer3: 'Ehdottomasti! Sovellus toimii kaikenlaisten lainojen kanssa, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat.',
+      question4: 'Mikä on lumivyöry- ja lumipallomenetelmien ero?',
+      answer4: 'Lumivyörymenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästääkseen eniten korkokuluissa. Lumipallomenetelmä keskittyy maksamaan pienimmät velat ensin motivaation ja momentumin rakentamiseksi.',
+    },
+    finalCta: {
+      title: 'Aloita Velattomuusmatkasi Tänään',
+      subtitle: 'Liity tuhansien käyttäjien joukkoon, jotka ovat jo ottaneet taloudellisen tulevaisuutensa hallintaan.',
+      buttonText: 'Rekisteröidy Nyt - Se on Ilmaista',
+    },
+    footer: {
+      about: {
+        title: 'Tietoa Lainalaskuri Harmoniasta',
+        description: 'Lainalaskuri Harmonia on ilmainen työkalu, joka on suunniteltu auttamaan sinua luomaan ja noudattamaan henkilökohtaista velanmaksusuunnitelmaa.',
+      },
+      links: {
+        title: 'Pikalinkit',
+        item1: 'Kojelauta',
+        item2: 'Lainaehdot',
+        item3: 'Velkayhteenveto',
+      },
+      legal: {
+        title: 'Lakiasiat',
+        privacy: 'Tietosuojaseloste',
+        terms: 'Käyttöehdot',
+        cookies: 'Evästekäytäntö',
+      },
+      copyright: 'Kaikki oikeudet pidätetään.',
+    },
   },
   form: {
     name: "Nimi",
@@ -178,7 +309,7 @@ export const fi = {
     neverPaidOff: "Ei koskaan maksettu",
     loanName: "Lainan nimi",
     totalLifetimeInterest: "Kokonaiselinkaarikorko",
-    summaryExplanation: "Tämä yhteenveto näyttää velkojen kokonaiskuvan ja auttaa priorisoimaan maksustrategiaa.",
+    summaryExplanation: "Tämä yhteenveto näyttää veloisten kokonaiskuvan ja auttaa priorisoimaan maksustrategiaa.",
     totalLoans: "Lainat yhteensä",
     payoffButton: "Maksa pois",
     actions: "Toiminnot"

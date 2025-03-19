@@ -47,6 +47,10 @@ export const AuthButtons = () => {
           <User className="mr-2 h-4 w-4" />
           {user.email}
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+          <User className="mr-2 h-4 w-4" />
+          {t("auth.dashboard")}
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
           {t("auth.logout")}
