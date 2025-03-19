@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Loan, LoanType, InterestType } from '@/utils/loanCalculations';
-import { PlusCircle, Edit, X } from 'lucide-react';
+import { PlusCircle, Edit, X, Percent, DollarSign, Clock, Bank } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -77,7 +77,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
     const monthlyInterestRate = rate / 12 / 100;
     
     if (payment <= loanAmount * monthlyInterestRate) {
-      return t('form.paymentTooSmall');
+      return t('loan.customPaymentWarning');
     }
     
     const initialPrincipalPortion = payment - (loanAmount * monthlyInterestRate);
@@ -217,7 +217,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
   };
   
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} aria-label="Velan lisäyslomake">
       <Card 
         className={cn(
           "transition-all duration-300 overflow-hidden", 
@@ -230,10 +230,11 @@ const LoanForm: React.FC<LoanFormProps> = ({
             {isEditing ? t('form.editTitle') : t('form.title')}
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 pb-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <CardContent className="space-y-6 pb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-sm font-medium">
+              <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
+                <Bank size={16} className="text-primary" />
                 {t('form.name')}
               </Label>
               <Input
@@ -244,11 +245,13 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label="Velan nimi"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="amount" className="text-sm font-medium">
+              <Label htmlFor="amount" className="text-sm font-medium flex items-center gap-2">
+                <DollarSign size={16} className="text-primary" />
                 {t('form.amount')}
               </Label>
               <Input
@@ -262,14 +265,16 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label="Velan määrä euroina"
                 required
               />
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="interestRate" className="text-sm font-medium">
+              <Label htmlFor="interestRate" className="text-sm font-medium flex items-center gap-2">
+                <Percent size={16} className="text-primary" />
                 {t('form.interestRate')}
               </Label>
               <Input
@@ -283,11 +288,13 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label="Korko prosentteina"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="termYears" className="text-sm font-medium">
+              <Label htmlFor="termYears" className="text-sm font-medium flex items-center gap-2">
+                <Clock size={16} className="text-primary" />
                 {t('form.termYears')}
               </Label>
               <Input
@@ -301,12 +308,13 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label="Laina-aika vuosina"
                 required
               />
             </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="repaymentType" className="text-sm font-medium">
                 {t('form.repaymentType')}
@@ -319,8 +327,9 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 <SelectTrigger
                   id="repaymentType"
                   className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                  aria-label="Lyhennystapa"
                 >
-                  <SelectValue placeholder="Select repayment type" />
+                  <SelectValue placeholder="Valitse lyhennystapa" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="annuity">{t('repayment.annuity')}</SelectItem>
@@ -344,8 +353,9 @@ const LoanForm: React.FC<LoanFormProps> = ({
                   <SelectTrigger
                     id="interestType"
                     className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                    aria-label="Korkotyyppi"
                   >
-                    <SelectValue placeholder="Select interest type" />
+                    <SelectValue placeholder="Valitse korkotyyppi" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="fixed">{t('interest.fixed')}</SelectItem>
@@ -357,7 +367,8 @@ const LoanForm: React.FC<LoanFormProps> = ({
             
             {isCustomPayment && (
               <div className="space-y-2">
-                <Label htmlFor="customPayment" className="text-sm font-medium">
+                <Label htmlFor="customPayment" className="text-sm font-medium flex items-center gap-2">
+                  <DollarSign size={16} className="text-primary" />
                   {t('form.customPayment')}
                 </Label>
                 <Input
@@ -371,6 +382,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
                   className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                  aria-label="Mukautettu kuukausimaksu"
                   required={isCustomPayment}
                 />
                 {isCustomPayment && amount && interestRate && customPayment && (
@@ -383,7 +395,8 @@ const LoanForm: React.FC<LoanFormProps> = ({
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="monthlyFee" className="text-sm font-medium">
+            <Label htmlFor="monthlyFee" className="text-sm font-medium flex items-center gap-2">
+              <DollarSign size={16} className="text-primary" />
               {t('form.monthlyFee')}
             </Label>
             <Input
@@ -397,13 +410,14 @@ const LoanForm: React.FC<LoanFormProps> = ({
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+              aria-label="Kuukausimaksu"
             />
             <p className="text-xs text-muted-foreground mt-1">
               {t('form.monthlyFeeDescription')}
             </p>
           </div>
         </CardContent>
-        <CardFooter className="flex gap-2">
+        <CardFooter className="flex gap-2 pt-2">
           {isEditing ? (
             <>
               <Button
@@ -411,6 +425,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 variant="outline"
                 onClick={handleCancel}
                 className="flex-1 py-5 transition-all"
+                aria-label="Peruuta muokkaus"
               >
                 <X size={18} className="mr-2" />
                 <span>{t('form.cancel')}</span>
@@ -418,6 +433,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
               <Button
                 type="submit"
                 className="flex-1 bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
+                aria-label="Päivitä velka"
               >
                 <Edit size={18} />
                 <span>{t('form.update')}</span>
@@ -427,6 +443,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
             <Button
               type="submit"
               className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
+              aria-label="Lisää velka"
             >
               <PlusCircle size={18} />
               <span>{t('form.submit')}</span>

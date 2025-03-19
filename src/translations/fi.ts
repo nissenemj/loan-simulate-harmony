@@ -66,6 +66,27 @@ export const fi = {
     creditCardMinPayment: 'Luottokortin minimimaksu',
     creditCardMinPaymentPercent: 'Luottokortin minimimaksuprosentti',
     creditCardFullPayment: 'Maksa koko saldo',
+    name: 'Velan nimi',
+    placeholderName: 'Esim. Asuntolaina',
+    amount: 'Velan määrä (€)',
+    placeholderAmount: 'Esim. 10000',
+    placeholderInterestRate: 'Esim. 3.5',
+    termYears: 'Laina-aika (vuotta)',
+    placeholderTermYears: 'Esim. 10',
+    placeholderMonthlyFee: 'Esim. 100',
+    monthlyFeeDescription: 'Lisämaksut, kuten tilinhoitomaksut',
+    submit: 'Lisää velka',
+    title: 'Lisää uusi velka',
+    editTitle: 'Muokkaa velkaa',
+    loanAdded: 'Velka lisätty',
+    loanAddedDesc: 'Uusi velka on lisätty onnistuneesti',
+    loanUpdated: 'Velka päivitetty',
+    loanUpdatedDesc: 'Velka on päivitetty onnistuneesti',
+    cancel: 'Peruuta',
+    update: 'Päivitä',
+    placeholderCustomPayment: 'Esim. 500',
+    estimatedTerm: 'Arvioitu laina-aika',
+    paymentTooSmall: 'Maksu on liian pieni'
   },
   loan: {
     types: {
@@ -342,6 +363,30 @@ export const fi = {
   language: {
     en: "Englanti",
     fi: "Suomi"
+  },
+  validation: {
+    nameRequired: 'Nimi on pakollinen',
+    nameRequiredDesc: 'Anna velalle nimi',
+    invalidAmount: 'Virheellinen summa',
+    invalidAmountDesc: 'Syötä positiivinen summa',
+    invalidRate: 'Virheellinen korko',
+    invalidRateDesc: 'Syötä positiivinen korko',
+    invalidTerm: 'Virheellinen laina-aika',
+    invalidTermDesc: 'Syötä positiivinen laina-aika',
+    invalidPayment: 'Virheellinen maksusumma',
+    invalidPaymentDesc: 'Syötä positiivinen maksusumma',
+    paymentTooSmall: 'Maksu on liian pieni',
+    paymentTooSmallDesc: 'Maksun tulee kattaa vähintään korot'
+  },
+  repayment: {
+    annuity: 'Annuiteetti',
+    equalPrincipal: 'Tasalyhennys',
+    fixedInstallment: 'Kiinteä maksuerä',
+    customPayment: 'Mukautettu maksu'
+  },
+  interest: {
+    fixed: 'Kiinteä',
+    variableEuribor: 'Vaihtuva (Euribor)'
   }
 };
 
