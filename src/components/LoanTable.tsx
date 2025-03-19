@@ -93,7 +93,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
   if (loans.length === 0) {
     return (
       <div className="mt-6 text-center p-8 bg-white/50 rounded-lg shadow-subtle">
-        <p className="text-primary font-medium">{t('table.noLoans')}</p>
+        <p className="text-primary font-medium">{t('loan.table.noLoans')}</p>
       </div>
     );
   }
@@ -104,13 +104,13 @@ const LoanTable: React.FC<LoanTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary/50">
-              <TableHead>{t('table.name')}</TableHead>
+              <TableHead>{t('loan.table.name')}</TableHead>
               <TableHead 
                 className="cursor-pointer hover:bg-secondary/80 transition-colors"
                 onClick={() => handleSort('monthlyPayment')}
               >
                 <div className="flex items-center gap-1">
-                  {t('table.payment')}
+                  {t('loan.table.monthlyPayment')}
                   {sortField === 'monthlyPayment' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
@@ -121,7 +121,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
                 onClick={() => handleSort('interestRate')}
               >
                 <div className="flex items-center gap-1">
-                  {t('table.interest')}
+                  {t('loan.table.interestRate')}
                   {sortField === 'interestRate' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
@@ -132,16 +132,16 @@ const LoanTable: React.FC<LoanTableProps> = ({
                 onClick={() => handleSort('totalInterest')}
               >
                 <div className="flex items-center gap-1">
-                  {t('table.totalInterest')}
+                  {t('loan.table.totalInterest')}
                   {sortField === 'totalInterest' && (
                     sortDirection === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
                   )}
                 </div>
               </TableHead>
-              <TableHead>{t('table.term')}</TableHead>
-              <TableHead>{t('table.type')}</TableHead>
-              <TableHead>{t('table.fee')}</TableHead>
-              <TableHead className="text-right">{t('table.actions')}</TableHead>
+              <TableHead>{t('loan.table.term')}</TableHead>
+              <TableHead>{t('repayment.repaymentType')}</TableHead>
+              <TableHead>{t('form.monthlyFee')}</TableHead>
+              <TableHead className="text-right">{t('debtSummary.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
