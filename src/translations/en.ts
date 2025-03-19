@@ -261,5 +261,22 @@ export const en = {
       title: "Fixed Installment",
       description: "With a fixed installment loan, you pay the same amount every month. This payment type is similar to annuity but is often used when the interest rate may vary."
     }
+  },
+  auth: {
+    welcome: "Welcome to Loan Calculator",
+    description: "Sign in to your account or create a new one",
+    login: "Login",
+    signup: "Sign Up",
+    email: "Email",
+    password: "Password",
+    loggingIn: "Logging in...",
+    signingUp: "Signing up...",
+    logout: "Log out",
+    loginSuccess: "Login successful",
+    welcomeBack: "Welcome back!",
+    loginError: "Login failed",
+    signupSuccess: "Sign up successful",
+    checkEmail: "Please check your email to verify your account",
+    signupError: "Sign up failed"
   }
 }

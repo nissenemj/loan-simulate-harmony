@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
+import { AuthButtons } from './AuthButtons'; 
 import { cn } from '@/lib/utils';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,7 @@ const NavigationHeader: React.FC = () => {
         
         {isMobile ? (
           <div className="flex items-center gap-2">
+            <AuthButtons />
             <LanguageSwitcher />
             <Sheet>
               <SheetTrigger asChild>
@@ -89,6 +91,7 @@ const NavigationHeader: React.FC = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
+            <AuthButtons />
             <LanguageSwitcher />
           </div>
         )}

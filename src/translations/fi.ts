@@ -261,5 +261,22 @@ export const fi = {
       title: "Kiinteät maksut",
       description: "Kiinteän maksun lainassa maksat saman summan joka kuukausi. Tämä maksutyyppi on samankaltainen kuin annuiteetti, mutta sitä käytetään usein kun korko voi vaihdella."
     }
+  },
+  auth: {
+    welcome: "Tervetuloa Lainalaskuriin",
+    description: "Kirjaudu sisään tai luo uusi tili",
+    login: "Kirjaudu",
+    signup: "Rekisteröidy",
+    email: "Sähköposti",
+    password: "Salasana",
+    loggingIn: "Kirjaudutaan...",
+    signingUp: "Rekisteröidytään...",
+    logout: "Kirjaudu ulos",
+    loginSuccess: "Kirjautuminen onnistui",
+    welcomeBack: "Tervetuloa takaisin!",
+    loginError: "Kirjautuminen epäonnistui",
+    signupSuccess: "Rekisteröityminen onnistui",
+    checkEmail: "Tarkista sähköpostisi varmistaaksesi tilisi",
+    signupError: "Rekisteröityminen epäonnistui"
   }
 };
