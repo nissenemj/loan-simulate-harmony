@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loan, calculateTotalMonthlyPayment, formatCurrency, generateRecommendations } from '@/utils/loanCalculations';
@@ -27,7 +28,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyPayment')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
                   value={totalPayment} 
@@ -37,7 +38,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
             </div>
             
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyPrincipal')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('loan.table.monthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
                   value={totalPrincipal} 
@@ -47,7 +48,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
             </div>
             
             <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">{t('summary.monthlyInterest')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyInterest')}</h3>
               <p className="text-2xl font-semibold text-primary">
                 <AnimatedNumber 
                   value={totalInterest} 
