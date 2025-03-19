@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import LoanForm from "@/components/LoanForm";
 import LoanTable from "@/components/LoanTable";
 import LoanSummary from "@/components/LoanSummary";
+import SavingsImpact from "@/components/SavingsImpact";
 import CreditCardForm from "@/components/CreditCardForm";
 import CreditCardTable from "@/components/CreditCardTable";
 import CreditCardSummary from "@/components/CreditCardSummary";
@@ -41,6 +42,13 @@ export default function Index() {
   const handleToggleCreditCardActive = (id: string, isActive: boolean) => {
     setCreditCards((prev) =>
       prev.map((card) => (card.id === id ? { ...card, isActive } : card))
+    );
+  };
+
+  // Add a new function to handle loan payoff
+  const handlePayoffLoan = (id: string) => {
+    setLoans((prev) =>
+      prev.map((loan) => (loan.id === id ? { ...loan, amount: 0, isActive: false } : loan))
     );
   };
 
@@ -75,7 +83,14 @@ export default function Index() {
           
           {activeLoans.length > 0 && (
             <>
-              <LoanSummary loans={activeLoans} />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <LoanSummary loans={activeLoans} />
+                </div>
+                <div>
+                  <SavingsImpact loans={loans} onPayoffLoan={handlePayoffLoan} />
+                </div>
+              </div>
             </>
           )}
         </TabsContent>
