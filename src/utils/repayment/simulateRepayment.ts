@@ -17,8 +17,8 @@ export const simulateRepayment = (
   // Deep clone debts to avoid mutating the original
   let currentDebts = initialDebts.map(debt => ({...debt}));
   
-  // Initialize allocation by copying the initial allocation
-  let currentAllocation = [...initialAllocation];
+  // Initialize allocation by creating a deep copy of the initial allocation
+  let currentAllocation = initialAllocation.map(alloc => ({...alloc}));
   
   const timeline: RepaymentPlan['timeline'] = [];
   
