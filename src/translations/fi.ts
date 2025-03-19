@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -140,7 +139,7 @@ export const fi = {
     confirmDeleteLoan: 'Haluatko varmasti poistaa tämän lainan?',
     noLoansAdded: 'Ei lisättyjä lainoja.',
     addYourFirstLoan: 'Lisää ensimmäinen lainasi!',
-    customPaymentNote: 'Jos mukautettu maksu ei kata korkoja, lainaa ei makseta koskaan takaisin.',
+    customPaymentNote: 'Jos mukautettu maksu ei kata korkoja, lainaa ei makseta koskaa takaisin.',
     customPaymentWarning: 'Mukautettu maksu on liian pieni kattamaan korot. Laina ei lyhene.',
     customPaymentTermEstimate: 'Arvioitu laina-aika on {months} kuukautta.',
     customPaymentTermEstimateNever: 'Lainaa ei makseta koskaan takaisin tällä maksulla.',
@@ -294,6 +293,56 @@ export const fi = {
     helpWithDebt: 'Tarvitsetko apua velkojesi kanssa?',
     year: 'vuosi',
   },
+  loanTerms: {
+    pageTitle: "Taloussanasto",
+    backButton: "Takaisin",
+    introduction: "Taloussanasto yksinkertaisesti selitettynä. Ymmärrä taloudelliset termit helposti.",
+    searchPlaceholder: "Etsi termiä...",
+    noResults: "Ei hakutuloksia. Kokeile eri hakusanaa.",
+    tryCalculator: "Kokeile laskuria nähdäksesi miten tämä vaikuttaa lainaasi →",
+    relatedTools: "Aiheeseen liittyvät työkalut",
+    loanCalculator: "Lainalaskuri",
+    loanCalculatorDesc: "Laske lainan maksuerät eri lyhennystavoilla",
+    bestLoanOffers: "Löydä parhaat lainatarjoukset",
+    bestLoanOffersDesc: "Vertaile asuntolainojen korkoja ja lainavaihtoehto luotetuista lähteistä",
+    interestRate: {
+      title: "Korko",
+      description: "Korko on summa, jonka maksat lainanantajalle heidän rahansa käytöstä. Se ilmaistaan prosenttiosuutena lainan pääomasta ja maksetaan yleensä kuukausittain."
+    },
+    annuity: {
+      title: "Annuiteetti",
+      description: "Annuiteettilainassa maksat saman summan joka kuukausi koko laina-ajan. Aluksi suurempi osa maksustasi menee korkoihin, ja ajan myötä yhä enemmän pääoman lyhentämiseen."
+    },
+    principal: {
+      title: "Pääoma",
+      description: "Pääoma on alkuperäinen lainaamasi rahasumma. Kuukausittainen maksusi koostuu tämän pääoman takaisinmaksusta sekä korosta."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "Euribor (Euro Interbank Offered Rate) on viitekorko, johon monet vaihtuvakorkoiset lainat on sidottu. Se kuvastaa korkoa, jolla eurooppalaiset pankit lainaavat toisilleen, ja se voi muuttua ajan myötä vaikuttaen kokonaislainakorkoon."
+    },
+    totalInterest: {
+      title: "Kokonaiskorko",
+      description: "Kokonaiskorko on kaikkien korkoerien summa, jotka maksat lainan elinkaaren aikana. Se riippuu lainan määrästä, korosta, laina-ajasta ja lyhennystavasta."
+    },
+    termYears: {
+      title: "Laina-aika (vuosia)",
+      description: "Laina-aika on ajanjakso, jonka aikana sovit maksavasi lainan takaisin. Pidempi laina-aika tarkoittaa yleensä pienempiä kuukausittaisia maksuja, mutta enemmän maksettavaa korkoa yhteensä."
+    },
+    equalPrincipal: {
+      title: "Tasalyhennys",
+      description: "Tasalyhennyslainassa maksat saman verran pääomaa joka kuukausi, mutta korko-osuus pienenee ajan myötä. Siten kuukausimaksusi ovat korkeammat alussa ja pienenevät ajan myötä."
+    },
+    fixedInstallment: {
+      title: "Kiinteä maksuerä",
+      description: "Kiinteässä maksuerässä maksat saman summan joka kuukausi. Tämä maksutyyppi on samankaltainen kuin annuiteetti, mutta sitä käytetään usein, kun korko saattaa vaihdella."
+    }
+  },
+  language: {
+    en: "Englanti",
+    fi: "Suomi"
+  }
 };
 
 export default fi;
+

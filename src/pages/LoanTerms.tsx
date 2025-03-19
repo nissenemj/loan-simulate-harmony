@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -117,11 +118,11 @@ const LoanTerms: React.FC = () => {
                 </Link>
                 <span>•</span>
                 <Link to="/terms#interest-rate" className="text-primary hover:underline">
-                  What is interest rate?
+                  {t('loanTerms.interestRate.title')}
                 </Link>
                 <span>•</span>
                 <Link to="/terms#euribor" className="text-primary hover:underline">
-                  Euribor explained
+                  {t('loanTerms.euribor.title')}
                 </Link>
               </div>
 
@@ -155,7 +156,7 @@ const LoanTerms: React.FC = () => {
                   <div className="mt-4 pt-3 border-t">
                     <p className="text-sm text-primary">
                       <Link to="/" className="hover:underline">
-                        Try our calculator to see how this affects your loan →
+                        {t('loanTerms.tryCalculator')}
                       </Link>
                     </p>
                   </div>
@@ -170,21 +171,21 @@ const LoanTerms: React.FC = () => {
         )}
         
         <div className="mt-10 pt-6 border-t">
-          <h2 className="text-xl font-semibold mb-3">Related Financial Tools</h2>
+          <h2 className="text-xl font-semibold mb-3">{t('loanTerms.relatedTools')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <Link to="/" className="block">
-                  <h3 className="font-medium">Loan Calculator</h3>
-                  <p className="text-sm text-muted-foreground">Calculate your loan payments with various repayment methods</p>
+                  <h3 className="font-medium">{t('loanTerms.loanCalculator')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('loanTerms.loanCalculatorDesc')}</p>
                 </Link>
               </CardContent>
             </Card>
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <Link to="/" className="block">
-                  <h3 className="font-medium">Find the Best Loan Offers</h3>
-                  <p className="text-sm text-muted-foreground">Compare mortgage rates and loan options from trusted providers</p>
+                  <h3 className="font-medium">{t('loanTerms.bestLoanOffers')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('loanTerms.bestLoanOffersDesc')}</p>
                 </Link>
               </CardContent>
             </Card>

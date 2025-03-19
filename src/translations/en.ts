@@ -363,6 +363,12 @@ export const en = {
     introduction: "Financial terms explained in simple terms. Understand financial terms easily.",
     searchPlaceholder: "Search for a term...",
     noResults: "No results found. Try a different search term.",
+    tryCalculator: "Try our calculator to see how this affects your loan →",
+    relatedTools: "Related Financial Tools",
+    loanCalculator: "Loan Calculator",
+    loanCalculatorDesc: "Calculate your loan payments with various repayment methods",
+    bestLoanOffers: "Find the Best Loan Offers",
+    bestLoanOffersDesc: "Compare mortgage rates and loan options from trusted providers",
     interestRate: {
       title: "Interest Rate",
       description: "The interest rate is the amount you pay to the lender for the use of their money. It's expressed as a percentage of the loan principal and is typically paid monthly."
