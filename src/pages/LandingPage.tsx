@@ -1,9 +1,9 @@
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import NavigationHeader from "@/components/NavigationHeader";
 import {
   HandCoins,
   LineChart,
@@ -122,8 +122,10 @@ const LandingPage = () => {
       </Helmet>
 
       <div className="bg-gradient-to-b from-background to-accent min-h-screen">
+        <NavigationHeader />
+        
         {/* Hero Section */}
-        <section className="pt-20 pb-16 px-4 md:pt-28 md:pb-20">
+        <section className="pt-10 pb-16 px-4 md:pt-16 md:pb-20">
           <div className="container mx-auto max-w-5xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">

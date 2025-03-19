@@ -37,10 +37,10 @@ const App = () => (
                   </ProtectedRoute>
                 } />
                 <Route path="/terms" element={
-                  <ProtectedRoute>
+                  <>
                     <NavigationHeader />
                     <LoanTerms />
-                  </ProtectedRoute>
+                  </>
                 } />
                 <Route path="/debt-summary" element={
                   <ProtectedRoute>
