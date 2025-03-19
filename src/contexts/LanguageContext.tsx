@@ -33,15 +33,15 @@ const enTranslations = flattenTranslations(enTranslationsObject);
 const fiTranslations = flattenTranslations(fiTranslationsObject);
 
 const LanguageContext = createContext<LanguageContextType>({
-  language: 'en',
-  translations: enTranslations,
+  language: 'fi',
+  translations: fiTranslations,
   setLanguage: () => {},
   t: () => '',
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'fi'>('en');
-  const [translations, setTranslations] = useState<Translations>(enTranslations);
+  const [language, setLanguage] = useState<'en' | 'fi'>('fi');
+  const [translations, setTranslations] = useState<Translations>(fiTranslations);
   
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
