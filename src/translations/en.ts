@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -30,6 +31,16 @@ export const en = {
     resetPassword: 'Reset Password',
     resetPasswordEmailSent: 'Password reset email has been sent.',
     verificationEmailSent: 'Verification email has been sent. Please check your inbox.',
+    welcome: "Welcome to Loan Calculator",
+    description: "Sign in to your account or create a new one",
+    loggingIn: "Logging in...",
+    signingUp: "Signing up...",
+    loginSuccess: "Login successful",
+    welcomeBack: "Welcome back!",
+    loginError: "Login failed",
+    signupSuccess: "Sign up successful",
+    checkEmail: "Please check your email to verify your account",
+    signupError: "Sign up failed"
   },
   toast: {
     loanAdded: 'Loan added successfully',
@@ -38,6 +49,10 @@ export const en = {
     cardAdded: 'Credit card added successfully',
     cardUpdated: 'Credit card updated successfully',
     cardDeleted: 'Credit card deleted successfully',
+    loanActivated: "Loan activated",
+    loanDeactivated: "Loan deactivated",
+    loanPaidOff: "Loan paid off",
+    cardPaidOff: "Card paid off",
   },
   landing: {
     seo: {
@@ -336,17 +351,6 @@ export const en = {
     year: "year",
     years: "years",
   },
-  toast: {
-    loanActivated: "Loan activated",
-    loanDeactivated: "Loan deactivated",
-    loanPaidOff: "Loan paid off",
-    loanAdded: "Loan added",
-    cardPaidOff: "Card paid off",
-  },
-  language: {
-    en: "English",
-    fi: "Suomi"
-  },
   loanTerms: {
     pageTitle: "Loan Terms Explained Simply",
     backButton: "Back",
@@ -386,21 +390,8 @@ export const en = {
       description: "With a fixed installment loan, you pay the same amount every month. This payment type is similar to annuity but is often used when the interest rate may vary."
     }
   },
-  auth: {
-    welcome: "Welcome to Loan Calculator",
-    description: "Sign in to your account or create a new one",
-    login: "Login",
-    signup: "Sign Up",
-    email: "Email",
-    password: "Password",
-    loggingIn: "Logging in...",
-    signingUp: "Signing up...",
-    logout: "Log out",
-    loginSuccess: "Login successful",
-    welcomeBack: "Welcome back!",
-    loginError: "Login failed",
-    signupSuccess: "Sign up successful",
-    checkEmail: "Please check your email to verify your account",
-    signupError: "Sign up failed"
+  language: {
+    en: "English",
+    fi: "Suomi"
   }
 }
