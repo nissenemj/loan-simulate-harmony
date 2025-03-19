@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -170,7 +169,9 @@ export const en = {
     save: "Save",
     cancel: "Cancel",
     title: "New Loan",
+    editTitle: "Edit Loan",
     submit: "Add Loan",
+    update: "Update Loan",
     placeholderName: "e.g. Mortgage",
     placeholderAmount: "10000",
     placeholderInterestRate: "5.0",
@@ -178,7 +179,10 @@ export const en = {
     estimatedTerm: "Estimated Term",
     paymentTooSmall: "Payment too small",
     years: "years",
-    placeholderCustomPayment: "200"
+    placeholderCustomPayment: "200",
+    monthlyFee: "Monthly Fee",
+    placeholderMonthlyFee: "5.0",
+    monthlyFeeDescription: "Optional monthly service fee for the loan"
   },
   repayment: {
     annuity: "Annuity",

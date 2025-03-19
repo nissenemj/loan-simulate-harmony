@@ -169,7 +169,9 @@ export const fi = {
     save: "Tallenna",
     cancel: "Peruuta",
     title: "Uusi laina",
+    editTitle: "Muokkaa lainaa",
     submit: "Lisää laina",
+    update: "Päivitä laina",
     placeholderName: "Esim. Asuntolaina",
     placeholderAmount: "10000",
     placeholderInterestRate: "5.0",
@@ -177,7 +179,10 @@ export const fi = {
     estimatedTerm: "Arvioitu takaisinmaksuaika",
     paymentTooSmall: "Maksu on liian pieni",
     years: "vuotta",
-    placeholderCustomPayment: "200"
+    placeholderCustomPayment: "200",
+    monthlyFee: "Kuukausimaksu",
+    placeholderMonthlyFee: "5.0",
+    monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle"
   },
   repayment: {
     annuity: "Annuiteetti",
