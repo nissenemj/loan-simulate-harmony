@@ -1,3 +1,4 @@
+
 import { Loan, calculateLoan } from './loanCalculations';
 import { CreditCard, calculateCreditCard } from './creditCardCalculations';
 
@@ -222,7 +223,7 @@ const simulateRepayment = (
       const allocation = currentAllocation.find(a => a.id === debt.id);
       if (!allocation) continue;
       
-      // Calculate monthly interest - critical fix for correct interest calculation
+      // Calculate monthly interest
       const monthlyInterestRate = debt.interestRate / 100 / 12;
       const interestForMonth = debt.balance * monthlyInterestRate;
       
@@ -251,6 +252,12 @@ const simulateRepayment = (
       monthData.totalPaid += actualPayment;
       monthData.totalInterestPaid += interestForMonth;
     }
+    
+    // Calculate total remaining balance
+    monthData.totalRemaining = currentDebts.reduce((sum, debt) => sum + debt.balance, 0);
+    
+    // Add month to timeline
+    timeline.push(monthData);
     
     // Handle snowball effect - identify debts that were just paid off this month
     const justPaidOffDebts = monthData.debts.filter(debt => debt.remainingBalance === 0);
@@ -291,12 +298,6 @@ const simulateRepayment = (
         }
       }
     }
-    
-    // Calculate total remaining balance
-    monthData.totalRemaining = currentDebts.reduce((sum, debt) => sum + debt.balance, 0);
-    
-    // Add month to timeline
-    timeline.push(monthData);
     
     // Check if all debts are paid off
     if (monthData.totalRemaining <= 0) {
