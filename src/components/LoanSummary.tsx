@@ -94,7 +94,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               
               {highestTotalInterestLoans.length > 0 && (
                 <div className="p-4 bg-secondary/30 rounded-lg">
-                  <h4 className="font-medium mb-2">{t('recommendations.highestInterest')}</h4>
+                  <h4 className="font-medium mb-2">{t('recommendations.highTotalInterest')}</h4>
                   <p className="text-sm">
                     {highestTotalInterestLoans.map(loan => {
                       const result = calculateTotalMonthlyPayment([loan]);
@@ -110,8 +110,8 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
                     }, <></>)}
                     {" "}
                     {highestTotalInterestLoans.length === 1 
-                      ? t('recommendations.highestInterestText')
-                      : t('recommendations.highestInterestTextPlural')}
+                      ? t('recommendations.highTotalInterestText')
+                      : t('recommendations.highTotalInterestTextPlural')}
                   </p>
                 </div>
               )}
