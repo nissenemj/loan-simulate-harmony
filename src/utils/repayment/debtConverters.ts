@@ -1,5 +1,5 @@
 
-import { Loan, calculateMonthlyPayment } from '../loanCalculations';
+import { Loan, calculateLoan } from '../loanCalculations';
 import { CreditCard, calculateEffectiveMinPayment } from '../creditCardCalculations';
 import { DebtItem } from './types';
 
@@ -7,20 +7,15 @@ import { DebtItem } from './types';
  * Convert a loan to a DebtItem
  */
 export const convertLoanToDebtItem = (loan: Loan): DebtItem => {
-  const monthlyPayment = calculateMonthlyPayment(
-    loan.amount,
-    loan.interestRate,
-    loan.termYears * 12,
-    loan.repaymentType
-  );
-
+  const calculation = calculateLoan(loan);
+  
   return {
     id: loan.id,
     name: loan.name,
     type: 'loan',
     balance: loan.amount,
     interestRate: loan.interestRate,
-    minPayment: monthlyPayment,
+    minPayment: calculation.monthlyPayment,
     remainingTerm: loan.termYears * 12,
     isActive: loan.isActive
   };
