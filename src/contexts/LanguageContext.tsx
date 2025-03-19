@@ -4,7 +4,7 @@ import { en } from '@/translations/en';
 import { fi } from '@/translations/fi';
 
 type Translations = {
-  [key: string]: string;
+  [key: string]: string | any;
 };
 
 type LanguageContextType = {

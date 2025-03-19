@@ -19,6 +19,7 @@ import CreditCardSummary from "@/components/CreditCardSummary";
 import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Index() {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -47,7 +48,6 @@ export default function Index() {
     setLoanToEdit(null);
   };
 
-  // Update this function to accept isActive parameter to match LoanTable prop
   const handleToggleLoanActive = (id: string, isActive?: boolean) => {
     setLoans((prev) =>
       prev.map((loan) => (loan.id === id ? { ...loan, isActive: isActive !== undefined ? isActive : !loan.isActive } : loan))
@@ -56,6 +56,7 @@ export default function Index() {
 
   const handleAddCreditCard = (card: CreditCard) => {
     setCreditCards((prev) => [...prev, card]);
+    toast(t("toast.cardAdded"));
   };
 
   const handleToggleCreditCardActive = (id: string, isActive: boolean) => {
@@ -64,11 +65,11 @@ export default function Index() {
     );
   };
 
-  // Add a new function to handle loan payoff
   const handlePayoffLoan = (id: string) => {
     setLoans((prev) =>
       prev.map((loan) => (loan.id === id ? { ...loan, amount: 0, isActive: false } : loan))
     );
+    toast(t("toast.loanPaidOff"));
   };
 
   const activeLoans = loans.filter((loan) => loan.isActive);
@@ -77,6 +78,11 @@ export default function Index() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">{t("tabs.loans")}</h1>
+        <LanguageSwitcher />
+      </div>
+      
       <Tabs defaultValue="loans" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>

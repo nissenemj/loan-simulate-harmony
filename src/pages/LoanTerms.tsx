@@ -9,6 +9,7 @@ import { ChevronLeft, Search, Home, InfoIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Helmet } from 'react-helmet-async';
 import { useIsMobile } from '@/hooks/use-mobile';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const LoanTerms: React.FC = () => {
   const navigate = useNavigate();
@@ -92,16 +93,19 @@ const LoanTerms: React.FC = () => {
       </Helmet>
 
       <div className="container max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={() => navigate(-1)}
-            aria-label={t('loanTerms.backButton')}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-3xl font-bold">{t('loanTerms.pageTitle')}</h1>
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={() => navigate(-1)}
+              aria-label={t('loanTerms.backButton')}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <h1 className="text-3xl font-bold">{t('loanTerms.pageTitle')}</h1>
+          </div>
+          <LanguageSwitcher />
         </div>
         
         <Card className="mb-8">
