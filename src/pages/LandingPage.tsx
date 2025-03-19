@@ -20,6 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AffiliateLink } from "@/utils/affiliateData";
 import AffiliateSection from "@/components/affiliate/AffiliateSection";
+import Footer from "@/components/Footer";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
@@ -416,79 +417,7 @@ const LandingPage = () => {
         </section>
 
         {/* Footer */}
-        <footer className="py-8 bg-accent/80 border-t">
-          <div className="container mx-auto max-w-5xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <h3 className="font-bold text-lg mb-4">
-                  {t("landing.footer.about.title")}
-                </h3>
-                <p className="text-muted-foreground">
-                  {t("landing.footer.about.description")}
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg mb-4">
-                  {t("landing.footer.links.title")}
-                </h3>
-                <ul className="space-y-2">
-                  <li>
-                    <Button
-                      variant="link"
-                      className="p-0 h-auto"
-                      onClick={() => navigate("/")}
-                    >
-                      {t("landing.footer.links.item1")}
-                    </Button>
-                  </li>
-                  <li>
-                    <Button
-                      variant="link"
-                      className="p-0 h-auto"
-                      onClick={() => navigate("/terms")}
-                    >
-                      {t("landing.footer.links.item2")}
-                    </Button>
-                  </li>
-                  <li>
-                    <Button
-                      variant="link"
-                      className="p-0 h-auto"
-                      onClick={() => navigate("/debt-summary")}
-                    >
-                      {t("landing.footer.links.item3")}
-                    </Button>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold text-lg mb-4">
-                  {t("landing.footer.legal.title")}
-                </h3>
-                <ul className="space-y-2">
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
-                      {t("landing.footer.legal.privacy")}
-                    </Button>
-                  </li>
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
-                      {t("landing.footer.legal.terms")}
-                    </Button>
-                  </li>
-                  <li>
-                    <Button variant="link" className="p-0 h-auto">
-                      {t("landing.footer.legal.cookies")}
-                    </Button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-              <p>© {new Date().getFullYear()} Loan Simulate Harmony. {t("landing.footer.copyright")}</p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

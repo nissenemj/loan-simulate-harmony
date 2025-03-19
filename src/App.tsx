@@ -15,6 +15,10 @@ import Auth from "./pages/Auth";
 import NavigationHeader from "./components/NavigationHeader";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/LandingPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
+import CookieConsentBanner from "./components/CookieConsentBanner";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +31,7 @@ const App = () => (
             <AuthProvider>
               <Toaster />
               <Sonner />
+              <CookieConsentBanner />
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<Auth />} />
@@ -48,6 +53,12 @@ const App = () => (
                     <DebtSummaryPage />
                   </ProtectedRoute>
                 } />
+                
+                {/* Legal pages */}
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
+                
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
