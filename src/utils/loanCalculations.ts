@@ -11,6 +11,7 @@ export interface Loan {
   interestType?: InterestType;
   customPayment?: number;
   isActive: boolean;
+  monthlyFee?: number; // Added monthly fee (e.g., processing fee)
 }
 
 /**
@@ -248,20 +249,34 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
     ? loan.interestRate + 1 // Add 1% for Euribor
     : loan.interestRate;
   
+  let result;
+  
   switch (loan.repaymentType) {
     case 'annuity':
-      return calculateAnnuityLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      result = calculateAnnuityLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      break;
     case 'equal-principal':
-      return calculateEqualPrincipalLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      result = calculateEqualPrincipalLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      break;
     case 'fixed-installment':
-      return calculateFixedInstallmentLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      result = calculateFixedInstallmentLoan(loan.amount, effectiveInterestRate, loan.termYears);
+      break;
     case 'custom-payment':
       // Use a default payment if customPayment is not provided
       const customPayment = loan.customPayment || loan.amount / (loan.termYears * 12);
-      return calculateCustomPaymentLoan(loan.amount, effectiveInterestRate, loan.termYears, customPayment);
+      result = calculateCustomPaymentLoan(loan.amount, effectiveInterestRate, loan.termYears, customPayment);
+      break;
     default:
       throw new Error(`Unknown repayment type: ${loan.repaymentType}`);
   }
+  
+  // Add monthly fee to the payment if specified
+  if (loan.monthlyFee && loan.monthlyFee > 0) {
+    result.monthlyPayment += loan.monthlyFee;
+    result.totalInterest += loan.monthlyFee * (loan.termYears * 12);
+  }
+  
+  return result;
 };
 
 /**

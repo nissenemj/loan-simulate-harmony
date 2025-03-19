@@ -18,14 +18,33 @@ import CreditCardTable from "@/components/CreditCardTable";
 import CreditCardSummary from "@/components/CreditCardSummary";
 import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 export default function Index() {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  const [loanToEdit, setLoanToEdit] = useState<Loan | null>(null);
   const { t } = useLanguage();
 
   const handleAddLoan = (loan: Loan) => {
     setLoans((prev) => [...prev, loan]);
+    toast(t("toast.loanAdded"));
+  };
+
+  const handleUpdateLoan = (updatedLoan: Loan) => {
+    setLoans((prev) =>
+      prev.map((loan) => (loan.id === updatedLoan.id ? updatedLoan : loan))
+    );
+    setLoanToEdit(null);
+    toast(t("toast.loanUpdated"));
+  };
+
+  const handleEditLoan = (loan: Loan) => {
+    setLoanToEdit(loan);
+  };
+
+  const handleCancelEdit = () => {
+    setLoanToEdit(null);
   };
 
   // Update this function to accept isActive parameter to match LoanTable prop
@@ -66,9 +85,18 @@ export default function Index() {
         </TabsList>
         
         <TabsContent value="loans" className="space-y-8">
-          <LoanForm onAddLoan={handleAddLoan} />
+          <LoanForm 
+            onAddLoan={handleAddLoan} 
+            onUpdateLoan={handleUpdateLoan}
+            loanToEdit={loanToEdit}
+            onCancelEdit={handleCancelEdit}
+          />
           
-          <LoanTable loans={loans} onToggleLoan={handleToggleLoanActive} />
+          <LoanTable 
+            loans={loans} 
+            onToggleLoan={handleToggleLoanActive} 
+            onEditLoan={handleEditLoan}
+          />
           
           {activeLoans.length > 0 && (
             <>

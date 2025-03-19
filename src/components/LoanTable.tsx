@@ -11,7 +11,7 @@ import {
 import { Loan, calculateLoan, formatCurrency, formatPercentage } from '@/utils/loanCalculations';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { ArrowDown, ArrowUp, AlertCircle } from 'lucide-react';
+import { ArrowDown, ArrowUp, AlertCircle, Edit } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import AnimatedNumber from './AnimatedNumber';
 import { cn } from '@/lib/utils';
@@ -20,6 +20,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 interface LoanTableProps {
   loans: Loan[];
   onToggleLoan: (id: string) => void;
+  onEditLoan?: (loan: Loan) => void;
   highestTotalInterestId?: string;
 }
 
@@ -29,6 +30,7 @@ type SortDirection = 'asc' | 'desc';
 const LoanTable: React.FC<LoanTableProps> = ({ 
   loans, 
   onToggleLoan,
+  onEditLoan,
   highestTotalInterestId 
 }) => {
   const { t } = useLanguage();
@@ -138,7 +140,8 @@ const LoanTable: React.FC<LoanTableProps> = ({
               </TableHead>
               <TableHead>{t('table.term')}</TableHead>
               <TableHead>{t('table.type')}</TableHead>
-              <TableHead className="text-right">{t('table.active')}</TableHead>
+              <TableHead>{t('table.fee')}</TableHead>
+              <TableHead className="text-right">{t('table.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -187,7 +190,27 @@ const LoanTable: React.FC<LoanTableProps> = ({
                   </TableCell>
                   <TableCell>{loan.termYears} {loan.termYears === 1 ? t('table.year') : t('table.years')}</TableCell>
                   <TableCell>{getRepaymentTypeLabel(loan.repaymentType)}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell>
+                    {loan.monthlyFee ? (
+                      <AnimatedNumber 
+                        value={loan.monthlyFee} 
+                        formatter={(val) => formatCurrency(val)}
+                      />
+                    ) : (
+                      <span className="text-muted-foreground">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right flex justify-end items-center gap-2">
+                    {onEditLoan && (
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        onClick={() => onEditLoan(loan)}
+                        className="h-8 w-8"
+                      >
+                        <Edit size={16} className="text-muted-foreground" />
+                      </Button>
+                    )}
                     <Switch
                       checked={loan.isActive}
                       onCheckedChange={() => onToggleLoan(loan.id)}

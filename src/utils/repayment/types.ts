@@ -14,6 +14,7 @@ export interface DebtItem {
   minPayment: number;
   remainingTerm?: number; // for loans
   isActive: boolean;
+  monthlyFee?: number; // Added monthly fee field
 }
 
 export interface RepaymentPlan {

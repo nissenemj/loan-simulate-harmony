@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -5,16 +6,24 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Loan, LoanType, InterestType } from '@/utils/loanCalculations';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Edit, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LoanFormProps {
   onAddLoan: (loan: Loan) => void;
+  onUpdateLoan?: (loan: Loan) => void;
+  loanToEdit?: Loan | null;
+  onCancelEdit?: () => void;
 }
 
-const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
+const LoanForm: React.FC<LoanFormProps> = ({ 
+  onAddLoan, 
+  onUpdateLoan, 
+  loanToEdit, 
+  onCancelEdit 
+}) => {
   const { toast } = useToast();
   const { t } = useLanguage();
   const [name, setName] = useState('');
@@ -24,7 +33,26 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
   const [repaymentType, setRepaymentType] = useState<LoanType>('annuity');
   const [interestType, setInterestType] = useState<InterestType>('fixed');
   const [customPayment, setCustomPayment] = useState('');
+  const [monthlyFee, setMonthlyFee] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  
+  useEffect(() => {
+    if (loanToEdit) {
+      setName(loanToEdit.name);
+      setAmount(loanToEdit.amount.toString());
+      setInterestRate(loanToEdit.interestRate.toString());
+      setTermYears(loanToEdit.termYears.toString());
+      setRepaymentType(loanToEdit.repaymentType);
+      setInterestType(loanToEdit.interestType || 'fixed');
+      setCustomPayment(loanToEdit.customPayment?.toString() || '');
+      setMonthlyFee(loanToEdit.monthlyFee?.toString() || '');
+      setIsEditing(true);
+    } else {
+      resetForm();
+      setIsEditing(false);
+    }
+  }, [loanToEdit]);
   
   const needsInterestType = repaymentType === 'annuity' || repaymentType === 'fixed-installment';
   const isCustomPayment = repaymentType === 'custom-payment';
@@ -70,6 +98,7 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     setRepaymentType('annuity');
     setInterestType('fixed');
     setCustomPayment('');
+    setMonthlyFee('');
   };
   
   const validateForm = (): boolean => {
@@ -141,23 +170,50 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
     
     if (!validateForm()) return;
     
-    const newLoan: Loan = {
-      id: Date.now().toString(),
+    const loanData: Loan = {
+      id: isEditing && loanToEdit ? loanToEdit.id : Date.now().toString(),
       name: name.trim(),
       amount: parseFloat(amount),
       interestRate: parseFloat(interestRate),
       termYears: parseInt(termYears),
       repaymentType,
       interestType: needsInterestType ? interestType : undefined,
-      isActive: true
+      isActive: isEditing && loanToEdit ? loanToEdit.isActive : true
     };
     
     if (isCustomPayment && customPayment) {
-      newLoan.customPayment = parseFloat(customPayment);
+      loanData.customPayment = parseFloat(customPayment);
     }
     
-    onAddLoan(newLoan);
+    if (monthlyFee && parseFloat(monthlyFee) > 0) {
+      loanData.monthlyFee = parseFloat(monthlyFee);
+    }
+    
+    if (isEditing && onUpdateLoan) {
+      onUpdateLoan(loanData);
+      toast({
+        title: t('form.loanUpdated'),
+        description: t('form.loanUpdatedDesc'),
+      });
+    } else {
+      onAddLoan(loanData);
+      toast({
+        title: t('form.loanAdded'),
+        description: t('form.loanAddedDesc'),
+      });
+    }
+    
     resetForm();
+    if (isEditing && onCancelEdit) {
+      onCancelEdit();
+    }
+  };
+  
+  const handleCancel = () => {
+    resetForm();
+    if (onCancelEdit) {
+      onCancelEdit();
+    }
   };
   
   return (
@@ -170,7 +226,9 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
         )}
       >
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl sm:text-2xl font-medium text-center">{t('form.title')}</CardTitle>
+          <CardTitle className="text-xl sm:text-2xl font-medium text-center">
+            {isEditing ? t('form.editTitle') : t('form.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 pb-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -323,15 +381,57 @@ const LoanForm: React.FC<LoanFormProps> = ({ onAddLoan }) => {
               </div>
             )}
           </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="monthlyFee" className="text-sm font-medium">
+              {t('form.monthlyFee')}
+            </Label>
+            <Input
+              id="monthlyFee"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder={t('form.placeholderMonthlyFee')}
+              value={monthlyFee}
+              onChange={(e) => setMonthlyFee(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              {t('form.monthlyFeeDescription')}
+            </p>
+          </div>
         </CardContent>
-        <CardFooter>
-          <Button
-            type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
-          >
-            <PlusCircle size={18} />
-            <span>{t('form.submit')}</span>
-          </Button>
+        <CardFooter className="flex gap-2">
+          {isEditing ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                className="flex-1 py-5 transition-all"
+              >
+                <X size={18} className="mr-2" />
+                <span>{t('form.cancel')}</span>
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
+              >
+                <Edit size={18} />
+                <span>{t('form.update')}</span>
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
+            >
+              <PlusCircle size={18} />
+              <span>{t('form.submit')}</span>
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </form>

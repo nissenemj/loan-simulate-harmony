@@ -9,15 +9,19 @@ import { DebtItem } from './types';
 export const convertLoanToDebtItem = (loan: Loan): DebtItem => {
   const calculation = calculateLoan(loan);
   
+  // Include the monthly fee in the minimum payment when creating debt items
+  const minPayment = calculation.monthlyPayment;
+  
   return {
     id: loan.id,
     name: loan.name,
     type: 'loan',
     balance: loan.amount,
     interestRate: loan.interestRate,
-    minPayment: calculation.monthlyPayment,
+    minPayment: minPayment,
     remainingTerm: loan.termYears * 12,
-    isActive: loan.isActive
+    isActive: loan.isActive,
+    monthlyFee: loan.monthlyFee
   };
 };
 

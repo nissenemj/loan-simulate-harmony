@@ -9,12 +9,14 @@ import { PiggyBank, Calculator } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 import { PrioritizationMethod } from "@/utils/repayment";
+
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
   className?: string;
   defaultBudget?: number;
   method?: PrioritizationMethod;
 }
+
 const BudgetInput: React.FC<BudgetInputProps> = ({
   onCalculate,
   className,
@@ -26,10 +28,12 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   } = useLanguage();
   const [budget, setBudget] = useState<number>(defaultBudget);
   const [method, setMethod] = useState<PrioritizationMethod>(initialMethod);
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onCalculate(budget, method);
   };
+  
   return <Card className={cn("shadow-sm", className)}>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center text-lg gap-2">
@@ -74,4 +78,5 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
       </CardContent>
     </Card>;
 };
+
 export default BudgetInput;

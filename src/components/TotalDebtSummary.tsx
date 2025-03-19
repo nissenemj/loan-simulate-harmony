@@ -27,12 +27,18 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
   let totalLoanMonthlyPayment = 0;
   let totalLoanMonthlyInterest = 0;
   let totalLoanInterestEstimate = 0;
+  let totalLoanMonthlyFee = 0;
 
   loans.forEach(loan => {
     const calculation = calculateLoan(loan);
     totalLoanMonthlyPayment += calculation.monthlyPayment;
     totalLoanMonthlyInterest += calculation.interest;
     totalLoanInterestEstimate += calculation.totalInterest;
+    
+    // Add monthly fee if present
+    if (loan.monthlyFee) {
+      totalLoanMonthlyFee += loan.monthlyFee;
+    }
   });
 
   // Calculate credit card totals
@@ -81,6 +87,11 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
                 formatter={formatCurrency}
               />
             </div>
+            {totalLoanMonthlyFee > 0 && (
+              <p className="text-xs text-muted-foreground">
+                {t("debtSummary.includesFees")}: {formatCurrency(totalLoanMonthlyFee)}
+              </p>
+            )}
           </div>
           
           <div className="space-y-2">
