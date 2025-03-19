@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,9 +66,9 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             </p>
           </div>
           
-          <Button type="submit" size="sm" className="w-full mt-2 font-extralight">
-            <Calculator className="mr-2 h-4 w-4" />
-            {t("repayment.calculatePlan")}
+          <Button type="submit" size="sm" className="w-full mt-2 font-extralight whitespace-normal py-3 h-auto flex items-center justify-center">
+            <Calculator className="mr-2 h-4 w-4 flex-shrink-0" />
+            <span>{t("repayment.calculatePlan")}</span>
           </Button>
         </form>
       </CardContent>
