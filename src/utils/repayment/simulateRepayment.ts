@@ -10,7 +10,10 @@ export const simulateRepayment = (
   initialDebts: DebtItem[],
   initialAllocation: RepaymentPlan['monthlyAllocation'],
   method: PrioritizationMethod
-): RepaymentPlan['timeline'] => {
+): {
+  timeline: RepaymentPlan['timeline'];
+  finalAllocation: RepaymentPlan['monthlyAllocation'];
+} => {
   // Deep clone debts to avoid mutating the original
   let currentDebts = initialDebts.map(debt => ({...debt}));
   
@@ -47,13 +50,23 @@ export const simulateRepayment = (
       
       // Calculate principal payment
       const totalPayment = allocation.totalPayment;
-      let principalPayment = totalPayment - interestForMonth;
+      
+      // Improved interest handling - check if payment covers interest
+      let principalPayment;
+      if (totalPayment < interestForMonth) {
+        // If payment doesn't cover interest, increase balance
+        principalPayment = 0;
+        debt.balance += (interestForMonth - totalPayment);
+      } else {
+        // Calculate principal payment (payment minus interest)
+        principalPayment = totalPayment - interestForMonth;
+      }
       
       // Ensure principal payment doesn't exceed the balance
       principalPayment = Math.min(principalPayment, debt.balance);
       
       // Calculate actual payment (interest + principal)
-      const actualPayment = principalPayment + interestForMonth;
+      const actualPayment = principalPayment + Math.min(interestForMonth, totalPayment);
       
       // Update debt balance
       debt.balance = Math.max(0, debt.balance - principalPayment);
@@ -64,11 +77,11 @@ export const simulateRepayment = (
         name: debt.name,
         remainingBalance: debt.balance,
         payment: actualPayment,
-        interestPaid: interestForMonth
+        interestPaid: Math.min(interestForMonth, totalPayment)
       });
       
       monthData.totalPaid += actualPayment;
-      monthData.totalInterestPaid += interestForMonth;
+      monthData.totalInterestPaid += Math.min(interestForMonth, totalPayment);
     }
     
     // Calculate total remaining balance
@@ -113,6 +126,7 @@ export const simulateRepayment = (
           // Set the paid off debt's allocation to zero
           paidOffAllocation.extraPayment = 0;
           paidOffAllocation.totalPayment = 0;
+          paidOffAllocation.minPayment = 0; // Also zero out min payment for paid debts
         }
       }
     }
@@ -130,5 +144,8 @@ export const simulateRepayment = (
     console.warn('Repayment plan calculation hit maximum months limit');
   }
   
-  return timeline;
+  return {
+    timeline,
+    finalAllocation: currentAllocation
+  };
 };

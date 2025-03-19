@@ -10,6 +10,7 @@ export const prioritizeDebts = (
 ): DebtItem[] => {
   if (debts.length === 0) return [];
   
+  // Filter to only include active debts with positive balances
   const activeDebts = debts.filter(debt => debt.isActive && debt.balance > 0);
   
   return [...activeDebts].sort((a, b) => {

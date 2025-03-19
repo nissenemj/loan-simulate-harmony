@@ -36,7 +36,7 @@ export const generateRepaymentPlan = (
   const prioritizedDebts = prioritizeDebts(activeDebts, method);
   
   // Initialize monthly allocation with minimum payments for all debts
-  const monthlyAllocation = activeDebts.map(debt => ({
+  const initialAllocation = activeDebts.map(debt => ({
     id: debt.id,
     name: debt.name,
     type: debt.type,
@@ -49,7 +49,7 @@ export const generateRepaymentPlan = (
   if (prioritizedDebts.length > 0 && extraBudget > 0) {
     // Get the highest priority debt based on the selected method
     const highestPriorityDebtId = prioritizedDebts[0].id;
-    const allocation = monthlyAllocation.find(a => a.id === highestPriorityDebtId);
+    const allocation = initialAllocation.find(a => a.id === highestPriorityDebtId);
     
     if (allocation) {
       // Allocate all extra budget to the highest priority debt
@@ -59,7 +59,7 @@ export const generateRepaymentPlan = (
   }
   
   // Simulate repayment over time with accurate interest calculation
-  const timeline = simulateRepayment(activeDebts, monthlyAllocation, method);
+  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method);
   
   // Calculate totals
   const totalMonths = timeline.length;
@@ -67,7 +67,7 @@ export const generateRepaymentPlan = (
     sum + month.debts.reduce((monthSum, debt) => monthSum + debt.interestPaid, 0), 0);
   
   return {
-    monthlyAllocation,
+    monthlyAllocation: finalAllocation,  // Use the final allocation after simulation
     timeline,
     totalMonths,
     totalInterestPaid,
