@@ -111,9 +111,11 @@ export default {
       noCards: "Ei lisättyjä luottokortteja.",
     },
     summary: {
+      title: "Luottokorttien yhteenveto",
       totalBalance: "Luottokorttien kokonaissaldo",
       totalLimit: "Luottokorttien kokonaisluottoraja",
       totalMinPayment: "Luottokorttien minimimaksu yhteensä",
+      totalInterest: "Kokonaiskuukausikorko",
       totalAvailableCredit: "Kokonaisluottoraja",
       totalUtilization: "Kokonaiskäyttöaste",
     },

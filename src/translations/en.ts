@@ -1,3 +1,4 @@
+
 export default {
   app: {
     title: "Loan Calculator",
@@ -93,9 +94,13 @@ export default {
       noCards: "No credit cards added yet.",
     },
     summary: {
+      title: "Credit Card Summary",
       totalBalance: "Total Balance",
-      totalCreditLimit: "Total Credit Limit",
+      totalLimit: "Total Credit Limit",
+      totalMinPayment: "Total Minimum Payment",
       totalAvailableCredit: "Total Available Credit",
+      totalInterest: "Total Monthly Interest",
+      totalUtilization: "Total Utilization Rate",
     },
   },
   utilization: {
