@@ -236,7 +236,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.form.minPaymentPercent")} 
+                          placeholder="3.0" 
                           className="pl-10" 
                           step="0.01"
                           disabled={fullPaymentValue}

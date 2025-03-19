@@ -2,6 +2,7 @@
 export const fi = {
   app: {
     title: "Budjettisovellus",
+    subtitle: "Hallitse lainoja ja luottokortteja helposti"
   },
   form: {
     name: "Nimi",
@@ -23,6 +24,40 @@ export const fi = {
     isActive: "Aktiivinen",
     save: "Tallenna",
     cancel: "Peruuta",
+    title: "Uusi laina",
+    submit: "Lisää laina",
+    placeholderName: "Esim. Asuntolaina",
+    placeholderAmount: "10000",
+    placeholderInterestRate: "5.0",
+    placeholderTermYears: "10",
+    estimatedTerm: "Arvioitu takaisinmaksuaika",
+    paymentTooSmall: "Maksu on liian pieni",
+    years: "vuotta",
+    placeholderCustomPayment: "200"
+  },
+  repayment: {
+    annuity: "Annuiteetti",
+    equalPrincipal: "Tasalyhennys",
+    fixedInstallment: "Kiinteät maksut",
+    customPayment: "Mukautettu maksu"
+  },
+  interest: {
+    fixed: "Kiinteä",
+    variableEuribor: "Vaihtuva (EURIBOR)"
+  },
+  validation: {
+    nameRequired: "Nimi on pakollinen",
+    nameRequiredDesc: "Anna lainalle nimi",
+    invalidAmount: "Virheellinen määrä",
+    invalidAmountDesc: "Määrän on oltava positiivinen luku",
+    invalidRate: "Virheellinen korkoprosentti",
+    invalidRateDesc: "Korkoprosentin on oltava positiivinen luku",
+    invalidTerm: "Virheellinen laina-aika",
+    invalidTermDesc: "Laina-ajan on oltava positiivinen kokonaisluku",
+    invalidPayment: "Virheellinen maksu",
+    invalidPaymentDesc: "Maksun on oltava positiivinen luku",
+    paymentTooSmall: "Maksu on liian pieni",
+    paymentTooSmallDesc: "Maksun on oltava suurempi kuin kuukausikorko"
   },
   loan: {
     types: {
@@ -48,6 +83,7 @@ export const fi = {
     },
   },
   creditCard: {
+    title: "Uusi luottokortti",
     table: {
       name: "Kortin nimi",
       balance: "Saldo",
@@ -60,8 +96,28 @@ export const fi = {
       noCards: "Ei vielä lisättyjä luottokortteja.",
     },
     summary: {
+      title: "Luottokorttien yhteenveto",
       totalBalance: "Kokonaissaldo",
       totalLimit: "Kokonaisluottoraja",
+      totalMinPayment: "Kokonaisminimimaksu",
+      totalInterest: "Kokonaiskorko",
+      totalUtilization: "Kokonaiskäyttöaste",
+    },
+    form: {
+      name: "Kortin nimi",
+      balance: "Saldo",
+      limit: "Luottoraja",
+      apr: "Vuosikorko",
+      minPayment: "Minimimaksu",
+      minPaymentPercent: "Minimimaksu (%)",
+      fullPayment: "Maksa koko saldo kuukausittain",
+      submit: "Lisää luottokortti",
+      placeholderName: "Esim. Visa",
+      placeholderBalance: "1000",
+      placeholderCreditLimit: "5000",
+      placeholderApr: "18.0",
+      placeholderMinPayment: "30",
+      autoCalculated: "Automaattisesti laskettu saldosta ja prosentista"
     },
   },
   debtSummary: {
@@ -86,7 +142,9 @@ export const fi = {
     loanName: "Lainan nimi",
     totalLifetimeInterest: "Kokonaiselinkaarikorko",
     summaryExplanation: "Tämä yhteenveto näyttää velkojen kokonaiskuvan ja auttaa priorisoimaan maksustrategiaa.",
-    totalLoans: "Lainat yhteensä"
+    totalLoans: "Lainat yhteensä",
+    payoffButton: "Maksa pois",
+    actions: "Toiminnot"
   },
   recommendations: {
     title: "Takaisinmaksusuositukset",
@@ -114,6 +172,8 @@ export const fi = {
     loanActivated: "Laina aktivoitu",
     loanDeactivated: "Laina deaktivoitu",
     loanPaidOff: "Laina maksettu",
+    loanAdded: "Laina lisätty",
+    cardPaidOff: "Kortti maksettu pois",
   },
   repayment: {
     budgetTitle: "Kuukausibudjetti",
@@ -157,5 +217,10 @@ export const fi = {
   language: {
     en: "English",
     fi: "Suomi"
+  },
+  tabs: {
+    loans: "Lainat",
+    debtSummary: "Velkatiivistelmä",
+    loanTerms: "Lainaehdot"
   }
 };
