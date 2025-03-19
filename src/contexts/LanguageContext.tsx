@@ -48,9 +48,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
   };
   
-  const t = (key: string): string => {
-    return translations[key] || key;
-  };
+const t = (key: string): string => {
+  if (!translations[key]) {
+    console.warn(`Translation key missing: ${key}`);
+  }
+  return translations[key] || key;
+};
   
   return (
     <LanguageContext.Provider value={{ language, translations, setLanguage: handleSetLanguage, t }}>
