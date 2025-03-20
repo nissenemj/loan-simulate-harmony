@@ -83,9 +83,10 @@ const LoanTable: React.FC<LoanTableProps> = ({
   
   const getRepaymentTypeLabel = (type: string): string => {
     switch (type) {
-      case 'annuity': return t('repayment.annuity');
-      case 'equal-principal': return t('repayment.equalPrincipal');
-      case 'fixed-installment': return t('repayment.fixedInstallment');
+      case 'annuity': return t('loan.types.annuity');
+      case 'equal-principal': return t('loan.types.equal-principal');
+      case 'fixed-installment': return t('loan.types.fixed-installment');
+      case 'custom-payment': return t('loan.types.custom-payment');
       default: return type;
     }
   };
