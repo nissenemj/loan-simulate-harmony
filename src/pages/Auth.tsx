@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -92,7 +93,10 @@ const Auth = () => {
             <form onSubmit={handleLogin}>
               <CardContent className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t("auth.email")}</Label>
+                  <Label htmlFor="email" className="flex items-center">
+                    <Mail className="h-4 w-4 mr-2" />
+                    {t("auth.email")}
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -100,22 +104,30 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="border rounded-md"
+                    aria-label={t("auth.email")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">{t("auth.password")}</Label>
+                  <Label htmlFor="password" className="flex items-center">
+                    <Lock className="h-4 w-4 mr-2" />
+                    {t("auth.password")}
+                  </Label>
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="border rounded-md"
+                    aria-label={t("auth.password")}
                   />
                 </div>
               </CardContent>
               <CardFooter>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t("auth.loggingIn") : t("auth.login")}
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </CardFooter>
             </form>
@@ -125,7 +137,10 @@ const Auth = () => {
             <form onSubmit={handleSignup}>
               <CardContent className="space-y-4 pt-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">{t("auth.email")}</Label>
+                  <Label htmlFor="signup-email" className="flex items-center">
+                    <Mail className="h-4 w-4 mr-2" />
+                    {t("auth.email")}
+                  </Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -133,22 +148,30 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="border rounded-md"
+                    aria-label={t("auth.email")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">{t("auth.password")}</Label>
+                  <Label htmlFor="signup-password" className="flex items-center">
+                    <Lock className="h-4 w-4 mr-2" />
+                    {t("auth.password")}
+                  </Label>
                   <Input
                     id="signup-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="border rounded-md"
+                    aria-label={t("auth.password")}
                   />
                 </div>
               </CardContent>
               <CardFooter>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? t("auth.signingUp") : t("auth.signUp")}
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </CardFooter>
             </form>

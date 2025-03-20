@@ -40,8 +40,8 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'fi'>('en');  // Vaihda 'fi' -> 'en'
-  const [translations, setTranslations] = useState<Translations>(enTranslations);  // Vaihda fiTranslations -> enTranslations
+  const [language, setLanguage] = useState<'en' | 'fi'>('fi');  // Changed from 'en' to 'fi'
+  const [translations, setTranslations] = useState<Translations>(fiTranslations);  // Changed from enTranslations to fiTranslations
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
