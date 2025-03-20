@@ -23,13 +23,14 @@ const VelkavapausLogo: React.FC<VelkavapausLogoProps> = ({
   };
 
   const logoContent = (
-    <div className={cn('velkavapaus-logo', className)}>
+    <div className={cn('velkavapaus-logo flex items-center', className)}>
       <div className={cn('velkavapaus-logo-symbol', sizeClasses[size])}>
         <svg 
           viewBox="0 0 120 80" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full"
+          aria-label="Velkavapaus logo"
         >
           {/* Triangle outlines */}
           <path 
@@ -60,10 +61,10 @@ const VelkavapausLogo: React.FC<VelkavapausLogoProps> = ({
       </div>
       
       {showText && (
-        <>
-          <div className="velkavapaus-logo-line" />
-          <span className="velkavapaus-logo-text">velkavapaus.fi</span>
-        </>
+        <div className="flex items-center">
+          <div className="h-6 w-px bg-gray-300 mx-2" />
+          <span className="text-lg font-medium">velkavapaus.fi</span>
+        </div>
       )}
     </div>
   );
