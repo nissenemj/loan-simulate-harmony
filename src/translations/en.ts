@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -70,6 +69,8 @@ export const en = {
       cta: 'Login or Sign Up Now',
       secondaryCta: 'Learn More',
       imageAlt: 'Person smiling while reviewing finances on a laptop',
+      loggedInCta: 'Go to Dashboard',
+      blogCta: 'Explore Our Blog',
     },
     benefits: {
       title: 'Take Control of Your Financial Future',

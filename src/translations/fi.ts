@@ -324,6 +324,8 @@ export const fi = {
       cta: 'Kirjaudu tai rekisteröidy nyt',
       secondaryCta: 'Lue lisää',
       imageAlt: 'Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella',
+      loggedInCta: 'Siirry hallintapaneeliin',
+      blogCta: 'Tutustu blogiin',
     },
     benefits: {
       title: 'Ota hallinta taloudellisesta tulevaisuudestasi',

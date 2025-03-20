@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -185,10 +186,10 @@ const LandingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-                  {getTranslatedText("landing.hero.headline", "Maksa velkasi nopeammin - Aloita taloudenhoito tänään!")}
+                  {t("landing.hero.headline")}
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-md">
-                  {getTranslatedText("landing.hero.subheadline", "Luo ilmainen henkilökohtainen velanmaksusuunnitelma ja ota hallinta taloudestasi.")}
+                  {t("landing.hero.subheadline")}
                 </p>
                 {!user ? (
                   <div className="flex flex-col sm:flex-row gap-4">
@@ -197,7 +198,7 @@ const LandingPage = () => {
                       className="bg-primary hover:bg-primary/90 transition-colors"
                       onClick={handleCTAClick}
                     >
-                      {getTranslatedText("landing.hero.cta", "Kirjaudu tai rekisteröidy nyt")}
+                      {t("landing.hero.cta")}
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                     <Button
@@ -205,7 +206,7 @@ const LandingPage = () => {
                       size="lg"
                       onClick={() => navigate("/terms")}
                     >
-                      {getTranslatedText("landing.hero.secondaryCta", "Lue lisää")}
+                      {t("landing.hero.secondaryCta")}
                     </Button>
                   </div>
                 ) : (
@@ -215,7 +216,7 @@ const LandingPage = () => {
                       className="bg-primary hover:bg-primary/90 transition-colors"
                       onClick={() => navigate("/dashboard")}
                     >
-                      {getTranslatedText("landing.hero.loggedInCta", "Siirry hallintapaneeliin")}
+                      {t("landing.hero.loggedInCta")}
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                     <Button
@@ -223,7 +224,7 @@ const LandingPage = () => {
                       size="lg"
                       onClick={() => navigate("/blog")}
                     >
-                      {getTranslatedText("landing.hero.blogCta", "Tutustu blogiin")}
+                      {t("landing.hero.blogCta")}
                     </Button>
                   </div>
                 )}
@@ -231,7 +232,7 @@ const LandingPage = () => {
               <div className="rounded-lg shadow-xl overflow-hidden hidden md:block">
                 <img
                   src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600"
-                  alt={getTranslatedText("landing.hero.imageAlt", "Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella")}
+                  alt={t("landing.hero.imageAlt")}
                   className="w-full h-auto object-cover"
                   loading="lazy"
                 />
@@ -460,4 +461,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
