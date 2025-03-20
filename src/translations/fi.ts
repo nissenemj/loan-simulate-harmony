@@ -118,6 +118,7 @@ export const fi = {
       payoff: 'Maksa pois',
       inactive: 'Ei aktiivinen',
       monthlyFee: 'Kuukausimaksu',
+      noLoans: 'Ei lisättyjä lainoja',
     },
     addLoan: 'Lisää laina',
     editLoan: 'Muokkaa lainaa',
@@ -195,6 +196,7 @@ export const fi = {
       delete: 'Poista',
       payoff: 'Maksa pois',
       inactive: 'Ei aktiivinen',
+      noCards: 'Ei lisättyjä luottokortteja',
     },
     utilizationRate: 'Käyttöaste',
     monthlyInterest: 'Kuukausikorko',
@@ -207,6 +209,16 @@ export const fi = {
     minimumPayment: 'Minimimaksu',
     never: 'Ei koskaan',
     paid: 'Maksettu',
+    summary: {
+      title: 'Luottokorttien yhteenveto',
+      totalBalance: 'Saldo yhteensä',
+      totalLimit: 'Luottoraja yhteensä',
+      totalMinPayment: 'Minimimaksut yhteensä',
+      totalInterest: 'Korot yhteensä',
+      totalMonthlyInterest: 'Kuukausikorot yhteensä',
+      totalUtilization: 'Käyttöaste yhteensä',
+      includesFees: 'Sisältää maksut'
+    }
   },
   debtSummary: {
     pageTitle: 'Velkayhteenveto',
@@ -234,7 +246,8 @@ export const fi = {
     totalLoans: 'Lainat yhteensä',
     payoffButton: 'Maksa pois',
     actions: 'Toiminnot',
-    title: 'Velkayhteenveto'
+    title: 'Velkayhteenveto',
+    includesFees: 'Sisältää maksut'
   },
   toast: {
     loanAdded: 'Laina lisätty!',
@@ -248,6 +261,8 @@ export const fi = {
     cookieConsent: 'Tämä sivusto käyttää evästeitä käyttökokemuksen parantamiseen.',
     cookieDecline: 'Evästeet hylätty.',
     cookieAccept: 'Evästeet hyväksytty.',
+    loanActivated: 'Laina aktivoitu',
+    loanDeactivated: 'Laina deaktivoitu',
   },
   tabs: {
     dashboard: 'Kojelauta',
@@ -561,3 +576,4 @@ export const fi = {
 };
 
 export default fi;
+

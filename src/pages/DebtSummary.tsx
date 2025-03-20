@@ -33,13 +33,10 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
   const activeLoans = loans.filter(loan => loan.isActive);
   const activeCards = creditCards.filter(card => card.isActive);
 
-  // Get sample data if no actual data exists
   const loansToDisplay = activeLoans.length > 0 ? activeLoans : getSampleLoans();
   const cardsToDisplay = activeCards.length > 0 ? activeCards : getSampleCreditCards();
   
-  // Calculate recommendations - get the actual arrays from the return value
   const recommendationsObj = generateRecommendations(loansToDisplay);
-  // Convert recommendations object to array for rendering
   const recommendations = [
     ...(recommendationsObj.topPriorityLoans.length > 0 
       ? [{ type: 'topPriority', loans: recommendationsObj.topPriorityLoans.map(loan => loan.id) }] 
@@ -55,10 +52,8 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
   const hasActiveDebts = activeLoans.length > 0 || activeCards.length > 0;
   const isDemo = activeLoans.length === 0 && activeCards.length === 0;
   
-  // Calculate total payments
   const { totalPayment: totalLoanPayment, totalInterest: totalLoanInterest } = calculateTotalMonthlyPayment(loansToDisplay);
   
-  // Calculate credit card totals
   let totalCardPayment = 0;
   let totalCardInterest = 0;
   
@@ -68,16 +63,13 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
     totalCardInterest += calc.monthlyInterest;
   });
   
-  // Combined totals
   const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
   const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
 
-  // Calculate total loan and credit card balances
   const totalLoanBalance = loansToDisplay.reduce((sum, loan) => sum + loan.amount, 0);
   const totalCardBalance = cardsToDisplay.reduce((sum, card) => sum + card.balance, 0);
   const totalDebtBalance = totalLoanBalance + totalCardBalance;
 
-  // Calculate repayment plan
   const calculateRepaymentPlan = (budgetAmount: number, prioritizationMethod: PrioritizationMethod) => {
     setBudget(budgetAmount);
     setMethod(prioritizationMethod);
@@ -114,7 +106,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
           </div>
         </div>
         
-        {/* Dashboard Stats */}
         {hasActiveDebts && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-card rounded-lg p-5 shadow-sm border">
@@ -155,7 +146,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
           </div>
         )}
         
-        {/* Recommendations section (if loans exist) */}
         {activeLoans.length > 0 && recommendations.length > 0 && (
           <div className="bg-card rounded-lg p-6 shadow-sm border mb-8">
             <h2 className="text-xl font-bold mb-4">{t("recommendations.title")}</h2>
@@ -192,7 +182,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
         </TabsList>
         
         <TabsContent value="summary" className="space-y-8">
-          {/* Loans and Savings Impact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="md:col-span-2">
               <section aria-labelledby="loans-heading">

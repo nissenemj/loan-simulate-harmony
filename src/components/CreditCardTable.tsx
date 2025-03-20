@@ -35,10 +35,9 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
     
     const card = creditCards.find(card => card.id === id);
     if (card) {
-      // Fix toast error: update to use a single parameter
       toast(isActive ? 
-        `${t("toast.loanActivated")}: ${card.name}` : 
-        `${t("toast.loanDeactivated")}: ${card.name}`
+        t("toast.loanActivated") + ": " + card.name : 
+        t("toast.loanDeactivated") + ": " + card.name
       );
     }
   };
@@ -55,7 +54,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
             <TableHead>{t("creditCard.table.monthlyInterest")}</TableHead>
             <TableHead>{t("creditCard.table.payoffTime")}</TableHead>
             <TableHead>{t("creditCard.table.utilization")}</TableHead>
-            <TableHead className="text-right">{t("creditCard.table.active")}</TableHead>
+            <TableHead className="text-right">{t("creditCard.isActive")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -90,7 +89,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                         <Check className="w-3 h-3 mr-1" />
-                        Full
+                        {t("creditCard.fullPayment")}
                       </span>
                     ) : (
                       <AnimatedNumber
@@ -108,12 +107,12 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                   <TableCell>
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                        1 month
+                        1 {t("form.months")}
                       </span>
                     ) : calculation.payoffMonths === null ? (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                         <X className="w-3 h-3 mr-1" />
-                        Never
+                        {t("creditCard.never")}
                       </span>
                     ) : (
                       formatPayoffTime(calculation.payoffMonths, t)
