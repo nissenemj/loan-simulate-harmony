@@ -4,6 +4,7 @@ export const en = {
     title: 'Loan Simulate Harmony',
     subtitle: 'Your Path to Financial Freedom',
     footer: 'Made with ❤️ by Finance Wizards',
+    language: 'Language'
   },
   tabs: {
     dashboard: 'Dashboard',
@@ -53,7 +54,9 @@ export const en = {
     loanActivated: "Loan activated",
     loanDeactivated: "Loan deactivated",
     loanPaidOff: "Loan paid off",
-    cardPaidOff: "Card paid off"
+    cardPaidOff: "Card paid off",
+    cardActivated: "Card activated",
+    cardDeactivated: "Card deactivated"
   },
   landing: {
     seo: {
@@ -272,6 +275,9 @@ export const en = {
   },
   creditCard: {
     title: "New Credit Card",
+    isActive: "Active",
+    fullPayment: "Full Payment",
+    never: "Never",
     table: {
       name: "Card Name",
       balance: "Balance",
@@ -288,7 +294,7 @@ export const en = {
       totalBalance: "Total Balance",
       totalLimit: "Total Limit",
       totalMinPayment: "Total Minimum Payment",
-      totalInterest: "Total Monthly Interest",
+      totalMonthlyInterest: "Total Monthly Interest",
       totalUtilization: "Total Utilization",
     },
     form: {
