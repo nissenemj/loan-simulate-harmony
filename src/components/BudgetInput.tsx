@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { CalculatorIcon, TrendingUp, CoinIcon } from 'lucide-react';
+import { CalculatorIcon, TrendingUp, CoinsIcon } from 'lucide-react';
 
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
