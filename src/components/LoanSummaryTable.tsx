@@ -33,7 +33,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
     const calculation = calculateLoan(loan);
     
     totalMonthlyPayment += calculation.monthlyPayment;
-    totalMonthlyInterest += calculation.interest;
+    totalMonthlyInterest += calculation.firstMonthInterest; // Use firstMonthInterest for monthly interest
     totalInterestEstimate += calculation.totalInterest;
     
     return {
@@ -81,7 +81,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
                   </TableCell>
                   <TableCell>
                     <AnimatedNumber
-                      value={calculation.interest}
+                      value={calculation.firstMonthInterest}
                       formatter={formatCurrency}
                     />
                   </TableCell>

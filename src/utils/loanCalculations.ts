@@ -1,3 +1,4 @@
+
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -22,6 +23,7 @@ export interface LoanCalculationResult {
   totalInterest: number;
   firstMonthPrincipal: number; // Renamed to clarify it's the first month's principal
   firstMonthInterest: number; // Renamed to clarify it's the first month's interest
+  interest: number; // Added to make the interface consistent for totalMonthlyInterest
   monthlyBreakdown: { principal: number; interest: number }[];
   actualTermMonths?: number; // Added for custom payment to show actual term
 }
@@ -76,6 +78,7 @@ export const calculateAnnuityLoan = (
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
+    interest: firstMonthInterest, // Add the interest field
     monthlyBreakdown
   };
 };
@@ -119,6 +122,7 @@ export const calculateEqualPrincipalLoan = (
     totalInterest,
     firstMonthPrincipal: monthlyPrincipal,
     firstMonthInterest,
+    interest: firstMonthInterest, // Add the interest field
     monthlyBreakdown
   };
 };
@@ -167,6 +171,7 @@ export const calculateFixedInstallmentLoan = (
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
+    interest: firstMonthInterest, // Add the interest field
     monthlyBreakdown
   };
 };
@@ -192,6 +197,7 @@ export const calculateCustomPaymentLoan = (
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       firstMonthPrincipal: 0,
       firstMonthInterest: minimumPayment,
+      interest: minimumPayment, // Add the interest field
       monthlyBreakdown: [{ principal: 0, interest: minimumPayment }],
       actualTermMonths: Infinity
     };
@@ -240,6 +246,7 @@ export const calculateCustomPaymentLoan = (
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       firstMonthPrincipal,
       firstMonthInterest,
+      interest: firstMonthInterest, // Add the interest field
       monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
       actualTermMonths: Infinity
     };
@@ -250,6 +257,7 @@ export const calculateCustomPaymentLoan = (
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
+    interest: firstMonthInterest, // Add the interest field
     monthlyBreakdown,
     actualTermMonths: monthCount
   };
@@ -287,7 +295,8 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
   
   // Add monthly fee to the payment if specified, but NOT to the total interest
   if (loan.monthlyFee && loan.monthlyFee > 0) {
-    // Store the original total interest
+    // Store the original monthly payment and total interest
+    const originalMonthlyPayment = result.monthlyPayment;
     const originalTotalInterest = result.totalInterest;
     
     // Add fee to monthly payment
@@ -298,6 +307,9 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
     
     // Don't modify the total interest calculation
     result.totalInterest = originalTotalInterest;
+    
+    // Calculate appropriate first month interest (without fee)
+    result.interest = result.firstMonthInterest;
   }
   
   return result;
