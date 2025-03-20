@@ -10,4 +10,9 @@ adsenseScript.async = true;
 adsenseScript.crossOrigin = "anonymous";
 document.head.appendChild(adsenseScript);
 
+// Ensure correct character encoding for Finnish characters
+const metaCharset = document.createElement('meta');
+metaCharset.setAttribute('charset', 'UTF-8');
+document.head.appendChild(metaCharset);
+
 createRoot(document.getElementById("root")!).render(<App />);

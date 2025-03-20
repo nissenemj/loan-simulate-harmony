@@ -278,6 +278,7 @@ export const fi = {
     debtSummary: 'Velkayhteenveto',
     glossary: 'Sanastoa',
     affiliate: 'Yhteistyökumppanit',
+    blog: 'Blogi',
   },
   affiliate: {
     title: 'Yhteistyökumppanit',
@@ -540,7 +541,7 @@ export const fi = {
     progress: 'Edistyminen',
     progressMessage: 'Olet jo maksanut {{percentage}}% velastasi - jatka samaan malliin!',
     paymentPlanSummary: 'Maksusuunnitelman yhteenveto',
-    paymentPlanDescription: 'Velanmaksustrategiasi yhdellä silm��yksellä',
+    paymentPlanDescription: 'Velanmaksustrategiasi yhdellä silmäyksellä',
     monthlyBudget: 'Kuukausibudjetti',
     minimumPayments: 'Minimimaksut',
     extraBudget: 'Ylimääräinen budjetti',
