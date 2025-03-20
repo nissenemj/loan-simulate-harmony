@@ -36,13 +36,13 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 break-words">
+    <Card className="max-w-full overflow-hidden">
+      <CardHeader className="space-y-1">
+        <CardTitle className="flex items-center gap-2 text-wrap overflow-hidden">
           <CalculatorIcon className="h-5 w-5 text-primary shrink-0" />
-          <span className="break-words">{t("repayment.title")}</span>
+          <span className="text-wrap break-all overflow-hidden">{t("repayment.title")}</span>
         </CardTitle>
-        <CardDescription className="break-words">
+        <CardDescription className="text-wrap break-words">
           {t("repayment.enterBudgetPrompt")}
         </CardDescription>
       </CardHeader>
@@ -73,16 +73,16 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
           >
             <div className="flex items-center space-x-2 rounded-md border p-3">
               <RadioGroupItem value="avalanche" id="avalanche" />
-              <Label htmlFor="avalanche" className="flex flex-col cursor-pointer">
-                <span className="font-medium break-words">{t("repayment.highestInterestFirst")}</span>
-                <span className="text-xs text-muted-foreground break-words">{t("repayment.highestInterestDesc")}</span>
+              <Label htmlFor="avalanche" className="flex flex-col cursor-pointer w-full">
+                <span className="font-medium text-wrap break-words">{t("repayment.highestInterestFirst")}</span>
+                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.highestInterestDesc")}</span>
               </Label>
             </div>
             <div className="flex items-center space-x-2 rounded-md border p-3">
               <RadioGroupItem value="snowball" id="snowball" />
-              <Label htmlFor="snowball" className="flex flex-col cursor-pointer">
-                <span className="font-medium break-words">{t("repayment.lowestBalanceFirst")}</span>
-                <span className="text-xs text-muted-foreground break-words">{t("repayment.lowestBalanceDesc")}</span>
+              <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
+                <span className="font-medium text-wrap break-words">{t("repayment.lowestBalanceFirst")}</span>
+                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.lowestBalanceDesc")}</span>
               </Label>
             </div>
           </RadioGroup>

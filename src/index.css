@@ -142,4 +142,9 @@
   .form-focus-ring {
     @apply focus-within:ring-2 focus-within:ring-primary/20 focus-within:ring-offset-2 transition-all duration-200;
   }
+
+  /* Text wrapping utilities */
+  .text-wrap {
+    @apply break-words hyphens-auto;
+  }
 }
