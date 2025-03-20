@@ -331,10 +331,10 @@ const LoanForm: React.FC<LoanFormProps> = ({
                   <SelectValue placeholder="Valitse lyhennystapa" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="annuity">{t('repayment.annuity')}</SelectItem>
-                  <SelectItem value="equal-principal">{t('repayment.equalPrincipal')}</SelectItem>
-                  <SelectItem value="fixed-installment">{t('repayment.fixedInstallment')}</SelectItem>
-                  <SelectItem value="custom-payment">{t('repayment.customPayment')}</SelectItem>
+                  <SelectItem value="annuity">{t('loan.types.annuity')}</SelectItem>
+                  <SelectItem value="equal-principal">{t('loan.types.equal-principal')}</SelectItem>
+                  <SelectItem value="fixed-installment">{t('loan.types.fixed-installment')}</SelectItem>
+                  <SelectItem value="custom-payment">{t('loan.types.custom-payment')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
