@@ -36,8 +36,8 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
     const card = creditCards.find(card => card.id === id);
     if (card) {
       toast(isActive ? 
-        t("toast.loanActivated") + ": " + card.name : 
-        t("toast.loanDeactivated") + ": " + card.name
+        t("toast.cardActivated", { name: card.name }) : 
+        t("toast.cardDeactivated", { name: card.name })
       );
     }
   };
