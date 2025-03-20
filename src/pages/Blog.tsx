@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Clock, User, Tag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BlogPost {
   id: string;
@@ -154,7 +155,7 @@ const Blog = () => {
                     </div>
                   </div>
                   <CardTitle className="text-xl hover:text-primary transition-colors">
-                    <a href={`/blog/${post.id}`}>{post.title}</a>
+                    <Link to={`/blog/${post.id}`}>{post.title}</Link>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -166,9 +167,9 @@ const Blog = () => {
                       <User className="h-4 w-4 mr-1" />
                       <span>{post.author}</span>
                     </div>
-                    <a href={`/blog/${post.id}`} className="text-sm font-medium text-primary hover:underline">
+                    <Link to={`/blog/${post.id}`} className="text-sm font-medium text-primary hover:underline">
                       {t("blog.readMore") || "Lue lisää"} →
-                    </a>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
