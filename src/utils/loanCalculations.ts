@@ -20,8 +20,8 @@ export interface Loan {
 export interface LoanCalculationResult {
   monthlyPayment: number;
   totalInterest: number;
-  principal: number;
-  interest: number;
+  firstMonthPrincipal: number; // Renamed to clarify it's the first month's principal
+  firstMonthInterest: number; // Renamed to clarify it's the first month's interest
   monthlyBreakdown: { principal: number; interest: number }[];
   actualTermMonths?: number; // Added for custom payment to show actual term
 }
@@ -67,11 +67,15 @@ export const calculateAnnuityLoan = (
     });
   }
   
+  // First month's values for principal and interest
+  const firstMonthInterest = loanAmount * monthlyInterestRate;
+  const firstMonthPrincipal = monthlyPayment - firstMonthInterest;
+  
   return {
     monthlyPayment,
     totalInterest,
-    principal: monthlyPayment - (loanAmount * monthlyInterestRate),
-    interest: loanAmount * monthlyInterestRate,
+    firstMonthPrincipal,
+    firstMonthInterest,
     monthlyBreakdown
   };
 };
@@ -107,19 +111,21 @@ export const calculateEqualPrincipalLoan = (
   }
   
   // First month payment
-  const firstMonthPayment = monthlyPrincipal + (loanAmount * monthlyInterestRate);
+  const firstMonthInterest = loanAmount * monthlyInterestRate;
+  const firstMonthPayment = monthlyPrincipal + firstMonthInterest;
   
   return {
-    monthlyPayment: firstMonthPayment,
+    monthlyPayment: firstMonthPayment, // Note: this is just the first month's payment, not constant
     totalInterest,
-    principal: monthlyPrincipal,
-    interest: loanAmount * monthlyInterestRate,
+    firstMonthPrincipal: monthlyPrincipal,
+    firstMonthInterest,
     monthlyBreakdown
   };
 };
 
 /**
  * Calculates loan details for fixed installment repayment
+ * Corrected to use proper compound interest calculation
  */
 export const calculateFixedInstallmentLoan = (
   loanAmount: number,
@@ -129,13 +135,13 @@ export const calculateFixedInstallmentLoan = (
   const monthlyInterestRate = calculateMonthlyInterestRate(annualInterestRate);
   const termMonths = termYears * 12;
   
-  // Calculate total interest (simplified formula for fixed installment)
-  const totalInterest = loanAmount * annualInterestRate * termYears / 100;
-  
-  // Monthly payment is simply the loan amount plus total interest divided by the term
-  const monthlyPayment = (loanAmount + totalInterest) / termMonths;
+  // Use the same monthly payment calculation as annuity loan
+  const monthlyPayment = 
+    (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, termMonths)) / 
+    (Math.pow(1 + monthlyInterestRate, termMonths) - 1);
   
   let remainingBalance = loanAmount;
+  let totalInterest = 0;
   const monthlyBreakdown: { principal: number; interest: number }[] = [];
   
   // Calculate the monthly breakdown
@@ -143,6 +149,7 @@ export const calculateFixedInstallmentLoan = (
     const interestPayment = remainingBalance * monthlyInterestRate;
     const principalPayment = monthlyPayment - interestPayment;
     
+    totalInterest += interestPayment;
     remainingBalance -= principalPayment;
     
     monthlyBreakdown.push({
@@ -151,11 +158,15 @@ export const calculateFixedInstallmentLoan = (
     });
   }
   
+  // First month's values
+  const firstMonthInterest = loanAmount * monthlyInterestRate;
+  const firstMonthPrincipal = monthlyPayment - firstMonthInterest;
+  
   return {
     monthlyPayment,
     totalInterest,
-    principal: monthlyPayment - (loanAmount * monthlyInterestRate),
-    interest: loanAmount * monthlyInterestRate,
+    firstMonthPrincipal,
+    firstMonthInterest,
     monthlyBreakdown
   };
 };
@@ -179,8 +190,8 @@ export const calculateCustomPaymentLoan = (
     return {
       monthlyPayment: customPayment,
       totalInterest: Infinity, // Indicate that the loan will never be paid off
-      principal: 0,
-      interest: minimumPayment,
+      firstMonthPrincipal: 0,
+      firstMonthInterest: minimumPayment,
       monthlyBreakdown: [{ principal: 0, interest: minimumPayment }],
       actualTermMonths: Infinity
     };
@@ -218,13 +229,17 @@ export const calculateCustomPaymentLoan = (
     }
   }
   
+  // First month's values
+  const firstMonthInterest = loanAmount * monthlyInterestRate;
+  const firstMonthPrincipal = customPayment - firstMonthInterest;
+  
   // If we hit the max months, the loan won't be paid off with the custom payment
   if (monthCount >= maxMonths) {
     return {
       monthlyPayment: customPayment,
       totalInterest: Infinity, // Indicate that the loan will never be paid off
-      principal: customPayment - (loanAmount * monthlyInterestRate),
-      interest: loanAmount * monthlyInterestRate,
+      firstMonthPrincipal,
+      firstMonthInterest,
       monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
       actualTermMonths: Infinity
     };
@@ -233,8 +248,8 @@ export const calculateCustomPaymentLoan = (
   return {
     monthlyPayment: customPayment,
     totalInterest,
-    principal: customPayment - (loanAmount * monthlyInterestRate),
-    interest: loanAmount * monthlyInterestRate,
+    firstMonthPrincipal,
+    firstMonthInterest,
     monthlyBreakdown,
     actualTermMonths: monthCount
   };
@@ -270,10 +285,19 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
       throw new Error(`Unknown repayment type: ${loan.repaymentType}`);
   }
   
-  // Add monthly fee to the payment if specified
+  // Add monthly fee to the payment if specified, but NOT to the total interest
   if (loan.monthlyFee && loan.monthlyFee > 0) {
+    // Store the original total interest
+    const originalTotalInterest = result.totalInterest;
+    
+    // Add fee to monthly payment
     result.monthlyPayment += loan.monthlyFee;
-    result.totalInterest += loan.monthlyFee * (loan.termYears * 12);
+    
+    // Add fees to a total fees calculation (separate from interest)
+    const totalFees = loan.monthlyFee * (result.actualTermMonths || loan.termYears * 12);
+    
+    // Don't modify the total interest calculation
+    result.totalInterest = originalTotalInterest;
   }
   
   return result;
@@ -334,7 +358,10 @@ export const generateRecommendations = (loans: Loan[]): {
     .map(item => item.loan);
   
   // Find highest total interest
-  const maxTotalInterest = Math.max(...loansWithResults.map(item => item.result.totalInterest));
+  const maxTotalInterest = Math.max(...loansWithResults
+    .filter(item => item.result.totalInterest !== Infinity) // Exclude loans that can't be paid off
+    .map(item => item.result.totalInterest));
+  
   const highestTotalInterestLoans = loansWithResults
     .filter(item => item.result.totalInterest === maxTotalInterest)
     .map(item => item.loan);
@@ -368,8 +395,8 @@ export const calculateTotalMonthlyPayment = (loans: Loan[]): {
   activeLoans.forEach(loan => {
     const result = calculateLoan(loan);
     totalPayment += result.monthlyPayment;
-    totalPrincipal += result.principal;
-    totalInterest += result.interest;
+    totalPrincipal += result.firstMonthPrincipal;
+    totalInterest += result.firstMonthInterest;
   });
   
   return {
