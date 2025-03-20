@@ -17,26 +17,26 @@ const UserGuidanceSection: React.FC = () => {
   
   const guidanceItems = [
     {
-      title: t('guidance.blog.title') || 'Blogi',
-      description: t('guidance.blog.description') || 'Tutustu uusimpiin vinkkeihin ja oppaisiin',
+      title: t('guidance.blog.title'),
+      description: t('guidance.blog.description'),
       icon: BookOpen,
       action: () => navigate('/blog'),
     },
     {
-      title: t('guidance.profile.title') || 'Omat tiedot',
-      description: t('guidance.profile.description') || 'Päivitä profiilisi ja seuraa edistymistäsi',
+      title: t('guidance.profile.title'),
+      description: t('guidance.profile.description'),
       icon: User,
       action: () => navigate('/dashboard'),
     },
     {
-      title: t('guidance.guides.title') || 'Oppaat',
-      description: t('guidance.guides.description') || 'Lataa PDF-oppaita talouden hallintaan',
+      title: t('guidance.guides.title'),
+      description: t('guidance.guides.description'),
       icon: FileText,
       action: () => navigate('/terms'),
     },
     {
-      title: t('guidance.support.title') || 'Tuki',
-      description: t('guidance.support.description') || 'Tarvitsetko apua? Ota yhteyttä tukeen',
+      title: t('guidance.support.title'),
+      description: t('guidance.support.description'),
       icon: Mail,
       action: () => window.location.href = 'mailto:tuki@velkavapaus.fi',
     },
@@ -47,10 +47,10 @@ const UserGuidanceSection: React.FC = () => {
       <div className="container max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            {t('guidance.welcome') || 'Tervetuloa'}, {userName}!
+            {t('guidance.welcome')}, {userName}!
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('guidance.subtitle') || 'Näin käytät sivustoamme ja saat eniten irti palveluistamme.'}
+            {t('guidance.subtitle')}
           </p>
         </div>
 

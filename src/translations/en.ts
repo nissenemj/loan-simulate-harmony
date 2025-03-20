@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -12,6 +13,26 @@ export const en = {
     debtSummary: 'Debt Summary',
     glossary: 'Glossary',
     affiliate: 'Affiliate',
+  },
+  guidance: {
+    welcome: 'Welcome',
+    subtitle: 'Here\'s how to use our site and get the most out of our services.',
+    blog: {
+      title: 'Blog',
+      description: 'Explore our latest tips and guides for financial freedom'
+    },
+    profile: {
+      title: 'Profile',
+      description: 'Update your profile and track your progress'
+    },
+    guides: {
+      title: 'Guides',
+      description: 'Download PDF guides for financial management'
+    },
+    support: {
+      title: 'Support',
+      description: 'Need help? Contact our support team'
+    }
   },
   auth: {
     login: 'Login',
