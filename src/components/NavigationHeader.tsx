@@ -32,6 +32,7 @@ const NavigationHeader: React.FC = () => {
     { path: "/dashboard", label: t('tabs.dashboard') },
     { path: "/loans", label: t('tabs.loans') },
     { path: "/debt-summary", label: t('tabs.debtSummary') },
+    { path: "/blog", label: t('tabs.blog') || "Blogi" },
     { path: "/terms", label: t('tabs.glossary') }
   ];
   

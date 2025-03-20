@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,10 +15,13 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+import UserGuidanceSection from "@/components/UserGuidanceSection";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Debug käännöksiä
   useEffect(() => {
@@ -197,23 +199,43 @@ const LandingPage = () => {
                 <p className="text-lg md:text-xl text-muted-foreground max-w-md">
                   {getTranslatedText("landing.hero.subheadline", "Luo ilmainen henkilökohtainen velanmaksusuunnitelma ja ota hallinta taloudestasi.")}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 transition-colors"
-                    onClick={handleCTAClick}
-                  >
-                    {getTranslatedText("landing.hero.cta", "Kirjaudu tai rekisteröidy nyt")}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => navigate("/terms")}
-                  >
-                    {getTranslatedText("landing.hero.secondaryCta", "Lue lisää")}
-                  </Button>
-                </div>
+                {!user ? (
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button
+                      size="lg"
+                      className="bg-primary hover:bg-primary/90 transition-colors"
+                      onClick={handleCTAClick}
+                    >
+                      {getTranslatedText("landing.hero.cta", "Kirjaudu tai rekisteröidy nyt")}
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => navigate("/terms")}
+                    >
+                      {getTranslatedText("landing.hero.secondaryCta", "Lue lisää")}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button
+                      size="lg"
+                      className="bg-primary hover:bg-primary/90 transition-colors"
+                      onClick={() => navigate("/dashboard")}
+                    >
+                      {getTranslatedText("landing.hero.loggedInCta", "Siirry hallintapaneeliin")}
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => navigate("/blog")}
+                    >
+                      {getTranslatedText("landing.hero.blogCta", "Tutustu blogiin")}
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="rounded-lg shadow-xl overflow-hidden hidden md:block">
                 <img
@@ -226,6 +248,9 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        {/* User Guidance Section - Only shown when logged in */}
+        {user && <UserGuidanceSection />}
 
         {/* Benefits Section */}
         <section className="py-16 bg-background">

@@ -20,6 +20,8 @@ import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 import Dashboard from "./pages/Dashboard";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,6 +69,10 @@ const App = () => (
                     <DebtSummaryPage />
                   </ProtectedRoute>
                 } />
+                
+                {/* Blog pages */}
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:postId" element={<BlogPost />} />
                 
                 {/* Legal pages */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
