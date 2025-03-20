@@ -7,7 +7,7 @@ import { BookOpen, User, FileText, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const UserGuidanceSection: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -15,28 +15,29 @@ const UserGuidanceSection: React.FC = () => {
   const userEmail = user?.email || '';
   const userName = userEmail.split('@')[0];
   
+  // Define the guidance items with fallback text in case translations aren't working
   const guidanceItems = [
     {
-      title: t('guidance.blog.title'),
-      description: t('guidance.blog.description'),
+      title: language === 'fi' ? 'Blogi' : 'Blog',
+      description: language === 'fi' ? 'Tutustu uusimpiin vinkkeihin ja oppaisiin' : 'Explore our latest tips and guides for financial freedom',
       icon: BookOpen,
       action: () => navigate('/blog'),
     },
     {
-      title: t('guidance.profile.title'),
-      description: t('guidance.profile.description'),
+      title: language === 'fi' ? 'Omat tiedot' : 'Profile',
+      description: language === 'fi' ? 'Päivitä profiilisi ja seuraa edistymistäsi' : 'Update your profile and track your progress',
       icon: User,
       action: () => navigate('/dashboard'),
     },
     {
-      title: t('guidance.guides.title'),
-      description: t('guidance.guides.description'),
+      title: language === 'fi' ? 'Oppaat' : 'Guides',
+      description: language === 'fi' ? 'Lataa PDF-oppaita talouden hallintaan' : 'Download PDF guides for financial management',
       icon: FileText,
       action: () => navigate('/terms'),
     },
     {
-      title: t('guidance.support.title'),
-      description: t('guidance.support.description'),
+      title: language === 'fi' ? 'Tuki' : 'Support',
+      description: language === 'fi' ? 'Tarvitsetko apua? Ota yhteyttä tukeen' : 'Need help? Contact our support team',
       icon: Mail,
       action: () => window.location.href = 'mailto:tuki@velkavapaus.fi',
     },
@@ -47,10 +48,12 @@ const UserGuidanceSection: React.FC = () => {
       <div className="container max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            {t('guidance.welcome')}, {userName}!
+            {language === 'fi' ? 'Tervetuloa' : 'Welcome'}, {userName}!
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('guidance.subtitle')}
+            {language === 'fi' 
+              ? 'Näin käytät sivustoamme ja saat eniten irti palveluistamme.'
+              : 'Here\'s how to use our site and get the most out of our services.'}
           </p>
         </div>
 
