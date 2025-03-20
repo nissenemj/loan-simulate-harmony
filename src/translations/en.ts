@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -332,7 +333,8 @@ export const en = {
     summaryExplanation: "This summary shows the overall picture of your debts and helps prioritize your repayment strategy.",
     totalLoans: "Total Loans",
     payoffButton: "Pay Off",
-    actions: "Actions"
+    actions: "Actions",
+    title: "Debt Summary"
   },
   recommendations: {
     title: "Repayment Recommendations",

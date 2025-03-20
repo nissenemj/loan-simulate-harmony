@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -137,7 +136,7 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
             <div className="bg-card rounded-lg p-5 shadow-sm border">
               <div className="flex items-center gap-2 mb-2">
                 <Wallet className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">{t("creditCard.summary.totalBalance")}</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("debtSummary.totalBalance")}</span>
               </div>
               <div className="text-2xl font-bold">
                 {formatCurrency(totalDebtBalance)}
