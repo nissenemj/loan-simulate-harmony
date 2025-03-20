@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
+import { Analytics } from "@vercel/analytics/react"
 
 // Add Google AdSense script to the document head
 const adsenseScript = document.createElement('script');
@@ -15,4 +16,9 @@ const metaCharset = document.createElement('meta');
 metaCharset.setAttribute('charset', 'UTF-8');
 document.head.appendChild(metaCharset);
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <>
+    <App />
+    <Analytics />
+  </>
+);
