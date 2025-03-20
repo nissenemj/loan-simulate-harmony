@@ -97,7 +97,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
     onAddCreditCard(newCreditCard);
     
     // Fix toast error: update to use a single parameter with formatted string
-    toast(t("toast.loanAdded") + ": " + values.name);
+    toast(t("toast.cardAdded") + ": " + values.name);
     
     // Reset the form
     form.reset({

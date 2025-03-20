@@ -1,4 +1,4 @@
-
+// LanguageContext.tsx (korjattu)
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { en } from '@/translations/en';
 import { fi } from '@/translations/fi';
@@ -41,19 +41,20 @@ const LanguageContext = createContext<LanguageContextType>({
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<'fi' | 'en'>('fi');
-  const [translations, setTranslations] = useState<Translations>(fiTranslations); // Oletuskäännökset ovat englanniksi  // Vaihda fiTranslations -> enTranslations
+  const [translations, setTranslations] = useState<Translations>(fiTranslations); // Oletuskäännökset ovat suomeksi
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
   };
   
-const t = (key: string): string => {
-  if (!translations[key]) {
-    console.warn(`Translation key missing: ${key}`);
-  }
-  return translations[key] || key;
-};
+  const t = (key: string): string => {
+    if (!translations[key]) {
+      console.error(`Translation key missing for language ${language}: ${key}`);
+      return key;
+    }
+    return translations[key];
+  };
   
   return (
     <LanguageContext.Provider value={{ language, translations, setLanguage: handleSetLanguage, t }}>

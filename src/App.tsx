@@ -1,4 +1,4 @@
-
+// App.tsx (päivitetty)
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +20,7 @@ import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 import Dashboard from "./pages/Dashboard";
+import CreditCardsPage from "./pages/CreditCardsPage"; // Lisätään CreditCardsPage
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,12 @@ const App = () => (
                     <Index />
                   </ProtectedRoute>
                 } />
+                <Route path="/creditCards" element={
+                  <ProtectedRoute>
+                    <NavigationHeader />
+                    <CreditCardsPage />
+                  </ProtectedRoute>
+                } /> {/* Lisätty /creditCards-reitti */}
                 <Route path="/terms" element={
                   <>
                     <NavigationHeader />
@@ -60,13 +67,9 @@ const App = () => (
                     <DebtSummaryPage />
                   </ProtectedRoute>
                 } />
-                
-                {/* Legal pages */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
-                
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AuthProvider>
