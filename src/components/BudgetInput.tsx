@@ -38,11 +38,11 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CalculatorIcon className="h-5 w-5 text-primary" />
-          {t("repayment.title")}
+        <CardTitle className="flex items-center gap-2 break-words">
+          <CalculatorIcon className="h-5 w-5 text-primary shrink-0" />
+          <span className="break-words">{t("repayment.title")}</span>
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="break-words">
           {t("repayment.enterBudgetPrompt")}
         </CardDescription>
       </CardHeader>
@@ -74,15 +74,15 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             <div className="flex items-center space-x-2 rounded-md border p-3">
               <RadioGroupItem value="avalanche" id="avalanche" />
               <Label htmlFor="avalanche" className="flex flex-col cursor-pointer">
-                <span className="font-medium">{t("repayment.highestInterestFirst")}</span>
-                <span className="text-xs text-muted-foreground">{t("repayment.highestInterestDesc")}</span>
+                <span className="font-medium break-words">{t("repayment.highestInterestFirst")}</span>
+                <span className="text-xs text-muted-foreground break-words">{t("repayment.highestInterestDesc")}</span>
               </Label>
             </div>
             <div className="flex items-center space-x-2 rounded-md border p-3">
               <RadioGroupItem value="snowball" id="snowball" />
               <Label htmlFor="snowball" className="flex flex-col cursor-pointer">
-                <span className="font-medium">{t("repayment.lowestBalanceFirst")}</span>
-                <span className="text-xs text-muted-foreground">{t("repayment.lowestBalanceDesc")}</span>
+                <span className="font-medium break-words">{t("repayment.lowestBalanceFirst")}</span>
+                <span className="text-xs text-muted-foreground break-words">{t("repayment.lowestBalanceDesc")}</span>
               </Label>
             </div>
           </RadioGroup>
