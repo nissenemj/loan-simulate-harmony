@@ -20,12 +20,14 @@ const hasMarketingConsent = () => {
 
 // Only add Google AdSense script if user has consented
 if (hasMarketingConsent()) {
-  const adsenseScript = document.createElement('script');
-  adsenseScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4847273727626264";
-  adsenseScript.async = true;
-  adsenseScript.crossOrigin = "anonymous";
-  document.head.appendChild(adsenseScript);
-  console.log('AdSense script loaded with consent');
+  if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
+    const adsenseScript = document.createElement('script');
+    adsenseScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4847273727626264";
+    adsenseScript.async = true;
+    adsenseScript.crossOrigin = "anonymous";
+    document.head.appendChild(adsenseScript);
+    console.log('AdSense script loaded with consent');
+  }
 } else {
   console.log('Marketing cookies not consented, AdSense script not loaded');
 }

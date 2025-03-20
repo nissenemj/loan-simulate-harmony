@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 // Define the global adsbygoogle object for TypeScript
 declare global {
@@ -22,6 +22,7 @@ const AdSenseBanner = ({
   className = '',
 }: AdSenseBannerProps) => {
   const [hasMarketingConsent, setHasMarketingConsent] = useState<boolean>(false);
+  const adContainerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     // Check if user has given consent for marketing cookies
@@ -54,19 +55,26 @@ const AdSenseBanner = ({
   }, []);
   
   useEffect(() => {
-    // Only initialize ads if the user has given consent
-    if (hasMarketingConsent) {
+    // Only initialize ads if the user has given consent and component is mounted
+    if (hasMarketingConsent && adContainerRef.current) {
       try {
-        // Initialize adsbygoogle if not already initialized
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        console.log('AdSense push executed');
+        // Ensure the ad container is ready before pushing the ad
+        const adElement = adContainerRef.current.querySelector('.adsbygoogle');
+        
+        if (adElement) {
+          // Initialize adsbygoogle if not already initialized
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          console.log('AdSense push executed for slot:', adSlot);
+        } else {
+          console.error('AdSense container not found in DOM');
+        }
       } catch (error) {
         console.error('AdSense error:', error);
       }
     } else {
-      console.log('Marketing consent not given, ads not loaded');
+      console.log('Marketing consent not given or container not ready, ads not loaded');
     }
-  }, [hasMarketingConsent]);
+  }, [hasMarketingConsent, adSlot]);
 
   // If no consent, return an empty div with same dimensions
   if (!hasMarketingConsent) {
@@ -83,7 +91,7 @@ const AdSenseBanner = ({
   }
 
   return (
-    <div className={`adsbygoogle-container ${className}`}>
+    <div className={`adsbygoogle-container ${className}`} ref={adContainerRef}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
