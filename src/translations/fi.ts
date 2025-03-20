@@ -241,7 +241,7 @@ export const fi = {
     cookieAccept: 'Evästeet hyväksytty.',
   },
   tabs: {
-    dashboard: 'Kojelauta',
+    dashboard: 'Dashboard',
     loans: 'Lainat',
     creditCards: 'Luottokortit',
     debtSummary: 'Velkayhteenveto',

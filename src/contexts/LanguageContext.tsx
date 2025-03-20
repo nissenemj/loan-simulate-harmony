@@ -8,9 +8,9 @@ type Translations = {
 };
 
 type LanguageContextType = {
-  language: 'en' | 'fi';
+  language: 'fi' | 'en';
   translations: Translations;
-  setLanguage: (language: 'en' | 'fi') => void;
+  setLanguage: (language: 'fi' | 'en') => void;
   t: (key: string) => string;
 };
 
@@ -40,8 +40,8 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'fi'>('en');  // Vaihda 'fi' -> 'en'
-  const [translations, setTranslations] = useState<Translations>(enTranslations);  // Vaihda fiTranslations -> enTranslations
+  const [language, setLanguage] = useState<'fi' | 'en'>('fi');
+  const [translations, setTranslations] = useState<Translations>(fiTranslations); // Oletuskäännökset ovat englanniksi  // Vaihda fiTranslations -> enTranslations
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
