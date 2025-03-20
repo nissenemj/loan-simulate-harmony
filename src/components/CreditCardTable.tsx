@@ -35,9 +35,10 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
     
     const card = creditCards.find(card => card.id === id);
     if (card) {
+      // Fix: Replace template strings with concatenation since the t function doesn't support template parameters
       toast(isActive ? 
-        t("toast.cardActivated", { name: card.name }) : 
-        t("toast.cardDeactivated", { name: card.name })
+        t("toast.cardActivated") + ": " + card.name : 
+        t("toast.cardDeactivated") + ": " + card.name
       );
     }
   };
