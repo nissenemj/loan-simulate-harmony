@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -172,17 +171,10 @@ export const fi = {
     monthlyFeeInfo: 'Kuukausimaksu lisätään kuukausittaiseen maksuun ja kokonaiskorkoon.',
   },
   creditCard: {
-    addCard: 'Lisää luottokortti',
-    editCard: 'Muokkaa luottokorttia',
-    cardDetails: 'Luottokortin tiedot',
-    cardName: 'Luottokortin nimi',
-    cardBalance: 'Saldo',
-    cardLimit: 'Luottoraja',
-    cardApr: 'Korko',
-    cardMinPayment: 'Minimimaksu',
-    cardMinPaymentPercent: 'Minimimaksuprosentti',
-    cardFullPayment: 'Maksa koko saldo',
-    isActive: 'Aktiivinen',
+    title: "Uusi luottokortti",
+    isActive: "Aktiivinen",
+    fullPayment: "Maksa koko saldo kuukausittain",
+    never: "Ei koskaan",
     table: {
       name: 'Nimi',
       balance: 'Saldo',
@@ -218,6 +210,22 @@ export const fi = {
       totalMonthlyInterest: 'Kuukausikorot yhteensä',
       totalUtilization: 'Käyttöaste yhteensä',
       includesFees: 'Sisältää maksut'
+    },
+    form: {
+      name: "Kortin nimi",
+      balance: "Saldo",
+      limit: "Luottoraja",
+      apr: "Korko",
+      minPayment: "Minimimaksu",
+      minPaymentPercent: "Minimimaksuprosentti (%)",
+      fullPayment: "Maksa koko saldo kuukausittain",
+      submit: "Lisää luottokortti",
+      placeholderName: "esim. Visa",
+      placeholderBalance: "1000",
+      placeholderCreditLimit: "5000",
+      placeholderApr: "18.0",
+      placeholderMinPayment: "30",
+      autoCalculated: "Lasketaan automaattisesti saldon ja prosentin perusteella"
     }
   },
   debtSummary: {
@@ -576,4 +584,3 @@ export const fi = {
 };
 
 export default fi;
-
