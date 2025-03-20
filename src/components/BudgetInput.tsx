@@ -1,82 +1,101 @@
 
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PiggyBank, Calculator } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { cn } from "@/lib/utils";
-import { PrioritizationMethod } from "@/utils/repayment";
+import { useLanguage } from '@/contexts/LanguageContext';
+import { PrioritizationMethod } from '@/utils/repayment';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { CalculatorIcon, TrendingUp, CoinIcon } from 'lucide-react';
 
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
-  className?: string;
   defaultBudget?: number;
   method?: PrioritizationMethod;
 }
 
-const BudgetInput: React.FC<BudgetInputProps> = ({
-  onCalculate,
-  className,
+const BudgetInput: React.FC<BudgetInputProps> = ({ 
+  onCalculate, 
   defaultBudget = 500,
-  method: initialMethod = 'avalanche'
+  method = 'avalanche'
 }) => {
-  const {
-    t
-  } = useLanguage();
-  const [budget, setBudget] = useState<number>(defaultBudget);
-  const [method, setMethod] = useState<PrioritizationMethod>(initialMethod);
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onCalculate(budget, method);
+  const { t } = useLanguage();
+  const [budget, setBudget] = useState<number | string>(defaultBudget);
+  const [prioritization, setPrioritization] = useState<PrioritizationMethod>(method);
+
+  const handleCalculate = () => {
+    if (typeof budget === 'string') {
+      const parsedBudget = parseFloat(budget);
+      if (!isNaN(parsedBudget) && parsedBudget > 0) {
+        onCalculate(parsedBudget, prioritization);
+      }
+    } else if (budget > 0) {
+      onCalculate(budget, prioritization);
+    }
   };
-  
-  return <Card className={cn("shadow-sm", className)}>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center text-lg gap-2">
-          <PiggyBank className="h-5 w-5" />
-          {t("repayment.budgetTitle")}
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <CalculatorIcon className="h-5 w-5 text-primary" />
+          {t("repayment.title")}
         </CardTitle>
         <CardDescription>
-          {t("repayment.budgetDescription")}
+          {t("repayment.enterBudgetPrompt")}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="budget">{t("repayment.monthlyBudget")}</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">€</span>
-              <Input id="budget" type="number" min="0" step="10" className="pl-8" value={budget} onChange={e => setBudget(parseFloat(e.target.value) || 0)} placeholder="500" />
-            </div>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="budget">{t("repayment.budget")}</Label>
+          <div className="relative">
+            <span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">€</span>
+            <Input
+              id="budget"
+              type="number"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              className="pl-8"
+              placeholder={t("repayment.budgetPlaceholder")}
+              min="0"
+              step="10"
+            />
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="method">{t("repayment.prioritizationMethod")}</Label>
-            <Select value={method} onValueChange={value => setMethod(value as PrioritizationMethod)}>
-              <SelectTrigger>
-                <SelectValue placeholder={t("repayment.selectMethod")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="avalanche">{t("repayment.avalancheMethod")}</SelectItem>
-                <SelectItem value="snowball">{t("repayment.snowballMethod")}</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground mt-1">
-              {method === 'avalanche' ? t("repayment.avalancheDescription") : t("repayment.snowballDescription")}
-            </p>
-          </div>
-          
-          <Button type="submit" size="sm" className="w-full mt-2 font-extralight whitespace-normal py-3 h-auto flex items-center justify-center">
-            <Calculator className="mr-2 h-4 w-4 flex-shrink-0" />
-            <span className="text-center inline-block w-full">{t("repayment.calculatePlan")}</span>
-          </Button>
-        </form>
+        <div className="space-y-2">
+          <Label>{t("repayment.strategy")}</Label>
+          <RadioGroup 
+            value={prioritization} 
+            onValueChange={(value) => setPrioritization(value as PrioritizationMethod)}
+            className="space-y-2"
+          >
+            <div className="flex items-center space-x-2 rounded-md border p-3">
+              <RadioGroupItem value="avalanche" id="avalanche" />
+              <Label htmlFor="avalanche" className="flex flex-col cursor-pointer">
+                <span className="font-medium">{t("repayment.highestInterestFirst")}</span>
+                <span className="text-xs text-muted-foreground">{t("repayment.highestInterestDesc")}</span>
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2 rounded-md border p-3">
+              <RadioGroupItem value="snowball" id="snowball" />
+              <Label htmlFor="snowball" className="flex flex-col cursor-pointer">
+                <span className="font-medium">{t("repayment.lowestBalanceFirst")}</span>
+                <span className="text-xs text-muted-foreground">{t("repayment.lowestBalanceDesc")}</span>
+              </Label>
+            </div>
+          </RadioGroup>
+        </div>
       </CardContent>
-    </Card>;
+      <CardFooter>
+        <Button onClick={handleCalculate} className="w-full">
+          <CalculatorIcon className="mr-2 h-4 w-4" />
+          {t("repayment.calculateNow")}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
 };
 
 export default BudgetInput;

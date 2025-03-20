@@ -214,7 +214,7 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
                 />
                 <Tooltip 
                   formatter={(value) => [formatCurrency(Number(value)), t("repayment.totalRemaining")]}
-                  labelFormatter={(label) => `${t("form.months")}: ${label}`}
+                  labelFormatter={(label) => `${t("repayment.months")}: ${label}`}
                 />
                 <Area 
                   type="monotone" 
