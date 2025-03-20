@@ -3,11 +3,11 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, User, FileText, Mail } from 'lucide-react';
+import { BookOpen, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const UserGuidanceSection: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -19,27 +19,19 @@ const UserGuidanceSection: React.FC = () => {
   const guidanceItems = [
     {
       title: language === 'fi' ? 'Blogi' : 'Blog',
-      description: language === 'fi' ? 'Tutustu uusimpiin vinkkeihin ja oppaisiin' : 'Explore our latest tips and guides for financial freedom',
+      description: language === 'fi' 
+        ? 'Tutustu lainavelhon uusimpiin vinkkeihin ja oppaisiin' 
+        : 'Explore lainavelho\'s latest tips and guides for financial freedom',
       icon: BookOpen,
       action: () => navigate('/blog'),
     },
     {
-      title: language === 'fi' ? 'Omat tiedot' : 'Profile',
-      description: language === 'fi' ? 'Päivitä profiilisi ja seuraa edistymistäsi' : 'Update your profile and track your progress',
-      icon: User,
-      action: () => navigate('/dashboard'),
-    },
-    {
-      title: language === 'fi' ? 'Oppaat' : 'Guides',
-      description: language === 'fi' ? 'Lataa PDF-oppaita talouden hallintaan' : 'Download PDF guides for financial management',
-      icon: FileText,
-      action: () => navigate('/terms'),
-    },
-    {
       title: language === 'fi' ? 'Tuki' : 'Support',
-      description: language === 'fi' ? 'Tarvitsetko apua? Ota yhteyttä tukeen' : 'Need help? Contact our support team',
+      description: language === 'fi' 
+        ? 'Tarvitsetko apua? Ota yhteyttä tukeen' 
+        : 'Need help? Contact our support team',
       icon: Mail,
-      action: () => window.location.href = 'mailto:tuki@velkavapaus.fi',
+      action: () => window.location.href = 'mailto:support@velkavapaa.fi',
     },
   ];
 
