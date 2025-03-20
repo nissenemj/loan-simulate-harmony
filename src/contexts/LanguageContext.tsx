@@ -40,20 +40,23 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'fi'>('fi');  // Changed from 'en' to 'fi'
-  const [translations, setTranslations] = useState<Translations>(fiTranslations);  // Changed from enTranslations to fiTranslations
+  const [language, setLanguage] = useState<'en' | 'fi'>('fi');
+  const [translations, setTranslations] = useState<Translations>(fiTranslations);
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
   };
   
-const t = (key: string): string => {
-  if (!translations[key]) {
-    console.warn(`Translation key missing: ${key}`);
-  }
-  return translations[key] || key;
-};
+  const t = (key: string): string => {
+    if (!translations[key]) {
+      console.warn(`Translation key missing: ${key}`);
+      // Return only the last part of the key for a more user-friendly fallback
+      const parts = key.split('.');
+      return parts[parts.length - 1];
+    }
+    return translations[key] || key;
+  };
   
   return (
     <LanguageContext.Provider value={{ language, translations, setLanguage: handleSetLanguage, t }}>

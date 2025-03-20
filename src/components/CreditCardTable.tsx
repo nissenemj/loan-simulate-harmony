@@ -54,15 +54,15 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
             <TableHead>{t("creditCard.table.minPayment")}</TableHead>
             <TableHead>{t("creditCard.table.monthlyInterest")}</TableHead>
             <TableHead>{t("creditCard.table.payoffTime")}</TableHead>
-            <TableHead>{t("creditCard.table.utilization")}</TableHead>
-            <TableHead className="text-right">{t("creditCard.isActive")}</TableHead>
+            <TableHead>{t("creditCard.table.utilizationRate")}</TableHead>
+            <TableHead className="text-right">{t("form.isActive")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {creditCards.length === 0 ? (
             <TableRow>
               <TableCell colSpan={8} className="text-center py-8">
-                {t("creditCard.table.noCards")}
+                {t("creditCard.noCardsAdded")}
               </TableCell>
             </TableRow>
           ) : (
@@ -90,7 +90,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                         <Check className="w-3 h-3 mr-1" />
-                        {t("creditCard.fullPayment")}
+                        {t("creditCard.form.fullPayment")}
                       </span>
                     ) : (
                       <AnimatedNumber
@@ -113,7 +113,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                     ) : calculation.payoffMonths === null ? (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                         <X className="w-3 h-3 mr-1" />
-                        {t("creditCard.never")}
+                        {t("loan.customPaymentTermEstimateNever")}
                       </span>
                     ) : (
                       formatPayoffTime(calculation.payoffMonths, t)

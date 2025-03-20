@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -195,11 +196,13 @@ export const fi = {
       availableCredit: 'Käytettävissä',
       apr: 'Vuosikorko',
       minPayment: 'Minimimaksu',
+      payoffTime: 'Maksuaika',
+      utilizationRate: 'Käyttöaste',
+      monthlyInterest: 'Kuukausikorko',
       actions: 'Toiminnot',
       edit: 'Muokkaa',
       delete: 'Poista',
-      utilizationRate: 'Käyttöaste',
-      monthlyInterest: 'Kuukausikorko'
+      noCards: 'Ei lisättyjä luottokortteja'
     },
     editTitle: 'Muokkaa luottokorttia',
     deleteTitle: 'Poista luottokortti',
@@ -208,9 +211,15 @@ export const fi = {
     addYourFirstCard: 'Lisää ensimmäinen luottokorttisi!',
     minimumPayment: 'Minimimaksu',
     paid: 'Maksettu',
+    isActive: 'Aktiivinen',
+    never: 'Ei ikinä',
     summary: {
       title: 'Luottokorttien yhteenveto',
-      total: 'Yhteensä',
+      totalBalance: 'Kokonaissaldo',
+      totalMinPayment: 'Minimimaksut yhteensä',
+      totalMonthlyInterest: 'Kuukausikorot yhteensä',
+      totalLimit: 'Luottorajat yhteensä',
+      totalUtilization: 'Kokonaiskäyttöaste',
       cards: 'Kortteja',
       avgApr: 'Keskimääräinen korko',
       highestApr: 'Korkein korko',
@@ -260,6 +269,8 @@ export const fi = {
     cookieAccept: 'Evästeet hyväksytty.',
     loanActivated: 'Laina aktivoitu',
     loanDeactivated: 'Laina deaktivoitu',
+    cardActivated: 'Luottokortti aktivoitu',
+    cardDeactivated: 'Luottokortti deaktivoitu',
   },
   tabs: {
     dashboard: 'Kojelauta',

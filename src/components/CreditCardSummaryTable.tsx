@@ -71,7 +71,7 @@ export default function CreditCardSummaryTable({
               <TableHead>{t("debtSummary.cardName")}</TableHead>
               <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
               <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
-              <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
+              <TableHead>{t("debtSummary.totalLifetimeInterest")}</TableHead>
               {onPayoffCreditCard && !isDemo && (
                 <TableHead className="text-right">{t("debtSummary.actions")}</TableHead>
               )}
