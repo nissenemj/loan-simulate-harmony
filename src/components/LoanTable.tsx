@@ -93,14 +93,14 @@ const LoanTable: React.FC<LoanTableProps> = ({
   
   if (loans.length === 0) {
     return (
-      <div className="mt-6 text-center p-8 bg-white/50 rounded-lg shadow-subtle">
+      <div className="mt-6 text-center p-8 bg-white/80 velkavapaus-card">
         <p className="text-primary font-medium">{t('loan.table.noLoans')}</p>
       </div>
     );
   }
   
   return (
-    <div className="mt-6 bg-white/80 backdrop-blur-subtle rounded-lg shadow-subtle overflow-hidden">
+    <div className="mt-6 velkavapaus-card overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
@@ -156,13 +156,13 @@ const LoanTable: React.FC<LoanTableProps> = ({
                   className={cn(
                     "transition-all duration-500 animate-fade-in",
                     !loan.isActive && "opacity-50 bg-muted/30",
-                    isHighestInterest && "bg-destructive/5"
+                    isHighestInterest && "bg-primary/5"
                   )}
                 >
                   <TableCell className="font-medium relative py-4">
                     {loan.name}
                     {isHighestInterest && (
-                      <div className="absolute -left-1 top-1/2 -translate-y-1/2 text-destructive ml-1">
+                      <div className="absolute -left-1 top-1/2 -translate-y-1/2 text-primary ml-1">
                         <AlertCircle size={15} className="animate-pulse" />
                       </div>
                     )}
@@ -186,7 +186,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
                     <AnimatedNumber 
                       value={result.totalInterest} 
                       formatter={(val) => formatCurrency(val)}
-                      className={isHighestInterest ? "text-destructive font-medium" : ""}
+                      className={isHighestInterest ? "text-primary font-medium" : ""}
                     />
                   </TableCell>
                   <TableCell>{loan.termYears} {loan.termYears === 1 ? t('table.year') : t('table.years')}</TableCell>

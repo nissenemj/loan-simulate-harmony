@@ -24,10 +24,10 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
   
   return (
     <div className="space-y-6 mt-6">
-      <Card className="bg-white/80 backdrop-blur-subtle shadow-subtle overflow-hidden">
+      <Card className="velkavapaus-card shadow-md overflow-hidden">
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
+            <div className="space-y-2 text-center p-4 bg-secondary/50 rounded-lg">
               <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
@@ -37,7 +37,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               </p>
             </div>
             
-            <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
+            <div className="space-y-2 text-center p-4 bg-secondary/50 rounded-lg">
               <h3 className="text-sm font-medium text-muted-foreground">{t('loan.table.monthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
@@ -47,7 +47,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               </p>
             </div>
             
-            <div className="space-y-2 text-center p-4 bg-secondary/30 rounded-lg">
+            <div className="space-y-2 text-center p-4 bg-secondary/50 rounded-lg">
               <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyInterest')}</h3>
               <p className="text-2xl font-semibold text-primary">
                 <AnimatedNumber 
@@ -62,7 +62,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
       
       {(highestInterestRateLoans.length > 0 || highestTotalInterestLoans.length > 0) && (
         <Card className={cn(
-          "bg-white/80 backdrop-blur-subtle shadow-subtle overflow-hidden",
+          "velkavapaus-card shadow-md overflow-hidden",
           "border-l-4 border-l-primary animate-slide-up"
         )}>
           <CardContent className="p-6">
@@ -93,7 +93,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               )}
               
               {highestTotalInterestLoans.length > 0 && (
-                <div className="p-4 bg-secondary/30 rounded-lg">
+                <div className="p-4 bg-secondary/50 rounded-lg">
                   <h4 className="font-medium mb-2">{t('recommendations.highTotalInterest')}</h4>
                   <p className="text-sm">
                     {highestTotalInterestLoans.map(loan => {
@@ -117,7 +117,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
               )}
               
               {highestInterestRateLoans.length > 0 && (
-                <div className="p-4 bg-secondary/30 rounded-lg">
+                <div className="p-4 bg-secondary/50 rounded-lg">
                   <h4 className="font-medium mb-2">{t('recommendations.highInterest')}</h4>
                   <p className="text-sm">
                     {highestInterestRateLoans.map(loan => (

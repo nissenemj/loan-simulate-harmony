@@ -36,7 +36,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   };
 
   return (
-    <Card className="max-w-full overflow-hidden">
+    <Card className="max-w-full overflow-hidden velkavapaus-card">
       <CardHeader className="space-y-1">
         <CardTitle className="flex items-center gap-2 text-wrap overflow-hidden">
           <CalculatorIcon className="h-5 w-5 text-primary shrink-0" />
@@ -71,14 +71,14 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             onValueChange={(value) => setPrioritization(value as PrioritizationMethod)}
             className="space-y-2"
           >
-            <div className="flex items-center space-x-2 rounded-md border p-3">
+            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
               <RadioGroupItem value="avalanche" id="avalanche" />
               <Label htmlFor="avalanche" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("repayment.highestInterestFirst")}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.highestInterestDesc")}</span>
               </Label>
             </div>
-            <div className="flex items-center space-x-2 rounded-md border p-3">
+            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
               <RadioGroupItem value="snowball" id="snowball" />
               <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("repayment.lowestBalanceFirst")}</span>

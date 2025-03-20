@@ -1,4 +1,5 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -16,16 +17,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 210 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 240 70% 40%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 20% 96%;
+    --secondary: 240 25% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 20% 96%;
+    --muted: 240 25% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 210 20% 96%;
+    --accent: 240 25% 96%;
     --accent-foreground: 222 47% 11%;
 
     --destructive: 0 84% 60%;
@@ -35,16 +36,16 @@
     --input: 214 32% 91%;
     --ring: 222 84% 5%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5% 26%;
-    --sidebar-primary: 240 6% 10%;
+    --sidebar-background: 240 30% 98%;
+    --sidebar-foreground: 240 10% 26%;
+    --sidebar-primary: 240 70% 40%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 240 6% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 240 25% 96%;
+    --sidebar-accent-foreground: 240 10% 10%;
+    --sidebar-border: 240 13% 91%;
+    --sidebar-ring: 240 70% 60%;
   }
 
   .dark {
@@ -57,23 +58,23 @@
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 100% 50%;
+    --primary: 240 70% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 217 33% 18%;
+    --secondary: 240 33% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 33% 18%;
+    --muted: 240 33% 18%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 33% 18%;
+    --accent: 240 33% 18%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 18%;
-    --input: 217 33% 18%;
+    --border: 240 33% 18%;
+    --input: 240 33% 18%;
     --ring: 213 27% 84%;
   }
 }
@@ -84,11 +85,15 @@
   }
 
   html, body {
-    @apply scroll-smooth antialiased;
+    @apply scroll-smooth antialiased font-montserrat;
   }
 
   body {
-    @apply bg-background text-foreground font-sans transition-colors duration-300;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat font-semibold tracking-tight;
   }
 
   /* Remove default focus styles for mouse users ONLY if :focus-visible is supported */
@@ -147,4 +152,26 @@
   .text-wrap {
     @apply break-words hyphens-auto;
   }
+
+  /* Custom card styles */
+  .velkavapaus-card {
+    @apply rounded-lg border bg-gradient-to-b from-white to-secondary/30 shadow-md;
+  }
+}
+
+/* Logo styles */
+.velkavapaus-logo {
+  @apply relative inline-flex flex-col items-center font-montserrat;
+}
+
+.velkavapaus-logo-symbol {
+  @apply relative h-12 w-24 mb-1;
+}
+
+.velkavapaus-logo-text {
+  @apply text-base font-medium tracking-tight text-primary;
+}
+
+.velkavapaus-logo-line {
+  @apply w-full h-0.5 bg-primary/80 mt-0.5 mb-1;
 }

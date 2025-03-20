@@ -21,6 +21,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import VelkavapausLogo from './VelkavapausLogo';
 
 const NavigationHeader: React.FC = () => {
   const { t } = useLanguage();
@@ -35,14 +36,9 @@ const NavigationHeader: React.FC = () => {
   ];
   
   return (
-    <header className="border-b mb-6">
+    <header className="border-b mb-6 bg-white">
       <div className="container py-4 px-4 md:px-6 flex justify-between items-center">
-        <div>
-          <Link to="/" className="inline-block">
-            <h1 className="text-2xl font-bold">{t('app.title')}</h1>
-            <p className="text-sm text-muted-foreground max-w-xs md:max-w-none">{t('app.subtitle')}</p>
-          </Link>
-        </div>
+        <VelkavapausLogo />
         
         {isMobile ? (
           <div className="flex items-center gap-2">
@@ -55,15 +51,18 @@ const NavigationHeader: React.FC = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent>
-                <nav className="flex flex-col gap-4 mt-8">
+                <div className="flex justify-center mt-6 mb-8">
+                  <VelkavapausLogo size="sm" />
+                </div>
+                <nav className="flex flex-col gap-4">
                   {menuItems.map((item) => (
                     <Link 
                       key={item.path}
                       to={item.path} 
                       className={cn(
-                        "px-4 py-2 rounded-md font-medium",
+                        "px-4 py-2 rounded-md font-medium text-center",
                         location.pathname === item.path ? 
-                          "bg-accent text-accent-foreground" : 
+                          "bg-primary text-primary-foreground" : 
                           "text-foreground hover:bg-accent/50"
                       )}
                     >
@@ -84,7 +83,7 @@ const NavigationHeader: React.FC = () => {
                       to={item.path} 
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        location.pathname === item.path && "bg-accent text-accent-foreground"
+                        location.pathname === item.path && "bg-primary text-primary-foreground"
                       )}
                     >
                       {item.label}

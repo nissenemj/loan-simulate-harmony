@@ -42,13 +42,13 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
   };
 
   return (
-    <Card className="bg-gradient-to-br from-violet-50 to-purple-100 border-none shadow-md overflow-hidden">
+    <Card className="velkavapaus-card overflow-hidden">
       <CardContent className="p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="bg-violet-200 p-2 rounded-full">
-            <PiggyBank className="h-5 w-5 text-violet-700" />
+          <div className="bg-primary/10 p-2 rounded-full">
+            <PiggyBank className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="text-lg font-medium text-violet-900">{t('savings.title')}</h3>
+          <h3 className="text-lg font-medium">{t('savings.title')}</h3>
         </div>
         
         <div className="space-y-4">
@@ -57,7 +57,9 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
               key={loan.id} 
               className={cn(
                 "p-4 rounded-lg flex justify-between items-center",
-                loan.id === topSavingsLoan.id ? "bg-gradient-to-r from-violet-200/60 to-purple-200/60" : "bg-white/60"
+                loan.id === topSavingsLoan.id 
+                  ? "bg-gradient-to-r from-primary/5 to-primary/10" 
+                  : "bg-white/60"
               )}
             >
               <div className="space-y-1">

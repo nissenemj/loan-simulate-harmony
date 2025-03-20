@@ -21,11 +21,13 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: [
+					'Montserrat',
 					'SF Pro Display',
 					'Inter',
 					'system-ui',
 					'sans-serif',
 				],
+				montserrat: ['Montserrat', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
