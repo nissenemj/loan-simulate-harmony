@@ -53,7 +53,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
       
       <div className="overflow-x-auto">
         <Table>
-          <caption className="sr-only">{t("debtSummary.tableSummary", "Summary of your loans and their costs")}</caption>
+          <caption className="sr-only">{t("debtSummary.tableSummary")}</caption>
           <TableHeader>
             <TableRow>
               <TableHead>{t("debtSummary.loanName")}</TableHead>
