@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -197,9 +198,7 @@ export const fi = {
     confirmDeleteCard: 'Haluatko varmasti poistaa tämän luottokortin?',
     noCardsAdded: 'Ei lisättyjä luottokortteja.',
     addYourFirstCard: 'Lisää ensimmäinen luottokorttisi!',
-    fullPayment: 'Koko maksu',
     minimumPayment: 'Minimimaksu',
-    never: 'Ei koskaan',
     paid: 'Maksettu',
     summary: {
       title: 'Luottokorttien yhteenveto',
@@ -504,7 +503,8 @@ export const fi = {
     enterBudgetPrompt: "Syötä kuukausibudjettisi ja klikkaa Laske nähdäksesi takaisinmaksusuunnitelmasi.",
     calculateNow: "Laske nyt",
     summaryTab: "Velkayhteenveto",
-    planTab: "Takaisinmaksusuunnitelma"
+    planTab: "Takaisinmaksusuunnitelma",
+    repaymentType: "Lyhennystapa"
   },
   interest: {
     fixed: 'Kiinteä',
