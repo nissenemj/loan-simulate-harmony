@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -598,6 +597,19 @@ export const fi = {
     signupSuccess: "Rekisteröityminen onnistui",
     checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi",
     signupError: "Rekisteröityminen epäonnistui"
+  },
+  blog: {
+    pageTitle: "Blogi | Velkavapaus.fi",
+    pageDescription: "Lue uusimmat artikkelit ja oppaat taloudenhallintaan, velanhoitoon ja budjetointiin Velkavapaus.fi-blogista.",
+    title: "Blogi",
+    subtitle: "Uusimmat artikkelit ja oppaat taloudenhallintaan",
+    allPosts: "Kaikki artikkelit",
+    readMore: "Lue lisää",
+    share: "Jaa",
+    shareArticle: "Jaa artikkeli",
+    backToBlog: "Takaisin blogiin",
+    postNotFound: "Artikkelia ei löytynyt",
+    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt."
   }
 };
 

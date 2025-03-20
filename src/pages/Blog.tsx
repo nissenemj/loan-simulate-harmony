@@ -19,32 +19,32 @@ interface BlogPost {
   image_url?: string;
 }
 
-// Demo blog posts for now - these would typically come from a CMS or database
+// Updated blog posts with new content
 const DEMO_BLOG_POSTS: BlogPost[] = [
   {
     id: "1",
-    title: "5 Tehokasta tapaa päästä eroon veloista",
-    content: "Velkataakka voi tuntua ylitsepääsemättömältä, mutta oikeilla strategioilla voit nopeuttaa matkaa kohti velkavapautta. Tässä artikkelissa käsittelemme viisi tehokasta taktiikkaa, joiden avulla voit maksaa velkasi nopeammin ja säästää korkokuluissa.\n\nEnsimmäinen strategia on lumipalloefekti: maksa ensin pois pienimmät velat ja siirry sitten suurempiin. Tämä antaa nopeita voittoja ja motivaatiota jatkaa. Toinen vaihtoehto on lumivyörystrategia, jossa keskityt ensin korkeakorkoisimpiin velkoihin säästääksesi pitkällä aikavälillä...",
+    title: "7 Yleisintä Virhettä Velkojen Maksussa – Ja Miten Välttää Ne",
+    content: "Velkojen maksaminen voi tuntua raskaalta, mutta moni kompastuu samoihin virheisiin, jotka tekevät prosessista hitaamman ja kalliimman. Tämä opas listaa seitsemän yleisintä virhettä ja antaa sinulle työkalut niiden kiertämiseen. Mukana on myös ripaus motivaatiota ja suomalaisia resursseja, kuten Takuusäätiö, jotka tukevat sinua matkallasi.\n\nVirhe: Maksat vain lainojen minimilyhennykset, jolloin korot kasvattavat velkaa ja maksuaika venyy. Miten välttää: Pyri maksamaan enemmän kuin minimisumma aina kun mahdollista. Näin lyhennät velkapääomaa nopeammin ja säästät koroissa...",
     created_at: "2024-01-15T09:00:00Z",
-    author: "Maria Virtanen",
+    author: "Talousvelhot",
     category: "Velanhoito",
     image_url: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2071&auto=format&fit=crop"
   },
   {
     id: "2",
-    title: "Kuukausittaisen budjetin laatiminen: Aloittelijan opas",
-    content: "Toimiva budjetti on taloudellisen vapauden perusta. Tässä oppaassa käymme läpi yksinkertaiset askeleet, joiden avulla voit luoda oman kuukausittaisen budjetin ja pitäytyä siinä...",
+    title: "Velattomuuden käsikirja – Näin otat taloutesi takaisin hallintaan!",
+    content: "Hengitä syvään ja tunnusta tilanteesi rehellisesti. Tee selkeä lista kaikista veloistasi (summa, korko, eräpäivä). Avaa laskupino heti ja tarkista, missä tilanne on kriittisin. Päätä, ettet enää ota uutta velkaa ja tee ensimmäinen realistinen kuukausibudjetti.\n\nLuo visuaalinen mittari, jossa seuraat velan vähenemistä. Jaa velkamäärä pienempiin, saavutettaviin osiin. Palkitse itsesi saavutetuista välitavoitteista (esim. edullisella tai ilmaisella tavalla). Kerro tavoitteestasi läheisillesi, jotta he voivat kannustaa sinua...",
     created_at: "2024-02-03T14:30:00Z",
-    author: "Juhani Mäkinen",
+    author: "Talousvelhot",
     category: "Budjetointi",
     image_url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2011&auto=format&fit=crop"
   },
   {
     id: "3",
-    title: "Miten selvitä yllättävistä taloudellisista kriiseistä",
-    content: "Elämä voi tuoda yllättäviä käänteitä – auton rikkoutumisesta työpaikan menetykseen. Tässä artikkelissa käsittelemme, miten voit varautua taloudellisiin kriiseihin ja selvitä niistä mahdollisimman vähällä stressillä...",
+    title: "Konkreettiset esimerkit velan maksamisen strategioista",
+    content: "Minimilyhennysten maksaminen vs. suuremman summan maksaminen: Oletetaan, että sinulla on 1000 euron velka, jonka vuosikorko on 15%. Jos maksat minimilyhennyksen, esimerkiksi 30 €/kk, velka kasvaa 15% vuodessa, eli noin 150 € vuodessa. Maksamalla 30 € kuukaudessa (yhteensä 360 € vuodessa) velka pienenee vain 210 € vuodessa (360 € - 150 €). Tällöin 1000 € velan maksaminen kestää noin 4,76 vuotta, ja maksat yhteensä noin 1360 € (sisältäen korot)...",
     created_at: "2024-03-10T11:15:00Z",
-    author: "Laura Heikkinen",
+    author: "Talousvelhot",
     category: "Talouskriisit",
     image_url: "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?q=80&w=2070&auto=format&fit=crop"
   }
