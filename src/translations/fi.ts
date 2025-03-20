@@ -540,7 +540,7 @@ export const fi = {
     progress: 'Edistyminen',
     progressMessage: 'Olet jo maksanut {{percentage}}% velastasi - jatka samaan malliin!',
     paymentPlanSummary: 'Maksusuunnitelman yhteenveto',
-    paymentPlanDescription: 'Velanmaksustrategiasi yhdellä silmäyksellä',
+    paymentPlanDescription: 'Velanmaksustrategiasi yhdellä silm��yksellä',
     monthlyBudget: 'Kuukausibudjetti',
     minimumPayments: 'Minimimaksut',
     extraBudget: 'Ylimääräinen budjetti',
@@ -609,7 +609,10 @@ export const fi = {
     shareArticle: "Jaa artikkeli",
     backToBlog: "Takaisin blogiin",
     postNotFound: "Artikkelia ei löytynyt",
-    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt."
+    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt.",
+    copyLink: "Kopioi linkki",
+    copiedToClipboard: "Linkki kopioitu leikepöydälle",
+    copyFailed: "Linkin kopiointi epäonnistui"
   }
 };
 
