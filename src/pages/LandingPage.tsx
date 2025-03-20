@@ -17,26 +17,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import UserGuidanceSection from "@/components/UserGuidanceSection";
+import AdSenseBanner from "@/components/AdSenseBanner";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Debug käännöksiä
   useEffect(() => {
     console.log("Current language:", language);
     console.log("Hero headline translation:", t("landing.hero.headline"));
   }, [language, t]);
 
-  // Generoi testidata käännöksistä, fallback-arvot tarvittaessa
   const getTranslatedText = (key: string, fallback: string) => {
     const translation = t(key);
-    // Jos käännös on sama kuin avain, käytetään fallbackia
     return translation === key ? fallback : translation;
   };
 
-  // Fictional testimonials
   const testimonials = [
     {
       id: 1,
@@ -58,7 +55,6 @@ const LandingPage = () => {
     },
   ];
 
-  // FAQ items with fallbacks
   const faqItems = [
     {
       id: 1,
@@ -82,7 +78,6 @@ const LandingPage = () => {
     },
   ];
 
-  // Handler for CTA buttons
   const handleCTAClick = () => {
     navigate("/auth");
   };
@@ -94,7 +89,6 @@ const LandingPage = () => {
         <meta name="description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")} />
         <meta name="keywords" content={getTranslatedText("landing.seo.keywords", "velanmaksu, lainahallinta, taloustyökalut, velkalumipallovaikutus, velkavyörymetodi, taloudellinen vapaus, velaton")} />
         
-        {/* Open Graph Tags */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://velkavapaus.fi" />
         <meta property="og:title" content={getTranslatedText("landing.seo.title", "Velkavapaus.fi – Tie velattomaan elämään | Laina Simulaattori")} />
@@ -102,13 +96,11 @@ const LandingPage = () => {
         <meta property="og:image" content="https://velkavapaus.fi/og-image.png" />
         <meta property="og:site_name" content="Velkavapaus.fi" />
         
-        {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={getTranslatedText("landing.seo.title", "Velkavapaus.fi – Tie velattomaan elämään | Laina Simulaattori")} />
         <meta name="twitter:description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")} />
         <meta name="twitter:image" content="https://velkavapaus.fi/og-image.png" />
         
-        {/* Canonical Link */}
         <link rel="canonical" href="https://velkavapaus.fi" />
         
         <script type="application/ld+json">
@@ -188,7 +180,6 @@ const LandingPage = () => {
       <div className="bg-gradient-to-b from-background to-accent min-h-screen">
         <NavigationHeader />
         
-        {/* Hero Section */}
         <section className="pt-10 pb-16 px-4 md:pt-16 md:pb-20">
           <div className="container mx-auto max-w-5xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -249,10 +240,15 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* User Guidance Section - Only shown when logged in */}
         {user && <UserGuidanceSection />}
 
-        {/* Benefits Section */}
+        <div className="container mx-auto max-w-5xl px-4 py-4">
+          <AdSenseBanner 
+            adSlot="1234567890" 
+            className="w-full bg-background rounded-lg shadow-md overflow-hidden" 
+          />
+        </div>
+
         <section className="py-16 bg-background">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
@@ -310,7 +306,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Repayment Methods Section */}
         <section className="py-16 bg-accent/50">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
@@ -411,7 +406,13 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        <div className="container mx-auto max-w-5xl px-4 py-4">
+          <AdSenseBanner 
+            adSlot="1234567890" 
+            className="w-full bg-background rounded-lg shadow-md overflow-hidden" 
+          />
+        </div>
+
         <section className="py-16 bg-background">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
@@ -433,7 +434,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Final CTA Section */}
         <section className="py-20 bg-gradient-to-r from-primary/10 to-primary/5">
           <div className="container mx-auto max-w-5xl text-center">
             <h2 className="text-2xl md:text-4xl font-bold mb-6">
@@ -453,7 +453,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* Footer */}
         <Footer />
       </div>
     </>
@@ -461,3 +460,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+

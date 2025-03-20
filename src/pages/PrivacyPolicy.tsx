@@ -81,8 +81,10 @@ const PrivacyPolicy = () => {
               <li>Analytiikkaevästeet käyttökokemuksen parantamiseksi (esim. Google Analytics)</li>
               <li>Mieltymysevästeet asetustesi tallentamiseksi</li>
               <li>Markkinointievästeet affiliate-linkkien seurantaa varten</li>
+              <li>Google AdSense -evästeet personoitua mainontaa varten</li>
             </ul>
             <p className="text-sm text-muted-foreground mt-2">
+              Sivustollamme käytetään Google AdSense -mainoksia, jotka voivat käyttää evästeitä personoituun mainontaan. 
               Lisätietoja evästeistä löydät <Button variant="link" className="p-0 h-auto" onClick={() => navigate("/cookie-policy")}>Evästekäytännöstämme</Button>.
             </p>
           </section>
@@ -111,11 +113,12 @@ const PrivacyPolicy = () => {
             <ul className="list-disc pl-6 mb-4 space-y-2">
               <li>Palveluntarjoajille, jotka auttavat meitä tarjoamaan sovelluksen palveluita (esim. hosting-palvelut)</li>
               <li>Analytiikkatyökalujen tarjoajille (esim. Google Analytics) anonymisoidussa muodossa</li>
+              <li>Google AdSense -palvelulle mainonnointitarkoituksiin anonymisoidussa muodossa</li>
               <li>Viranomaisten pyynnöstä tai lakisääteisten velvoitteiden täyttämiseksi</li>
             </ul>
             <p className="mb-4">
-              Sovelluksessamme on affiliate-linkkejä (esim. Ferratum Business Adtractionin kautta ja Nordnet Adservicen kautta). 
-              Napsauttaessasi näitä linkkejä saatat päätyä kolmansien osapuolten sivustoille, joilla on omat tietosuojakäytäntönsä.
+              Sovelluksessamme on affiliate-linkkejä (esim. Ferratum Business Adtractionin kautta ja Nordnet Adservicen kautta) sekä Google AdSense -mainoksia. 
+              Napsauttaessasi näitä linkkejä tai mainoksia saatat päätyä kolmansien osapuolten sivustoille, joilla on omat tietosuojakäytäntönsä.
               Emme ole vastuussa näiden sivustojen käytännöistä tai sisällöstä.
             </p>
           </section>
