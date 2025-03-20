@@ -58,16 +58,29 @@ const AdSenseBanner = ({
     // Only initialize ads if the user has given consent and component is mounted
     if (hasMarketingConsent && adContainerRef.current) {
       try {
-        // Ensure the ad container is ready before pushing the ad
-        const adElement = adContainerRef.current.querySelector('.adsbygoogle');
-        
-        if (adElement) {
-          // Initialize adsbygoogle if not already initialized
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-          console.log('AdSense push executed for slot:', adSlot);
-        } else {
-          console.error('AdSense container not found in DOM');
+        // Make sure the adsbygoogle script is loaded
+        if (!document.querySelector('script[src*="adsbygoogle.js"]')) {
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4847273727626264";
+          script.crossOrigin = "anonymous";
+          document.head.appendChild(script);
+          console.log('AdSense script dynamically added');
         }
+        
+        // Wait a short time to ensure the script has loaded
+        setTimeout(() => {
+          // Ensure the ad container is ready before pushing the ad
+          const adElement = adContainerRef.current?.querySelector('.adsbygoogle');
+          
+          if (adElement && window.adsbygoogle) {
+            // Push the ad
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            console.log('AdSense push executed for slot:', adSlot);
+          } else {
+            console.warn('AdSense container or adsbygoogle not ready yet');
+          }
+        }, 200);
       } catch (error) {
         console.error('AdSense error:', error);
       }
@@ -92,6 +105,8 @@ const AdSenseBanner = ({
 
   return (
     <div className={`adsbygoogle-container ${className}`} ref={adContainerRef}>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4847273727626264"
+      crossorigin="anonymous"></script>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
