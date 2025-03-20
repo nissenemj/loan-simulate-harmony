@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -87,22 +88,45 @@ const LandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>{getTranslatedText("landing.seo.title", "Velanmaksu helpoksi - Ilmainen taloustyökalu | Laina Simulaattori")}</title>
-        <meta name="description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Laina Simulaattorilla. Aloita velaton matkasi tänään!")} />
+        <title>{getTranslatedText("landing.seo.title", "Velkavapaus.fi – Tie velattomaan elämään | Laina Simulaattori")}</title>
+        <meta name="description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")} />
         <meta name="keywords" content={getTranslatedText("landing.seo.keywords", "velanmaksu, lainahallinta, taloustyökalut, velkalumipallovaikutus, velkavyörymetodi, taloudellinen vapaus, velaton")} />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://velkavapaus.fi" />
+        <meta property="og:title" content={getTranslatedText("landing.seo.title", "Velkavapaus.fi – Tie velattomaan elämään | Laina Simulaattori")} />
+        <meta property="og:description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")} />
+        <meta property="og:image" content="https://velkavapaus.fi/og-image.png" />
+        <meta property="og:site_name" content="Velkavapaus.fi" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={getTranslatedText("landing.seo.title", "Velkavapaus.fi – Tie velattomaan elämään | Laina Simulaattori")} />
+        <meta name="twitter:description" content={getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")} />
+        <meta name="twitter:image" content="https://velkavapaus.fi/og-image.png" />
+        
+        {/* Canonical Link */}
+        <link rel="canonical" href="https://velkavapaus.fi" />
+        
         <script type="application/ld+json">
           {`
             {
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "Loan Simulate Harmony",
-              "url": "https://loansimulateharmony.fi",
-              "description": "${getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Laina Simulaattorilla. Aloita velaton matkasi tänään!")}",
+              "name": "Velkavapaus.fi",
+              "url": "https://velkavapaus.fi",
+              "description": "${getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")}",
               "applicationCategory": "FinanceApplication",
               "offers": {
                 "@type": "Offer",
                 "price": "0",
                 "priceCurrency": "EUR"
+              },
+              "provider": {
+                "@type": "Organization",
+                "name": "Velkavapaus.fi",
+                "url": "https://velkavapaus.fi"
               }
             }
           `}
@@ -123,6 +147,36 @@ const LandingPage = () => {
                   }
                 }`
                 )}
+              ]
+            }
+          `}
+        </script>
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "FinancialService",
+              "name": "Velkavapaus.fi",
+              "url": "https://velkavapaus.fi",
+              "description": "${getTranslatedText("landing.seo.description", "Luo ilmainen velanmaksusuunnitelma ja ota hallinta taloudestasi Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!")}",
+              "serviceType": "Debt Management",
+              "areaServed": {
+                "@type": "Country",
+                "name": "Finland"
+              },
+              "audience": {
+                "@type": "Audience",
+                "audienceType": "People with debt concerns"
+              },
+              "availableLanguage": [
+                {
+                  "@type": "Language",
+                  "name": "Finnish"
+                },
+                {
+                  "@type": "Language",
+                  "name": "English"
+                }
               ]
             }
           `}

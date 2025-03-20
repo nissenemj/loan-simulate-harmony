@@ -45,14 +45,15 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
   return (
     <Card className="overflow-hidden">
       {isDemo && (
-        <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300">
-          <AlertCircle size={16} />
+        <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300" role="alert" aria-live="polite">
+          <AlertCircle size={16} aria-hidden="true" />
           <p className="text-sm font-medium">{t("debtSummary.demoDataMessage")}</p>
         </div>
       )}
       
       <div className="overflow-x-auto">
         <Table>
+          <caption className="sr-only">{t("debtSummary.tableSummary", "Summary of your loans and their costs")}</caption>
           <TableHeader>
             <TableRow>
               <TableHead>{t("debtSummary.loanName")}</TableHead>
