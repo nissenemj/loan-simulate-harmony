@@ -6,15 +6,16 @@ import { trackAffiliateClick } from '@/utils/affiliateData';
 
 interface AffiliateBannerProps {
   banner: AffiliateBannerType;
+  className?: string;
 }
 
-const AffiliateBanner: React.FC<AffiliateBannerProps> = ({ banner }) => {
+const AffiliateBanner: React.FC<AffiliateBannerProps> = ({ banner, className = '' }) => {
   const handleClick = () => {
     trackAffiliateClick(banner.trackingId, 'banner');
   };
 
   return (
-    <Card className="mb-4 border-0 shadow-none">
+    <Card className={`mb-4 border-0 shadow-none ${className}`}>
       <CardContent className="p-2 flex justify-center">
         {banner.htmlContent ? (
           <div 

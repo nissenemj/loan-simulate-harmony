@@ -20,6 +20,8 @@ import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { affiliateBanners } from "@/utils/affiliateData";
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 
 export default function Index() {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -80,6 +82,11 @@ export default function Index() {
   const activeLoans = loans.filter((loan) => loan.isActive);
   const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
   const recommendations = generateRecommendations(loans);
+  
+  // Get appropriate banners
+  const investmentBanners = affiliateBanners.filter(banner => banner.category === 'investment');
+  const loanBanners = affiliateBanners.filter(banner => banner.category === 'loan');
+  const creditCardBanners = affiliateBanners.filter(banner => banner.category === 'credit-card');
 
   return (
     <div className="container mx-auto py-8 space-y-8">
@@ -103,6 +110,12 @@ export default function Index() {
             onCancelEdit={handleCancelEdit}
           />
           
+          {loanBanners.length > 0 && (
+            <div className="flex justify-center my-6">
+              <AffiliateBanner banner={loanBanners[0]} />
+            </div>
+          )}
+          
           <LoanTable 
             loans={loans} 
             onToggleLoan={handleToggleLoanActive} 
@@ -121,10 +134,22 @@ export default function Index() {
               </div>
             </>
           )}
+          
+          {investmentBanners.length > 0 && (
+            <div className="flex justify-center mt-8">
+              <AffiliateBanner banner={investmentBanners[0]} />
+            </div>
+          )}
         </TabsContent>
         
         <TabsContent value="creditCards" className="space-y-8">
           <CreditCardForm onAddCreditCard={handleAddCreditCard} />
+          
+          {creditCardBanners.length > 0 && (
+            <div className="flex justify-center my-6">
+              <AffiliateBanner banner={creditCardBanners[0] || loanBanners[0] || investmentBanners[0]} />
+            </div>
+          )}
           
           <CreditCardTable 
             creditCards={creditCards} 
@@ -132,6 +157,12 @@ export default function Index() {
           />
           
           <CreditCardSummary creditCards={creditCards} />
+          
+          {investmentBanners.length > 1 && (
+            <div className="flex justify-center mt-8">
+              <AffiliateBanner banner={investmentBanners[1]} />
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="affiliate" className="space-y-4">

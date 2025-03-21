@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,6 +18,8 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import UserGuidanceSection from "@/components/UserGuidanceSection";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import { affiliateBanners } from "@/utils/affiliateData";
+import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
@@ -82,6 +83,9 @@ const LandingPage = () => {
   const handleCTAClick = () => {
     navigate("/auth");
   };
+
+  const investmentBanners = affiliateBanners.filter(banner => banner.category === 'investment');
+  const loanBanners = affiliateBanners.filter(banner => banner.category === 'loan');
 
   return (
     <>
@@ -243,11 +247,13 @@ const LandingPage = () => {
 
         {user && <UserGuidanceSection />}
 
+        {/* Investment Banner Section */}
         <div className="container mx-auto max-w-5xl px-4 py-4">
-          <AdSenseBanner 
-            adSlot="1234567890" 
-            className="w-full bg-background rounded-lg shadow-md overflow-hidden" 
-          />
+          {investmentBanners.length > 0 && (
+            <div className="flex justify-center mb-6">
+              <AffiliateBanner banner={investmentBanners[0]} />
+            </div>
+          )}
         </div>
 
         <section className="py-16 bg-background">
@@ -407,11 +413,13 @@ const LandingPage = () => {
           </div>
         </section>
 
+        {/* Loan Banner Section */}
         <div className="container mx-auto max-w-5xl px-4 py-4">
-          <AdSenseBanner 
-            adSlot="1234567890" 
-            className="w-full bg-background rounded-lg shadow-md overflow-hidden" 
-          />
+          {loanBanners.length > 0 && (
+            <div className="flex justify-center mb-6">
+              <AffiliateBanner banner={loanBanners[0]} />
+            </div>
+          )}
         </div>
 
         <section className="py-16 bg-background">
@@ -434,6 +442,15 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        {/* Additional Investment Banner */}
+        <div className="container mx-auto max-w-5xl px-4 py-4">
+          {investmentBanners.length > 1 && (
+            <div className="flex justify-center mb-6">
+              <AffiliateBanner banner={investmentBanners[1]} />
+            </div>
+          )}
+        </div>
 
         <section className="py-20 bg-gradient-to-r from-primary/10 to-primary/5">
           <div className="container mx-auto max-w-5xl text-center">
