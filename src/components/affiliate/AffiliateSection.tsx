@@ -9,7 +9,7 @@ import {
 import AffiliateLink from './AffiliateLink';
 import AffiliateBanner from './AffiliateBanner';
 import AffiliateRecommendation from './AffiliateRecommendation';
-import { HandCoins, BadgeDollarSign, Tag, MegaphoneIcon, TrendingUp } from 'lucide-react';
+import { BadgeDollarSign, HandCoins, MegaphoneIcon } from 'lucide-react';
 
 const AffiliateSection = () => {
   const { t } = useLanguage();
@@ -24,22 +24,8 @@ const AffiliateSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left column: Affiliate links, investments and first recommendation */}
+        {/* Left column: Loans and first recommendation */}
         <div className="space-y-6">
-          <div className="bg-muted rounded-lg p-4">
-            <div className="flex items-center mb-3">
-              <TrendingUp className="mr-2 text-primary" />
-              <h3 className="text-lg font-semibold">{t("affiliate.investmentOptions")}</h3>
-            </div>
-            <div className="space-y-2">
-              {affiliateLinks
-                .filter(link => link.category === 'investment')
-                .map(link => (
-                  <AffiliateLink key={link.id} link={link} />
-                ))}
-            </div>
-          </div>
-
           <div className="bg-muted rounded-lg p-4">
             <div className="flex items-center mb-3">
               <BadgeDollarSign className="mr-2 text-primary" />

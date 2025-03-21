@@ -33,20 +33,6 @@ export interface AffiliateRecommendation {
 export const affiliateLinks: AffiliateLink[] = [
   {
     id: uuidv4(),
-    title: 'Nordnet',
-    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
-    category: 'investment',
-    trackingId: 'nordnet_1'
-  },
-  {
-    id: uuidv4(),
-    title: 'Sijoittaja.fi',
-    url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
-    category: 'investment',
-    trackingId: 'sijoittaja_1'
-  },
-  {
-    id: uuidv4(),
     title: 'Rahalaitos - Lainojen kilpailutus',
     url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
     category: 'loan',
@@ -61,24 +47,10 @@ export const affiliateLinks: AffiliateLink[] = [
   },
   {
     id: uuidv4(),
-    title: 'BestLoans.com',
-    url: 'https://example.com/bestloans',
-    category: 'loan',
-    trackingId: 'aff_bl_001'
-  },
-  {
-    id: uuidv4(),
-    title: 'MortgageCompare',
-    url: 'https://example.com/mortgagecompare',
-    category: 'mortgage',
-    trackingId: 'aff_mc_001'
-  },
-  {
-    id: uuidv4(),
-    title: 'RefinanceToday',
-    url: 'https://example.com/refinancetoday',
+    title: 'Rahalaitos',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
     category: 'refinance',
-    trackingId: 'aff_rt_001'
+    trackingId: 'rahalaitos_refinance'
   }
 ];
 
@@ -149,16 +121,6 @@ export const affiliateBanners: AffiliateBanner[] = [
     trackingId: 'etua_banner_1',
     size: '300x250',
     htmlContent: '<a href="https://go.adt242.com/t/t?a=1296154796&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
-  },
-  {
-    id: uuidv4(),
-    title: 'Lower Your Rate Today',
-    description: 'Refinance with rates as low as 4.5%',
-    url: 'https://example.com/refinance-special',
-    imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
-    category: 'refinance',
-    trackingId: 'aff_banner_001',
-    size: '300x250'
   }
 ];
 
@@ -198,13 +160,6 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
         url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
         category: 'refinance',
         trackingId: 'rahalaitos_rec_1'
-      },
-      {
-        id: uuidv4(),
-        title: 'EasyLoanRates',
-        url: 'https://example.com/easyrates',
-        category: 'refinance',
-        trackingId: 'aff_rec_001_2'
       }
     ]
   }
