@@ -106,7 +106,7 @@ const AdSenseBanner = ({
   return (
     <div className={`adsbygoogle-container ${className}`} ref={adContainerRef}>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4847273727626264"
-      crossorigin="anonymous"></script>
+      crossOrigin="anonymous"></script>
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
