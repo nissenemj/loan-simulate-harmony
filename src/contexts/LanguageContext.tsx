@@ -40,12 +40,19 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'fi'>('fi');
-  const [translations, setTranslations] = useState<Translations>(fiTranslations);
+  // Default to Finnish if there's no stored preference
+  const savedLanguage = localStorage.getItem('language') as 'en' | 'fi';
+  const initialLanguage = savedLanguage || 'fi';
+  
+  const [language, setLanguage] = useState<'en' | 'fi'>(initialLanguage);
+  const [translations, setTranslations] = useState<Translations>(
+    initialLanguage === 'en' ? enTranslations : fiTranslations
+  );
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
+    localStorage.setItem('language', lang);
   };
   
   const t = (key: string): string => {
