@@ -33,6 +33,9 @@ interface BlogPost {
   image_url?: string;
 }
 
+// The only email allowed to access blog admin
+const AUTHORIZED_EMAIL = "nissenemj@gmail.com";
+
 const BlogAdmin = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
@@ -58,17 +61,23 @@ const BlogAdmin = () => {
   const [editCategory, setEditCategory] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
 
+  // Check if the current user is authorized
+  const isAuthorized = user?.email === AUTHORIZED_EMAIL;
+
+  // Redirect unauthorized users back to the homepage
+  useEffect(() => {
+    if (user && !isAuthorized) {
+      toast.error("Sinulla ei ole oikeuksia tähän sivuun");
+      navigate("/");
+    }
+  }, [user, isAuthorized, navigate]);
+
   // Fetch posts when component mounts
   useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  // If not authenticated, don't show the admin interface
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth');
+    if (isAuthorized) {
+      fetchPosts();
     }
-  }, [user, navigate]);
+  }, [isAuthorized]);
 
   const fetchPosts = async () => {
     try {
@@ -205,12 +214,38 @@ const BlogAdmin = () => {
     }).format(date);
   };
   
+  // Show loading state while checking authentication
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
         <NavigationHeader />
         <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
           <p className="text-center py-12">Sisäänkirjautuminen vaaditaan...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show unauthorized message if user is logged in but not authorized
+  if (user && !isAuthorized) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
+        <NavigationHeader />
+        <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center text-destructive">Pääsy evätty</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center py-4">
+                Sinulla ei ole oikeuksia blogin hallintaan. Vain käyttäjä nissenemj@gmail.com voi hallita blogia.
+              </p>
+              <div className="flex justify-center mt-4">
+                <Button onClick={() => navigate("/")}>Takaisin etusivulle</Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
         <Footer />
       </div>
