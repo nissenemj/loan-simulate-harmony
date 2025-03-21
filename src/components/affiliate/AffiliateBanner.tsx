@@ -18,13 +18,13 @@ const AffiliateBanner: React.FC<AffiliateBannerProps> = ({
   };
 
   return (
-    <Card className={`mb-4 border-0 shadow-none ${className}`}>
+    <Card className={`mb-4 shadow-sm hover:shadow-md transition-shadow ${className}`}>
       <CardContent className="p-2 flex justify-center">
         {banner.htmlContent ? (
           <div 
             onClick={handleClick} 
             dangerouslySetInnerHTML={{ __html: banner.htmlContent }} 
-            className="cursor-pointer" 
+            className="cursor-pointer rounded-md overflow-hidden" 
           />
         ) : (
           <a 
@@ -32,12 +32,13 @@ const AffiliateBanner: React.FC<AffiliateBannerProps> = ({
             target="_blank" 
             rel="noopener noreferrer" 
             onClick={handleClick}
+            className="block rounded-md overflow-hidden"
           >
             <img 
               src={banner.imageUrl} 
               alt={banner.title} 
-              className="rounded-md" 
-              style={{ maxWidth: '100%', height: 'auto' }} 
+              className="w-full h-auto" 
+              style={{ maxWidth: '100%' }} 
             />
           </a>
         )}
