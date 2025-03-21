@@ -20,7 +20,7 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { PenSquare, Trash2, Eye, Clock } from "lucide-react";
+import { PenSquare, Trash2, Eye, Clock, ImageIcon, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface BlogPost {
@@ -51,6 +51,8 @@ const BlogAdmin = () => {
   const [author, setAuthor] = useState("Talousvelhot"); // Default
   const [category, setCategory] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [showImagePreview, setShowImagePreview] = useState(false);
+  const [imagePreviewError, setImagePreviewError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
   // State for edit form
@@ -60,6 +62,8 @@ const BlogAdmin = () => {
   const [editAuthor, setEditAuthor] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [editImageUrl, setEditImageUrl] = useState("");
+  const [showEditImagePreview, setShowEditImagePreview] = useState(false);
+  const [editImagePreviewError, setEditImagePreviewError] = useState(false);
 
   // Check if the current user is authorized
   const isAuthorized = user?.email === AUTHORIZED_EMAIL;
@@ -105,6 +109,13 @@ const BlogAdmin = () => {
     setSubmitting(true);
     
     try {
+      // Validate the image URL if provided
+      if (imageUrl && imagePreviewError) {
+        toast.error('Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi.');
+        setSubmitting(false);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('blog_posts')
         .insert({
@@ -118,6 +129,7 @@ const BlogAdmin = () => {
 
       if (error) {
         toast.error('Artikkelin lisäys epäonnistui: ' + error.message);
+        console.error('Error adding post:', error);
       } else {
         toast.success('Artikkeli lisätty onnistuneesti!');
         // Reset form
@@ -125,6 +137,8 @@ const BlogAdmin = () => {
         setContent("");
         setCategory("");
         setImageUrl("");
+        setShowImagePreview(false);
+        setImagePreviewError(false);
         // Refresh posts list
         fetchPosts();
       }
@@ -143,6 +157,8 @@ const BlogAdmin = () => {
     setEditAuthor(post.author);
     setEditCategory(post.category);
     setEditImageUrl(post.image_url || '');
+    setShowEditImagePreview(!!post.image_url);
+    setEditImagePreviewError(false);
   };
 
   const handleUpdatePost = async (e: React.FormEvent) => {
@@ -153,6 +169,13 @@ const BlogAdmin = () => {
     setSubmitting(true);
     
     try {
+      // Validate the image URL if provided
+      if (editImageUrl && editImagePreviewError) {
+        toast.error('Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi.');
+        setSubmitting(false);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('blog_posts')
         .update({
@@ -167,9 +190,11 @@ const BlogAdmin = () => {
 
       if (error) {
         toast.error('Artikkelin päivitys epäonnistui: ' + error.message);
+        console.error('Error updating post:', error);
       } else {
         toast.success('Artikkeli päivitetty onnistuneesti!');
         setEditingPost(null);
+        setShowEditImagePreview(false);
         fetchPosts();
       }
     } catch (err) {
@@ -212,6 +237,36 @@ const BlogAdmin = () => {
       hour: '2-digit',
       minute: '2-digit'
     }).format(date);
+  };
+  
+  const handleImagePreview = () => {
+    if (imageUrl) {
+      setShowImagePreview(true);
+    }
+  };
+  
+  const handleEditImagePreview = () => {
+    if (editImageUrl) {
+      setShowEditImagePreview(true);
+    }
+  };
+
+  const handleImageError = () => {
+    setImagePreviewError(true);
+    toast.error('Kuvan lataus epäonnistui. Tarkista URL-osoite.');
+  };
+  
+  const handleEditImageError = () => {
+    setEditImagePreviewError(true);
+    toast.error('Kuvan lataus epäonnistui. Tarkista URL-osoite.');
+  };
+  
+  // Testing an image URL to see if it's valid
+  const testImageUrl = (url: string, callback: (success: boolean) => void) => {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url;
   };
   
   // Show loading state while checking authentication
@@ -303,7 +358,23 @@ const BlogAdmin = () => {
                         <TableBody>
                           {posts.map((post) => (
                             <TableRow key={post.id}>
-                              <TableCell className="font-medium">{post.title}</TableCell>
+                              <TableCell className="font-medium">
+                                <div className="flex items-center">
+                                  {post.image_url && (
+                                    <div className="h-8 w-8 mr-2 overflow-hidden rounded bg-muted flex items-center justify-center">
+                                      <img 
+                                        src={post.image_url} 
+                                        alt="" 
+                                        className="h-full w-full object-cover"
+                                        onError={(e) => {
+                                          (e.target as HTMLImageElement).src = '/placeholder.svg';
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                  {post.title}
+                                </div>
+                              </TableCell>
                               <TableCell>{post.category}</TableCell>
                               <TableCell>{post.author}</TableCell>
                               <TableCell>
@@ -391,10 +462,49 @@ const BlogAdmin = () => {
                       </div>
                       <div>
                         <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
-                        <Input 
-                          value={editImageUrl} 
-                          onChange={(e) => setEditImageUrl(e.target.value)} 
-                        />
+                        <div className="flex gap-2">
+                          <Input 
+                            value={editImageUrl} 
+                            onChange={(e) => {
+                              setEditImageUrl(e.target.value);
+                              setShowEditImagePreview(false);
+                              setEditImagePreviewError(false);
+                            }} 
+                            placeholder="https://esimerkki.com/kuva.jpg"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            onClick={handleEditImagePreview}
+                            disabled={!editImageUrl}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            Esikatsele
+                          </Button>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Voit käyttää esim. Unsplash-kuvia: https://unsplash.com/
+                        </p>
+                        
+                        {showEditImagePreview && editImageUrl && (
+                          <div className="mt-4 border rounded-md p-4">
+                            <h4 className="font-medium mb-2">Kuvan esikatselu:</h4>
+                            <div className="relative max-w-md mx-auto">
+                              <img 
+                                src={editImageUrl} 
+                                alt="Esikatselu" 
+                                className="max-h-48 object-contain mx-auto"
+                                onError={handleEditImageError}
+                                onLoad={() => setEditImagePreviewError(false)}
+                              />
+                              {editImagePreviewError && (
+                                <div className="mt-2 text-center text-destructive">
+                                  <p>Kuvan lataus epäonnistui. Tarkista URL-osoite.</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="flex gap-2">
                         <Button 
@@ -466,18 +576,56 @@ const BlogAdmin = () => {
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
-                      <Input 
-                        value={imageUrl} 
-                        onChange={(e) => setImageUrl(e.target.value)} 
-                        placeholder="https://esimerkki.com/kuva.jpg" 
-                      />
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Voit käyttää esim. Unsplash-kuvia: https://unsplash.com/
-                      </p>
+                      <div className="flex gap-2">
+                        <Input 
+                          value={imageUrl} 
+                          onChange={(e) => {
+                            setImageUrl(e.target.value);
+                            setShowImagePreview(false);
+                            setImagePreviewError(false);
+                          }} 
+                          placeholder="https://esimerkki.com/kuva.jpg" 
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline"
+                          onClick={handleImagePreview}
+                          disabled={!imageUrl}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          Esikatsele
+                        </Button>
+                      </div>
+                      <div className="flex items-center mt-1 space-x-1">
+                        <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">
+                          Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a>
+                        </p>
+                      </div>
+                      
+                      {showImagePreview && imageUrl && (
+                        <div className="mt-4 border rounded-md p-4">
+                          <h4 className="font-medium mb-2">Kuvan esikatselu:</h4>
+                          <div className="relative max-w-md mx-auto">
+                            <img 
+                              src={imageUrl} 
+                              alt="Esikatselu" 
+                              className="max-h-48 object-contain mx-auto"
+                              onError={handleImageError}
+                              onLoad={() => setImagePreviewError(false)}
+                            />
+                            {imagePreviewError && (
+                              <div className="mt-2 text-center text-destructive">
+                                <p>Kuvan lataus epäonnistui. Tarkista URL-osoite.</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <Button 
                       type="submit" 
-                      disabled={submitting}
+                      disabled={submitting || (imageUrl !== "" && imagePreviewError)}
                     >
                       {submitting ? "Lisätään..." : "Lisää artikkeli"}
                     </Button>
