@@ -3,7 +3,7 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, Mail } from 'lucide-react';
+import { BookOpen, Mail, PenSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const UserGuidanceSection: React.FC = () => {
@@ -24,6 +24,14 @@ const UserGuidanceSection: React.FC = () => {
         : 'Explore lainavelho\'s latest tips and guides for financial freedom',
       icon: BookOpen,
       action: () => navigate('/blog'),
+    },
+    {
+      title: language === 'fi' ? 'Hallinnoi blogia' : 'Manage blog',
+      description: language === 'fi' 
+        ? 'Lisää ja hallinnoi blogiartikkeleita' 
+        : 'Add and manage blog articles',
+      icon: PenSquare,
+      action: () => navigate('/admin/blog'),
     },
     {
       title: language === 'fi' ? 'Tuki' : 'Support',
@@ -49,7 +57,7 @@ const UserGuidanceSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {guidanceItems.map((item, index) => (
             <Card 
               key={index} 

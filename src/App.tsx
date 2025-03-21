@@ -22,6 +22,7 @@ import CookieConsentBanner from "./components/CookieConsentBanner";
 import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import BlogAdmin from "./pages/BlogAdmin";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +74,11 @@ const App = () => (
                 {/* Blog pages */}
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:postId" element={<BlogPost />} />
+                <Route path="/admin/blog" element={
+                  <ProtectedRoute>
+                    <BlogAdmin />
+                  </ProtectedRoute>
+                } />
                 
                 {/* Legal pages */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
