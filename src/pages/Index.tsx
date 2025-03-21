@@ -26,6 +26,7 @@ export default function Index() {
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const [loanToEdit, setLoanToEdit] = useState<Loan | null>(null);
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<string>("loans");
 
   const handleAddLoan = (loan: Loan) => {
     setLoans((prev) => [...prev, loan]);
@@ -72,6 +73,10 @@ export default function Index() {
     toast(t("toast.loanPaidOff"));
   };
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
   const activeLoans = loans.filter((loan) => loan.isActive);
   const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
   const recommendations = generateRecommendations(loans);
@@ -83,7 +88,7 @@ export default function Index() {
         <LanguageSwitcher />
       </div>
       
-      <Tabs defaultValue="loans" className="w-full">
+      <Tabs defaultValue="loans" className="w-full" value={activeTab} onValueChange={handleTabChange}>
         <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
           <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
