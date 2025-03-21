@@ -5,7 +5,7 @@ export interface AffiliateLink {
   id: string;
   title: string;
   url: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
   trackingId: string;
 }
 
@@ -15,9 +15,10 @@ export interface AffiliateBanner {
   description: string;
   url: string;
   imageUrl: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
   trackingId: string;
-  size: '300x250' | '728x90' | '300x600';
+  size: '300x250' | '728x90' | '300x600' | '320x320';
+  htmlContent?: string; // Added for adtraction banners
 }
 
 export interface AffiliateRecommendation {
@@ -25,11 +26,32 @@ export interface AffiliateRecommendation {
   title: string;
   description: string;
   links: AffiliateLink[];
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
 }
 
 // Sample affiliate links data
 export const affiliateLinks: AffiliateLink[] = [
+  {
+    id: uuidv4(),
+    title: 'Nordnet',
+    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+    category: 'investment',
+    trackingId: 'nordnet_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sijoittaja.fi',
+    url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
+    category: 'investment',
+    trackingId: 'sijoittaja_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rahalaitos - Lainojen kilpailutus',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
+    category: 'loan',
+    trackingId: 'rahalaitos_1'
+  },
   {
     id: uuidv4(),
     title: 'BestLoans.com',
@@ -60,8 +82,63 @@ export const affiliateLinks: AffiliateLink[] = [
   }
 ];
 
-// Sample affiliate banners data
+// Affiliate banners data with new Adtraction banners
 export const affiliateBanners: AffiliateBanner[] = [
+  {
+    id: uuidv4(),
+    title: 'Nordnet - Sijoita paremmin',
+    description: 'Aloita sijoittaminen Nordnetissä',
+    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1616887300&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'nordnet_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1616887300&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Nordnet - Valitse itsellesi sopiva sijoitusvaihtoehto',
+    description: 'Nordnet - aloita sijoittaminen helposti',
+    url: 'https://go.adt231.net/t/t?a=1876582082&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1876582082&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'nordnet_banner_2',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt231.net/t/t?a=1876582082&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1876582082&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sijoittaja.fi - Opi sijoittamaan',
+    description: 'Suomen paras sijoituskoulutus',
+    url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1896287410&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'sijoittaja_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1896287410&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sijoittaja.fi - Sijoituskoulutus',
+    description: 'Opi sijoittamaan ammattimaisesti',
+    url: 'https://go.adt256.com/t/t?a=1896287434&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1896287434&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'sijoittaja_banner_2',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt256.com/t/t?a=1896287434&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1896287434&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rahalaitos - Kilpailuta lainasi',
+    description: 'Säästä lainakuluissa',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1056517297&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'rahalaitos_banner_1',
+    size: '320x320',
+    htmlContent: '<a href="https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1056517297&as=1962325200&t=1&tk=1&i=1" width="320" height="320" border="0"></a>'
+  },
   {
     id: uuidv4(),
     title: 'Lower Your Rate Today',
@@ -86,6 +163,28 @@ export const affiliateBanners: AffiliateBanner[] = [
 
 // Sample affiliate recommendations data
 export const affiliateRecommendations: AffiliateRecommendation[] = [
+  {
+    id: uuidv4(),
+    title: 'Sijoitussuositukset',
+    description: 'Aloita sijoittaminen näiden luotettavien palveluiden avulla.',
+    category: 'investment',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Nordnet',
+        url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+        category: 'investment',
+        trackingId: 'nordnet_rec_1'
+      },
+      {
+        id: uuidv4(),
+        title: 'Sijoittaja.fi',
+        url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
+        category: 'investment',
+        trackingId: 'sijoittaja_rec_1'
+      }
+    ]
+  },
   {
     id: uuidv4(),
     title: 'Top Loan Refinance Options',

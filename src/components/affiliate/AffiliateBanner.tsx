@@ -23,6 +23,15 @@ const AffiliateBanner: React.FC<AffiliateBannerProps> = ({ banner }) => {
     setImageError(true);
   };
 
+  // If banner has HTML content, render it directly
+  if (banner.htmlContent) {
+    return (
+      <Card className="overflow-hidden mb-4 max-w-fit mx-auto">
+        <CardContent className="p-0" dangerouslySetInnerHTML={{ __html: banner.htmlContent }} />
+      </Card>
+    );
+  }
+
   return (
     <Card className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow duration-300 mb-4">
       <CardContent className="p-0" onClick={handleClick}>
@@ -34,9 +43,11 @@ const AffiliateBanner: React.FC<AffiliateBannerProps> = ({ banner }) => {
               className="w-full h-auto object-cover"
               style={{ 
                 maxHeight: banner.size === '300x250' ? '250px' : 
-                          banner.size === '728x90' ? '90px' : '600px',
+                          banner.size === '728x90' ? '90px' : 
+                          banner.size === '320x320' ? '320px' : '600px',
                 maxWidth: banner.size === '300x250' ? '300px' : 
-                         banner.size === '728x90' ? '728px' : '300px',
+                         banner.size === '728x90' ? '728px' : 
+                         banner.size === '320x320' ? '320px' : '300px',
               }}
               onError={handleImageError}
             />
@@ -45,9 +56,11 @@ const AffiliateBanner: React.FC<AffiliateBannerProps> = ({ banner }) => {
               className="bg-accent flex items-center justify-center text-center"
               style={{ 
                 height: banner.size === '300x250' ? '250px' : 
-                       banner.size === '728x90' ? '90px' : '600px',
+                       banner.size === '728x90' ? '90px' : 
+                       banner.size === '320x320' ? '320px' : '600px',
                 width: banner.size === '300x250' ? '300px' : 
-                      banner.size === '728x90' ? '728px' : '300px',
+                      banner.size === '728x90' ? '728px' : 
+                      banner.size === '320x320' ? '320px' : '300px',
               }}
             >
               <p className="text-muted-foreground p-4">{t('affiliate.imageNotAvailable')}</p>

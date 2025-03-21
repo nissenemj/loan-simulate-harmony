@@ -84,12 +84,10 @@ export default function Index() {
       </div>
       
       <Tabs defaultValue="loans" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-8">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
           <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
-          {/* Affiliate tab hidden until we have content 
           <TabsTrigger value="affiliate">{t("tabs.affiliate")}</TabsTrigger>
-          */}
         </TabsList>
         
         <TabsContent value="loans" className="space-y-8">
@@ -131,11 +129,9 @@ export default function Index() {
           <CreditCardSummary creditCards={creditCards} />
         </TabsContent>
 
-        {/* Affiliate tab content hidden until we have content 
         <TabsContent value="affiliate" className="space-y-4">
           <AffiliateSection />
         </TabsContent>
-        */}
       </Tabs>
 
       <footer className="text-center text-sm text-muted-foreground pt-8 border-t">
