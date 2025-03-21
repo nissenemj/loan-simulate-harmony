@@ -104,22 +104,9 @@ const AffiliateSection = () => {
             </div>
           </div>
 
-          <div className="bg-muted rounded-lg p-4">
-            <div className="flex items-center mb-3">
-              <Tag className="mr-2 text-primary" />
-              <h3 className="text-lg font-semibold">{t("affiliate.creditCardTitle")}</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              {t("affiliate.creditCardText")}
-            </p>
-            <div className="space-y-2">
-              {affiliateLinks
-                .filter(link => link.category === 'credit-card')
-                .map(link => (
-                  <AffiliateLink key={link.id} link={link} />
-                ))}
-            </div>
-          </div>
+          {affiliateRecommendations.length > 1 && (
+            <AffiliateRecommendation recommendation={affiliateRecommendations[1]} />
+          )}
         </div>
       </div>
 

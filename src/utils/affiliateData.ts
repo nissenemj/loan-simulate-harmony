@@ -54,17 +54,17 @@ export const affiliateLinks: AffiliateLink[] = [
   },
   {
     id: uuidv4(),
+    title: 'Etua.fi - Vertaile lainoja',
+    url: 'https://go.adt242.com/t/t?a=1048146716&as=1962325200&t=2&tk=1',
+    category: 'loan',
+    trackingId: 'etua_1'
+  },
+  {
+    id: uuidv4(),
     title: 'BestLoans.com',
     url: 'https://example.com/bestloans',
     category: 'loan',
     trackingId: 'aff_bl_001'
-  },
-  {
-    id: uuidv4(),
-    title: 'CreditCardDeals',
-    url: 'https://example.com/creditcarddeals',
-    category: 'credit-card',
-    trackingId: 'aff_cc_001'
   },
   {
     id: uuidv4(),
@@ -141,22 +141,23 @@ export const affiliateBanners: AffiliateBanner[] = [
   },
   {
     id: uuidv4(),
+    title: 'Etua.fi - Vertaile lainoja',
+    description: 'Löydä paras laina sinulle',
+    url: 'https://go.adt242.com/t/t?a=1048146716&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'etua_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt242.com/t/t?a=1296154796&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
     title: 'Lower Your Rate Today',
     description: 'Refinance with rates as low as 4.5%',
     url: 'https://example.com/refinance-special',
     imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
     category: 'refinance',
     trackingId: 'aff_banner_001',
-    size: '300x250'
-  },
-  {
-    id: uuidv4(),
-    title: 'Premium Credit Card',
-    description: 'Earn 5% cashback on all purchases',
-    url: 'https://example.com/premium-card',
-    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
-    category: 'credit-card',
-    trackingId: 'aff_banner_002',
     size: '300x250'
   }
 ];
@@ -187,16 +188,16 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
   },
   {
     id: uuidv4(),
-    title: 'Top Loan Refinance Options',
-    description: 'These trusted lenders offer competitive rates for refinancing your existing loans.',
+    title: 'Harkitse uudelleenrahoitusta',
+    description: 'Nämä luotettavat lainanantajat tarjoavat kilpailukykyisiä korkoja olemassa olevien lainojesi uudelleenrahoitukseen.',
     category: 'refinance',
     links: [
       {
         id: uuidv4(),
-        title: 'QuickRefinance',
-        url: 'https://example.com/quickrefinance',
+        title: 'Rahalaitos',
+        url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
         category: 'refinance',
-        trackingId: 'aff_rec_001_1'
+        trackingId: 'rahalaitos_rec_1'
       },
       {
         id: uuidv4(),
@@ -204,28 +205,6 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
         url: 'https://example.com/easyrates',
         category: 'refinance',
         trackingId: 'aff_rec_001_2'
-      }
-    ]
-  },
-  {
-    id: uuidv4(),
-    title: 'Best Credit Cards for Rewards',
-    description: 'Maximize your benefits with these top-rated rewards credit cards.',
-    category: 'credit-card',
-    links: [
-      {
-        id: uuidv4(),
-        title: 'Premium Rewards Card',
-        url: 'https://example.com/premium-rewards',
-        category: 'credit-card',
-        trackingId: 'aff_rec_002_1'
-      },
-      {
-        id: uuidv4(),
-        title: 'Travel Points Card',
-        url: 'https://example.com/travel-points',
-        category: 'credit-card',
-        trackingId: 'aff_rec_002_2'
       }
     ]
   }
