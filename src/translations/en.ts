@@ -495,6 +495,16 @@ export const en = {
     copyLink: "Copy Link",
     copiedToClipboard: "Link copied to clipboard",
     copyFailed: "Failed to copy link"
+  },
+  affiliate: {
+    title: 'Need Additional Help Managing Your Debts?',
+    subtitle: 'These trusted partners offer services that can complement your debt repayment journey.',
+    compareLoans: 'Compare Loans',
+    refinanceTitle: 'Consider Refinancing',
+    refinanceText: 'Find a better interest rate and save money.',
+    creditCardTitle: 'Best Credit Cards',
+    creditCardText: 'Explore credit card offers and benefits.',
+    disclaimer: 'We may earn a commission if you use these links, but this doesn\'t affect the price you pay.',
   }
 };
 
