@@ -37,31 +37,36 @@ const NavigationHeader: React.FC = () => {
   ];
   
   return (
-    <header className="border-b mb-6 bg-white">
+    <header className="border-b mb-6 bg-white sticky top-0 z-50 shadow-sm">
       <div className="container py-4 px-4 md:px-6 flex justify-between items-center">
         <VelkavapausLogo />
         
         {isMobile ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <AuthButtons />
             <LanguageSwitcher />
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" aria-label="Menu">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  aria-label="Menu"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary"
+                >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent>
+              <SheetContent className="w-[85%] sm:w-[385px]">
                 <div className="flex justify-center mt-6 mb-8">
                   <VelkavapausLogo size="sm" />
                 </div>
-                <nav className="flex flex-col gap-4">
+                <nav className="flex flex-col gap-4 mt-8">
                   {menuItems.map((item) => (
                     <Link 
                       key={item.path}
                       to={item.path} 
                       className={cn(
-                        "px-4 py-2 rounded-md font-medium text-center",
+                        "px-4 py-3 rounded-md font-medium text-center transition-colors",
                         location.pathname === item.path ? 
                           "bg-primary text-primary-foreground" : 
                           "text-foreground hover:bg-accent/50"

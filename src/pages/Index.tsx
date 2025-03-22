@@ -19,7 +19,6 @@ import CreditCardSummary from "@/components/CreditCardSummary";
 import AffiliateSection from "@/components/affiliate/AffiliateSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { affiliateBanners } from "@/utils/affiliateData";
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 
@@ -91,7 +90,6 @@ export default function Index() {
     <div className="container mx-auto py-8 space-y-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{t("tabs.loans")}</h1>
-        <LanguageSwitcher />
       </div>
       
       <Tabs defaultValue="loans" className="w-full" value={activeTab} onValueChange={handleTabChange}>
