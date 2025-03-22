@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { 
@@ -83,7 +82,6 @@ export default function Index() {
   const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
   const recommendations = generateRecommendations(loans);
   
-  // Get appropriate banners
   const investmentBanners = affiliateBanners.filter(banner => banner.category === 'investment');
   const loanBanners = affiliateBanners.filter(banner => banner.category === 'loan');
   const creditCardBanners = affiliateBanners.filter(banner => banner.category === 'credit-card');
@@ -110,12 +108,6 @@ export default function Index() {
             onCancelEdit={handleCancelEdit}
           />
           
-          {loanBanners.length > 0 && (
-            <div className="flex justify-center my-6">
-              <AffiliateBanner banner={loanBanners[0]} />
-            </div>
-          )}
-          
           <LoanTable 
             loans={loans} 
             onToggleLoan={handleToggleLoanActive} 
@@ -123,33 +115,30 @@ export default function Index() {
           />
           
           {activeLoans.length > 0 && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-2">
-                  <LoanSummary loans={activeLoans} />
-                </div>
-                <div>
-                  <SavingsImpact loans={loans} onPayoffLoan={handlePayoffLoan} />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2">
+                <LoanSummary loans={activeLoans} />
               </div>
-            </>
+              <div>
+                <SavingsImpact loans={loans} onPayoffLoan={handlePayoffLoan} />
+              </div>
+            </div>
           )}
           
-          {investmentBanners.length > 0 && (
-            <div className="flex justify-center mt-8">
-              <AffiliateBanner banner={investmentBanners[0]} />
+          {loanBanners.length > 0 && (
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {loanBanners.map((banner, index) => (
+                <AffiliateBanner key={banner.id} banner={banner} />
+              ))}
+              {investmentBanners.length > 0 && (
+                <AffiliateBanner banner={investmentBanners[0]} />
+              )}
             </div>
           )}
         </TabsContent>
         
         <TabsContent value="creditCards" className="space-y-8">
           <CreditCardForm onAddCreditCard={handleAddCreditCard} />
-          
-          {creditCardBanners.length > 0 && (
-            <div className="flex justify-center my-6">
-              <AffiliateBanner banner={creditCardBanners[0] || loanBanners[0] || investmentBanners[0]} />
-            </div>
-          )}
           
           <CreditCardTable 
             creditCards={creditCards} 
@@ -158,11 +147,14 @@ export default function Index() {
           
           <CreditCardSummary creditCards={creditCards} />
           
-          {investmentBanners.length > 1 && (
-            <div className="flex justify-center mt-8">
-              <AffiliateBanner banner={investmentBanners[1]} />
-            </div>
-          )}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {loanBanners.filter(banner => 
+              banner.title.includes('Rahalaitos') || 
+              banner.title.includes('Etua.fi')
+            ).map((banner, index) => (
+              <AffiliateBanner key={banner.id} banner={banner} />
+            ))}
+          </div>
         </TabsContent>
 
         <TabsContent value="affiliate" className="space-y-4">
