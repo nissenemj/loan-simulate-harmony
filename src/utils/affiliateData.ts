@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 
 export interface AffiliateLink {
@@ -24,7 +23,9 @@ export interface AffiliateBanner {
 export interface AffiliateRecommendation {
   id: string;
   title: string;
+  titleEn?: string; // Added English title
   description: string;
+  descriptionEn?: string; // Added English description
   links: AffiliateLink[];
   category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
 }
@@ -129,7 +130,9 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
   {
     id: uuidv4(),
     title: 'Sijoitussuositukset',
+    titleEn: 'Investment Recommendations',
     description: 'Aloita sijoittaminen näiden luotettavien palveluiden avulla.',
+    descriptionEn: 'Start investing with these trusted services.',
     category: 'investment',
     links: [
       {
@@ -151,7 +154,9 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
   {
     id: uuidv4(),
     title: 'Harkitse uudelleenrahoitusta',
+    titleEn: 'Consider Refinancing',
     description: 'Nämä luotettavat lainanantajat tarjoavat kilpailukykyisiä korkoja olemassa olevien lainojesi uudelleenrahoitukseen.',
+    descriptionEn: 'These trusted lenders offer competitive rates for refinancing your existing loans.',
     category: 'refinance',
     links: [
       {
