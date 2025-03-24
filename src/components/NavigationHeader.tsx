@@ -37,7 +37,9 @@ const NavigationHeader: React.FC = () => {
   return (
     <header className="border-b sticky top-0 z-50 bg-white shadow-sm">
       <div className="container py-3 md:py-4 px-3 md:px-6 flex justify-between items-center">
-        <VelkavapausLogo />
+        <Link to="/">
+          <VelkavapausLogo />
+        </Link>
         
         {isMobile ? (
           <div className="flex items-center gap-2">

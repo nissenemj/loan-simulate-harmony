@@ -39,7 +39,7 @@ const UserGuidanceSection: React.FC = () => {
         ? 'Tarvitsetko apua? Ota yhteyttä tukeen' 
         : 'Need help? Contact our support team',
       icon: Mail,
-      action: () => window.location.href = 'mailto:support@velkavapaa.fi',
+      action: () => window.location.href = 'mailto:support@velkavapaus.fi',
     },
   ];
 
