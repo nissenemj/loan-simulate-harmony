@@ -2,12 +2,15 @@
 import React from 'react';
 import { RecommendationType } from '@/utils/affiliateData';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface AffiliateRecommendationProps {
   recommendation: RecommendationType;
 }
 
 const AffiliateRecommendation: React.FC<AffiliateRecommendationProps> = ({ recommendation }) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="flex flex-col items-center space-y-4 p-4 rounded-lg border border-border bg-card">
       <h3 className="text-lg font-semibold">{recommendation.title}</h3>
