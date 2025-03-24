@@ -9,12 +9,22 @@ import {
 import AffiliateLink from './AffiliateLink';
 import AffiliateBanner from './AffiliateBanner';
 import AffiliateRecommendation from './AffiliateRecommendation';
-import { BadgeDollarSign, HandCoins } from 'lucide-react';
+import { BadgeDollarSign, HandCoins, BookOpen, PiggyBank } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 const AffiliateSection = () => {
   const { t } = useLanguage();
+
+  // Get recommendations by category
+  const getRecommendationsByCategory = (category: string) => {
+    return affiliateRecommendations.filter(rec => rec.category === category);
+  };
+
+  // Get banners by category
+  const getBannersByCategory = (category: string) => {
+    return affiliateBanners.filter(banner => banner.category === category);
+  };
 
   return (
     <div className="space-y-8">
@@ -26,7 +36,7 @@ const AffiliateSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Left column: Loans and first recommendation */}
+        {/* Left column: Loans and loan recommendations */}
         <div className="space-y-6">
           <Card>
             <CardHeader className="pb-3">
@@ -46,35 +56,34 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
           
-          {affiliateRecommendations.length > 0 && (
-            <AffiliateRecommendation recommendation={affiliateRecommendations[0]} />
-          )}
+          {getRecommendationsByCategory('loan').map(recommendation => (
+            <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
+          ))}
         </div>
 
         {/* Middle column: Banners */}
         <div className="space-y-6">
           <Card className="border-0 shadow-none bg-transparent">
             <CardContent className="p-0 flex flex-col items-center">
-              {/* Display investment banners first */}
-              {affiliateBanners
-                .filter(banner => banner.category === 'investment')
-                .map(banner => (
-                  <AffiliateBanner key={banner.id} banner={banner} />
-                ))}
-
               {/* Display loan banners */}
-              {affiliateBanners
-                .filter(banner => banner.category === 'loan')
-                .map(banner => (
-                  <AffiliateBanner key={banner.id} banner={banner} />
-                ))}
+              {getBannersByCategory('loan').slice(0, 2).map(banner => (
+                <AffiliateBanner key={banner.id} banner={banner} />
+              ))}
+              
+              {/* Display education banners */}
+              {getBannersByCategory('education').map(banner => (
+                <AffiliateBanner key={banner.id} banner={banner} />
+              ))}
 
-              {/* Display other banners */}
-              {affiliateBanners
-                .filter(banner => banner.category !== 'investment' && banner.category !== 'loan')
-                .map(banner => (
-                  <AffiliateBanner key={banner.id} banner={banner} />
-                ))}
+              {/* Display budgeting banners */}
+              {getBannersByCategory('budgeting').map(banner => (
+                <AffiliateBanner key={banner.id} banner={banner} />
+              ))}
+
+              {/* Display investment banners */}
+              {getBannersByCategory('investment').slice(0, 1).map(banner => (
+                <AffiliateBanner key={banner.id} banner={banner} />
+              ))}
             </CardContent>
           </Card>
         </div>
@@ -102,10 +111,64 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
 
-          {affiliateRecommendations.length > 1 && (
-            <AffiliateRecommendation recommendation={affiliateRecommendations[1]} />
-          )}
+          {/* Education recommendations */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-lg font-semibold">
+                <BookOpen className="mr-2 h-5 w-5 text-primary" />
+                {t("affiliate.educationTitle") || "Haluatko oppia lisää?"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {affiliateLinks
+                  .filter(link => link.category === 'education')
+                  .map(link => (
+                    <AffiliateLink key={link.id} link={link} />
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Budgeting recommendations */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-lg font-semibold">
+                <PiggyBank className="mr-2 h-5 w-5 text-primary" />
+                {t("affiliate.budgetingTitle") || "Tasapainota taloutesi"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {affiliateLinks
+                  .filter(link => link.category === 'budgeting')
+                  .map(link => (
+                    <AffiliateLink key={link.id} link={link} />
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Display remaining recommendations */}
+          {getRecommendationsByCategory('education').map(recommendation => (
+            <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
+          ))}
+          
+          {getRecommendationsByCategory('budgeting').map(recommendation => (
+            <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
+          ))}
         </div>
+      </div>
+
+      {/* Storytel specific disclaimer */}
+      <div className="bg-accent/30 p-4 rounded-lg text-sm">
+        <p className="font-medium mb-2">{t("affiliate.storytelDisclaimer") || "Storytel-edun ehdot:"}</p>
+        <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+          <li>{t("affiliate.storytelDisclaimerLine1") || "Etu koskee vain uusia Storytelin asiakkaita."}</li>
+          <li>{t("affiliate.storytelDisclaimerLine2") || "Kokeilujakson aikana saa kuunnella ja lukea 100 tuntia kirjoja."}</li>
+          <li>{t("affiliate.storytelDisclaimerLine3") || "Storytelin tilaus ei ole sitova ja sen voi lopettaa milloin haluaa."}</li>
+          <li>{t("affiliate.storytelDisclaimerLine4") || "Ilmaisen kokeilujakson jälkeen tilaus jatkuu automaattisesti hintaan 19,99 € / kk."}</li>
+        </ul>
       </div>
 
       {/* Disclaimer */}

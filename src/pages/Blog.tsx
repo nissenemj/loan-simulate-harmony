@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Clock, User, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import { affiliateRecommendations } from "@/utils/affiliateData";
+import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendation";
 
 interface BlogPost {
   id: string;
@@ -27,6 +29,11 @@ const Blog = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+
+  // Get affiliate recommendations for education and books
+  const educationRecommendations = affiliateRecommendations.filter(rec => 
+    rec.category === 'education'
+  );
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -104,22 +111,36 @@ const Blog = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="all" className="mb-8">
-            <TabsList className="mb-6 flex flex-wrap">
-              <TabsTrigger value="all" onClick={() => setSelectedCategory("all")}>
-                {t("blog.allPosts") || "Kaikki artikkelit"}
-              </TabsTrigger>
-              {categories.map((category) => (
-                <TabsTrigger 
-                  key={category} 
-                  value={category}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </TabsTrigger>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="md:col-span-3">
+              <Tabs defaultValue="all" className="mb-6">
+                <TabsList className="mb-6 flex flex-wrap">
+                  <TabsTrigger value="all" onClick={() => setSelectedCategory("all")}>
+                    {t("blog.allPosts") || "Kaikki artikkelit"}
+                  </TabsTrigger>
+                  {categories.map((category) => (
+                    <TabsTrigger 
+                      key={category} 
+                      value={category}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
+            
+            {/* Storytel recommendation in sidebar */}
+            <div className="hidden md:block">
+              {educationRecommendations.map(recommendation => (
+                <AffiliateRecommendation 
+                  key={recommendation.id} 
+                  recommendation={recommendation} 
+                />
               ))}
-            </TabsList>
-          </Tabs>
+            </div>
+          </div>
 
           {filteredPosts.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
@@ -172,6 +193,16 @@ const Blog = () => {
               ))}
             </div>
           )}
+          
+          {/* Mobile Storytel recommendation */}
+          <div className="md:hidden mb-8">
+            {educationRecommendations.map(recommendation => (
+              <AffiliateRecommendation 
+                key={recommendation.id} 
+                recommendation={recommendation} 
+              />
+            ))}
+          </div>
           
           <AdSenseBanner adSlot="1234567890" className="mt-8" />
         </main>

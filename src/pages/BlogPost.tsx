@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -5,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import NavigationHeader from "@/components/NavigationHeader";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin, ExternalLink, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
@@ -16,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import { affiliateBanners, trackAffiliateClick } from "@/utils/affiliateData";
 
 interface BlogPost {
   id: string;
@@ -33,6 +35,9 @@ const BlogPost = () => {
   const { t, language } = useLanguage();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Get Storytel banner for display
+  const storytelBanner = affiliateBanners.find(banner => banner.category === 'education' && banner.trackingId.includes('storytel'));
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -103,6 +108,12 @@ const BlogPost = () => {
     }
     
     window.open(shareLink, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleStorytellClick = () => {
+    if (storytelBanner) {
+      trackAffiliateClick(storytelBanner.trackingId, 'banner');
+    }
   };
 
   const renderContent = (content: string) => {
@@ -251,6 +262,32 @@ const BlogPost = () => {
             <article className="prose prose-lg max-w-none">
               {renderContent(post.content)}
             </article>
+            
+            {/* Storytel banner placement */}
+            {storytelBanner && (
+              <div className="my-8 p-6 bg-accent/20 rounded-lg">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold mb-3 flex items-center">
+                      <BookOpen className="mr-2 h-5 w-5 text-primary" />
+                      {t("affiliate.wantToLearnMore") || "Haluatko oppia lisää?"}
+                    </h3>
+                    <p className="mb-4">
+                      {t("affiliate.storytelDescription") || "Storytel on äänikirjapalvelu, jossa on lähes miljoona äänikirjaa, e-kirjaa ja podcastia. Valikoimasta löytyy kirjoja kahdeksalla eri kielellä mm. suomeksi, ruotsiksi ja englanniksi."}
+                    </p>
+                    <p className="text-sm font-medium mb-2">
+                      {t("affiliate.storytelOffer") || "Kokeile Storyteliä maksutta 7 päivän ajan!"}
+                    </p>
+                    <p className="text-xs text-muted-foreground italic">
+                      {t("affiliate.storytelOfferCondition") || "Etu koskee uusia Storytelin asiakkaita"}
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0" onClick={handleStorytellClick}>
+                    <div dangerouslySetInnerHTML={{ __html: storytelBanner.htmlContent || '' }} />
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="mt-8 pt-6 border-t">
               <div className="flex justify-between items-center">

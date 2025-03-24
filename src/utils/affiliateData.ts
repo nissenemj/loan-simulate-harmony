@@ -1,10 +1,11 @@
+
 import { v4 as uuidv4 } from 'uuid';
 
 export interface AffiliateLink {
   id: string;
   title: string;
   url: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
   trackingId: string;
 }
 
@@ -14,9 +15,9 @@ export interface AffiliateBanner {
   description: string;
   url: string;
   imageUrl: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
   trackingId: string;
-  size: '300x250' | '728x90' | '300x600' | '320x320';
+  size: '300x250' | '728x90' | '300x600' | '320x320' | '336x280' | '980x120';
   htmlContent?: string; // Added for adtraction banners
 }
 
@@ -27,7 +28,7 @@ export interface AffiliateRecommendation {
   description: string;
   descriptionEn?: string; // Added English description
   links: AffiliateLink[];
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
 }
 
 // Sample affiliate links data
@@ -52,6 +53,27 @@ export const affiliateLinks: AffiliateLink[] = [
     url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
     category: 'refinance',
     trackingId: 'rahalaitos_refinance'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Äänikirjapalvelu',
+    url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+    category: 'education',
+    trackingId: 'storytel_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat ja säästä',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    category: 'loan',
+    trackingId: 'sortter_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rensa - Tasapainota taloutesi',
+    url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
+    category: 'budgeting',
+    trackingId: 'rensa_1'
   }
 ];
 
@@ -122,6 +144,50 @@ export const affiliateBanners: AffiliateBanner[] = [
     trackingId: 'etua_banner_1',
     size: '300x250',
     htmlContent: '<a href="https://go.adt242.com/t/t?a=1296154796&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Kuuntele ja lue tuhansia kirjoja',
+    description: 'Kokeile ilmaiseksi 7 päivää',
+    url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1897988466&as=1962325200&t=1&tk=1&i=1',
+    category: 'education',
+    trackingId: 'storytel_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1897988466&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1897988466&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat',
+    description: 'Vertaa ja säästä koroissa',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'sortter_banner_1',
+    size: '336x280',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1" width="336" height="280" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat',
+    description: 'Suomen kattavin lainavertailu',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1714374467&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'sortter_banner_2',
+    size: '980x120',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1714374467&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1714374467&as=1962325200&t=1&tk=1&i=1" width="980" height="120" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rensa - Tasapainota taloutesi',
+    description: 'Hallitse menosi ja tulosi tehokkaasti',
+    url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1',
+    category: 'budgeting',
+    trackingId: 'rensa_banner_1',
+    size: '336x280',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1" width="336" height="280" border="0"></a>'
   }
 ];
 
@@ -165,6 +231,57 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
         url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
         category: 'refinance',
         trackingId: 'rahalaitos_rec_1'
+      }
+    ]
+  },
+  {
+    id: uuidv4(),
+    title: 'Haluatko oppia lisää?',
+    titleEn: 'Want to learn more?',
+    description: 'Storytel äänikirjapalvelussa on lähes miljoona äänikirjaa, e-kirjaa ja podcastia. Kokeile ilmaiseksi 7 päivän ajan!',
+    descriptionEn: 'Storytel audio book service has nearly a million audiobooks, e-books and podcasts. Try it free for 7 days!',
+    category: 'education',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Storytel - Äänikirjapalvelu',
+        url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+        category: 'education',
+        trackingId: 'storytel_rec_1'
+      }
+    ]
+  },
+  {
+    id: uuidv4(),
+    title: 'Kilpailuta lainasi ja säästä',
+    titleEn: 'Compare loans and save',
+    description: 'Sortter on Suomen kattavin lainavertailu. Vertaa ja löydä edullisin laina helposti.',
+    descriptionEn: 'Sortter is Finland\'s most comprehensive loan comparison. Compare and find the most affordable loan easily.',
+    category: 'loan',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Sortter - Lainavertailu',
+        url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+        category: 'loan',
+        trackingId: 'sortter_rec_1'
+      }
+    ]
+  },
+  {
+    id: uuidv4(),
+    title: 'Tasapainota taloutesi',
+    titleEn: 'Balance your finances',
+    description: 'Rensa auttaa sinua hallitsemaan menoja ja tuloja tehokkaasti.',
+    descriptionEn: 'Rensa helps you manage your expenses and income effectively.',
+    category: 'budgeting',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Rensa - Taloudenhallinta',
+        url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
+        category: 'budgeting',
+        trackingId: 'rensa_rec_1'
       }
     ]
   }
