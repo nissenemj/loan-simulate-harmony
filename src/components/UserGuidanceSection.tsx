@@ -5,11 +5,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Mail, PenSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const UserGuidanceSection: React.FC = () => {
   const { language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   // Extract user email for greeting
   const userEmail = user?.email || '';
@@ -44,7 +46,7 @@ const UserGuidanceSection: React.FC = () => {
   ];
 
   return (
-    <div className="py-10 px-4 md:py-16">
+    <div className="py-8 px-4 md:py-16">
       <div className="container max-w-5xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
@@ -57,7 +59,7 @@ const UserGuidanceSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-3 gap-6'}`}>
           {guidanceItems.map((item, index) => (
             <Card 
               key={index} 

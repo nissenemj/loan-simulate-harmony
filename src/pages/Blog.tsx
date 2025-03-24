@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateRecommendations } from "@/utils/affiliateData";
 import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BlogPost {
   id: string;
@@ -29,6 +30,7 @@ const Blog = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   // Get affiliate recommendations for education and books
   const educationRecommendations = affiliateRecommendations.filter(rec => 
@@ -86,6 +88,12 @@ const Blog = () => {
     );
   }
 
+  const blogTitle = t("blog.title") || "Blogi";
+  const blogSubtitle = t("blog.subtitle") || "Uusimmat artikkelit ja oppaat taloudenhallintaan";
+  const allPostsLabel = t("blog.allPosts") || "Kaikki artikkelit";
+  const noPostsLabel = t("blog.noPosts") || "Ei artikkeleita tässä kategoriassa.";
+  const readMoreLabel = t("blog.readMore") || "Lue lisää";
+
   return (
     <>
       <Helmet>
@@ -104,19 +112,19 @@ const Blog = () => {
         <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              {t("blog.title") || "Blogi"}
+              {blogTitle}
             </h1>
             <p className="text-muted-foreground text-lg">
-              {t("blog.subtitle") || "Uusimmat artikkelit ja oppaat taloudenhallintaan"}
+              {blogSubtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="md:col-span-3">
               <Tabs defaultValue="all" className="mb-6">
-                <TabsList className="mb-6 flex flex-wrap">
+                <TabsList className={`mb-6 flex ${isMobile ? 'flex-col gap-2' : 'flex-wrap'}`}>
                   <TabsTrigger value="all" onClick={() => setSelectedCategory("all")}>
-                    {t("blog.allPosts") || "Kaikki artikkelit"}
+                    {allPostsLabel}
                   </TabsTrigger>
                   {categories.map((category) => (
                     <TabsTrigger 
@@ -144,7 +152,7 @@ const Blog = () => {
 
           {filteredPosts.length === 0 ? (
             <p className="text-center py-8 text-muted-foreground">
-              {t("blog.noPosts") || "Ei artikkeleita tässä kategoriassa."}
+              {noPostsLabel}
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -185,7 +193,7 @@ const Blog = () => {
                         <span>{post.author}</span>
                       </div>
                       <Link to={`/blog/${post.id}`} className="text-sm font-medium text-primary hover:underline">
-                        {t("blog.readMore") || "Lue lisää"} →
+                        {readMoreLabel} →
                       </Link>
                     </div>
                   </CardContent>

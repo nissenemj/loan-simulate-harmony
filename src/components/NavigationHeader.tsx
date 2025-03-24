@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -25,6 +25,8 @@ const NavigationHeader: React.FC = () => {
   const { t } = useLanguage();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   
   const menuItems = [
     { path: "/dashboard", label: t('tabs.dashboard') },
@@ -33,6 +35,11 @@ const NavigationHeader: React.FC = () => {
     { path: "/blog", label: t('tabs.blog') || "Blogi" },
     { path: "/terms", label: t('tabs.glossary') }
   ];
+  
+  const handleMobileNavigation = (path: string) => {
+    setIsOpen(false); // Close the mobile menu
+    navigate(path);
+  };
   
   return (
     <header className="border-b sticky top-0 z-50 bg-white shadow-sm">
@@ -43,7 +50,7 @@ const NavigationHeader: React.FC = () => {
         
         {isMobile ? (
           <div className="flex items-center gap-2">
-            <Sheet>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button 
                   variant="outline" 
@@ -60,18 +67,18 @@ const NavigationHeader: React.FC = () => {
                 </div>
                 <nav className="flex flex-col gap-3 mt-6">
                   {menuItems.map((item) => (
-                    <Link 
+                    <button 
                       key={item.path}
-                      to={item.path} 
+                      onClick={() => handleMobileNavigation(item.path)}
                       className={cn(
-                        "px-4 py-3 rounded-md font-medium text-center transition-colors",
+                        "px-4 py-3 rounded-md font-medium text-center transition-colors w-full",
                         location.pathname === item.path ? 
                           "bg-primary text-primary-foreground" : 
                           "text-foreground hover:bg-accent/50"
                       )}
                     >
                       {item.label}
-                    </Link>
+                    </button>
                   ))}
                 </nav>
               </SheetContent>

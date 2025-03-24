@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { 
@@ -8,6 +7,7 @@ import {
 } from "@/utils/loanCalculations";
 import { CreditCard } from "@/utils/creditCardCalculations";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import LoanForm from "@/components/LoanForm";
 import LoanTable from "@/components/LoanTable";
@@ -28,6 +28,7 @@ export default function Index() {
   const [loanToEdit, setLoanToEdit] = useState<Loan | null>(null);
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<string>("loans");
+  const isMobile = useIsMobile();
 
   const handleAddLoan = (loan: Loan) => {
     setLoans((prev) => [...prev, loan]);
@@ -91,7 +92,7 @@ export default function Index() {
       </div>
       
       <Tabs defaultValue="loans" className="w-full" value={activeTab} onValueChange={handleTabChange}>
-        <TabsList className="grid w-full grid-cols-3 mb-8">
+        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-1 gap-2' : 'grid-cols-3'} mb-8`}>
           <TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
           <TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
           <TabsTrigger value="affiliate">{t("tabs.affiliate")}</TabsTrigger>
