@@ -20,8 +20,8 @@ const UserGuidanceSection: React.FC = () => {
     {
       title: language === 'fi' ? 'Blogi' : 'Blog',
       description: language === 'fi' 
-        ? 'Tutustu lainavelhon uusimpiin vinkkeihin ja oppaisiin' 
-        : 'Explore lainavelho\'s latest tips and guides for financial freedom',
+        ? 'Tutustu velkavelhon uusimpiin vinkkeihin ja oppaisiin' 
+        : 'Explore velkavelho\'s latest tips and guides for financial freedom',
       icon: BookOpen,
       action: () => navigate('/blog'),
     },

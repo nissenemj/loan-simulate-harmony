@@ -43,8 +43,6 @@ const NavigationHeader: React.FC = () => {
         
         {isMobile ? (
           <div className="flex items-center gap-2">
-            <AuthButtons />
-            <LanguageSwitcher />
             <Sheet>
               <SheetTrigger asChild>
                 <Button 
@@ -78,6 +76,8 @@ const NavigationHeader: React.FC = () => {
                 </nav>
               </SheetContent>
             </Sheet>
+            <LanguageSwitcher />
+            <AuthButtons />
           </div>
         ) : (
           <div className="flex items-center gap-4">

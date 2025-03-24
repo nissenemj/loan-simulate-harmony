@@ -1,23 +1,24 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AffiliateRecommendation as AffiliateRecommendationType } from '@/utils/affiliateData';
-import AffiliateLink from './AffiliateLink';
-import { MegaphoneIcon } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-interface AffiliateRecommendationProps {
-  recommendation: AffiliateRecommendationType;
-}
-const AffiliateRecommendation: React.FC<AffiliateRecommendationProps> = ({
-  recommendation
-}) => {
-  const {
-    t,
-    language
-  } = useLanguage();
 
-  // Use the localized title and description based on current language
-  const title = language === 'en' ? recommendation.titleEn || recommendation.title : recommendation.title;
-  const description = language === 'en' ? recommendation.descriptionEn || recommendation.description : recommendation.description;
-  return;
+import React from 'react';
+import { RecommendationType } from '@/utils/affiliateData';
+import { Button } from '@/components/ui/button';
+
+interface AffiliateRecommendationProps {
+  recommendation: RecommendationType;
+}
+
+const AffiliateRecommendation: React.FC<AffiliateRecommendationProps> = ({ recommendation }) => {
+  return (
+    <div className="flex flex-col items-center space-y-4 p-4 rounded-lg border border-border bg-card">
+      <h3 className="text-lg font-semibold">{recommendation.title}</h3>
+      <p className="text-center text-muted-foreground">{recommendation.description}</p>
+      <Button asChild variant="outline" className="mt-2">
+        <a href={recommendation.url} target="_blank" rel="noopener noreferrer">
+          {recommendation.buttonText}
+        </a>
+      </Button>
+    </div>
+  );
 };
+
 export default AffiliateRecommendation;

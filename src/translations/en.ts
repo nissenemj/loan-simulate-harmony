@@ -18,7 +18,7 @@ export const en = {
     subtitle: 'Here\'s how to use our site and get the most out of our services.',
     blog: {
       title: 'Blog',
-      description: 'Explore our latest tips and guides for financial freedom'
+      description: 'Explore velkavelho\'s latest tips and guides for financial freedom'
     },
     profile: {
       title: 'Profile',
