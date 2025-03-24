@@ -79,8 +79,6 @@ export default function Index() {
   };
 
   const activeLoans = loans.filter((loan) => loan.isActive);
-  const { totalPayment, totalPrincipal, totalInterest } = calculateTotalMonthlyPayment(loans);
-  const recommendations = generateRecommendations(loans);
   
   const investmentBanners = affiliateBanners.filter(banner => banner.category === 'investment');
   const loanBanners = affiliateBanners.filter(banner => banner.category === 'loan');

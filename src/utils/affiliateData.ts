@@ -17,7 +17,7 @@ export interface AffiliateBanner {
   imageUrl: string;
   category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
   trackingId: string;
-  size: '300x250' | '728x90' | '300x600' | '320x320' | '336x280' | '980x120';
+  size: '300x250' | '728x90' | '300x600' | '320x320' | '336x280' | '980x120' | '300x100';
   htmlContent?: string; // Added for adtraction banners
 }
 
@@ -74,6 +74,13 @@ export const affiliateLinks: AffiliateLink[] = [
     url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
     category: 'budgeting',
     trackingId: 'rensa_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Nordnet - Sijoita paremmin',
+    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+    category: 'education',
+    trackingId: 'nordnet_education'
   }
 ];
 
@@ -155,6 +162,17 @@ export const affiliateBanners: AffiliateBanner[] = [
     trackingId: 'storytel_banner_1',
     size: '300x250',
     htmlContent: '<a href="https://go.adt267.com/t/t?a=1897988466&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1897988466&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Kokeile ilmaiseksi 7 päivää',
+    description: 'Äänikirjoja ja e-kirjoja',
+    url: 'https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1',
+    category: 'education',
+    trackingId: 'storytel_banner_blog',
+    size: '300x100',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>'
   },
   {
     id: uuidv4(),
@@ -248,6 +266,13 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
         url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
         category: 'education',
         trackingId: 'storytel_rec_1'
+      },
+      {
+        id: uuidv4(),
+        title: 'Nordnet - Sijoita paremmin',
+        url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+        category: 'education',
+        trackingId: 'nordnet_edu_rec'
       }
     ]
   },
@@ -267,23 +292,6 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
         trackingId: 'sortter_rec_1'
       }
     ]
-  },
-  {
-    id: uuidv4(),
-    title: 'Tasapainota taloutesi',
-    titleEn: 'Balance your finances',
-    description: 'Rensa auttaa sinua hallitsemaan menoja ja tuloja tehokkaasti.',
-    descriptionEn: 'Rensa helps you manage your expenses and income effectively.',
-    category: 'budgeting',
-    links: [
-      {
-        id: uuidv4(),
-        title: 'Rensa - Taloudenhallinta',
-        url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
-        category: 'budgeting',
-        trackingId: 'rensa_rec_1'
-      }
-    ]
   }
 ];
 
@@ -291,11 +299,6 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
 export const trackAffiliateClick = (trackingId: string, linkType: 'link' | 'banner' | 'recommendation') => {
   // In a real-world scenario, this would send data to an analytics service
   console.log(`Affiliate click tracked: ${trackingId}, type: ${linkType}`);
-  
-  // For demonstration, we'll just log the click, but this could be expanded to:
-  // - Send data to Google Analytics
-  // - Make an API call to a tracking endpoint
-  // - Store in localStorage for later analysis
   
   // Return true to allow the default link behavior
   return true;

@@ -3,10 +3,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
   NavigationMenuList,
-  NavigationMenuTrigger,
+  NavigationMenuItem,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -37,19 +35,19 @@ const NavigationHeader: React.FC = () => {
   ];
   
   return (
-    <header className="border-b mb-6 bg-white sticky top-0 z-50 shadow-sm">
-      <div className="container py-4 px-4 md:px-6 flex justify-between items-center">
+    <header className="border-b sticky top-0 z-50 bg-white shadow-sm">
+      <div className="container py-3 md:py-4 px-3 md:px-6 flex justify-between items-center">
         <VelkavapausLogo />
         
         {isMobile ? (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <AuthButtons />
             <LanguageSwitcher />
             <Sheet>
               <SheetTrigger asChild>
                 <Button 
                   variant="outline" 
-                  size="icon" 
+                  size="sm" 
                   aria-label="Menu"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary"
                 >
@@ -60,7 +58,7 @@ const NavigationHeader: React.FC = () => {
                 <div className="flex justify-center mt-6 mb-8">
                   <VelkavapausLogo size="sm" />
                 </div>
-                <nav className="flex flex-col gap-4 mt-8">
+                <nav className="flex flex-col gap-3 mt-6">
                   {menuItems.map((item) => (
                     <Link 
                       key={item.path}

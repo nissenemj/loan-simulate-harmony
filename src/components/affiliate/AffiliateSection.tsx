@@ -9,7 +9,7 @@ import {
 import AffiliateLink from './AffiliateLink';
 import AffiliateBanner from './AffiliateBanner';
 import AffiliateRecommendation from './AffiliateRecommendation';
-import { BadgeDollarSign, HandCoins, BookOpen, PiggyBank } from 'lucide-react';
+import { BadgeDollarSign, HandCoins, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
@@ -25,6 +25,12 @@ const AffiliateSection = () => {
   const getBannersByCategory = (category: string) => {
     return affiliateBanners.filter(banner => banner.category === category);
   };
+  
+  // Get investment recommendations
+  const investmentRecommendations = affiliateRecommendations.filter(rec => rec.category === 'investment');
+  
+  // Get education recommendations including Storytel
+  const educationRecommendations = affiliateRecommendations.filter(rec => rec.category === 'education');
 
   return (
     <div className="space-y-8">
@@ -47,8 +53,9 @@ const AffiliateSection = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
+                {/* Only Etua.fi in the compareLoans section */}
                 {affiliateLinks
-                  .filter(link => link.category === 'loan')
+                  .filter(link => link.category === 'loan' && link.title.includes('Etua.fi'))
                   .map(link => (
                     <AffiliateLink key={link.id} link={link} />
                   ))}
@@ -56,6 +63,7 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
           
+          {/* Display loan recommendations */}
           {getRecommendationsByCategory('loan').map(recommendation => (
             <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
           ))}
@@ -75,11 +83,6 @@ const AffiliateSection = () => {
                 <AffiliateBanner key={banner.id} banner={banner} />
               ))}
 
-              {/* Display budgeting banners */}
-              {getBannersByCategory('budgeting').map(banner => (
-                <AffiliateBanner key={banner.id} banner={banner} />
-              ))}
-
               {/* Display investment banners */}
               {getBannersByCategory('investment').slice(0, 1).map(banner => (
                 <AffiliateBanner key={banner.id} banner={banner} />
@@ -90,6 +93,30 @@ const AffiliateSection = () => {
 
         {/* Right column: More affiliate content */}
         <div className="space-y-6">
+          {/* Combine Rahalaitos, Sortter and Rensa in single card */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center text-lg font-semibold">
+                <BadgeDollarSign className="mr-2 h-5 w-5 text-primary" />
+                {t("affiliate.competitiveLoansTitle") || "Kilpailuta lainasi ja säästä"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {affiliateLinks
+                  .filter(link => 
+                    (link.title.includes('Rahalaitos') && link.category === 'loan') || 
+                    link.title.includes('Sortter') || 
+                    link.title.includes('Rensa')
+                  )
+                  .map(link => (
+                    <AffiliateLink key={link.id} link={link} />
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Refinance card */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
@@ -111,18 +138,22 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
 
-          {/* Education recommendations */}
+          {/* Education (Storytel and Nordnet) */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
                 <BookOpen className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.educationTitle") || "Haluatko oppia lisää?"}
+                {t("affiliate.wantToLearnMore") || "Haluatko oppia lisää?"}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
+                {/* Include Storytel */}
                 {affiliateLinks
-                  .filter(link => link.category === 'education')
+                  .filter(link => 
+                    link.category === 'education' || 
+                    (link.category === 'investment' && link.title.includes('Nordnet'))
+                  )
                   .map(link => (
                     <AffiliateLink key={link.id} link={link} />
                   ))}
@@ -130,31 +161,13 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
 
-          {/* Budgeting recommendations */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center text-lg font-semibold">
-                <PiggyBank className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.budgetingTitle") || "Tasapainota taloutesi"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {affiliateLinks
-                  .filter(link => link.category === 'budgeting')
-                  .map(link => (
-                    <AffiliateLink key={link.id} link={link} />
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Display remaining recommendations */}
-          {getRecommendationsByCategory('education').map(recommendation => (
+          {/* Display education recommendations */}
+          {educationRecommendations.map(recommendation => (
             <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
           ))}
           
-          {getRecommendationsByCategory('budgeting').map(recommendation => (
+          {/* Display investment recommendations */}
+          {investmentRecommendations.map(recommendation => (
             <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />
           ))}
         </div>
