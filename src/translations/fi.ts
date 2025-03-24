@@ -566,3 +566,4 @@ export const fi = {
     currentDebt: 'Nykyinen velka',
     creditCardsFree: 'Luottokortit maksettu',
   }
+};
