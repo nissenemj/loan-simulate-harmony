@@ -565,3 +565,4 @@ export const fi = {
     now: 'Nyt',
     currentDebt: 'Nykyinen velka',
     creditCardsFree: 'Luottokortit maksettu',
+  }
