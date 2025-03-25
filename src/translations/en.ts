@@ -1,7 +1,14 @@
+
 const en = {
   app: {
     title: 'Loan Simulator',
+    description: 'Free loan simulator helps you calculate loans and plan your finances.',
     footer: 'Made with ❤️ by Joonas',
+    language: 'Language',
+  },
+  language: {
+    en: 'English',
+    fi: 'Finnish',
   },
   form: {
     name: 'Name',
@@ -31,6 +38,7 @@ const en = {
     fullPayment: 'Full Payment',
     months: 'months',
     years: 'years',
+    loanName: 'Loan Name',
   },
   table: {
     name: 'Name',
@@ -50,6 +58,10 @@ const en = {
     fullPayment: 'Full Payment',
     effectivePayment: 'Effective Payment',
     payoffTime: 'Payoff Time',
+    totalPayment: 'Total Payment',
+    remainingBalance: 'Remaining Balance',
+    interestPaid: 'Interest Paid',
+    principalPaid: 'Principal Paid',
   },
   summary: {
     totalLoanAmount: 'Total Loan Amount',
@@ -77,6 +89,7 @@ const en = {
     login: 'Login',
     logout: 'Logout',
     dashboard: 'Dashboard',
+    user: 'User',
   },
   dashboard: {
     totalDebt: 'Total Debt',
@@ -96,9 +109,23 @@ const en = {
     years: 'years',
     months: 'months',
     user: 'User',
+    title: 'Dashboard',
   },
   blog: {
     title: 'Blog',
+    subtitle: 'Debt guide and financial management tips',
+    allPosts: 'All Posts',
+    readMore: 'Read More',
+    authoredBy: 'Authored by',
+    publishedOn: 'Published on',
+    back: 'Back to Blog',
+    relatedPosts: 'Related Posts',
+    sharePost: 'Share Post',
+    categories: 'Categories',
+    search: 'Search Articles',
+    searchResults: 'Search Results',
+    noResults: 'No Results Found',
+    manageBlog: 'Manage Blog',
   },
   debtSummary: {
     pageTitle: 'Debt Summary',
@@ -135,7 +162,54 @@ const en = {
       totalLimit: 'Total Limit',
       totalAvailable: 'Total Available',
       averageInterest: 'Average Interest',
-    }
+      totalMinPayment: 'Total Minimum Payment',
+      averageApr: 'Average APR',
+      payoffTime: 'Estimated Payoff Time',
+      totalUtilization: 'Total Utilization',
+      totalMonthlyInterest: 'Total Monthly Interest',
+      title: 'Credit Card Summary',
+    },
+    name: 'Credit Card Name',
+    balance: 'Balance',
+    limit: 'Limit',
+    apr: 'APR',
+    minPayment: 'Min Payment',
+    minPaymentPercent: 'Min Payment Percent',
+    fullPayment: 'Full Payment',
+    isActive: 'Is Active',
+  },
+  loan: {
+    types: {
+      annuity: 'Annuity',
+      'equal-principal': 'Equal Principal',
+      'fixed-installment': 'Fixed Installment',
+      'custom-payment': 'Custom Payment',
+    },
+    interestTypes: {
+      fixed: 'Fixed',
+      'variable-euribor': 'Variable (Euribor)',
+    },
+    summary: {
+      totalLoans: 'Total Loans',
+      totalBalance: 'Total Balance',
+      averageInterestRate: 'Average Interest Rate',
+      averageTerm: 'Average Term',
+      totalMonthlyPayment: 'Total Monthly Payment',
+    },
+  },
+  savings: {
+    title: 'Savings Opportunities',
+    description: 'See how much you can save by paying off loans faster.',
+    payingOffNow: 'By paying this off now you save',
+    payOff: 'Pay Off',
+  },
+  savingsImpact: {
+    title: 'Savings Impact',
+    description: 'See how much you can save by paying off your loans faster.',
+    payoffLoan: 'Pay off Loan',
+    payoffCreditCard: 'Pay off Credit Card',
+    amountSaved: 'Amount Saved',
+    timeSaved: 'Time Saved',
   },
   repayment: {
     minimumPayments: 'Minimum Payments',
@@ -173,6 +247,27 @@ const en = {
     payoffTime: 'Payoff Time',
     insufficientBudget: 'Insufficient Budget',
     budgetTooLow: 'Your budget is too low to cover the minimum payments on your debts.',
+  },
+  landing: {
+    footer: {
+      about: {
+        title: 'About Service',
+        description: 'Velkavapaus.fi helps you manage your finances and achieve a debt-free life.',
+      },
+      links: {
+        title: 'Useful Links',
+        item1: 'Loan Simulator',
+        item2: 'Loan Glossary',
+        item3: 'Debt Summary',
+      },
+      legal: {
+        title: 'Legal Information',
+        privacy: 'Privacy Policy',
+        terms: 'Terms of Service',
+        cookies: 'Cookie Policy',
+      },
+      copyright: 'All rights reserved.',
+    },
   },
 };
 
