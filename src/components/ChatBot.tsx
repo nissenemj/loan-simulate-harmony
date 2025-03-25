@@ -112,23 +112,25 @@ const ChatBot: React.FC = () => {
     }
   };
 
-  // Only show the chatbot on desktop view
-  if (isMobile) return null;
-
+  // Remove the mobile check so chatbot is visible on all devices
   return (
     <>
       {/* Chat button */}
       <Button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 rounded-full p-3 h-14 w-14 shadow-lg z-50"
+        className={`fixed bottom-6 right-6 rounded-full p-3 h-14 w-14 shadow-lg z-50 ${isMobile ? 'h-12 w-12' : ''}`}
         aria-label={language === 'fi' ? 'Avaa keskustelu' : 'Open chat'}
       >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageSquare size={isMobile ? 20 : 24} />}
       </Button>
 
       {/* Chat window */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-96 h-[500px] shadow-xl z-50 flex flex-col animate-fade-in">
+        <Card className={`fixed shadow-xl z-50 flex flex-col animate-fade-in ${
+          isMobile 
+            ? 'bottom-20 right-2 left-2 h-[80vh]' 
+            : 'bottom-24 right-6 w-96 h-[500px]'
+        }`}>
           <CardHeader className="flex flex-row items-center space-x-2 bg-primary text-primary-foreground rounded-t-lg p-4">
             <BookOpen size={20} />
             <CardTitle className="text-lg font-medium">
