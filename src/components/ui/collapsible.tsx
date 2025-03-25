@@ -54,13 +54,21 @@ const CollapsibleTrigger = (props: React.ComponentPropsWithoutRef<typeof Collaps
 };
 
 // CollapsibleContent that works with both Collapsible and Drawer
-const CollapsibleContent = (props: React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>) => {
+const CollapsibleContent = ({
+  onAnimationEnd,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>) => {
   const { isMobile } = useCollapsible();
 
+  // Remove the onAnimationEnd prop when passing to DrawerContent
+  // since it has a different signature than what CollapsibleContent expects
   return isMobile ? (
     <DrawerContent {...props} />
   ) : (
-    <CollapsiblePrimitive.CollapsibleContent {...props} />
+    <CollapsiblePrimitive.CollapsibleContent 
+      onAnimationEnd={onAnimationEnd} 
+      {...props} 
+    />
   );
 };
 
