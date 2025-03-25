@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import en from '@/translations/en';
-import fi from '@/translations/fi';
+import { en } from '@/translations/en';
+import { fi } from '@/translations/fi';
 
 type Translations = {
   [key: string]: string | any;
