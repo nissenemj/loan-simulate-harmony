@@ -14,17 +14,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const AuthButtons = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
 
   if (!user) {
     return (
       <Button 
         variant="outline" 
         onClick={() => navigate("/auth")}
+        size={isMobile ? "sm" : "default"}
       >
         {t("auth.login")}
       </Button>
@@ -38,14 +41,14 @@ export const AuthButtons = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
-          <AvatarFallback>{initials}</AvatarFallback>
+        <Avatar className="cursor-pointer h-8 w-8">
+          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem className="text-muted-foreground">
           <User className="mr-2 h-4 w-4" />
-          {user.email}
+          <span className="max-w-[150px] truncate">{user.email}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate("/dashboard")}>
           <User className="mr-2 h-4 w-4" />

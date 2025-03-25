@@ -49,14 +49,16 @@ const NavigationHeader: React.FC = () => {
         </Link>
         
         {isMobile ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 justify-end">
+            <LanguageSwitcher />
+            <AuthButtons />
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   aria-label="Menu"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary ml-1"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
@@ -83,8 +85,6 @@ const NavigationHeader: React.FC = () => {
                 </nav>
               </SheetContent>
             </Sheet>
-            <LanguageSwitcher />
-            <AuthButtons />
           </div>
         ) : (
           <div className="flex items-center gap-4">

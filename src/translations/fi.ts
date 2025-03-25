@@ -565,5 +565,21 @@ export const fi = {
     now: 'Nyt',
     currentDebt: 'Nykyinen velka',
     creditCardsFree: 'Luottokortit maksettu',
+  },
+  blog: {
+    pageTitle: "Blogi | Laina Simulaattori",
+    pageDescription: "Lue uusimmat artikkelit ja oppaat talouden hallintaan, velkojen käsittelyyn ja budjetointiin Laina Simulaattori -blogista.",
+    title: "Blogi",
+    subtitle: "Uusimmat artikkelit ja oppaat talouden hallintaan",
+    allPosts: "Kaikki artikkelit",
+    readMore: "Lue lisää",
+    share: "Jaa",
+    shareArticle: "Jaa artikkeli",
+    backToBlog: "Takaisin blogiin",
+    postNotFound: "Artikkelia ei löytynyt",
+    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt.",
+    copyLink: "Kopioi linkki",
+    copiedToClipboard: "Linkki kopioitu leikepöydälle",
+    copyFailed: "Linkin kopiointi epäonnistui"
   }
 };

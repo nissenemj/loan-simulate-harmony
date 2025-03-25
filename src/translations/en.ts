@@ -12,6 +12,7 @@ export const en = {
     debtSummary: 'Debt Summary',
     glossary: 'Glossary',
     affiliate: 'Affiliate',
+    blog: 'Blog',
   },
   guidance: {
     welcome: 'Welcome',
