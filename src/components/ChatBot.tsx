@@ -37,7 +37,7 @@ const ChatBot: React.FC = () => {
   // Initial welcome message
   useEffect(() => {
     const welcomeMessage = language === 'fi' 
-      ? "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa Suomen lainsäädännön mukaisesti."
+      ? "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa."
       : "Hello! I'm VelkaAI, your financial assistant. I can help with personal finance and debt management questions. Please note that I cannot provide investment advice according to Finnish legislation.";
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
