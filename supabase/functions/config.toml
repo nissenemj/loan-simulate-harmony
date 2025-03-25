@@ -1,0 +1,7 @@
+
+project_id = "jwzzkqelqsqsirfowevs"
+# This should be kept as the first line of this file.
+# Configuration for Edge Functions.
+
+[functions.financial-advisor]
+verify_jwt = false

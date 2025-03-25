@@ -23,6 +23,7 @@ import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogAdmin from "./pages/BlogAdmin";
+import ChatBot from "./components/ChatBot";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,7 @@ const App = () => (
               <Toaster />
               <Sonner />
               <CookieConsentBanner />
+              <ChatBot />
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<Auth />} />
