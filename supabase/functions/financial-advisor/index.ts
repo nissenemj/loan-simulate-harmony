@@ -71,16 +71,17 @@ ${financialBooksKnowledge.map(book =>
 ).join('\n')}
 
 When responding to questions:
+- Keep your responses very short and direct (maximum 3-4 sentences)
 - Give practical, actionable advice
 - Reference specific concepts from these books when relevant
-- Be concise but thorough
-- Be friendly and encouraging
+- Be precise and to the point
+- Be friendly and supportive
 - Focus on helping people manage debt or grow wealth
 - Use simple language, not complex financial jargon
 - If a question is outside your financial knowledge, politely redirect to financial topics
 
 For Finnish users, you should respond in Finnish when they ask in Finnish, otherwise respond in English.
-Remember, your goal is to provide helpful financial guidance based on these well-established financial books.
+Remember, your goal is to provide helpful financial guidance based on these well-established financial books, but keep your answers concise.
 `;
 
 serve(async (req) => {
@@ -117,7 +118,7 @@ serve(async (req) => {
         model: "gpt-4o-mini",
         messages: messages,
         temperature: 0.7,
-        max_tokens: 800
+        max_tokens: 300  // Reduced from 800 to encourage shorter responses
       })
     });
     

@@ -30,8 +30,8 @@ const ChatBot: React.FC = () => {
   // Initial welcome message
   useEffect(() => {
     const welcomeMessage = language === 'fi' 
-      ? "Hei! Olen VelkaAI, sinun taloudellinen apurisi. Kysy minulta mitä tahansa liittyen henkilökohtaiseen talouteen, velanhallintaan tai sijoittamiseen. Tietoni perustuu 10 vaikutusvaltaiseen talouskirjaan!"
-      : "Hello! I'm VelkaAI, your financial assistant. Ask me anything about personal finance, debt management, or investing. My knowledge is based on 10 influential financial books!";
+      ? "Hei! Olen VelkaAI, sinun taloudellinen apurisi. Kysy minulta mitä tahansa liittyen henkilökohtaiseen talouteen, velanhallintaan tai sijoittamiseen."
+      : "Hello! I'm VelkaAI, your financial assistant. Ask me anything about personal finance, debt management, or investing.";
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
   }, [language]);
@@ -128,14 +128,26 @@ const ChatBot: React.FC = () => {
       {isOpen && (
         <Card className={`fixed shadow-xl z-50 flex flex-col animate-fade-in ${
           isMobile 
-            ? 'bottom-20 right-2 left-2 h-[80vh]' 
+            ? 'bottom-20 right-2 left-2 h-[70vh]' 
             : 'bottom-24 right-6 w-96 h-[500px]'
         }`}>
-          <CardHeader className="flex flex-row items-center space-x-2 bg-primary text-primary-foreground rounded-t-lg p-4">
-            <BookOpen size={20} />
-            <CardTitle className="text-lg font-medium">
-              {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
-            </CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground rounded-t-lg p-4">
+            <div className="flex items-center space-x-2">
+              <BookOpen size={20} />
+              <CardTitle className="text-lg font-medium">
+                {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+              </CardTitle>
+            </div>
+            {/* Add explicit close button in header for mobile */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleChat} 
+              className="text-primary-foreground hover:bg-primary/80"
+              aria-label={language === 'fi' ? 'Sulje keskustelu' : 'Close chat'}
+            >
+              <X size={isMobile ? 18 : 20} />
+            </Button>
           </CardHeader>
 
           <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 overflow-y-auto">
