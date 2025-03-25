@@ -10,6 +10,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { BookOpen, Send, X, MessageSquare, Loader2 } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -112,10 +114,74 @@ const ChatBot: React.FC = () => {
     }
   };
 
-  // Remove the mobile check so chatbot is visible on all devices
+  const renderChatContent = () => (
+    <>
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full pb-4">
+          <div className="space-y-4 p-4">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                }`}
+              >
+                <div
+                  className={`max-w-[85%] rounded-lg p-3 ${
+                    message.role === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted'
+                  }`}
+                >
+                  {message.content}
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="max-w-[85%] rounded-lg p-3 bg-muted flex items-center space-x-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{language === 'fi' ? 'Ajattelee...' : 'Thinking...'}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <Separator />
+
+      <div className="p-3">
+        <div className="flex items-center space-x-2">
+          <Input
+            ref={inputRef}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
+            className="flex-1"
+            disabled={isLoading}
+          />
+          <Button
+            size="icon"
+            onClick={handleSendMessage}
+            disabled={!inputValue.trim() || isLoading}
+            aria-label={language === 'fi' ? 'Lähetä viesti' : 'Send message'}
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+
+  // Chat button (visible on all devices)
   return (
     <>
-      {/* Chat button */}
       <Button
         onClick={toggleChat}
         className={`fixed bottom-6 right-6 rounded-full p-3 h-14 w-14 shadow-lg z-50 ${isMobile ? 'h-12 w-12' : ''}`}
@@ -124,13 +190,9 @@ const ChatBot: React.FC = () => {
         {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageSquare size={isMobile ? 20 : 24} />}
       </Button>
 
-      {/* Chat window */}
-      {isOpen && (
-        <Card className={`fixed shadow-xl z-50 flex flex-col animate-fade-in ${
-          isMobile 
-            ? 'bottom-20 right-2 left-2 h-[70vh]' 
-            : 'bottom-24 right-6 w-96 h-[500px]'
-        }`}>
+      {/* Use Sheet for desktop */}
+      {isOpen && !isMobile && (
+        <Card className="fixed bottom-24 right-6 w-96 h-[480px] shadow-xl z-50 flex flex-col animate-fade-in">
           <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground rounded-t-lg p-4">
             <div className="flex items-center space-x-2">
               <BookOpen size={20} />
@@ -138,7 +200,6 @@ const ChatBot: React.FC = () => {
                 {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
               </CardTitle>
             </div>
-            {/* Add explicit close button in header for mobile */}
             <Button 
               variant="ghost" 
               size="icon" 
@@ -146,69 +207,42 @@ const ChatBot: React.FC = () => {
               className="text-primary-foreground hover:bg-primary/80"
               aria-label={language === 'fi' ? 'Sulje keskustelu' : 'Close chat'}
             >
-              <X size={isMobile ? 18 : 20} />
+              <X size={20} />
             </Button>
           </CardHeader>
 
-          <ScrollArea ref={scrollAreaRef} className="flex-1 p-4 overflow-y-auto">
-            <CardContent className="space-y-4 pt-0">
-              {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
-                  >
-                    {message.content}
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="max-w-[80%] rounded-lg p-3 bg-muted flex items-center space-x-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>{language === 'fi' ? 'Ajattelee...' : 'Thinking...'}</span>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </ScrollArea>
-
-          <Separator />
-
-          <CardFooter className="p-4">
-            <div className="flex w-full items-center space-x-2">
-              <Input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
-                className="flex-1"
-                disabled={isLoading}
-              />
-              <Button
-                size="icon"
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isLoading}
-                aria-label={language === 'fi' ? 'Lähetä viesti' : 'Send message'}
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </CardFooter>
+          {renderChatContent()}
         </Card>
+      )}
+
+      {/* Use Drawer for mobile - much better UX */}
+      {isOpen && isMobile && (
+        <Drawer open={isOpen} onOpenChange={setIsOpen}>
+          <DrawerContent className="max-h-[85vh] flex flex-col">
+            <DrawerHeader className="bg-primary text-primary-foreground">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <BookOpen size={20} />
+                  <DrawerTitle className="text-lg font-medium">
+                    {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+                  </DrawerTitle>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={toggleChat} 
+                  className="text-primary-foreground hover:bg-primary/80"
+                  aria-label={language === 'fi' ? 'Sulje keskustelu' : 'Close chat'}
+                >
+                  <X size={18} />
+                </Button>
+              </div>
+            </DrawerHeader>
+            <div className="flex-1 pb-0 overflow-hidden">
+              {renderChatContent()}
+            </div>
+          </DrawerContent>
+        </Drawer>
       )}
     </>
   );
