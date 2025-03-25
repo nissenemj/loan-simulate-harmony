@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,17 +12,22 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { BookOpen, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
   content: string;
 }
 
+const MAX_QUESTIONS = 5;
+
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [questionCount, setQuestionCount] = useLocalStorage('chat_question_count', 0);
+  const [limitReached, setLimitReached] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -35,7 +41,12 @@ const ChatBot: React.FC = () => {
       : "Hello! I'm VelkaAI, your financial assistant. I can help with personal finance and debt management questions. Please note that I cannot provide investment advice according to Finnish legislation.";
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
-  }, [language]);
+    
+    // Check if the user has already reached the limit
+    if (questionCount >= MAX_QUESTIONS) {
+      setLimitReached(true);
+    }
+  }, [language, questionCount]);
 
   // Auto-scroll to the bottom when new messages arrive
   useEffect(() => {
@@ -56,7 +67,7 @@ const ChatBot: React.FC = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+    if (!inputValue.trim() || isLoading || limitReached) return;
     
     const userMessage: Message = { role: 'user', content: inputValue };
     setMessages(prev => [...prev, userMessage]);
@@ -71,7 +82,8 @@ const ChatBot: React.FC = () => {
       const { data, error } = await supabase.functions.invoke('financial-advisor', {
         body: {
           message: inputValue,
-          chatHistory
+          chatHistory,
+          questionCount
         }
       });
       
@@ -80,6 +92,14 @@ const ChatBot: React.FC = () => {
       if (data.response) {
         const assistantMessage: Message = { role: 'assistant', content: data.response };
         setMessages(prev => [...prev, assistantMessage]);
+        
+        // Increment question count and check if limit was reached
+        const newCount = questionCount + 1;
+        setQuestionCount(newCount);
+        
+        if (data.limitReached || newCount >= MAX_QUESTIONS) {
+          setLimitReached(true);
+        }
       } else if (data.error) {
         throw new Error(data.error);
       }
@@ -111,6 +131,18 @@ const ChatBot: React.FC = () => {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const renderLimitMessage = () => {
+    const limitMessage = language === 'fi'
+      ? `Olet käyttänyt kaikki ${MAX_QUESTIONS} kysymystäsi. Palaa myöhemmin uudelleen.`
+      : `You have used all your ${MAX_QUESTIONS} questions. Please come back later.`;
+    
+    return (
+      <div className="p-3 text-center text-sm text-muted-foreground bg-muted rounded-md">
+        {limitMessage}
+      </div>
+    );
   };
 
   const renderChatContent = () => (
@@ -151,28 +183,35 @@ const ChatBot: React.FC = () => {
       <Separator />
 
       <div className="p-3">
-        <div className="flex items-center space-x-2">
-          <Input
-            ref={inputRef}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
-            className="flex-1"
-            disabled={isLoading}
-          />
-          <Button
-            size="icon"
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            aria-label={language === 'fi' ? 'Lähetä viesti' : 'Send message'}
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </Button>
+        {limitReached ? renderLimitMessage() : (
+          <div className="flex items-center space-x-2">
+            <Input
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
+              className="flex-1"
+              disabled={isLoading}
+            />
+            <Button
+              size="icon"
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim() || isLoading}
+              aria-label={language === 'fi' ? 'Lähetä viesti' : 'Send message'}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        )}
+        <div className="mt-2 text-xs text-muted-foreground text-center">
+          {language === 'fi' 
+            ? `Kysymyksiä käytetty: ${questionCount}/${MAX_QUESTIONS}` 
+            : `Questions used: ${questionCount}/${MAX_QUESTIONS}`}
         </div>
       </div>
     </>

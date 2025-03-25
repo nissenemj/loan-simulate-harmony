@@ -99,12 +99,32 @@ serve(async (req) => {
   }
   
   try {
-    const { message, chatHistory } = await req.json();
+    const { message, chatHistory, questionCount } = await req.json();
     
     if (!openAIApiKey) {
       return new Response(
         JSON.stringify({ error: "OpenAI API key not configured" }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Check if the user has reached the question limit (5 questions)
+    if (questionCount >= 5) {
+      const limitMessage = {
+        fi: "Olet saavuttanut viiden kysymyksen rajan. Kiitos keskustelusta!",
+        en: "You have reached the limit of 5 questions. Thank you for the conversation!"
+      };
+      
+      return new Response(
+        JSON.stringify({ 
+          response: message.startsWith("Hei") || /[äöå]/i.test(message) ? limitMessage.fi : limitMessage.en,
+          message: { 
+            role: "assistant", 
+            content: message.startsWith("Hei") || /[äöå]/i.test(message) ? limitMessage.fi : limitMessage.en 
+          },
+          limitReached: true
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
     
