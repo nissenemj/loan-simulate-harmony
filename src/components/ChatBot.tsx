@@ -57,7 +57,7 @@ const ChatBot: React.FC = () => {
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
     
-    const userMessage = { role: 'user', content: inputValue };
+    const userMessage: Message = { role: 'user', content: inputValue };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
@@ -77,7 +77,8 @@ const ChatBot: React.FC = () => {
       if (error) throw error;
       
       if (data.response) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
+        const assistantMessage: Message = { role: 'assistant', content: data.response };
+        setMessages(prev => [...prev, assistantMessage]);
       } else if (data.error) {
         throw new Error(data.error);
       }
@@ -92,15 +93,13 @@ const ChatBot: React.FC = () => {
       });
       
       // Add error message for user
-      setMessages(prev => [
-        ...prev, 
-        { 
-          role: 'assistant', 
-          content: language === 'fi' 
-            ? 'Pahoittelut, en voinut käsitellä viestiä. Voinko auttaa sinua jotenkin muuten?' 
-            : 'Sorry, I couldn\'t process your message. Can I help you with something else?' 
-        }
-      ]);
+      const errorMessage: Message = { 
+        role: 'assistant', 
+        content: language === 'fi' 
+          ? 'Pahoittelut, en voinut käsitellä viestiä. Voinko auttaa sinua jotenkin muuten?' 
+          : 'Sorry, I couldn\'t process your message. Can I help you with something else?' 
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
