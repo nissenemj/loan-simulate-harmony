@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,8 +31,8 @@ const ChatBot: React.FC = () => {
   // Initial welcome message
   useEffect(() => {
     const welcomeMessage = language === 'fi' 
-      ? "Hei! Olen VelkaAI, sinun taloudellinen apurisi. Kysy minulta mitä tahansa liittyen henkilökohtaiseen talouteen, velanhallintaan tai sijoittamiseen."
-      : "Hello! I'm VelkaAI, your financial assistant. Ask me anything about personal finance, debt management, or investing.";
+      ? "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa Suomen lainsäädännön mukaisesti."
+      : "Hello! I'm VelkaAI, your financial assistant. I can help with personal finance and debt management questions. Please note that I cannot provide investment advice according to Finnish legislation.";
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
   }, [language]);
