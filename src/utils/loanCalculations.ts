@@ -211,10 +211,8 @@ export const calculateCustomPaymentLoan = (
   
   // Increase max months to a more realistic value - 100 years should be enough for any loan
   const maxMonths = 12 * 100; // 100 years as absolute maximum
-
   
-  
- let currentPayment = customPayment;
+  let currentPayment = customPayment;
   
   // Calculate the monthly breakdown
   while (remainingBalance > 0 && monthCount < maxMonths) {
@@ -240,9 +238,7 @@ export const calculateCustomPaymentLoan = (
     if (remainingBalance < 0.01) {
       remainingBalance = 0;
     }
-    
-    // For future enhancement: if implementing snowball/avalanche within this function,
-    // we could adjust currentPayment here based on other loans' statuses
+  }
   
   // First month's values
   const firstMonthInterest = loanAmount * monthlyInterestRate;
@@ -260,8 +256,7 @@ export const calculateCustomPaymentLoan = (
       firstMonthInterest,
       interest: firstMonthInterest,
       monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
-      actualTermMonths: Infinity,
-      strategyApplied: strategy // Add information about the applied strategy
+      actualTermMonths: Infinity
     };
   }
   
@@ -272,10 +267,10 @@ export const calculateCustomPaymentLoan = (
     firstMonthInterest,
     interest: firstMonthInterest,
     monthlyBreakdown,
-    actualTermMonths: monthCount,
-    strategyApplied: strategy // Add information about the applied strategy
+    actualTermMonths: monthCount
   };
 };
+
 /**
  * Calculates loan details based on the repayment type
  */
