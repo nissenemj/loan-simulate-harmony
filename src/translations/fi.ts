@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -526,7 +525,6 @@ export const fi = {
     payoffTime: "Maksuaika",
     totalRemaining: "Jäljellä yhteensä",
     noPlanYet: "Ei vielä takaisinmaksusuunnitelmaa",
-    // Add these new translations
     strategyComparison: "Lyhennysstrategioiden vertailu",
     strategyComparisonDesc: "Vertaile eri lyhennysstrategioiden vaikutusta lainojen takaisinmaksuun",
     payoffTimeline: "Maksuaikataulu",
@@ -601,3 +599,4 @@ export const fi = {
     copyFailed: "Linkin kopiointi epäonnistui"
   }
 };
+

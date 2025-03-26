@@ -1,4 +1,3 @@
-
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -459,4 +458,97 @@ export const estimateTermForCustomPayment = (
   }
   
   return months < maxMonths ? months : null;
+};
+
+export const customPaymentLoanCalculator = (
+  loanAmount: number,
+  interestRate: number,
+  customPayment: number,
+  monthlyFee: number = 0,
+  strategy: 'avalanche' | 'snowball' = 'avalanche'
+): CustomPaymentResult => {
+  if (loanAmount <= 0 || interestRate < 0 || customPayment <= 0) {
+    throw new Error('Invalid input parameters');
+  }
+
+  const monthlyInterestRate = interestRate / 100 / 12;
+  let remainingBalance = loanAmount;
+  let monthCount = 0;
+  
+  // For tracking monthly breakdown
+  const monthlyBreakdown: MonthlyBreakdown[] = [];
+  
+  // Increase max months to a more realistic value - 100 years should be enough for any loan
+  const maxMonths = 12 * 100; // 100 years as absolute maximum
+  
+  let currentPayment = customPayment;
+  
+  // Calculate the monthly breakdown
+  while (remainingBalance > 0 && monthCount < maxMonths) {
+    // Calculate interest for this month
+    const interestPayment = remainingBalance * monthlyInterestRate;
+    
+    // Calculate how much of the payment goes to principal
+    const principalPayment = currentPayment - interestPayment;
+    
+    // If payment doesn't cover interest, loan will never be paid off
+    if (principalPayment <= 0) {
+      break;
+    }
+    
+    // Update remaining balance
+    remainingBalance -= principalPayment;
+    
+    // Add this month to the breakdown
+    monthlyBreakdown.push({
+      month: monthCount + 1,
+      principalPayment,
+      interestPayment,
+      remainingBalance: Math.max(0, remainingBalance),
+      totalPayment: currentPayment + monthlyFee
+    });
+    
+    monthCount++;
+    
+    // Handle small remaining amounts
+    if (remainingBalance < 0.01) {
+      remainingBalance = 0;
+    }
+  }
+  
+  // First month's values
+  const firstMonthInterest = loanAmount * monthlyInterestRate;
+  const firstMonthPrincipal = customPayment - firstMonthInterest;
+  
+  // If payment doesn't cover interest, loan will never be paid off
+  if (firstMonthPrincipal <= 0) {
+    // Return special case for impossible loan payoff
+    return {
+      monthlyPayment: customPayment + monthlyFee,
+      totalPayment: Infinity,
+      totalInterest: Infinity,
+      loanAmount,
+      interestRate,
+      termMonths: Infinity,
+      firstMonthPrincipal: 0,
+      firstMonthInterest,
+      interest: firstMonthInterest,
+      monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
+      actualTermMonths: Infinity
+    };
+  }
+  
+  return {
+    monthlyPayment: customPayment + monthlyFee,
+    totalPayment: monthCount * customPayment + monthCount * monthlyFee,
+    totalInterest: (monthCount * customPayment) - loanAmount + (monthCount * monthlyFee),
+    loanAmount,
+    interestRate,
+    termMonths: monthCount,
+    firstMonthPrincipal,
+    firstMonthInterest,
+    interest: firstMonthInterest,
+    monthlyBreakdown,
+    actualTermMonths: monthCount
+  };
 };

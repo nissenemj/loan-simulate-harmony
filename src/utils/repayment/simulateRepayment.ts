@@ -1,4 +1,7 @@
 
+import { DebtItem, PrioritizationMethod, RepaymentPlan } from './types';
+import { prioritizeDebts } from './prioritization';
+
 /**
  * Simulates debt repayment month by month with improved interest calculation
  * and proper implementation of snowball/avalanche prioritization
