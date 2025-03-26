@@ -1,3 +1,4 @@
+
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -25,6 +26,29 @@ export interface LoanCalculationResult {
   interest: number; // Added to make the interface consistent for totalMonthlyInterest
   monthlyBreakdown: { principal: number; interest: number }[];
   actualTermMonths?: number; // Added for custom payment to show actual term
+}
+
+// Define the missing types
+export interface MonthlyBreakdown {
+  month: number;
+  principalPayment: number;
+  interestPayment: number;
+  remainingBalance: number;
+  totalPayment: number;
+}
+
+export interface CustomPaymentResult {
+  monthlyPayment: number;
+  totalPayment: number;
+  totalInterest: number;
+  loanAmount: number;
+  interestRate: number;
+  termMonths: number;
+  firstMonthPrincipal: number;
+  firstMonthInterest: number;
+  interest: number;
+  monthlyBreakdown: MonthlyBreakdown[];
+  actualTermMonths: number;
 }
 
 /**
