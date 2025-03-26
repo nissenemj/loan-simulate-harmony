@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -536,7 +537,7 @@ export const fi = {
     minimumPayments: "Minimimaksut",
     snowball: "Lumipallostrategia",
     avalanche: "Lumivyörystrategia",
-    totalMonths: "Kokonaiskuukaudet",
+    // Note: Removed the duplicate 'totalMonths' property that was causing the error
     strategySummary: "Strategioiden yhteenveto",
     savingsVsMinimum: "Säästö vs. minimi",
     bestStrategy: "Paras strategia",
