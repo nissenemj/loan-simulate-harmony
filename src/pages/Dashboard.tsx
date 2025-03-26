@@ -111,6 +111,8 @@ const Dashboard = () => {
           totalDebt={totalDebt}
           formattedDebtFreeDate={formattedDebtFreeDate}
           activeCards={activeCards}
+          activeLoans={activeLoans}
+          monthlyBudget={monthlyBudget}
         />
       </div>
     </div>
