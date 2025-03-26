@@ -183,7 +183,8 @@ export const calculateCustomPaymentLoan = (
   loanAmount: number,
   annualInterestRate: number,
   termYears: number,
-  customPayment: number
+  customPayment: number,
+  strategy: 'minimum' | 'snowball' | 'avalanche' = 'minimum'
 ): LoanCalculationResult => {
   const monthlyInterestRate = calculateMonthlyInterestRate(annualInterestRate);
   
@@ -197,7 +198,7 @@ export const calculateCustomPaymentLoan = (
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       firstMonthPrincipal: 0,
       firstMonthInterest: minimumPayment,
-      interest: minimumPayment, // Add the interest field
+      interest: minimumPayment,
       monthlyBreakdown: [{ principal: 0, interest: minimumPayment }],
       actualTermMonths: Infinity
     };
@@ -207,12 +208,18 @@ export const calculateCustomPaymentLoan = (
   let totalInterest = 0;
   const monthlyBreakdown: { principal: number; interest: number }[] = [];
   let monthCount = 0;
-  const maxMonths = termYears * 12 * 2; // Safety limit to prevent infinite loops
+  
+  // Increase max months to a more realistic value - 100 years should be enough for any loan
+  const maxMonths = 12 * 100; // 100 years as absolute maximum
+
+  
+  
+ let currentPayment = customPayment;
   
   // Calculate the monthly breakdown
   while (remainingBalance > 0 && monthCount < maxMonths) {
     const interestPayment = remainingBalance * monthlyInterestRate;
-    const principalPayment = customPayment - interestPayment;
+    const principalPayment = currentPayment - interestPayment;
     
     // If the principal payment would exceed the remaining balance,
     // adjust the final payment
@@ -233,22 +240,28 @@ export const calculateCustomPaymentLoan = (
     if (remainingBalance < 0.01) {
       remainingBalance = 0;
     }
-  }
+    
+    // For future enhancement: if implementing snowball/avalanche within this function,
+    // we could adjust currentPayment here based on other loans' statuses
   
   // First month's values
   const firstMonthInterest = loanAmount * monthlyInterestRate;
   const firstMonthPrincipal = customPayment - firstMonthInterest;
   
-  // If we hit the max months, the loan won't be paid off with the custom payment
-  if (monthCount >= maxMonths) {
+  // Check if the loan will actually be paid off with the current payment
+  // Use a better condition - check if remainingBalance is still significant
+  const willNeverPayOff = monthCount >= maxMonths && remainingBalance > loanAmount * 0.01;
+  
+  if (willNeverPayOff) {
     return {
       monthlyPayment: customPayment,
       totalInterest: Infinity, // Indicate that the loan will never be paid off
       firstMonthPrincipal,
       firstMonthInterest,
-      interest: firstMonthInterest, // Add the interest field
+      interest: firstMonthInterest,
       monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
-      actualTermMonths: Infinity
+      actualTermMonths: Infinity,
+      strategyApplied: strategy // Add information about the applied strategy
     };
   }
   
@@ -257,12 +270,12 @@ export const calculateCustomPaymentLoan = (
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
-    interest: firstMonthInterest, // Add the interest field
+    interest: firstMonthInterest,
     monthlyBreakdown,
-    actualTermMonths: monthCount
+    actualTermMonths: monthCount,
+    strategyApplied: strategy // Add information about the applied strategy
   };
 };
-
 /**
  * Calculates loan details based on the repayment type
  */
