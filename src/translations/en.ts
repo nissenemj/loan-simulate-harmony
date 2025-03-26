@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -257,7 +258,25 @@ export const en = {
     enterBudgetPrompt: "Enter your monthly budget and click Calculate to see your repayment plan.",
     calculateNow: "Calculate Now",
     summaryTab: "Debt Summary",
-    planTab: "Repayment Plan"
+    planTab: "Repayment Plan",
+    // Add these new translations
+    strategyComparison: "Repayment Strategy Comparison",
+    strategyComparisonDesc: "Compare different repayment strategies and their impact on your debt payoff",
+    payoffTimeline: "Payoff Timeline",
+    debtDetails: "Debt Details",
+    timelineExplanation: "This chart shows how quickly each debt is paid off with the selected strategy",
+    paymentFlowVisualization: "Payment Flow Visualization",
+    paymentFlowDescription: "See how payments move from one debt to another as they are paid off",
+    paymentFlowExplanation: "When a debt is paid off, its allocated budget is shifted to the next priority debt",
+    minimumPayments: "Minimum Payments",
+    snowball: "Snowball Strategy",
+    avalanche: "Avalanche Strategy",
+    totalMonths: "Total Months",
+    totalInterest: "Total Interest",
+    strategySummary: "Strategy Summary",
+    savingsVsMinimum: "Savings vs. Minimum",
+    bestStrategy: "Best Strategy",
+    loadingPlans: "Loading payment plans...",
   },
   interest: {
     fixed: "Fixed",

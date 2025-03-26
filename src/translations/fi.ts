@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -524,7 +525,24 @@ export const fi = {
     payoffScheduleDescription: "Kuinka kauan kestää maksaa jokainen velka",
     payoffTime: "Maksuaika",
     totalRemaining: "Jäljellä yhteensä",
-    noPlanYet: "Ei vielä takaisinmaksusuunnitelmaa"
+    noPlanYet: "Ei vielä takaisinmaksusuunnitelmaa",
+    // Add these new translations
+    strategyComparison: "Lyhennysstrategioiden vertailu",
+    strategyComparisonDesc: "Vertaile eri lyhennysstrategioiden vaikutusta lainojen takaisinmaksuun",
+    payoffTimeline: "Maksuaikataulu",
+    debtDetails: "Velkojen tiedot",
+    timelineExplanation: "Kaavio näyttää kuinka nopeasti kukin velka maksetaan valitulla strategialla",
+    paymentFlowVisualization: "Maksuvirtojen visualisointi",
+    paymentFlowDescription: "Näet miten maksut siirtyvät yhdestä velasta seuraavaan",
+    paymentFlowExplanation: "Kun velka on maksettu pois, sen osuus budjetista siirtyy seuraavan prioriteetin velkaan",
+    minimumPayments: "Minimimaksut",
+    snowball: "Lumipallostrategia",
+    avalanche: "Lumivyörystrategia",
+    totalMonths: "Kokonaiskuukaudet",
+    strategySummary: "Strategioiden yhteenveto",
+    savingsVsMinimum: "Säästö vs. minimi",
+    bestStrategy: "Paras strategia",
+    loadingPlans: "Ladataan maksusuunnitelmia...",
   },
   interest: {
     fixed: 'Kiinteä',

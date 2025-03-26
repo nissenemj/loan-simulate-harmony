@@ -1,3 +1,4 @@
+
 /**
  * Simulates debt repayment month by month with improved interest calculation
  * and proper implementation of snowball/avalanche prioritization
