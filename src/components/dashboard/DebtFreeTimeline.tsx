@@ -46,7 +46,7 @@ const DebtFreeTimeline = ({ totalDebt, formattedDebtFreeDate, activeCards }: Deb
                   <CreditCard className="h-3 w-3" />
                 </div>
                 <h4 className="font-medium">{t('dashboard.creditCardsFree')}</h4>
-                <p className="text-sm text-muted-foreground mt-1">{t('dashboard.projectDate')}: +1 {t('dashboard.year')}</p>
+                <p className="text-sm text-muted-foreground mt-1">{t('repayment.projectDate')}: +1 {t('repayment.year')}</p>
               </div>
             )}
             
@@ -55,7 +55,7 @@ const DebtFreeTimeline = ({ totalDebt, formattedDebtFreeDate, activeCards }: Deb
                 <Award className="h-3 w-3 text-white" />
               </div>
               <h4 className="font-medium">{t('dashboard.debtFree')}</h4>
-              <p className="text-sm text-muted-foreground mt-1">{t('dashboard.projectDate')}: {formattedDebtFreeDate}</p>
+              <p className="text-sm text-muted-foreground mt-1">{t('repayment.projectDate')}: {formattedDebtFreeDate}</p>
             </div>
           </div>
         </div>

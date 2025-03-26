@@ -173,14 +173,14 @@ const AffiliateSection = () => {
         </div>
       </div>
 
-      {/* Storytel specific disclaimer */}
+      {/* Storytel specific disclaimer - Fixed properly with proper t() entries */}
       <div className="bg-accent/30 p-4 rounded-lg text-sm">
-        <p className="font-medium mb-2">{t("affiliate.storytelDisclaimer") || "Storytel-edun ehdot:"}</p>
+        <p className="font-medium mb-2">{t("affiliate.storytelDisclaimer")}</p>
         <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-          <li>{t("affiliate.storytelDisclaimerLine1") || "Etu koskee vain uusia Storytelin asiakkaita."}</li>
-          <li>{t("affiliate.storytelDisclaimerLine2") || "Kokeilujakson aikana saa kuunnella ja lukea 100 tuntia kirjoja."}</li>
-          <li>{t("affiliate.storytelDisclaimerLine3") || "Storytelin tilaus ei ole sitova ja sen voi lopettaa milloin haluaa."}</li>
-          <li>{t("affiliate.storytelDisclaimerLine4") || "Ilmaisen kokeilujakson jälkeen tilaus jatkuu automaattisesti hintaan 19,99 € / kk."}</li>
+          <li>{t("affiliate.storytelDisclaimerLine1")}</li>
+          <li>{t("affiliate.storytelDisclaimerLine2")}</li>
+          <li>{t("affiliate.storytelDisclaimerLine3")}</li>
+          <li>{t("affiliate.storytelDisclaimerLine4")}</li>
         </ul>
       </div>
 
