@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, CreditCard, Award, ArrowRight, TrendingDown, BadgeDollarSign } from 'lucide-react';
+import { Calendar, Clock, CreditCard, Award, ArrowRight, TrendingDown, BadgeDollarSign, Calculator } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
@@ -225,10 +225,19 @@ const DebtFreeTimeline = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-2 items-stretch sm:flex-row sm:items-center">
         <Button variant="outline" onClick={() => navigate('/debt-summary')}>
           {t('dashboard.viewDetailedTimeline')}
           <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+        
+        <Button 
+          variant="default" 
+          onClick={() => navigate('/debt-summary?tab=repayment')}
+          className="flex items-center"
+        >
+          <Calculator className="mr-2 h-4 w-4" />
+          {t('dashboard.goToRepaymentPlan')}
         </Button>
       </CardFooter>
     </Card>
