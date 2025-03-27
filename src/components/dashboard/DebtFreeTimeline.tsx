@@ -64,12 +64,8 @@ const DebtFreeTimeline = ({
   const fastestMethod = avalanchePlan.totalMonths <= snowballPlan.totalMonths ? 'avalanche' : 'snowball';
   const fastestDate = fastestMethod === 'avalanche' ? avalancheDate : snowballDate;
   
-  // Calculate different dates to ensure they're not all the same
-  const getFutureDate = (addMonths: number) => {
-    const date = new Date(now);
-    date.setMonth(date.getMonth() + addMonths);
-    return date.toLocaleDateString(locale);
-  };
+  // Calculate monthly difference between methods
+  const monthsDifference = Math.abs(avalanchePlan.totalMonths - snowballPlan.totalMonths);
   
   // Get credit card free date (finding when all credit cards are paid)
   let creditCardFreeMonth = 0;
@@ -127,34 +123,41 @@ const DebtFreeTimeline = ({
               </div>
             )}
             
-            {avalanchePlan.isViable && snowballPlan.isViable && (
-              <>
-                <div className="relative pl-8 pb-6">
-                  <div className="absolute left-0 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
-                    <Award className="h-3 w-3 text-white" />
-                  </div>
-                  <h4 className="font-medium">{t('repayment.avalancheStrategy')}</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {t('repayment.debtFreeIn')} {avalanchePlan.totalMonths} {t('repayment.months')}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('repayment.projectDate')}: {avalancheDate}
-                  </p>
+            {avalanchePlan.isViable && (
+              <div className="relative pl-8 pb-6">
+                <div className="absolute left-0 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
+                  <Award className="h-3 w-3 text-white" />
                 </div>
-                
-                <div className="relative pl-8 pb-6">
-                  <div className="absolute left-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                    <Award className="h-3 w-3 text-white" />
-                  </div>
-                  <h4 className="font-medium">{t('repayment.snowballStrategy')}</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {t('repayment.debtFreeIn')} {snowballPlan.totalMonths} {t('repayment.months')}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {t('repayment.projectDate')}: {snowballDate}
-                  </p>
+                <h4 className="font-medium">{t('repayment.avalancheStrategy')}</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t('repayment.debtFreeIn')} {avalanchePlan.totalMonths} {t('repayment.months')}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {t('repayment.projectDate')}: {avalancheDate}
+                </p>
+              </div>
+            )}
+            
+            {snowballPlan.isViable && (
+              <div className="relative pl-8 pb-6">
+                <div className="absolute left-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+                  <Award className="h-3 w-3 text-white" />
                 </div>
-              </>
+                <h4 className="font-medium">{t('repayment.snowballStrategy')}</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t('repayment.debtFreeIn')} {snowballPlan.totalMonths} {t('repayment.months')}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {t('repayment.projectDate')}: {snowballDate}
+                </p>
+                {monthsDifference > 0 && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {fastestMethod === 'snowball' 
+                      ? t('repayment.monthsFaster', { months: monthsDifference }) 
+                      : t('repayment.monthsSlower', { months: monthsDifference })}
+                  </p>
+                )}
+              </div>
             )}
             
             <div className="relative pl-8">
@@ -164,9 +167,11 @@ const DebtFreeTimeline = ({
               <h4 className="font-medium">{t('dashboard.debtFree')}</h4>
               <p className="text-sm text-muted-foreground mt-1">
                 {t('repayment.projectDate')}: {fastestDate}
+              </p>
+              <p className="text-xs text-muted-foreground">
                 {fastestMethod === 'avalanche' ? 
-                  ` (${t('repayment.avalancheStrategy')})` : 
-                  ` (${t('repayment.snowballStrategy')})`}
+                  t('repayment.fastestWithAvalanche') : 
+                  t('repayment.fastestWithSnowball')}
               </p>
             </div>
           </div>

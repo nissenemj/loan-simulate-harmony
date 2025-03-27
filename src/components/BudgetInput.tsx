@@ -29,9 +29,11 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
       const parsedBudget = parseFloat(budget);
       if (!isNaN(parsedBudget) && parsedBudget > 0) {
         onCalculate(parsedBudget, prioritization);
+        console.log(`Calculating repayment plan with budget: ${parsedBudget}, method: ${prioritization}`);
       }
     } else if (budget > 0) {
       onCalculate(budget, prioritization);
+      console.log(`Calculating repayment plan with budget: ${budget}, method: ${prioritization}`);
     }
   };
 

@@ -24,7 +24,7 @@ export const simulateRepayment = (
   
   // Simulate until all debts are paid off
   let month = 1;
-  const MAX_MONTHS = 3600; // 100 years safety limit
+  const MAX_MONTHS = 3600; // 300 years safety limit
   
   // Track extra payment amount available for redistribution
   let extraPaymentPool = 0;
@@ -137,7 +137,7 @@ export const simulateRepayment = (
     // Add month to timeline
     timeline.push(monthData);
     
-    // Handle snowball/avalanche effect - identify debts that were just paid off this month
+    // Handle snowball/avalanche logic - identify debts that were just paid off this month
     const justPaidOffDebts = monthData.debts.filter(debt => debt.remainingBalance === 0);
     
     // For each paid off debt, redistribute its payment to the highest priority remaining debt

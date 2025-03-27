@@ -34,16 +34,40 @@ const flattenTranslations = (obj: any, prefix = ''): Translations => {
 const enTranslations = flattenTranslations(en);
 const fiTranslations = flattenTranslations(fi);
 
-// For debugging, check translation counts
+// For debugging, check translation counts and specific keys for repayment section
 console.log('Translation keys loaded:', {
   english: Object.keys(enTranslations).length,
-  finnish: Object.keys(fiTranslations).length
+  finnish: Object.keys(fiTranslations).length,
+  repaymentKeysEn: Object.keys(enTranslations).filter(k => k.startsWith('repayment.')),
+  repaymentKeysFi: Object.keys(fiTranslations).filter(k => k.startsWith('repayment.')),
 });
 
 // Check for missing keys by comparing English to Finnish
 const missingFinnishKeys = Object.keys(enTranslations).filter(key => !fiTranslations[key]);
 if (missingFinnishKeys.length > 0) {
   console.warn('Missing Finnish translations for keys:', missingFinnishKeys);
+}
+
+// Check for specific repayment keys in both languages
+const requiredRepaymentKeys = [
+  'repayment.avalancheStrategy', 
+  'repayment.snowballStrategy',
+  'repayment.debtFreeIn',
+  'repayment.months',
+  'repayment.projectDate',
+  'repayment.fastestWithAvalanche',
+  'repayment.fastestWithSnowball',
+  'repayment.monthsFaster',
+  'repayment.monthsSlower'
+];
+
+for (const key of requiredRepaymentKeys) {
+  if (!enTranslations[key]) {
+    console.error(`Missing English translation for key: ${key}`);
+  }
+  if (!fiTranslations[key]) {
+    console.error(`Missing Finnish translation for key: ${key}`);
+  }
 }
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -76,7 +100,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
-      translationsSize: Object.keys(lang === 'en' ? enTranslations : fiTranslations).length 
+      translationsSize: Object.keys(lang === 'en' ? enTranslations : fiTranslations).length,
+      repaymentKeysAvailable: Object.keys(lang === 'en' ? enTranslations : fiTranslations)
+        .filter(k => k.startsWith('repayment.')).length
     });
   };
   
