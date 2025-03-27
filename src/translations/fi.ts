@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -218,8 +219,7 @@ export const fi: typeof en = {
     placeholderCustomPayment: "200",
     monthlyFee: "Kuukausimaksu",
     placeholderMonthlyFee: "5.0",
-    monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle",
-    currencySymbol: "€"
+    monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle"
   },
   repayment: {
     annuity: "Annuiteetti",
@@ -301,9 +301,7 @@ export const fi: typeof en = {
     monthsUntilCreditCardFree: "{{months}} kuukautta kunnes luottokorteista vapaa",
     interestSaved: "Säästetty korko",
     avalancheDesc: "Korkein korko ensin",
-    snowballDesc: "Pienin saldo ensin",
-    newPayoffTime: "Uusi maksuaika",
-    newInterestPaid: "Uusi maksettu korko"
+    snowballDesc: "Pienin saldo ensin"
   },
   interest: {
     fixed: "Kiinteä",
@@ -433,11 +431,7 @@ export const fi: typeof en = {
     title: "Potentiaaliset säästöt",
     description: "Lainojen maksaminen nopeammin voi säästää sinulle merkittävän summan korkokuluissa.",
     payingOffNow: "Maksamalla nyt säästät",
-    payOff: "Maksa pois",
-    payoffTime: "Maksuaika",
-    interestSaved: "Säästetty korko",
-    newPayoffTime: "Uusi maksuaika",
-    newInterestPaid: "Uusi maksettu korko"
+    payOff: "Maksa pois"
   },
   table: {
     name: "Nimi",
@@ -452,11 +446,10 @@ export const fi: typeof en = {
     edit: "Muokkaa",
     toggleActive: "Vaihda aktiiviseksi",
     payoff: "Maksa pois",
+    year: "vuosi",
     years: "vuotta",
     totalInterest: "Kokonaiskorko",
-    totalPayment: "Kokonaismaksu",
-    year: "vuosi",
-    years: "vuotta"
+    totalPayment: "Kokonaismaksu"
   },
   loanTerms: {
     pageTitle: "Talouden sanasto",
@@ -545,9 +538,9 @@ export const fi: typeof en = {
     projectDate: 'Arvioitu päivämäärä',
     debtFree: 'Velaton',
     viewDetailedTimeline: 'Näytä yksityiskohtainen aikataulu',
-    goToRepaymentPlan: 'Tee maksusuunnitelma',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
-    year: 'vuosi'
+    year: 'vuosi',
+    goToRepaymentPlan: 'Tee maksusuunnitelma'
   },
   blog: {
     pageTitle: "Blogi | Lainasimulaattori",
