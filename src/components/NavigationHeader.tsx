@@ -22,19 +22,21 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import VelkavapausLogo from './VelkavapausLogo';
 
 const NavigationHeader: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, translations } = useLanguage();
   const location = useLocation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   
   // Debug log to check if translations are being loaded
-  console.log('Navigation rendering, translations:', {
-    dashboard: t('tabs.dashboard'),
-    loans: t('tabs.loans'),
-    debtSummary: t('tabs.debtSummary'),
-    blog: t('tabs.blog'),
-    terms: t('tabs.glossary')
+  console.log('Navigation rendering, translations loaded:', {
+    dashboardLabel: t('tabs.dashboard'),
+    loansLabel: t('tabs.loans'),
+    debtSummaryLabel: t('tabs.debtSummary'),
+    blogLabel: t('tabs.blog'),
+    termsLabel: t('tabs.glossary'),
+    allTranslationsKeys: Object.keys(translations).length,
+    pathMatches: location.pathname
   });
   
   const menuItems = [

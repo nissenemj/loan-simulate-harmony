@@ -27,7 +27,7 @@ const DebtFreeTimeline = ({
   activeLoans = [], 
   monthlyBudget = 1500 
 }: DebtFreeTimelineProps) => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const navigate = useNavigate();
   
   // Generate repayment plans using both strategies
@@ -36,14 +36,26 @@ const DebtFreeTimeline = ({
   const avalanchePlan = generateRepaymentPlan(combinedDebts, monthlyBudget, 'avalanche');
   const snowballPlan = generateRepaymentPlan(combinedDebts, monthlyBudget, 'snowball');
   
-  // Get debt-free dates for each strategy
+  // Get debt-free dates for each strategy with proper future dates
   const now = new Date();
   
   const getDateAfterMonths = (months: number) => {
+    if (months <= 0) return '';
+    
     const date = new Date(now);
     date.setMonth(date.getMonth() + months);
-    return date.toLocaleDateString('fi-FI');
+    return date.toLocaleDateString(locale);
   };
+  
+  // Debug logs to verify timeline calculations
+  console.log('DebtFreeTimeline calculations:', {
+    avalancheTotalMonths: avalanchePlan.totalMonths,
+    snowballTotalMonths: snowballPlan.totalMonths,
+    avalancheViable: avalanchePlan.isViable,
+    snowballViable: snowballPlan.isViable,
+    now: now.toISOString(),
+    locale
+  });
   
   const avalancheDate = getDateAfterMonths(avalanchePlan.totalMonths);
   const snowballDate = getDateAfterMonths(snowballPlan.totalMonths);
@@ -51,6 +63,13 @@ const DebtFreeTimeline = ({
   // Determine fastest method
   const fastestMethod = avalanchePlan.totalMonths <= snowballPlan.totalMonths ? 'avalanche' : 'snowball';
   const fastestDate = fastestMethod === 'avalanche' ? avalancheDate : snowballDate;
+  
+  // Calculate different dates to ensure they're not all the same
+  const getFutureDate = (addMonths: number) => {
+    const date = new Date(now);
+    date.setMonth(date.getMonth() + addMonths);
+    return date.toLocaleDateString(locale);
+  };
   
   // Get credit card free date (finding when all credit cards are paid)
   let creditCardFreeMonth = 0;

@@ -30,8 +30,21 @@ const flattenTranslations = (obj: any, prefix = ''): Translations => {
   }, {});
 };
 
+// Precompute flattened translations
 const enTranslations = flattenTranslations(en);
 const fiTranslations = flattenTranslations(fi);
+
+// For debugging, check translation counts
+console.log('Translation keys loaded:', {
+  english: Object.keys(enTranslations).length,
+  finnish: Object.keys(fiTranslations).length
+});
+
+// Check for missing keys by comparing English to Finnish
+const missingFinnishKeys = Object.keys(enTranslations).filter(key => !fiTranslations[key]);
+if (missingFinnishKeys.length > 0) {
+  console.warn('Missing Finnish translations for keys:', missingFinnishKeys);
+}
 
 const LanguageContext = createContext<LanguageContextType>({
   language: 'fi',

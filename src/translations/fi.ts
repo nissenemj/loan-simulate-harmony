@@ -279,7 +279,19 @@ export const fi = {
     strategySummary: "Strategiayhteenveto",
     savingsVsMinimum: "Säästöt vs. minimi",
     bestStrategy: "Paras strategia",
-    loadingPlans: "Ladataan maksusuunnitelmia..."
+    loadingPlans: "Ladataan maksusuunnitelmia...",
+    // Add missing translation keys
+    title: "Takaisinmaksusuunnitelma",
+    budget: "Budjetti",
+    budgetPlaceholder: "Syötä kuukausibudjetti",
+    strategy: "Strategia",
+    highestInterestFirst: "Korkein korko ensin",
+    highestInterestDesc: "Maksa korkeimman koron velat ensin",
+    lowestBalanceFirst: "Pienin saldo ensin",
+    lowestBalanceDesc: "Maksa pienimmät velat ensin",
+    debtFreeIn: "Velaton",
+    projectDate: "Arvioitu päivämäärä",
+    tableSummary: "Velkakatsauksen taulukko"
   },
   interest: {
     fixed: "Kiinteä",
@@ -532,4 +544,3 @@ export const fi = {
     disclaimer: "Saatamme ansaita palkkion, jos käytät näitä linkkejä, mutta tämä ei vaikuta maksamaasi hintaan.",
   }
 };
-
