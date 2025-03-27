@@ -123,7 +123,8 @@ const DebtFreeTimeline = ({
   const totalMinPayments = combinedDebts.reduce((sum, debt) => {
     if (debt.type === 'loan') {
       const loanDebt = activeLoans.find(loan => loan.id === debt.id);
-      return sum + (loanDebt ? loanDebt.monthlyPayment || 0 : 0);
+      // Use the loan calculation for minimum payment instead of accessing monthlyPayment directly
+      return sum + (loanDebt ? loanDebt.minPayment || 0 : 0);
     } else {
       const cardDebt = activeCards.find(card => card.id === debt.id);
       return sum + (cardDebt ? Math.max(cardDebt.minPayment, cardDebt.balance * (cardDebt.minPaymentPercent / 100)) : 0);

@@ -11,7 +11,8 @@ export interface Loan {
   interestType?: InterestType;
   customPayment?: number;
   isActive: boolean;
-  monthlyFee?: number; // Added monthly fee (e.g., processing fee)
+  monthlyFee?: number; // Added monthly fee field
+  minPayment?: number; // Added minPayment field for compatibility with DebtItem
 }
 
 /**

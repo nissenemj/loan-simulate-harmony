@@ -66,8 +66,7 @@ export const fi: typeof en = {
     welcomeBack: "Tervetuloa takaisin!",
     loginError: "Kirjautuminen epäonnistui",
     signupSuccess: "Rekisteröityminen onnistui",
-    checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi",
-    signupError: "Rekisteröityminen epäonnistui"
+    checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi"
   },
   toast: {
     loanAdded: 'Laina lisätty onnistuneesti',
@@ -220,19 +219,6 @@ export const fi: typeof en = {
     monthlyFee: "Kuukausimaksu",
     placeholderMonthlyFee: "5.0",
     monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle",
-    loanName: "Lainan nimi",
-    loanAmount: "Lainan määrä",
-    interestRate: "Korko",
-    loanTerm: "Laina-aika",
-    cardName: "Luottokortin nimi",
-    cardBalance: "Luottokortin saldo",
-    cardAPR: "Luottokortin todellinen vuosikorko",
-    cardMinPayment: "Vähimmäismaksu",
-    addLoan: "Lisää laina",
-    addCard: "Lisää luottokortti",
-    editLoan: "Muokkaa lainaa",
-    updateLoan: "Päivitä laina",
-    cancelEdit: "Peruuta muokkaus",
     currencySymbol: "€"
   },
   repayment: {
@@ -316,9 +302,6 @@ export const fi: typeof en = {
     interestSaved: "Säästetty korko",
     avalancheDesc: "Korkein korko ensin",
     snowballDesc: "Pienin saldo ensin",
-    additionalPayment: "Lisämaksu",
-    payoffTime: "Maksuaika",
-    interestSaved: "Säästetty korko",
     newPayoffTime: "Uusi maksuaika",
     newInterestPaid: "Uusi maksettu korko"
   },
@@ -451,7 +434,6 @@ export const fi: typeof en = {
     description: "Lainojen maksaminen nopeammin voi säästää sinulle merkittävän summan korkokuluissa.",
     payingOffNow: "Maksamalla nyt säästät",
     payOff: "Maksa pois",
-    additionalPayment: "Lisämaksu",
     payoffTime: "Maksuaika",
     interestSaved: "Säästetty korko",
     newPayoffTime: "Uusi maksuaika",
@@ -474,7 +456,7 @@ export const fi: typeof en = {
     totalInterest: "Kokonaiskorko",
     totalPayment: "Kokonaismaksu",
     year: "vuosi",
-    years: "vuotta",
+    years: "vuotta"
   },
   loanTerms: {
     pageTitle: "Talouden sanasto",
@@ -565,7 +547,7 @@ export const fi: typeof en = {
     viewDetailedTimeline: 'Näytä yksityiskohtainen aikataulu',
     goToRepaymentPlan: 'Tee maksusuunnitelma',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
-    year: 'vuosi',
+    year: 'vuosi'
   },
   blog: {
     pageTitle: "Blogi | Lainasimulaattori",
@@ -584,9 +566,6 @@ export const fi: typeof en = {
     copyFailed: "Linkin kopiointi epäonnistui"
   },
   affiliate: {
-    title: 'Yhteistyökumppanit',
-    description: 'Tuemme sivustoa kumppanuuslinkkien kautta.',
-    disclaimer: 'Saatamme saada korvauksen, jos teet ostoksia kumppanilinkkien kautta.',
     title: 'Tarvitsetko lisäapua velkojesi hallintaan?',
     subtitle: 'Nämä luotetut kumppanit tarjoavat palveluja, jotka voivat täydentää velan takaisinmaksumatkaasi.',
     compareLoans: 'Vertaile lainoja',
@@ -594,6 +573,7 @@ export const fi: typeof en = {
     refinanceText: 'Löydä parempi korkotaso ja säästä rahaa.',
     creditCardTitle: 'Parhaat luottokortit',
     creditCardText: 'Tutustu luottokorttitarjouksiin ja etuihin.',
+    disclaimer: 'Saatamme saada korvauksen, jos teet ostoksia kumppanilinkkien kautta.'
   },
   summary: {
     totalLoans: "Lainojen kokonaismäärä",
