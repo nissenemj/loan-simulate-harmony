@@ -87,12 +87,13 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
       translationsSize: Object.keys(translationsToUse).length,
-      tabs: {
-        dashboard: translationsToUse['tabs.dashboard'],
-        loans: translationsToUse['tabs.loans'],
-        debtSummary: translationsToUse['tabs.debtSummary'],
-        blog: translationsToUse['tabs.blog'],
-        glossary: translationsToUse['tabs.glossary']
+      debtFreeTimelineTranslations: {
+        nowKey: translationsToUse['dashboard.now'],
+        currentDebtKey: translationsToUse['dashboard.currentDebt'],
+        debtFreeKey: translationsToUse['dashboard.debtFree'],
+        timelineDescKey: translationsToUse['dashboard.timelineDescription'],
+        avalancheKey: translationsToUse['repayment.fastestWithAvalanche'],
+        snowballKey: translationsToUse['repayment.fastestWithSnowball'],
       }
     });
   };
@@ -110,7 +111,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     // If we have parameters, replace them in the translation string
     if (params) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
-        translation = translation.replace(`{${paramKey}}`, String(paramValue));
+        translation = translation.replace(`{{${paramKey}}}`, String(paramValue));
       });
     }
     

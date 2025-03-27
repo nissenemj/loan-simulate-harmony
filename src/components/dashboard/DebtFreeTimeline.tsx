@@ -119,6 +119,17 @@ const DebtFreeTimeline = ({
   // If all debts are paid in one month, use a simpler display
   const singleMonthPayoff = avalanchePlan.totalMonths === 1 && snowballPlan.totalMonths === 1;
   
+  // Calculate minimum payments for debts
+  const totalMinPayments = combinedDebts.reduce((sum, debt) => {
+    if (debt.type === 'loan') {
+      const loanDebt = activeLoans.find(loan => loan.id === debt.id);
+      return sum + (loanDebt ? loanDebt.monthlyPayment || 0 : 0);
+    } else {
+      const cardDebt = activeCards.find(card => card.id === debt.id);
+      return sum + (cardDebt ? Math.max(cardDebt.minPayment, cardDebt.balance * (cardDebt.minPaymentPercent / 100)) : 0);
+    }
+  }, 0);
+  
   return (
     <Card>
       <CardHeader>
@@ -223,6 +234,15 @@ const DebtFreeTimeline = ({
               )}
             </div>
           </div>
+          
+          {/* Minimum payments timeline */}
+          {totalMinPayments > 0 && (
+            <div className="mt-6 border-t pt-4">
+              <p className="text-sm text-muted-foreground">
+                {t('repayment.minimumPayments')}: {formatCurrency(totalMinPayments)}/kk
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-2 items-stretch sm:flex-row sm:items-center">
@@ -240,6 +260,11 @@ const DebtFreeTimeline = ({
           {t('dashboard.goToRepaymentPlan')}
         </Button>
       </CardFooter>
+      <div className="px-6 pb-4 pt-0 text-sm text-muted-foreground">
+        <p>
+          {t('repayment.timelineExplanation')}. {t('repayment.avalancheDesc')} {t('repayment.snowballDesc')}.
+        </p>
+      </div>
     </Card>
   );
 };
