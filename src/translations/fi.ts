@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -375,7 +374,7 @@ export const fi = {
       question3: 'Voinko käyttää sovellusta opintolainoihin?',
       answer3: 'Ehdottomasti! Sovellus toimii minkä tahansa tyyppisen lainan kanssa, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat.',
       question4: 'Mikä on lumivyöry- ja lumipallomenetelmien ero?',
-      answer4: 'Lumivyörymenetelmässä priorisoidaan korkeakorkoisten velkojen maksaminen ensin säästääksesi eniten korkokuluissa. Lumipallomenetelmässä keskitytään pienimpien velkojen maksamiseen ensin, mikä luo momentin ja motivaation.',
+      answer4: 'Lumivyörymenetelmässä priorisoidaan korkeakorkoisten velkojen maksaminen ensin säästääksesi eniten korkokuluissa. Lumipallomenetelmässä keskitytä��n pienimpien velkojen maksamiseen ensin, mikä luo momentin ja motivaation.',
     },
     finalCta: {
       title: 'Aloita velaton matkasi tänään',
