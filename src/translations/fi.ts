@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -532,12 +533,14 @@ export const fi = {
     totalInterestPaid: "Korkokustannukset yhteensä",
     bestStrategy: "Paras strategia",
     savingsVsMinimum: "Säästö vs. minimi",
-    avalancheStrategy: "Lumivyörystrategia",
-    snowballStrategy: "Lumipallostrategia",
+    // Fixed the duplicate properties
+    // Removed duplicate "avalancheStrategy" and "snowballStrategy"
     date: "Päivämäärä",
     paymentFlowVisualization: "Maksuvirran visualisointi",
     paymentFlowDescription: "Näe miten maksut liikkuvat velasta toiseen",
     paymentFlowExplanation: "Tämä kaavio näyttää miten kuukausittaiset maksut jakautuvat eri velkojen kesken",
+    avalancheStrategy: "Lumivyörystrategia",
+    snowballStrategy: "Lumipallostrategia",
     avalancheSavings: "Lumivyörysäästöt",
     snowballSavings: "Lumipallosäästöt",
     strategySummary: "Strategioiden yhteenveto",
