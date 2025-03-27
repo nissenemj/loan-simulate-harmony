@@ -1,4 +1,3 @@
-
 import { en } from "./en";
 
 export const fi = {
@@ -228,7 +227,7 @@ export const fi = {
   },
   debtSummary: {
     pageTitle: 'Velkayhteenveto',
-    pageDescription: 'Yleiskatsaus veloistasi ja mahdollisista säästöistää.',
+    pageDescription: 'Yleiskatsaus veloistasi ja mahdollisista säästöistä.',
     metaDescription: 'Saa selkeä yleiskatsaus veloistasi ja löydä tapoja säästää rahaa.',
     backButton: 'Takaisin laskuriin',
     totalMonthlyPayment: 'Kuukausittaiset maksuerät yhteensä',
@@ -579,8 +578,6 @@ export const fi = {
     interestSavings: "Korkosäästöt",
     timelineExplanation: "Tämä kaavio näyttää miten velkasi vähenevät ajan myötä valitulla strategialla.",
     minimum: "Vähimmäismaksut",
-    // Add other missing translations
-    minimum: "Vähimmäismaksut"
   },
   interest: {
     fixed: 'Kiinteä',
