@@ -10,7 +10,7 @@ interface DebtSummaryCardProps {
   totalDebt: number;
   debtFreeDate: string;
   totalMinPayments: number;
-  totalAmountToPay?: number; // Added new optional prop
+  totalAmountToPay: number; // Changed from optional to required
 }
 
 const DebtSummaryCard = ({ 
@@ -53,18 +53,16 @@ const DebtSummaryCard = ({
             </div>
           </div>
           
-          {totalAmountToPay && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalAmountPaid')}</h3>
-              <div className="text-2xl font-bold flex items-center">
-                <Calculator className="mr-2 h-5 w-5 text-primary" />
-                <AnimatedNumber
-                  value={totalAmountToPay}
-                  formatter={formatCurrency}
-                />
-              </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalAmountPaid')}</h3>
+            <div className="text-2xl font-bold flex items-center">
+              <Calculator className="mr-2 h-5 w-5 text-primary" />
+              <AnimatedNumber
+                value={totalAmountToPay}
+                formatter={formatCurrency}
+              />
             </div>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>
