@@ -492,7 +492,6 @@ export const fi = {
     clear: "Tyhjennä",
     submit: "Lähetä",
     confirmation: "Vahvistus",
-    save: "Tallenna",
     results: "Tulokset",
     total: "Yhteensä",
     minimum: "Minimi",
@@ -636,6 +635,21 @@ export const fi = {
     allDebts: "Kaikki velat",
     loans: "Lainat",
     creditCards: "Luottokortit",
+    // Add missing translation keys that were referenced in components
+    financialTips: "Taloudelliset vinkit",
+    tip1: "Priorisoi korkean koron velat ensin säästääksesi korkokuluja.",
+    tip2: "Aseta automaattiset maksut varmistamaan, että maksat velkoja ajallaan.",
+    tip3: "Harkitse velkojen yhdistämistä, jos sinulla on useita korkeakorkoisia velkoja.",
+    viewGlossary: "Katso sanasto",
+    paymentPlanSummary: "Maksusuunnitelman yhteenveto",
+    paymentPlanDescription: "Kuukausittainen velkojen takaisinmaksusuunnitelma",
+    monthlyBudget: "Kuukausittainen budjetti",
+    minimumPayments: "Minimaksut",
+    extraBudget: "Ylimääräinen budjetti",
+    prioritizedDebt: "Priorisoitu velka",
+    interestRate: "Korkoprosentti",
+    allocatingExtra: "Kohdistetaan {{amount}} ylimääräistä maksua",
+    viewFullPlan: "Näytä koko suunnitelma",
   },
   cookies: {
     title: "Evästeasetukset",
@@ -710,7 +724,8 @@ export const fi = {
     retirement: "Eläkesäästäminen",
     creditScore: "Luottopisteet",
   },
-  tips: {
+  // Fix the duplicate tips section
+  financialTips: {
     title: "Taloudelliset vinkit",
     description: "Hyödyllisiä vinkkejä taloudenhallinnan parantamiseksi",
     debtManagement: "Velanhallinta",
@@ -757,6 +772,32 @@ export const fi = {
       "Kasvata sijoitussalkkuasi järjestelmällisesti",
       "Opi jatkuvasti uusia taloustaitoja"
     ],
+  },
+  // Add specific saving and debt tips that are needed elsewhere
+  savingTips: {
+    tip1: "Aloita hätärahastolla, joka kattaa 3-6 kuukauden menot",
+    tip2: "Automatisoi säästäminen siirtämällä osa palkastasi säästötilille",
+    tip3: "Vertaile hintoja ennen isoja ostoksia"
+  },
+  debtTips: {
+    tip1: "Priorisoi korkean koron velat ensin",
+    tip2: "Harkitse velkojenyhdistämistä alemmalla korolla",
+    tip3: "Tee aina vähintään minimaksut ajallaan"
+  },
+  budgetTips: {
+    tip1: "Seuraa menojasi tarkasti kuukauden ajan nähdäksesi mihin rahasi menevät",
+    tip2: "Käytä 50/30/20-sääntöä: 50% tarpeisiin, 30% haluihin, 20% säästöön",
+    tip3: "Tarkista ja päivitä budjettisi säännöllisesti"
+  },
+  creditTips: {
+    tip1: "Tarkista luottotietosi säännöllisesti",
+    tip2: "Pidä luottokorttien käyttöaste alle 30%",
+    tip3: "Älä sulje vanhimpia luottokorttejasi"
+  },
+  investingTips: {
+    tip1: "Aloita sijoittaminen mahdollisimman aikaisin hyödyntääksesi korkoa korolle -vaikutusta",
+    tip2: "Hajauta sijoituksesi eri omaisuusluokkiin",
+    tip3: "Tee pitkän aikavälin sijoitussuunnitelma tavoitteidesi perusteella"
   },
   affiliate: {
     title: "Kumppanuusohjelma",
@@ -827,32 +868,6 @@ export const fi = {
     timeout: "Aikakatkaisu",
     connectionError: "Yhteysvirhe",
   },
-  tips: {
-    saving: "Säästäminen",
-    savingTip1: "Aloita hätärahastolla, joka kattaa 3-6 kuukauden menot",
-    savingTip2: "Automatisoi säästäminen siirtämällä osa palkastasi säästötilille",
-    savingTip3: "Vertaile hintoja ennen isoja ostoksia",
-
-    debt: "Velanhallinta",
-    debtTip1: "Priorisoi korkean koron velat ensin",
-    debtTip2: "Harkitse velkojenyhdistämistä alemmalla korolla",
-    debtTip3: "Tee aina vähintään minimaksut ajallaan",
-
-    budget: "Budjetointi",
-    budgetTip1: "Seuraa menojasi tarkasti kuukauden ajan nähdäksesi mihin rahasi menevät",
-    budgetTip2: "Käytä 50/30/20-sääntöä: 50% tarpeisiin, 30% haluihin, 20% säästöön",
-    budgetTip3: "Tarkista ja päivitä budjettisi säännöllisesti",
-
-    credit: "Luotto",
-    creditTip1: "Tarkista luottotietosi säännöllisesti",
-    creditTip2: "Pidä luottokorttien käyttöaste alle 30%",
-    creditTip3: "Älä sulje vanhimpia luottokorttejasi",
-
-    investing: "Sijoittaminen",
-    investingTip1: "Aloita sijoittaminen mahdollisimman aikaisin hyödyntääksesi korkoa korolle -vaikutusta",
-    investingTip2: "Hajauta sijoituksesi eri omaisuusluokkiin",
-    investingTip3: "Tee pitkän aikavälin sijoitussuunnitelma tavoitteidesi perusteella",
-  },
   toast: {
     loanAdded: "Laina lisätty onnistuneesti",
     loanUpdated: "Laina päivitetty onnistuneesti",
@@ -888,6 +903,13 @@ export const fi = {
     tools: "Työkalut",
     recommendations: "Suositukset",
     affiliate: "Kumppanuusohjelma",
+  },
+  // Add missing language keys
+  language: {
+    en: "English",
+    fi: "Suomi",
+  },
+  app: {
+    language: "Kieli"
   }
 };
-
