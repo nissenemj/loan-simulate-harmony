@@ -206,7 +206,8 @@ export const fi = {
     cardName: "Kortin nimi",
     payoffButton: "Maksa pois",
     totalCards: "Kortteja yhteensä",
-    noCardsMessage: "Ei aktiivisia luottokortteja. Lisää luottokortteja päänäkymässä."
+    noCardsMessage: "Ei aktiivisia luottokortteja. Lisää luottokortteja päänäkymässä.",
+    totalInterestEstimate: "Korot yhteensä"
   },
   creditCard: {
     title: "Luottokortti",
@@ -440,7 +441,7 @@ export const fi = {
     selectInterestType: "Valitse korkotyyppi",
     useEuribor: "Käytä Euribor-viitekorkoa",
     useFee: "Sisällytä kuukausimaksu",
-    savingsPlan: "Säästösuunnitelma",
+    savingsPlan: "Säästösuunnitelma"
   },
   common: {
     loading: "Ladataan...",
@@ -513,7 +514,7 @@ export const fi = {
     days: "Päivää",
     hours: "Tuntia",
     minutes: "Minuuttia",
-    seconds: "Sekuntia",
+    seconds: "Sekuntia"
   },
   table: {
     noData: "Ei dataa",
@@ -533,7 +534,7 @@ export const fi = {
     to: "-",
     entries: "riviä",
     year: "vuosi",
-    years: "vuotta",
+    years: "vuotta"
   },
   auth: {
     login: "Kirjaudu",
@@ -570,7 +571,7 @@ export const fi = {
     profileUpdated: "Profiili päivitetty",
     updateProfile: "Päivitä profiili",
     profile: "Profiili",
-    settings: "Asetukset",
+    settings: "Asetukset"
   },
   settings: {
     title: "Asetukset",
@@ -594,18 +595,18 @@ export const fi = {
     themeOptions: {
       light: "Vaalea",
       dark: "Tumma",
-      system: "Järjestelmä",
+      system: "Järjestelmä"
     },
     languageOptions: {
       en: "English",
-      fi: "Suomi",
+      fi: "Suomi"
     },
     advanced: "Lisäasetukset",
     resetAppData: "Nollaa sovelluksen tiedot",
     resetAppDataWarning: "Tämä toiminto poistaa kaikki sovellukseen tallennetut tiedot.",
     importExport: "Tuo/Vie",
     importData: "Tuo tiedot",
-    exportData: "Vie tiedot",
+    exportData: "Vie tiedot"
   },
   dashboard: {
     title: "Kojelauta",
@@ -660,7 +661,14 @@ export const fi = {
     creditCardsFree: "Luottokorteista vapaa",
     debtFree: "Velaton",
     viewDetailedTimeline: "Katso yksityiskohtainen aikajana",
-    timelineDescription: "Näe kuinka nopeasti pääset velattomaksi eri strategioilla"
+    timelineDescription: "Näe kuinka nopeasti pääset velattomaksi eri strategioilla",
+    user: "Käyttäjä",
+    paidDebt: "Maksettu velka",
+    remainingDebt: "Jäljellä oleva velka",
+    progress: "Edistyminen",
+    progressMessage: "Olet jo maksanut {{percentage}}% velastasi - jatka samaan malliin!",
+    helpWithDebt: "Tarvitsetko apua velkasi kanssa?",
+    year: "vuosi"
   },
   tabs: {
     dashboard: "Kojelauta",
@@ -679,6 +687,13 @@ export const fi = {
     loanAdded: "Laina lisätty",
     loanUpdated: "Laina päivitetty",
     loanPaidOff: "Laina maksettu",
-    cardAdded: "Luottokortti lisätty"
+    cardAdded: "Luottokortti lisätty",
+    cardUpdated: "Luottokortti päivitetty",
+    cardDeleted: "Luottokortti poistettu",
+    loanActivated: "Laina aktivoitu",
+    loanDeactivated: "Laina deaktivoitu",
+    cardPaidOff: "Kortti maksettu",
+    cardActivated: "Kortti aktivoitu",
+    cardDeactivated: "Kortti deaktivoitu"
   }
 };

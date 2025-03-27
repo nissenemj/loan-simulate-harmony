@@ -27,6 +27,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
   let totalMonthlyPayment = 0;
   let totalMonthlyInterest = 0;
   let totalInterestEstimate = 0;
+  let totalAmountToBePaid = 0;
 
   // Process loan data
   const loanData = loans.map(loan => {
@@ -35,6 +36,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
     totalMonthlyPayment += calculation.monthlyPayment;
     totalMonthlyInterest += calculation.firstMonthInterest; // Use firstMonthInterest for monthly interest
     totalInterestEstimate += calculation.totalInterest;
+    totalAmountToBePaid += calculation.totalAmountPaid;
     
     return {
       loan,
@@ -60,13 +62,14 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
               <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
               <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
               <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
+              <TableHead>{t("debtSummary.totalAmountPaid")}</TableHead>
             </TableRow>
           </TableHeader>
           
           <TableBody>
             {loanData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-8">
+                <TableCell colSpan={5} className="text-center py-8">
                   {t("debtSummary.noLoansMessage")}
                 </TableCell>
               </TableRow>
@@ -89,6 +92,12 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
                   <TableCell>
                     <AnimatedNumber
                       value={calculation.totalInterest}
+                      formatter={formatCurrency}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <AnimatedNumber
+                      value={calculation.totalAmountPaid}
                       formatter={formatCurrency}
                     />
                   </TableCell>
@@ -116,6 +125,12 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
                 <TableCell className="font-bold">
                   <AnimatedNumber
                     value={totalInterestEstimate}
+                    formatter={formatCurrency}
+                  />
+                </TableCell>
+                <TableCell className="font-bold">
+                  <AnimatedNumber
+                    value={totalAmountToBePaid}
                     formatter={formatCurrency}
                   />
                 </TableCell>

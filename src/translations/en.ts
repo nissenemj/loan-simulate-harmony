@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -259,7 +258,6 @@ export const en = {
     calculateNow: "Calculate Now",
     summaryTab: "Debt Summary",
     planTab: "Repayment Plan",
-    // Add these new translations
     strategyComparison: "Repayment Strategy Comparison",
     strategyComparisonDesc: "Compare different repayment strategies and their impact on your debt payoff",
     payoffTimeline: "Payoff Timeline",
@@ -386,7 +384,9 @@ export const en = {
     totalLoans: "Total Loans",
     payoffButton: "Pay Off",
     actions: "Actions",
-    title: "Debt Summary"
+    title: "Debt Summary",
+    totalAmountPaid: "Total Amount to Pay",
+    includingInterestAndFees: "Including principal, interest, and fees"
   },
   recommendations: {
     title: "Repayment Recommendations",

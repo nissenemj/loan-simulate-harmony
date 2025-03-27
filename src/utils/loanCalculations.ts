@@ -1,4 +1,3 @@
-
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -26,6 +25,7 @@ export interface LoanCalculationResult {
   interest: number; // Added to make the interface consistent for totalMonthlyInterest
   monthlyBreakdown: { principal: number; interest: number }[];
   actualTermMonths?: number; // Added for custom payment to show actual term
+  totalAmountPaid: number; // New property for total amount including principal, interest and fees
 }
 
 // Define the missing types
@@ -96,13 +96,17 @@ export const calculateAnnuityLoan = (
   const firstMonthInterest = loanAmount * monthlyInterestRate;
   const firstMonthPrincipal = monthlyPayment - firstMonthInterest;
   
+  // Calculate total amount paid (principal + interest)
+  const totalAmountPaid = loanAmount + totalInterest;
+  
   return {
     monthlyPayment,
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
     interest: firstMonthInterest, // Add the interest field
-    monthlyBreakdown
+    monthlyBreakdown,
+    totalAmountPaid
   };
 };
 
@@ -140,13 +144,17 @@ export const calculateEqualPrincipalLoan = (
   const firstMonthInterest = loanAmount * monthlyInterestRate;
   const firstMonthPayment = monthlyPrincipal + firstMonthInterest;
   
+  // Calculate total amount paid (principal + interest)
+  const totalAmountPaid = loanAmount + totalInterest;
+  
   return {
     monthlyPayment: firstMonthPayment, // Note: this is just the first month's payment, not constant
     totalInterest,
     firstMonthPrincipal: monthlyPrincipal,
     firstMonthInterest,
     interest: firstMonthInterest, // Add the interest field
-    monthlyBreakdown
+    monthlyBreakdown,
+    totalAmountPaid
   };
 };
 
@@ -189,13 +197,17 @@ export const calculateFixedInstallmentLoan = (
   const firstMonthInterest = loanAmount * monthlyInterestRate;
   const firstMonthPrincipal = monthlyPayment - firstMonthInterest;
   
+  // Calculate total amount paid (principal + interest)
+  const totalAmountPaid = loanAmount + totalInterest;
+  
   return {
     monthlyPayment,
     totalInterest,
     firstMonthPrincipal,
     firstMonthInterest,
     interest: firstMonthInterest, // Add the interest field
-    monthlyBreakdown
+    monthlyBreakdown,
+    totalAmountPaid
   };
 };
 
@@ -223,7 +235,8 @@ export const calculateCustomPaymentLoan = (
       firstMonthInterest: minimumPayment,
       interest: minimumPayment,
       monthlyBreakdown: [{ principal: 0, interest: minimumPayment }],
-      actualTermMonths: Infinity
+      actualTermMonths: Infinity,
+      totalAmountPaid: Infinity // Will never be paid off
     };
   }
   
@@ -279,9 +292,13 @@ export const calculateCustomPaymentLoan = (
       firstMonthInterest,
       interest: firstMonthInterest,
       monthlyBreakdown: monthlyBreakdown.slice(0, 12), // Just return first year's breakdown
-      actualTermMonths: Infinity
+      actualTermMonths: Infinity,
+      totalAmountPaid: Infinity // Will never be paid off
     };
   }
+  
+  // Calculate total amount paid (principal + interest)
+  const totalAmountPaid = loanAmount + totalInterest;
   
   return {
     monthlyPayment: customPayment,
@@ -290,7 +307,8 @@ export const calculateCustomPaymentLoan = (
     firstMonthInterest,
     interest: firstMonthInterest,
     monthlyBreakdown,
-    actualTermMonths: monthCount
+    actualTermMonths: monthCount,
+    totalAmountPaid
   };
 };
 
@@ -324,20 +342,18 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
       throw new Error(`Unknown repayment type: ${loan.repaymentType}`);
   }
   
-  // Add monthly fee to the payment if specified, but NOT to the total interest
+  // Add monthly fee to the payment if specified, and to the total amount
   if (loan.monthlyFee && loan.monthlyFee > 0) {
-    // Store the original monthly payment and total interest
+    // Store the original monthly payment
     const originalMonthlyPayment = result.monthlyPayment;
-    const originalTotalInterest = result.totalInterest;
     
     // Add fee to monthly payment
     result.monthlyPayment += loan.monthlyFee;
     
-    // Add fees to a total fees calculation (separate from interest)
-    const totalFees = loan.monthlyFee * (result.actualTermMonths || loan.termYears * 12);
-    
-    // Don't modify the total interest calculation
-    result.totalInterest = originalTotalInterest;
+    // Add total fees to total amount paid
+    const termMonths = result.actualTermMonths || loan.termYears * 12;
+    const totalFees = loan.monthlyFee * termMonths;
+    result.totalAmountPaid += totalFees;
     
     // Calculate appropriate first month interest (without fee)
     result.interest = result.firstMonthInterest;
