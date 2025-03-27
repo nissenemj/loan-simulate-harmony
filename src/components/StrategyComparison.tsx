@@ -81,6 +81,15 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('timeline');
 
+  const t = (key: string): string => {
+    if (!translations[key]) {
+      console.warn(`Translation key missing: ${key}`);
+      const parts = key.split('.');
+      return parts[parts.length - 1];
+    }
+    return translations[key] || key;
+  };
+
   useEffect(() => {
     if (debts.length === 0 || monthlyBudget <= 0) {
       setLoading(false);

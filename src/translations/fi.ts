@@ -402,7 +402,6 @@ export const fi = {
       copyright: 'Kaikki oikeudet pidätetään.',
     },
   },
-  
   loanTerms: {
     pageTitle: "Taloussanasto",
     backButton: "Takaisin",
@@ -528,7 +527,6 @@ export const fi = {
     payoffTimeline: "Maksuaikataulu",
     debtDetails: "Velkojen tiedot",
     cashFlow: "Kassavirta",
-    minimum: "Minimimaksut",
     loadingPlans: "Ladataan maksusuunnitelmia...",
     projectDate: "Arvioitu päivämäärä",
     debtFreeIn: "Velaton ajassa",
@@ -538,7 +536,6 @@ export const fi = {
     avalancheStrategy: "Lumivyörystrategia",
     snowballStrategy: "Lumipallostrategia",
     date: "Päivämäärä",
-    payment: "Maksu",
     paymentFlowVisualization: "Maksuvirran visualisointi",
     paymentFlowDescription: "Näe miten maksut liikkuvat velasta toiseen",
     paymentFlowExplanation: "Tämä kaavio näyttää miten kuukausittaiset maksut jakautuvat eri velkojen kesken",
@@ -581,6 +578,8 @@ export const fi = {
     actionPlan: "Toimintasuunnitelma",
     interestSavings: "Korkosäästöt",
     timelineExplanation: "Tämä kaavio näyttää miten velkasi vähenevät ajan myötä valitulla strategialla.",
+    minimum: "Vähimmäismaksut",
+    // Add other missing translations
     minimum: "Vähimmäismaksut"
   },
   interest: {
@@ -622,6 +621,8 @@ export const fi = {
     now: 'Nyt',
     currentDebt: 'Nykyinen velka',
     creditCardsFree: 'Luottokortit maksettu',
+    debtFree: 'Velaton',
+    viewDetailedTimeline: 'Näytä yksityiskohtainen aikajana'
   },
   blog: {
     pageTitle: "Blogi | Laina Simulaattori",
@@ -638,5 +639,9 @@ export const fi = {
     copyLink: "Kopioi linkki",
     copiedToClipboard: "Linkki kopioitu leikepöydälle",
     copyFailed: "Linkin kopiointi epäonnistui"
+  },
+  auth: {
+    logout: 'Kirjaudu ulos',
+    dashboard: 'Kojelauta'
   }
 };

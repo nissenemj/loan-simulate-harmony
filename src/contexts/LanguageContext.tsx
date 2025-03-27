@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { en } from '@/translations/en';
 import { fi } from '@/translations/fi';
 
@@ -12,7 +12,7 @@ type LanguageContextType = {
   locale: string;
   translations: Translations;
   setLanguage: (language: 'en' | 'fi') => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
 };
 
 // Convert the nested translations object into a flat structure for easier lookup
@@ -43,32 +43,44 @@ const LanguageContext = createContext<LanguageContextType>({
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   // Default to Finnish if there's no stored preference
-  const savedLanguage = localStorage.getItem('language') as 'en' | 'fi';
-  const initialLanguage = savedLanguage || 'fi';
+  const [language, setLanguage] = useState<'en' | 'fi'>('fi');
+  const [translations, setTranslations] = useState<Translations>(fiTranslations);
+  const [locale, setLocale] = useState('fi-FI');
   
-  const [language, setLanguage] = useState<'en' | 'fi'>(initialLanguage);
-  const [translations, setTranslations] = useState<Translations>(
-    initialLanguage === 'en' ? enTranslations : fiTranslations
-  );
+  useEffect(() => {
+    // Check for saved language preference
+    const savedLanguage = localStorage.getItem('language') as 'en' | 'fi';
+    if (savedLanguage) {
+      handleSetLanguage(savedLanguage);
+    }
+  }, []);
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
+    setLocale(lang === 'en' ? 'en-US' : 'fi-FI');
     localStorage.setItem('language', lang);
   };
   
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, string | number>): string => {
     if (!translations[key]) {
       console.warn(`Translation key missing: ${key}`);
       // Return only the last part of the key for a more user-friendly fallback
       const parts = key.split('.');
       return parts[parts.length - 1];
     }
-    return translations[key] || key;
+    
+    let translation = translations[key];
+    
+    // If we have parameters, replace them in the translation string
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        translation = translation.replace(`{${paramKey}}`, String(paramValue));
+      });
+    }
+    
+    return translation || key;
   };
-
-  // Determine the locale based on the language
-  const locale = language === 'en' ? 'en-US' : 'fi-FI';
   
   return (
     <LanguageContext.Provider value={{ language, locale, translations, setLanguage: handleSetLanguage, t }}>
