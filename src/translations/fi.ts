@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -636,4 +637,49 @@ export const fi = {
     addFirstLoan: "Lisää ensimmäinen laina aloittaaksesi",
     debtPaydown: "Velkojen lyhennys",
     financialGoals: "Taloudelliset tavoitteet",
-    goalProgress: "Tavoitteen edist
+    goalProgress: "Tavoitteen edistyminen",
+    financialTips: "Taloudelliset vinkit",
+    viewGlossary: "Katso termistö",
+    tip1: "Priorisoi korkean koron velat saadaksesi eniten säästöjä",
+    tip2: "Aseta automaattiset maksut välttääksesi myöhästymismaksut",
+    tip3: "Tarkista luottotietosi säännöllisesti saadaksesi paremman kuvan taloudellisesta tilanteestasi",
+    allDebts: "Kaikki velat",
+    loans: "Lainat",
+    creditCards: "Luottokortit",
+    viewDebtSummary: "Katso velkakatsaus",
+    paymentPlanSummary: "Maksusuunnitelman yhteenveto",
+    paymentPlanDescription: "Näin maksat velkasi mahdollisimman tehokkaasti",
+    monthlyBudget: "Kuukausibudjetti velkojen maksuun",
+    minimumPayments: "Minimaksut",
+    extraBudget: "Ylimääräinen budjetti",
+    prioritizedDebt: "Priorisoitu velka",
+    interestRate: "Korkoprosentti",
+    allocatingExtra: "Kohdistetaan {{amount}} ylimääräistä tähän velkaan",
+    viewFullPlan: "Katso koko suunnitelma",
+    now: "Nyt",
+    currentDebt: "Nykyinen velka",
+    creditCardsFree: "Luottokorteista vapaa",
+    debtFree: "Velaton",
+    viewDetailedTimeline: "Katso yksityiskohtainen aikajana",
+    timelineDescription: "Näe kuinka nopeasti pääset velattomaksi eri strategioilla"
+  },
+  tabs: {
+    dashboard: "Kojelauta",
+    loans: "Lainat",
+    creditCards: "Luottokortit",
+    debtSummary: "Velkakatsaus",
+    affiliate: "Kumppanilinkit",
+    blog: "Blogi",
+    glossary: "Termistö"
+  },
+  language: {
+    en: "English",
+    fi: "Suomi"
+  },
+  toast: {
+    loanAdded: "Laina lisätty",
+    loanUpdated: "Laina päivitetty",
+    loanPaidOff: "Laina maksettu",
+    cardAdded: "Luottokortti lisätty"
+  }
+};
