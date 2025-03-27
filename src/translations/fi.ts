@@ -7,6 +7,7 @@ export const fi = {
     welcomeTitle: "Tervetuloa Velkavapauteen",
     welcomeSubtitle: "Kaikki tarvittavat työkalut velkojesi hallintaan",
     footer: "© 2023 Velkavapaus - Kaikki oikeudet pidätetään",
+    language: "Kieli"
   },
   nav: {
     home: "Etusivu",
@@ -200,6 +201,12 @@ export const fi = {
     includesFees: "Sisältää palkkiot",
     neverPaidOff: "Ei makseta koskaan",
     summaryExplanation: "Tämä yhteenveto näyttää kokonaisvelan, kuukausittaiset maksut ja korot, sekä arvion koroista koko laina-ajalta.",
+    totalAmountPaid: "Maksettava kokonaissumma",
+    includingInterestAndFees: "Sisältää pääoman, korot ja kulut",
+    cardName: "Kortin nimi",
+    payoffButton: "Maksa pois",
+    totalCards: "Kortteja yhteensä",
+    noCardsMessage: "Ei aktiivisia luottokortteja. Lisää luottokortteja päänäkymässä."
   },
   creditCard: {
     title: "Luottokortti",
@@ -374,6 +381,9 @@ export const fi = {
     paymentScheduleHint: "Voit lisätä tai vähentää kuukausimaksua milloin tahansa.",
     calculationAssumptions: "Laskelmien oletukset",
     calculationAssumptionsText: "Tämä simulaatio olettaa, että käytät koko takaisinmaksubudjetin ja että korot pysyvät muuttumattomina.",
+    projectDate: "Arvioitu päivämäärä",
+    debtFreeIn: "Velaton",
+    repaymentType: "Takaisinmaksutapa"
   },
   form: {
     addLoan: "Lisää laina",
@@ -635,7 +645,6 @@ export const fi = {
     allDebts: "Kaikki velat",
     loans: "Lainat",
     creditCards: "Luottokortit",
-    // Add missing translation keys that were referenced in components
     financialTips: "Taloudelliset vinkit",
     tip1: "Priorisoi korkean koron velat ensin säästääksesi korkokuluja.",
     tip2: "Aseta automaattiset maksut varmistamaan, että maksat velkoja ajallaan.",
@@ -650,6 +659,13 @@ export const fi = {
     interestRate: "Korkoprosentti",
     allocatingExtra: "Kohdistetaan {{amount}} ylimääräistä maksua",
     viewFullPlan: "Näytä koko suunnitelma",
+    debtFreeTimeline: "Aikajana velattomaksi",
+    debtFree: "Velaton",
+    creditCardsFree: "Luottokortit maksettu",
+    now: "Nyt",
+    currentDebt: "Nykyinen velka",
+    viewDetailedTimeline: "Katso yksityiskohtainen aikajana",
+    timelineDescription: "Arvio siitä, milloin olet velaton eri strategioita käyttäen"
   },
   cookies: {
     title: "Evästeasetukset",
@@ -724,7 +740,7 @@ export const fi = {
     retirement: "Eläkesäästäminen",
     creditScore: "Luottopisteet",
   },
-  // Fix the duplicate tips section
+  // Financial tips section with categorized tips
   financialTips: {
     title: "Taloudelliset vinkit",
     description: "Hyödyllisiä vinkkejä taloudenhallinnan parantamiseksi",
@@ -773,7 +789,7 @@ export const fi = {
       "Opi jatkuvasti uusia taloustaitoja"
     ],
   },
-  // Add specific saving and debt tips that are needed elsewhere
+  // Specific categorized tips for different sections
   savingTips: {
     tip1: "Aloita hätärahastolla, joka kattaa 3-6 kuukauden menot",
     tip2: "Automatisoi säästäminen siirtämällä osa palkastasi säästötilille",
@@ -904,12 +920,9 @@ export const fi = {
     recommendations: "Suositukset",
     affiliate: "Kumppanuusohjelma",
   },
-  // Add missing language keys
   language: {
     en: "English",
     fi: "Suomi",
-  },
-  app: {
-    language: "Kieli"
   }
 };
+
