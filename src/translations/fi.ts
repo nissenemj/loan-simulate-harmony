@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -642,3 +643,4 @@ export const fi = {
     dashboard: 'Kojelauta'
   }
 };
+
