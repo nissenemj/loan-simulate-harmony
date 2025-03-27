@@ -644,4 +644,3 @@ export const fi = {
     login: 'Kirjaudu sisään'
   }
 };
-
