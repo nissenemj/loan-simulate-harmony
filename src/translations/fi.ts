@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -341,6 +342,23 @@ export const fi: typeof en = {
       payoffTime: "Maksuaika",
       active: "Aktiivinen",
       noLoans: "Ei vielä lainoja lisätty.",
+    }
+  },
+  creditCard: {
+    title: "Uusi luottokortti",
+    isActive: "Aktiivinen",
+    fullPayment: "Täysi maksu",
+    never: "Ei koskaan",
+    table: {
+      name: "Kortin nimi",
+      balance: "Saldo",
+      apr: "APR",
+      minPayment: "Vähimmäismaksu",
+      monthlyInterest: "Kuukausikorko",
+      payoffTime: "Maksuaika",
+      utilization: "Käyttöaste",
+      active: "Aktiivinen",
+      noCards: "Ei vielä luottokortteja lisätty.",
     },
     summary: {
       title: "Luottokorttien yhteenveto",
