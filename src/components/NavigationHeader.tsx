@@ -28,11 +28,20 @@ const NavigationHeader: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   
+  // Debug log to check if translations are being loaded
+  console.log('Navigation rendering, translations:', {
+    dashboard: t('tabs.dashboard'),
+    loans: t('tabs.loans'),
+    debtSummary: t('tabs.debtSummary'),
+    blog: t('tabs.blog'),
+    terms: t('tabs.glossary')
+  });
+  
   const menuItems = [
     { path: "/dashboard", label: t('tabs.dashboard') },
     { path: "/loans", label: t('tabs.loans') },
     { path: "/debt-summary", label: t('tabs.debtSummary') },
-    { path: "/blog", label: t('tabs.blog') || "Blogi" },
+    { path: "/blog", label: t('tabs.blog') },
     { path: "/terms", label: t('tabs.glossary') }
   ];
   

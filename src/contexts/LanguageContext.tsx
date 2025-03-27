@@ -60,6 +60,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setTranslations(lang === 'en' ? enTranslations : fiTranslations);
     setLocale(lang === 'en' ? 'en-US' : 'fi-FI');
     localStorage.setItem('language', lang);
+    
+    // Debug log to help troubleshooting
+    console.log(`Language changed to ${lang}`, { 
+      translationsSize: Object.keys(lang === 'en' ? enTranslations : fiTranslations).length 
+    });
   };
   
   const t = (key: string, params?: Record<string, string | number>): string => {
