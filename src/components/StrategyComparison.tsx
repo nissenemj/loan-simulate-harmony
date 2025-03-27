@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
@@ -17,7 +16,7 @@ import { formatCurrency } from '@/utils/loanCalculations';
 import { 
   TrendingUp, TrendingDown, Clock, Award, CreditCard, DollarSign, 
   Calendar, BarChart2, List, Percent, ArrowRight, Info, 
-  ChevronRight, AlertCircle, CheckCircle2
+  ChevronRight, AlertCircle, CheckCircle2, CheckCircle
 } from 'lucide-react';
 
 // Define colors for the charts
@@ -928,7 +927,7 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                     {criticalPoints.map((point, index) => (
                       <div key={index} className="relative pl-8 pb-6">
                         <div className="absolute left-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <Check className="h-3 w-3 text-primary-foreground" />
+                          <CheckCircle className="h-3 w-3 text-primary-foreground" />
                         </div>
                         <h4 className="font-medium">{formatDate(point.date, locale)}</h4>
                         <p className="text-sm mt-1">

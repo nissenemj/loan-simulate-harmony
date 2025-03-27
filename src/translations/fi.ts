@@ -1,3 +1,4 @@
+
 import { en } from "./en";
 
 export const fi = {
@@ -508,13 +509,11 @@ export const fi = {
     planSummary: "Takaisinmaksusuunnitelman yhteenveto",
     planDescription: "Alla on yhteenveto takaisinmaksusuunnitelmastasi",
     timeToFreedom: "Aika velattomaksi",
-    totalInterestPaid: "Maksetut korot yhteensä",
     firstDebtPaidOff: "Ensimmäinen velka maksettu",
     monthlyAllocation: "Kuukausittainen jako",
     allocationDescription: "Tämän verran maksat kuukausittain jokaiseen velkaan",
     debtName: "Velan nimi",
     minPayment: "Minimimaksu",
-    totalPayment: "Kokonaismaksu",
     total: "Yhteensä",
     balanceTimeline: "Lainan väheneminen ajan myötä",
     balanceTimelineDescription: "Kokonaisvelan väheneminen kuukausittain",
@@ -531,11 +530,9 @@ export const fi = {
     debtDetails: "Velkojen tiedot",
     cashFlow: "Kassavirta",
     minimum: "Minimimaksut",
-    totalMonths: "Kokonaisaika",
     loadingPlans: "Ladataan maksusuunnitelmia...",
     projectDate: "Arvioitu päivämäärä",
     debtFreeIn: "Velaton ajassa",
-    months: "kuukautta",
     totalInterestPaid: "Korkokustannukset yhteensä",
     debtName: "Velka",
     bestStrategy: "Paras strategia",
@@ -568,11 +565,8 @@ export const fi = {
     snowballExplanation: "Maksa ensin pienimmät velat - saat nopeita voittoja ja motivaatiota",
     minimumExplanation: "Maksa vain vähimmäismaksut - ei ole optimaalinen, mutta helppo",
     totalTime: "Kokonaisaika",
-    totalInterest: "Kokonaiskorko",
-    extraPaymentImpact: "Lisämaksun vaikutus",
     nextMonth: "Seuraava kuukausi",
     downloadPlan: "Lataa suunnitelma",
-    totalPayment: "Kokonaismaksu",
     firstFocus: "Ensimmäinen fokus",
     highestInterestFirst: "Korkein korko ensin - säästät eniten korkokuluissa",
     lowestBalanceFirst: "Pienin saldo ensin - saat nopeita voittoja ja motivaatiota",
@@ -584,9 +578,10 @@ export const fi = {
     viewActionPlan: "Näytä toimintasuunnitelma",
     extraBudget: "Lisäbudjetti",
     noRemainingDebts: "Ei jäljellä olevia velkoja",
-    interestSavings: "Korkosäästöt",
     year: "vuosi",
-    years: "vuotta"
+    years: "vuotta",
+    avalanche: "Lumivyöry",
+    snowball: "Lumipallo"
   },
   interest: {
     fixed: 'Kiinteä',

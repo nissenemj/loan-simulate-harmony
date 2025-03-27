@@ -9,6 +9,7 @@ type Translations = {
 
 type LanguageContextType = {
   language: 'en' | 'fi';
+  locale: string;
   translations: Translations;
   setLanguage: (language: 'en' | 'fi') => void;
   t: (key: string) => string;
@@ -34,6 +35,7 @@ const fiTranslations = flattenTranslations(fi);
 
 const LanguageContext = createContext<LanguageContextType>({
   language: 'fi',
+  locale: 'fi-FI',
   translations: fiTranslations,
   setLanguage: () => {},
   t: () => '',
@@ -64,9 +66,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
     return translations[key] || key;
   };
+
+  // Determine the locale based on the language
+  const locale = language === 'en' ? 'en-US' : 'fi-FI';
   
   return (
-    <LanguageContext.Provider value={{ language, translations, setLanguage: handleSetLanguage, t }}>
+    <LanguageContext.Provider value={{ language, locale, translations, setLanguage: handleSetLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
