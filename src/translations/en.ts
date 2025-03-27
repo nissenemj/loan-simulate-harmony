@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -275,6 +276,28 @@ export const en = {
     savingsVsMinimum: "Savings vs. Minimum",
     bestStrategy: "Best Strategy",
     loadingPlans: "Loading payment plans...",
+    title: "Repayment Plan",
+    budget: "Budget",
+    budgetPlaceholder: "Enter monthly budget",
+    strategy: "Strategy",
+    highestInterestFirst: "Highest Interest First",
+    highestInterestDesc: "Pay highest interest debts first",
+    lowestBalanceFirst: "Lowest Balance First",
+    lowestBalanceDesc: "Pay smallest debts first",
+    debtFreeIn: "Debt Free In",
+    projectDate: "Projected date",
+    tableSummary: "Debt Summary Table",
+    avalancheStrategy: "Avalanche Strategy",
+    snowballStrategy: "Snowball Strategy",
+    fastestWithAvalanche: "Fastest with Avalanche method",
+    fastestWithSnowball: "Fastest with Snowball method",
+    monthsFaster: "{{months}} months faster",
+    monthsSlower: "{{months}} months slower",
+    creditCardsFree: "Credit Cards Paid Off",
+    monthsUntilCreditCardFree: "{{months}} months until all credit cards are paid off",
+    interestSaved: "Interest saved",
+    avalancheDesc: "Highest interest first",
+    snowballDesc: "Smallest balance first",
   },
   interest: {
     fixed: "Fixed",

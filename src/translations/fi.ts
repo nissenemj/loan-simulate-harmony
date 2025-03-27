@@ -280,7 +280,6 @@ export const fi = {
     savingsVsMinimum: "Säästöt vs. minimi",
     bestStrategy: "Paras strategia",
     loadingPlans: "Ladataan maksusuunnitelmia...",
-    // Add missing translation keys
     title: "Takaisinmaksusuunnitelma",
     budget: "Budjetti",
     budgetPlaceholder: "Syötä kuukausibudjetti",
@@ -291,7 +290,18 @@ export const fi = {
     lowestBalanceDesc: "Maksa pienimmät velat ensin",
     debtFreeIn: "Velaton",
     projectDate: "Arvioitu päivämäärä",
-    tableSummary: "Velkakatsauksen taulukko"
+    tableSummary: "Velkakatsauksen taulukko",
+    avalancheStrategy: "Lumivyörystrategia",
+    snowballStrategy: "Lumipallostrategia",
+    fastestWithAvalanche: "Nopein lumivyörymenetelmällä",
+    fastestWithSnowball: "Nopein lumipallostrategialla",
+    monthsFaster: "{{months}} kuukautta nopeampi",
+    monthsSlower: "{{months}} kuukautta hitaampi",
+    creditCardsFree: "Luottokortit maksettu",
+    monthsUntilCreditCardFree: "{{months}} kuukautta kunnes kaikki luottokortit on maksettu",
+    interestSaved: "Säästetyt korot",
+    avalancheDesc: "Korkein korko ensin",
+    snowballDesc: "Pienin saldo ensin",
   },
   interest: {
     fixed: "Kiinteä",
