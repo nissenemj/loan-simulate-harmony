@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -430,8 +429,22 @@ export const en = {
     payOff: "Pay Off",
   },
   table: {
+    name: "Name",
+    amount: "Amount",
+    interestRate: "Interest Rate",
+    term: "Term",
+    monthlyPayment: "Monthly Payment",
+    balance: "Balance",
+    apr: "APR",
+    minPayment: "Minimum Payment",
+    actions: "Actions",
+    edit: "Edit",
+    toggleActive: "Toggle Active",
+    payoff: "Pay Off",
     year: "year",
     years: "years",
+    totalInterest: "Total Interest",
+    totalPayment: "Total Payment"
   },
   loanTerms: {
     pageTitle: "Financial Glossary",
@@ -522,6 +535,7 @@ export const en = {
     viewDetailedTimeline: 'View Detailed Timeline',
     helpWithDebt: 'Need Help with Your Debt?',
     year: 'year',
+    goToRepaymentPlan: 'Go to Repayment Plan'
   },
   blog: {
     pageTitle: "Blog | Loan Simulate Harmony",
@@ -548,6 +562,12 @@ export const en = {
     creditCardTitle: 'Best Credit Cards',
     creditCardText: 'Explore credit card offers and benefits.',
     disclaimer: 'We may earn a commission if you use these links, but this doesn\'t affect the price you pay.',
+  },
+  summary: {
+    totalLoans: "Total Loans",
+    totalCreditCards: "Total Credit Cards Balance",
+    monthlyPayment: "Total Monthly Payment",
+    savingsImpact: "Savings Impact"
   }
 };
 
