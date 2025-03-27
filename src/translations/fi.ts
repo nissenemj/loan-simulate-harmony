@@ -579,7 +579,8 @@ export const fi = {
     extraPaymentImpact: "Lisämaksun vaikutus",
     totalPayment: "Kokonaismaksu",
     actionPlan: "Toimintasuunnitelma",
-    interestSavings: "Korkosäästöt"
+    interestSavings: "Korkosäästöt",
+    timelineExplanation: "Tämä kaavio näyttää miten velkasi vähenevät ajan myötä valitulla strategialla.",
   },
   interest: {
     fixed: 'Kiinteä',

@@ -19,7 +19,6 @@ import {
   ChevronRight, AlertCircle, CheckCircle2, CheckCircle
 } from 'lucide-react';
 
-// Define colors for the charts
 const COLORS = [
   '#8B5CF6', // Vivid Purple
   '#D946EF', // Magenta Pink
@@ -63,7 +62,6 @@ type CriticalPoint = {
   date: Date;
 };
 
-// Format date using the specified locale
 const formatDate = (date: Date, locale: string = 'fi-FI'): string => {
   return date.toLocaleDateString(locale, {
     year: 'numeric',
@@ -91,16 +89,13 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
 
     setLoading(true);
 
-    // Calculate the plan for each strategy
     calculatePlans();
   }, [debts, monthlyBudget, extraBudget]);
 
   const calculatePlans = () => {
-    // Calculate minimum payments plan
     const minPlan = calculateMinimumPaymentsPlan(debts);
     setMinimumPlan(minPlan);
 
-    // Calculate snowball plan with current budget + extra
     const totalBudget = monthlyBudget + extraBudget;
     const snowPlan = generateRepaymentPlan(debts, totalBudget, 'snowball');
     if (snowPlan.isViable) {
@@ -112,7 +107,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       });
     }
 
-    // Calculate avalanche plan with current budget + extra
     const avaPlan = generateRepaymentPlan(debts, totalBudget, 'avalanche');
     if (avaPlan.isViable) {
       setAvalanchePlan({
@@ -123,11 +117,9 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       });
     }
 
-    // Calculate payoff times for each debt in each strategy
     const payoffInfo = calculatePayoffInfo(debts, minPlan, snowPlan, avaPlan);
     setPayoffData(payoffInfo);
 
-    // Identify critical points in repayment timeline
     const criticalPointsData = identifyCriticalPoints(
       selectedStrategy === 'avalanche' ? avaPlan.timeline : snowPlan.timeline,
       debts
@@ -138,7 +130,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
   };
 
   const calculateMinimumPaymentsPlan = (debts: DebtItem[]): Plan => {
-    // Create allocation with only minimum payments
     const minAllocation = debts.map(debt => ({
       id: debt.id,
       name: debt.name,
@@ -148,14 +139,12 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       totalPayment: debt.minPayment
     }));
 
-    // Simulate repayment with minimum payments
     const { timeline } = simulateRepayment(
       debts,
       minAllocation,
-      'minimum' as PrioritizationMethod // Using 'minimum' as a strategy
+      'minimum' as PrioritizationMethod
     );
 
-    // Check if all debts can be paid off with minimum payments
     const allWillBePaidOff = !debts.some(debt => {
       const monthlyInterestRate = debt.interestRate / 100 / 12;
       return debt.minPayment <= debt.balance * monthlyInterestRate;
@@ -178,12 +167,10 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     avaPlan: RepaymentPlan
   ): PayoffData[] => {
     return debts.map(debt => {
-      // Calculate payoff month for each strategy
       const minimumMonths = findPayoffMonth(debt.id, minPlan.timeline);
       const snowballMonths = findPayoffMonth(debt.id, snowPlan.timeline);
       const avalancheMonths = findPayoffMonth(debt.id, avaPlan.timeline);
 
-      // Determine best strategy for this debt
       let bestStrategy = '';
       let bestMonths = Infinity;
       
@@ -226,22 +213,16 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     const points: CriticalPoint[] = [];
     const startDate = new Date();
     
-    // Track which debts have been paid off
     const paidOffDebts = new Set<string>();
     
-    // For each month in the timeline
     for (let i = 1; i < timeline.length; i++) {
       const prevMonth = timeline[i-1];
       const currMonth = timeline[i];
       
-      // Check for debts that are paid off in this month (balance was > 0 last month and = 0 this month)
       for (const debt of currMonth.debts) {
         const prevDebt = prevMonth.debts.find(d => d.id === debt.id);
         
         if (prevDebt && prevDebt.remainingBalance > 0 && debt.remainingBalance === 0) {
-          // This debt was just paid off
-          
-          // Find the debt that will receive the extra payment next
           const remainingDebts = currMonth.debts.filter(d => 
             d.remainingBalance > 0 && !paidOffDebts.has(d.id)
           );
@@ -255,20 +236,17 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
             prioritizedDebts[0].name : 
             t('repayment.noRemainingDebts');
           
-          // Calculate the date for this critical point
           const date = new Date(startDate);
           date.setMonth(startDate.getMonth() + i);
           
-          // Add this critical point
           points.push({
             month: i,
             debtPaidOff: debt.name,
             newFocusDebt,
-            extraPayment: 0, // This would need more complex logic to calculate exactly
+            extraPayment: 0,
             date
           });
           
-          // Mark this debt as paid off
           paidOffDebts.add(debt.id);
         }
       }
@@ -278,22 +256,19 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
   };
 
   const findPayoffMonth = (debtId: string, timeline: RepaymentPlan['timeline']): number => {
-    // Find the month when the debt is paid off
     for (let i = 0; i < timeline.length; i++) {
       const monthData = timeline[i];
       const debtData = monthData.debts.find(d => d.id === debtId);
       
       if (!debtData) {
-        // Debt is already paid off or not found in this month
-        return i; // It must have been paid off in the previous month
+        return i;
       }
       
       if (debtData.remainingBalance === 0) {
-        return i + 1; // +1 because we're 0-indexed but want to show months starting from 1
+        return i + 1;
       }
     }
     
-    // If we get here, the debt wasn't paid off in the timeline
     return Infinity;
   };
 
@@ -306,7 +281,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       return [];
     }
     
-    // Convert the timeline data to the format required by the chart
     return timeline.map((month, idx) => {
       const date = new Date();
       date.setMonth(date.getMonth() + idx);
@@ -336,7 +310,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       return [];
     }
 
-    // Create data for comparing all three strategies
     const maxMonths = Math.max(
       minimumPlan.totalMonths === Infinity ? 0 : minimumPlan.totalMonths,
       snowballPlan.totalMonths,
@@ -354,17 +327,14 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
         date: formatDate(date, locale)
       };
 
-      // Add minimum payment balance if available for this month
       if (i < minimumPlan.timeline.length) {
         monthData.minimum = minimumPlan.timeline[i].totalRemaining;
       }
 
-      // Add snowball balance if available for this month
       if (i < snowballPlan.timeline.length) {
         monthData.snowball = snowballPlan.timeline[i].totalRemaining;
       }
 
-      // Add avalanche balance if available for this month
       if (i < avalanchePlan.timeline.length) {
         monthData.avalanche = avalanchePlan.timeline[i].totalRemaining;
       }
@@ -384,7 +354,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       return [];
     }
     
-    // Convert the timeline data to show payment allocations
     return timeline.map((month, idx) => {
       const date = new Date();
       date.setMonth(date.getMonth() + idx);
@@ -414,7 +383,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
 
     const data = [];
     
-    // Calculate minimum interest each month (if plan is viable)
     const minInterestByMonth = minimumPlan.isViable ? 
       minimumPlan.timeline.map(month => month.totalInterestPaid) : 
       [];
@@ -428,10 +396,8 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
         date: formatDate(date, locale)
       };
 
-      // Calculate savings against minimum payments
       const minimumInterest = i < minInterestByMonth.length ? minInterestByMonth[i] : 0;
 
-      // Add snowball interest if available for this month
       if (i < snowballPlan.timeline.length) {
         const snowballInterest = snowballPlan.timeline[i].totalInterestPaid;
         monthData.snowballInterest = snowballInterest;
@@ -441,7 +407,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
         }
       }
 
-      // Add avalanche interest if available for this month
       if (i < avalanchePlan.timeline.length) {
         const avalancheInterest = avalanchePlan.timeline[i].totalInterestPaid;
         monthData.avalancheInterest = avalancheInterest;
@@ -465,7 +430,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     if (!avalanchePlan.isViable) return 'snowball';
     if (!snowballPlan.isViable) return 'avalanche';
     
-    // If both are viable, choose based on interest savings
     return avalanchePlan.totalInterestPaid <= snowballPlan.totalInterestPaid ? 
       'avalanche' : 'snowball';
   };
@@ -498,7 +462,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     });
   };
 
-  // Calculate estimated payoff date
   const getPayoffDate = (months: number) => {
     if (months === Infinity || months <= 0) return null;
     
@@ -507,7 +470,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     return date;
   };
 
-  // Prepare action plan for next month
   const getNextMonthActionPlan = () => {
     if (debts.length === 0) return [];
     
@@ -517,7 +479,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
       
     if (!plan.isViable || plan.timeline.length === 0) return [];
     
-    // Get the first month's allocation
     const firstMonth = plan.timeline[0];
     
     return firstMonth.debts.map(debt => {
@@ -532,7 +493,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     });
   };
 
-  // Calculate how much closer to debt freedom with additional payment
   const calculateAdditionalPaymentImpact = (additionalAmount: number) => {
     const plan = generateRepaymentPlan(
       debts, 
@@ -556,7 +516,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
     };
   };
 
-  // Render loading state
   if (loading) {
     return (
       <Card className="mt-6">
@@ -603,7 +562,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
               </TabsTrigger>
             </TabsList>
             
-            {/* Payoff Timeline Tab */}
             <TabsContent value="timeline" className="pt-4">
               <div className="flex flex-col space-y-4">
                 <div className="flex justify-end space-x-4 mb-4">
@@ -687,7 +645,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
               </div>
             </TabsContent>
             
-            {/* Strategy Comparison Tab */}
             <TabsContent value="comparison" className="pt-4">
               <div className="flex flex-col space-y-6">
                 <div className="h-80 w-full">
@@ -807,7 +764,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
               </div>
             </TabsContent>
             
-            {/* Debt Details Tab */}
             <TabsContent value="details" className="pt-4">
               <div className="overflow-x-auto">
                 <Table>
@@ -859,7 +815,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
               </div>
             </TabsContent>
             
-            {/* Cash Flow Tab */}
             <TabsContent value="cashflow" className="pt-4">
               <div className="flex flex-col space-y-4">
                 <div className="flex justify-end space-x-4 mb-4">
@@ -943,7 +898,6 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
               )}
             </TabsContent>
             
-            {/* Action Plan Tab */}
             <TabsContent value="actionplan" className="pt-4">
               <div className="space-y-6">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
