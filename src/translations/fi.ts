@@ -581,6 +581,7 @@ export const fi = {
     actionPlan: "Toimintasuunnitelma",
     interestSavings: "Korkosäästöt",
     timelineExplanation: "Tämä kaavio näyttää miten velkasi vähenevät ajan myötä valitulla strategialla.",
+    minimum: "Vähimmäismaksut"
   },
   interest: {
     fixed: 'Kiinteä',
