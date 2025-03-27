@@ -255,7 +255,6 @@ export const fi = {
       payoffTimeWithCurrentPayment: "Takaisinmaksuaika nykyisellä maksulla",
       savingsWithCurrentPayment: "Säästöt nykyisellä maksulla",
       paymentToPayOffIn: "Maksu maksaaksesi pois",
-      years: "vuodessa",
       impossibleToPayOff: "Mahdoton maksaa pois nykyisellä maksulla",
       effectiveAPR: "Todellinen vuosikorko (APR)",
       monthlyPayment: "Kuukausimaksu",
