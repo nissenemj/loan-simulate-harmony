@@ -671,7 +671,7 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                       <TableBody>
                         {criticalPoints.map((point, index) => (
                           <TableRow key={index}>
-                            <TableCell>{formatDate(point.date, locale)}</TableCell>
+                            <TableCell>{formatDate(point.date)}</TableCell>
                             <TableCell className="font-medium">{point.debtPaidOff}</TableCell>
                             <TableCell>{point.newFocusDebt}</TableCell>
                           </TableRow>
@@ -837,16 +837,16 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                             <span className="text-destructive">∞</span> : 
                             <>
                               {debt.minimumMonths} {t('form.months')}
-                              {minDate && <div className="text-xs text-muted-foreground">{formatDate(minDate, locale)}</div>}
+                              {minDate && <div className="text-xs text-muted-foreground">{formatDate(minDate)}</div>}
                             </>
                           }</TableCell>
                           <TableCell>
                             {debt.snowballMonths} {t('form.months')}
-                            {snowDate && <div className="text-xs text-muted-foreground">{formatDate(snowDate, locale)}</div>}
+                            {snowDate && <div className="text-xs text-muted-foreground">{formatDate(snowDate)}</div>}
                           </TableCell>
                           <TableCell>
                             {debt.avalancheMonths} {t('form.months')}
-                            {avaDate && <div className="text-xs text-muted-foreground">{formatDate(avaDate, locale)}</div>}
+                            {avaDate && <div className="text-xs text-muted-foreground">{formatDate(avaDate)}</div>}
                           </TableCell>
                           <TableCell className="font-medium">
                             {t(`repayment.${debt.bestStrategy}`)}
@@ -929,7 +929,7 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                         <div className="absolute left-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                           <CheckCircle className="h-3 w-3 text-primary-foreground" />
                         </div>
-                        <h4 className="font-medium">{formatDate(point.date, locale)}</h4>
+                        <h4 className="font-medium">{formatDate(point.date)}</h4>
                         <p className="text-sm mt-1">
                           {t('repayment.debtPaidOffMessage', {
                             debt: point.debtPaidOff,
@@ -989,7 +989,7 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                               selectedStrategy === 'avalanche' 
                                 ? avalanchePlan.totalMonths 
                                 : snowballPlan.totalMonths
-                            ) || new Date(), locale)}
+                            ) || new Date())}
                           </div>
                         </div>
                         
@@ -1141,7 +1141,7 @@ const StrategyComparison: React.FC<StrategyComparisonProps> = ({ debts, monthlyB
                                   selectedStrategy === 'avalanche' 
                                     ? payoffData.sort((a, b) => b.interestRate - a.interestRate)[0]?.avalancheMonths || 0
                                     : payoffData.sort((a, b) => a.initialBalance - b.initialBalance)[0]?.snowballMonths || 0
-                                ) || new Date(), locale)}
+                                ) || new Date())}
                               </span>
                             </div>
                           </div>
