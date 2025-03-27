@@ -548,3 +548,12 @@ export const fi: typeof en = {
     refinanceText: 'Löydä parempi korkotaso ja säästä rahaa.',
     creditCardTitle: 'Parhaat luottokortit',
     creditCardText: 'Tutustu luottokorttitarjouksiin ja etuihin.',
+    disclaimer: 'Saatamme ansaita palkkion, jos käytät näitä linkkejä, mutta tämä ei vaikuta hintaan, jonka maksat.',
+  },
+  summary: {
+    totalLoans: "Lainojen kokonaismäärä",
+    totalCreditCards: "Luottokorttien kokonaissaldo",
+    monthlyPayment: "Kuukausittainen maksu yhteensä",
+    savingsImpact: "Säästövaikutus"
+  }
+};
