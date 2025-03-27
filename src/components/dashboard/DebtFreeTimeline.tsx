@@ -240,7 +240,7 @@ const DebtFreeTimeline = ({
           {totalMinPayments > 0 && (
             <div className="mt-6 border-t pt-4">
               <p className="text-sm text-muted-foreground">
-                {t('repayment.minimumPayments')}: {formatCurrency(totalMinPayments)}/kk
+                {t('repayment.minimumPayments')}: {formatCurrency(totalMinPayments)}/{t('form.months')}
               </p>
             </div>
           )}
