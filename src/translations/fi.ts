@@ -640,7 +640,8 @@ export const fi = {
   },
   auth: {
     logout: 'Kirjaudu ulos',
-    dashboard: 'Kojelauta'
+    dashboard: 'Kojelauta',
+    login: 'Kirjaudu sisään'
   }
 };
 
