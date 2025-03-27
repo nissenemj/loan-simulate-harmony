@@ -34,46 +34,23 @@ const flattenTranslations = (obj: any, prefix = ''): Translations => {
 const enTranslations = flattenTranslations(en);
 const fiTranslations = flattenTranslations(fi);
 
-// For debugging, check translation counts and specific keys for repayment section
+// For debugging, check translation counts and specific keys
 console.log('Translation keys loaded:', {
   english: Object.keys(enTranslations).length,
   finnish: Object.keys(fiTranslations).length,
-  repaymentKeysEn: Object.keys(enTranslations).filter(k => k.startsWith('repayment.')),
-  repaymentKeysFi: Object.keys(fiTranslations).filter(k => k.startsWith('repayment.')),
 });
 
-// Check for missing keys by comparing English to Finnish
-const missingFinnishKeys = Object.keys(enTranslations).filter(key => !fiTranslations[key]);
-if (missingFinnishKeys.length > 0) {
-  console.warn('Missing Finnish translations for keys:', missingFinnishKeys);
+// Check for missing translations in either language
+const allKeys = new Set([...Object.keys(enTranslations), ...Object.keys(fiTranslations)]);
+const missingInFi = Array.from(allKeys).filter(key => !fiTranslations[key] && enTranslations[key]);
+const missingInEn = Array.from(allKeys).filter(key => !enTranslations[key] && fiTranslations[key]);
+
+if (missingInFi.length > 0) {
+  console.warn('Missing Finnish translations for keys:', missingInFi);
 }
 
-// Check for repayment keys required by our components
-const requiredRepaymentKeys = [
-  'repayment.avalancheStrategy', 
-  'repayment.snowballStrategy',
-  'repayment.debtFreeIn',
-  'repayment.months',
-  'repayment.projectDate',
-  'repayment.fastestWithAvalanche',
-  'repayment.fastestWithSnowball',
-  'repayment.monthsFaster',
-  'repayment.monthsSlower',
-  'repayment.totalInterestPaid',
-  'repayment.interestSaved',
-  'repayment.creditCardsFree',
-  'repayment.monthsUntilCreditCardFree',
-  'repayment.avalancheDesc',
-  'repayment.snowballDesc'
-];
-
-for (const key of requiredRepaymentKeys) {
-  if (!enTranslations[key]) {
-    console.error(`Missing English translation for key: ${key}`);
-  }
-  if (!fiTranslations[key]) {
-    console.error(`Missing Finnish translation for key: ${key}`);
-  }
+if (missingInEn.length > 0) {
+  console.warn('Missing English translations for keys:', missingInEn);
 }
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -100,27 +77,35 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
-    setTranslations(lang === 'en' ? enTranslations : fiTranslations);
+    
+    // Use the appropriate flattened translations
+    const translationsToUse = lang === 'en' ? enTranslations : fiTranslations;
+    setTranslations(translationsToUse);
     setLocale(lang === 'en' ? 'en-US' : 'fi-FI');
     localStorage.setItem('language', lang);
     
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
-      translationsSize: Object.keys(lang === 'en' ? enTranslations : fiTranslations).length,
-      repaymentKeysAvailable: Object.keys(lang === 'en' ? enTranslations : fiTranslations)
-        .filter(k => k.startsWith('repayment.')).length
+      translationsSize: Object.keys(translationsToUse).length,
+      tabs: {
+        dashboard: translationsToUse['tabs.dashboard'],
+        loans: translationsToUse['tabs.loans'],
+        debtSummary: translationsToUse['tabs.debtSummary'],
+        blog: translationsToUse['tabs.blog'],
+        glossary: translationsToUse['tabs.glossary']
+      }
     });
   };
   
   const t = (key: string, params?: Record<string, string | number>): string => {
-    if (!translations[key]) {
+    let translation = translations[key];
+    
+    if (translation === undefined) {
       console.warn(`Translation key missing: ${key}`);
       // Return only the last part of the key for a more user-friendly fallback
       const parts = key.split('.');
       return parts[parts.length - 1];
     }
-    
-    let translation = translations[key];
     
     // If we have parameters, replace them in the translation string
     if (params) {
@@ -129,7 +114,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       });
     }
     
-    return translation || key;
+    return translation;
   };
   
   return (
