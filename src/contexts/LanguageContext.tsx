@@ -48,7 +48,7 @@ if (missingFinnishKeys.length > 0) {
   console.warn('Missing Finnish translations for keys:', missingFinnishKeys);
 }
 
-// Check for specific repayment keys in both languages
+// Check for repayment keys required by our components
 const requiredRepaymentKeys = [
   'repayment.avalancheStrategy', 
   'repayment.snowballStrategy',
@@ -58,7 +58,13 @@ const requiredRepaymentKeys = [
   'repayment.fastestWithAvalanche',
   'repayment.fastestWithSnowball',
   'repayment.monthsFaster',
-  'repayment.monthsSlower'
+  'repayment.monthsSlower',
+  'repayment.totalInterestPaid',
+  'repayment.interestSaved',
+  'repayment.creditCardsFree',
+  'repayment.monthsUntilCreditCardFree',
+  'repayment.avalancheDesc',
+  'repayment.snowballDesc'
 ];
 
 for (const key of requiredRepaymentKeys) {

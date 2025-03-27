@@ -85,20 +85,24 @@ export const simulateRepayment = (
       
       // Improved interest handling - check if payment covers interest
       let principalPayment;
+      let actualInterestPaid;
+      
       if (totalPayment < interestForMonth) {
         // If payment doesn't cover interest, increase balance
         principalPayment = 0;
+        actualInterestPaid = totalPayment; // All payment goes to interest
         debt.balance += (interestForMonth - totalPayment);
       } else {
         // Calculate principal payment (payment minus interest)
         principalPayment = totalPayment - interestForMonth;
+        actualInterestPaid = interestForMonth;
       }
       
       // Ensure principal payment doesn't exceed the balance
       principalPayment = Math.min(principalPayment, debt.balance);
       
       // Calculate actual payment (interest + principal)
-      const actualPayment = principalPayment + Math.min(interestForMonth, totalPayment);
+      const actualPayment = principalPayment + actualInterestPaid;
       
       // Check if debt is being paid off this month
       const isPaidOff = principalPayment >= debt.balance;
@@ -124,11 +128,11 @@ export const simulateRepayment = (
         name: debt.name,
         remainingBalance: debt.balance,
         payment: actualPayment,
-        interestPaid: Math.min(interestForMonth, totalPayment)
+        interestPaid: actualInterestPaid
       });
       
       monthData.totalPaid += actualPayment;
-      monthData.totalInterestPaid += Math.min(interestForMonth, totalPayment);
+      monthData.totalInterestPaid += actualInterestPaid;
     }
     
     // Calculate total remaining balance
@@ -145,7 +149,7 @@ export const simulateRepayment = (
       // Get the remaining debts with balance > 0
       const remainingDebtsWithBalance = currentDebts.filter(debt => debt.balance > 0);
       
-      if (month % 12 === 0 || month === 1) {
+      if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
         console.log(`Month ${month} - Debts paid off:`, justPaidOffDebts.map(d => d.id));
         console.log(`Month ${month} - Remaining debts:`, remainingDebtsWithBalance.map(d => d.id));
       }
@@ -171,7 +175,7 @@ export const simulateRepayment = (
             
             if (targetAllocation) {
               // Add the payment to the target debt
-              if (month % 12 === 0 || month === 1) {
+              if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
                 console.log(`Month ${month} - Redistributing ${amountToRedistribute.toFixed(2)} from debt ${paidOffDebt.id} to debt ${targetDebtId}`);
               }
               targetAllocation.extraPayment += amountToRedistribute;
@@ -180,7 +184,7 @@ export const simulateRepayment = (
           } else {
             // If no debts remaining, add to extra payment pool for future use
             extraPaymentPool += amountToRedistribute;
-            if (month % 12 === 0 || month === 1) {
+            if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
               console.log(`Month ${month} - No remaining debts, adding ${amountToRedistribute.toFixed(2)} to extra payment pool`);
             }
           }

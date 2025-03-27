@@ -76,15 +76,15 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
               <RadioGroupItem value="avalanche" id="avalanche" />
               <Label htmlFor="avalanche" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("repayment.highestInterestFirst")}</span>
-                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.highestInterestDesc")}</span>
+                <span className="font-medium text-wrap break-words">{t("repayment.avalancheStrategy")}</span>
+                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.avalancheDesc")}</span>
               </Label>
             </div>
             <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
               <RadioGroupItem value="snowball" id="snowball" />
               <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("repayment.lowestBalanceFirst")}</span>
-                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.lowestBalanceDesc")}</span>
+                <span className="font-medium text-wrap break-words">{t("repayment.snowballStrategy")}</span>
+                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.snowballDesc")}</span>
               </Label>
             </div>
           </RadioGroup>
