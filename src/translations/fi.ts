@@ -1,4 +1,3 @@
-
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -511,7 +510,6 @@ export const fi: typeof en = {
     remainingDebt: 'Jäljellä oleva velka',
     debtFreeDate: 'Velaton päivä',
     progress: 'Edistyminen',
-    monthlyPayments: 'Kuukausittaiset velkaerät', // Changed from monthlyDebtPayments to match EN structure
     minimumPayments: 'Minimierät',
     extraPayment: 'Lisämaksu',
     debtPaymentPlan: 'Velanmaksusuunnitelma',
@@ -567,6 +565,9 @@ export const fi: typeof en = {
     recommendation: 'Suositus',
     equalStrategy: 'Tasainen jakelu',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
+    monthlyPaymentAmount: 'Kuukausimaksusumma',
+    snowballStrategy: 'Lumipallo',
+    avalancheStrategy: 'Lumivyöry',
   },
   export: {
     exportToPDF: "Vie PDF",
