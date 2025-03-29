@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -33,7 +32,6 @@ interface DebtFreeTimelineProps {
   monthlyBudget?: number;
 }
 
-// Type definition for strategy results
 interface StrategyResult {
   id: 'avalanche' | 'snowball' | 'equal';
   name: string;
@@ -52,20 +50,16 @@ const DebtFreeTimeline = ({
   const { t, locale } = useLanguage();
   const navigate = useNavigate();
   
-  // Generate combined debts from loans and credit cards
   const combinedDebts = useMemo(() => 
     combineDebts(activeLoans, activeCards), 
     [activeLoans, activeCards]
   );
   
-  // Calculate total minimum payments correctly for both loan and credit card debts
   const totalMinPayments = useMemo(() => {
-    // For loans: Use the loan's minimum payment or calculate from monthly result
     const loanMinPayments = activeLoans.reduce((sum, loan) => {
       if (loan.minPayment && loan.minPayment > 0) {
         return sum + loan.minPayment;
       } else {
-        // Calculate based on loan parameters (simplified calculation)
         const monthlyRate = loan.interestRate / 100 / 12;
         const totalMonths = loan.termYears * 12;
         let payment;
@@ -73,12 +67,10 @@ const DebtFreeTimeline = ({
         if (loan.repaymentType === 'custom-payment' && loan.customPayment) {
           payment = loan.customPayment;
         } else {
-          // Use annuity formula for standard loan types
           payment = (loan.amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
                    (Math.pow(1 + monthlyRate, totalMonths) - 1);
         }
         
-        // Add monthly fee if present
         if (loan.monthlyFee) {
           payment += loan.monthlyFee;
         }
@@ -87,7 +79,6 @@ const DebtFreeTimeline = ({
       }
     }, 0);
     
-    // For credit cards: Calculate the effective minimum payment (greater of fixed amount or percentage)
     const cardMinPayments = activeCards.reduce((sum, card) => {
       const percentPayment = card.balance * (card.minPaymentPercent / 100);
       const minPayment = Math.max(card.minPayment, percentPayment);
@@ -97,24 +88,19 @@ const DebtFreeTimeline = ({
     return loanMinPayments + cardMinPayments;
   }, [activeLoans, activeCards]);
   
-  // Ensure minimum payment is never less than 10 to avoid division by zero or negative values
   const safeMinPayment = Math.max(totalMinPayments, 10);
   
-  // State for payment slider (start at monthly budget or minimum payments, whichever is higher)
   const [paymentAmount, setPaymentAmount] = useState(
     Math.max(monthlyBudget || 0, safeMinPayment)
   );
   
-  // Update payment amount if minimum payments or budget changes
   useEffect(() => {
     const newAmount = Math.max(monthlyBudget || 0, safeMinPayment);
     setPaymentAmount(newAmount);
   }, [safeMinPayment, monthlyBudget]);
   
-  // State for selected strategy
   const [selectedStrategy, setSelectedStrategy] = useState<'avalanche' | 'snowball' | 'equal'>('avalanche');
   
-  // Calculate plans with different strategies only when dependencies change
   const avalanchePlan = useMemo(() => {
     if (combinedDebts.length === 0) {
       return {
@@ -141,7 +127,6 @@ const DebtFreeTimeline = ({
     return generateRepaymentPlan(combinedDebts, paymentAmount, 'snowball');
   }, [combinedDebts, paymentAmount]);
   
-  // Calculate equal distribution plan (custom strategy)
   const equalPlan = useMemo(() => {
     if (combinedDebts.length === 0) {
       return {
@@ -155,7 +140,6 @@ const DebtFreeTimeline = ({
     return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
   }, [combinedDebts, paymentAmount]);
   
-  // Get debt-free dates for each strategy with proper future dates
   const now = new Date();
   
   const getDateAfterMonths = (months: number) => {
@@ -170,14 +154,12 @@ const DebtFreeTimeline = ({
   const snowballDate = getDateAfterMonths(snowballPlan.totalMonths);
   const equalDate = getDateAfterMonths(equalPlan.totalMonths);
   
-  // Define strategy information
   const strategies: StrategyResult[] = useMemo(() => [
     { id: 'avalanche', name: t('repayment.avalancheStrategy'), months: avalanchePlan.totalMonths, interest: avalanchePlan.totalInterestPaid, date: avalancheDate },
     { id: 'snowball', name: t('repayment.snowballStrategy'), months: snowballPlan.totalMonths, interest: snowballPlan.totalInterestPaid, date: snowballDate },
     { id: 'equal', name: t('dashboard.equalDistribution'), months: equalPlan.totalMonths, interest: equalPlan.totalInterestPaid, date: equalDate }
   ], [t, avalanchePlan, snowballPlan, equalPlan, avalancheDate, snowballDate, equalDate]);
   
-  // Sort strategies by months (ascending) and then by interest (ascending)
   const sortedStrategies = useMemo(() => [...strategies].sort((a, b) => {
     if (a.months === b.months) {
       return a.interest - b.interest;
@@ -187,7 +169,6 @@ const DebtFreeTimeline = ({
   
   const recommendedStrategy = sortedStrategies[0];
   
-  // Prepare timeline data for the selected strategy
   const getSelectedPlan = () => {
     switch (selectedStrategy) {
       case 'avalanche': return avalanchePlan;
@@ -197,7 +178,6 @@ const DebtFreeTimeline = ({
     }
   };
   
-  // Improved timeline data preparation with better sampling for longer timelines
   const timelineData = useMemo(() => {
     const plan = getSelectedPlan();
     
@@ -208,10 +188,8 @@ const DebtFreeTimeline = ({
     const timeline = plan.timeline;
     const totalPeriods = timeline.length;
     
-    // For small datasets, include all points
     if (totalPeriods <= 24) {
       return timeline.map((point, index) => {
-        // Calculate monthly interest (current month's total interest - previous month's total interest)
         const monthlyInterest = index > 0 
           ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid 
           : point.totalInterestPaid;
@@ -220,31 +198,25 @@ const DebtFreeTimeline = ({
           month: index + 1,
           balance: point.totalRemaining,
           interest: point.totalInterestPaid,
-          interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+          interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100,
           monthlyInterest: monthlyInterest
         };
       });
     }
     
-    // For larger datasets, use intelligent sampling to preserve important features
     const simplifiedTimeline = [];
-    const samplingRate = Math.ceil(totalPeriods / 24); // Aim for about 24 points
-    
-    // Always include first and last points
+    const samplingRate = Math.ceil(totalPeriods / 24);
     let lastIncludedMonth = -samplingRate;
     
     for (let i = 0; i < totalPeriods; i++) {
-      // Include points at regular intervals, or if there's a significant change
       const isRegularSample = i % samplingRate === 0;
       const isLastPoint = i === totalPeriods - 1;
       const isSignificantChange = i > 0 && Math.abs(timeline[i].totalRemaining - timeline[i - 1].totalRemaining) > totalDebt * 0.05;
       
       if (isRegularSample || isLastPoint || isSignificantChange) {
-        // Avoid points too close together
         if (i - lastIncludedMonth >= samplingRate / 2 || isLastPoint) {
           lastIncludedMonth = i;
           
-          // Calculate monthly interest correctly (current month's total interest minus previous month's total)
           const monthlyInterest = i > 0 
             ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid 
             : timeline[i].totalInterestPaid;
@@ -253,7 +225,7 @@ const DebtFreeTimeline = ({
             month: i + 1,
             balance: timeline[i].totalRemaining,
             interest: timeline[i].totalInterestPaid,
-            interestRate: timeline[i].totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+            interestRate: timeline[i].totalInterestPaid / (totalDebt + 0.01) * 100,
             monthlyInterest: monthlyInterest
           });
         }
@@ -263,13 +235,21 @@ const DebtFreeTimeline = ({
     return simplifiedTimeline;
   }, [selectedStrategy, avalanchePlan, snowballPlan, equalPlan, totalDebt]);
   
-  // Calculate the maximum interest value for scaling the chart
-  const maxInterest = useMemo(() => {
-    if (timelineData.length === 0) return 0;
-    return Math.max(...timelineData.map(point => point.interest));
+  const maxValues = useMemo(() => {
+    if (timelineData.length === 0) return { interest: 0, monthlyInterest: 0 };
+    
+    const maxInterest = Math.max(...timelineData.map(point => point.interest));
+    const maxMonthlyInterest = Math.max(...timelineData.map(point => point.monthlyInterest || 0));
+    
+    const maxRightAxis = Math.max(maxInterest, maxMonthlyInterest * 5) * 1.1;
+    
+    return { 
+      interest: maxInterest,
+      monthlyInterest: maxMonthlyInterest,
+      rightAxis: maxRightAxis
+    };
   }, [timelineData]);
   
-  // Helper function for strategy card styling
   const getStrategyCardClass = (strategyId: string) => {
     if (strategyId === selectedStrategy) {
       return 'ring-2 ring-primary';
@@ -280,13 +260,10 @@ const DebtFreeTimeline = ({
     return '';
   };
   
-  // Check if payment amount is valid (at least meet minimum payments)
   const isValidPayment = paymentAmount >= safeMinPayment;
   
-  // Check if we have any debt to pay
   const hasDebt = totalDebt > 0 && combinedDebts.length > 0;
   
-  // Custom tooltip for the chart
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -330,7 +307,6 @@ const DebtFreeTimeline = ({
             </div>
           ) : (
             <>
-              {/* Minimum payments and current amount */}
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">{t('repayment.minimumPayments')}:</p>
@@ -342,7 +318,6 @@ const DebtFreeTimeline = ({
                 </div>
               </div>
               
-              {/* Payment amount slider */}
               <div className="space-y-3">
                 <label className="text-sm font-medium flex items-center justify-between">
                   <span>{t('dashboard.monthlyPaymentAmount')}</span>
@@ -367,7 +342,6 @@ const DebtFreeTimeline = ({
                 </div>
               </div>
               
-              {/* Strategy recommendation */}
               {recommendedStrategy && isValidPayment && recommendedStrategy.months > 0 && (
                 <div className="bg-primary/5 p-4 rounded-md">
                   <p className="font-medium mb-1">{t('dashboard.recommendedStrategy')}:</p>
@@ -384,7 +358,6 @@ const DebtFreeTimeline = ({
                 </div>
               )}
               
-              {/* Strategy cards */}
               {isValidPayment && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                   {strategies.map((strategy) => (
@@ -415,7 +388,6 @@ const DebtFreeTimeline = ({
                 </div>
               )}
               
-              {/* Chart - only show combinedView */}
               {timelineData.length > 0 && isValidPayment && (
                 <div className="mt-4">
                   <div className="h-64">
@@ -439,7 +411,7 @@ const DebtFreeTimeline = ({
                           orientation="right"
                           tickFormatter={(value) => `${Math.round(value / 1000)}k`}
                           label={{ value: t('dashboard.interest'), angle: 90, position: 'insideRight' }}
-                          domain={[0, maxInterest * 1.1]} // Scale the interest axis
+                          domain={[0, maxValues.rightAxis]}
                         />
                         <Tooltip content={<CustomTooltip />} />
                         <Legend />
@@ -479,7 +451,6 @@ const DebtFreeTimeline = ({
                 </div>
               )}
               
-              {/* Timeline milestones */}
               {isValidPayment && getSelectedPlan().totalMonths > 0 && (
                 <div className="relative">
                   <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-muted-foreground/20" />
