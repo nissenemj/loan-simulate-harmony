@@ -642,6 +642,7 @@ export const en = {
     creditRepair: 'Credit Repair',
     budgetCounseling: 'Budget Counseling',
     financialEducation: 'Financial Education',
+    monthlyPaymentReduction: 'Monthly Payment Reduction',
     learnMore: 'Learn More',
     contactUs: 'Contact Us',
     disclaimer: 'Disclaimer: Velkavapaus.fi may receive compensation if you choose to use services from our partners.',
