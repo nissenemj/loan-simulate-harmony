@@ -75,48 +75,51 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   const [comparisonStrategy, setComparisonStrategy] = useState<RepaymentStrategy | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
+  const [chartData, setChartData] = useState<any[]>([]);
   
   // Create debt items from loans and credit cards
   const debtItems = convertToDebtItems(activeLoans, activeCards);
   
   // Generate repayment plans for all strategies
-  const avalanchePlan = generateRepaymentPlan(
-    debtItems,
-    monthlyBudget + extraPayment,
-    'avalanche',
-    false // not equally distributed
-  );
-  
-  const snowballPlan = generateRepaymentPlan(
-    debtItems,
-    monthlyBudget + extraPayment,
-    'snowball',
-    false // not equally distributed
-  );
-  
-  const equalPlan = generateRepaymentPlan(
-    debtItems,
-    monthlyBudget + extraPayment,
-    'avalanche', // Method doesn't matter for equal distribution
-    true // equally distributed
-  );
-  
-  // Select the active plan based on strategy
-  const getActivePlan = (selectedStrategy: RepaymentStrategy) => {
-    switch (selectedStrategy) {
-      case 'avalanche':
-        return avalanchePlan;
-      case 'snowball':
-        return snowballPlan;
-      case 'equal':
-        return equalPlan;
-      default:
-        return avalanchePlan;
-    }
+  const generatePlans = () => {
+    // Generate plans for each strategy with the current extra payment
+    const avalanchePlan = generateRepaymentPlan(
+      debtItems,
+      monthlyBudget + extraPayment,
+      'avalanche',
+      false // not equally distributed
+    );
+    
+    const snowballPlan = generateRepaymentPlan(
+      debtItems,
+      monthlyBudget + extraPayment,
+      'snowball',
+      false // not equally distributed
+    );
+    
+    const equalPlan = generateRepaymentPlan(
+      debtItems,
+      monthlyBudget + extraPayment,
+      'avalanche', // Method doesn't matter for equal distribution
+      true // equally distributed
+    );
+    
+    return { avalanchePlan, snowballPlan, equalPlan };
   };
   
-  const activePlan = getActivePlan(strategy);
-  const comparisonPlan = comparisonStrategy ? getActivePlan(comparisonStrategy) : null;
+  // Get the active plan based on current strategy
+  const getActivePlan = (plans: any, selectedStrategy: RepaymentStrategy) => {
+    switch (selectedStrategy) {
+      case 'avalanche':
+        return plans.avalanchePlan;
+      case 'snowball':
+        return plans.snowballPlan;
+      case 'equal':
+        return plans.equalPlan;
+      default:
+        return plans.avalanchePlan;
+    }
+  };
   
   // Format date helper function
   const formatDate = (month: number): string => {
@@ -129,12 +132,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   };
   
   // Prepare data for chart - use repayment plan timeline
-  const prepareChartData = () => {
+  const prepareChartData = (activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
     if (!activePlan.isViable || activePlan.timeline.length === 0) {
       return [];
     }
     
-    return activePlan.timeline.map((month, i) => {
+    return activePlan.timeline.map((month: any, i: number) => {
       const comparisonMonth = comparisonPlan && comparisonPlan.isViable && i < comparisonPlan.timeline.length
         ? comparisonPlan.timeline[i]
         : null;
@@ -144,7 +147,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         month: month.month,
         date: formatDate(month.month - 1),
         "RemainingDebt": month.totalRemaining,
-        "Principal": month.debts.reduce((sum, debt) => sum + (debt.payment - debt.interestPaid), 0),
+        "Principal": month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
         "Interest": month.totalInterestPaid,
       };
       
@@ -153,7 +156,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         return {
           ...dataPoint,
           "RemainingDebt_Comparison": comparisonMonth.totalRemaining,
-          "Principal_Comparison": comparisonMonth.debts.reduce((sum, debt) => sum + (debt.payment - debt.interestPaid), 0),
+          "Principal_Comparison": comparisonMonth.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
           "Interest_Comparison": comparisonMonth.totalInterestPaid,
         };
       }
@@ -162,7 +165,22 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     });
   };
   
-  const chartData = prepareChartData();
+  // Effect to recalculate plans when inputs change
+  useEffect(() => {
+    const plans = generatePlans();
+    const activePlan = getActivePlan(plans, strategy);
+    const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
+    
+    const newChartData = prepareChartData(activePlan, comparisonPlan, showComparison);
+    setChartData(newChartData);
+    
+    // Debug log to help troubleshooting
+    console.log('Updated chart data with extraPayment:', extraPayment, {
+      totalMonths: activePlan.totalMonths,
+      totalInterestPaid: activePlan.totalInterestPaid,
+      dataPoints: newChartData.length
+    });
+  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems]);
   
   // Export to PDF
   const exportToPDF = async () => {
@@ -185,6 +203,9 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   
   // Export to CSV 
   const exportToCSV = () => {
+    const plans = generatePlans();
+    const activePlan = getActivePlan(plans, strategy);
+    
     if (!activePlan.isViable || activePlan.timeline.length === 0) {
       return;
     }
@@ -193,8 +214,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     
     const csvContent = [
       headers.join(','),
-      ...activePlan.timeline.map(month => {
-        const principal = month.debts.reduce((sum, debt) => sum + (debt.payment - debt.interestPaid), 0);
+      ...activePlan.timeline.map((month: any) => {
+        const principal = month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0);
         return [
           month.month,
           formatDate(month.month - 1),
@@ -214,6 +235,11 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     link.click();
     document.body.removeChild(link);
   };
+
+  // Generate all plans for current parameters
+  const plans = generatePlans();
+  const activePlan = getActivePlan(plans, strategy);
+  const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
 
   // Ensure we have valid data before rendering
   const hasValidData = activePlan.isViable && activePlan.timeline.length > 0;
@@ -259,6 +285,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     }
   };
   
+  // Handle extra payment change
+  const handleExtraPaymentChange = (values: number[]) => {
+    setExtraPayment(values[0]);
+    console.log('Extra payment changed to:', values[0]);
+  };
+  
   return (
     <Card className="overflow-hidden">
       <CardHeader>
@@ -269,19 +301,19 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
               variant="outline" 
               size="sm" 
               onClick={exportToPDF}
-              aria-label={t('exportSection.exportToPDF') || 'Vie PDF-muodossa'}
+              aria-label={t('dashboard.exportToPDF') || 'Vie PDF-muodossa'}
             >
               <Download className="h-4 w-4 mr-2" />
-              {t('exportSection.exportToPDF') || 'Vie PDF'}
+              {t('dashboard.exportToPDF') || 'Vie PDF'}
             </Button>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={exportToCSV}
-              aria-label={t('exportSection.exportToCSV') || 'Vie CSV-muodossa'}
+              aria-label={t('dashboard.exportToCSV') || 'Vie CSV-muodossa'}
             >
               <FileText className="h-4 w-4 mr-2" />
-              {t('exportSection.exportToCSV') || 'Vie CSV'}
+              {t('dashboard.exportToCSV') || 'Vie CSV'}
             </Button>
           </div>
         </CardTitle>
@@ -299,7 +331,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                 max={2000}
                 step={50}
                 value={[extraPayment]}
-                onValueChange={(values) => setExtraPayment(values[0])}
+                onValueChange={handleExtraPaymentChange}
                 aria-label={t('dashboard.extraPayment') || 'Lisämaksu kuukaudessa'}
                 className="flex-1"
               />
@@ -572,7 +604,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
                         {formatCurrency(hasValidData && activePlan.timeline.length > 0 ? 
-                          activePlan.timeline[0].debts.reduce((sum, debt) => sum + debt.payment, 0) : 0)}
+                          activePlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
                       </span>
                     </li>
                   </ul>
@@ -592,7 +624,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
                         {formatCurrency(comparisonPlan.timeline.length > 0 ? 
-                          comparisonPlan.timeline[0].debts.reduce((sum, debt) => sum + debt.payment, 0) : 0)}
+                          comparisonPlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
                       </span>
                     </li>
                   </ul>
