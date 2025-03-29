@@ -1,16 +1,16 @@
+
 import React, { useMemo, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, CreditCard, Award, ArrowRight, TrendingDown, BadgeDollarSign, Calculator } from 'lucide-react';
+import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
 import { Loan } from '@/utils/loanCalculations';
-import { DebtItem, PrioritizationMethod, RepaymentPlan } from '@/utils/repayment/types';
+import { DebtItem, PrioritizationMethod } from '@/utils/repayment/types';
 import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
 import { 
@@ -75,10 +75,8 @@ const DebtFreeTimeline = ({
   
   // Calculate equal distribution plan (custom strategy)
   const equalPlan = useMemo(() => {
-    // This would be a custom implementation that distributes extra payments equally
-    // For now, we'll use the same function but with a different strategy identifier
-    // In a full implementation, you would create a custom distribution algorithm
-    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche');
+    // Use avalanche strategy but with equal distribution flag set to true
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
   }, [combinedDebts, paymentAmount]);
   
   // Get debt-free dates for each strategy with proper future dates
@@ -212,43 +210,34 @@ const DebtFreeTimeline = ({
             </div>
           )}
           
-          {/* Strategy tabs */}
-          <Tabs defaultValue="avalanche" value={selectedStrategy} onValueChange={(value) => setSelectedStrategy(value as any)}>
-            <TabsList className="w-full grid grid-cols-3">
-              <TabsTrigger value="equal">{t('dashboard.equalStrategy')}</TabsTrigger>
-              <TabsTrigger value="snowball">{t('dashboard.snowballStrategy')}</TabsTrigger>
-              <TabsTrigger value="avalanche">{t('dashboard.avalancheStrategy')}</TabsTrigger>
-            </TabsList>
-            
-            {/* Strategy comparison cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-              {strategies.map((strategy) => (
-                <Card 
-                  key={strategy.id} 
-                  className={`cursor-pointer ${getStrategyCardClass(strategy.id)}`}
-                  onClick={() => setSelectedStrategy(strategy.id as any)}
-                >
-                  <CardHeader className="p-3">
-                    <CardTitle className="text-base">{strategy.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-3 pt-0">
-                    <p className="flex justify-between">
-                      <span className="text-sm">{t('repayment.debtFreeIn')}:</span>
-                      <span className="font-medium">{strategy.months} {t('form.months')}</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="text-sm">{t('repayment.totalInterestPaid')}:</span>
-                      <span className="font-medium">{formatCurrency(strategy.interest)}</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="text-sm">{t('repayment.projectDate')}:</span>
-                      <span className="font-medium">{strategy.date}</span>
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </Tabs>
+          {/* Strategy cards (direct selection, not tabs) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            {strategies.map((strategy) => (
+              <Card 
+                key={strategy.id} 
+                className={`cursor-pointer transition-all hover:shadow ${getStrategyCardClass(strategy.id)}`}
+                onClick={() => setSelectedStrategy(strategy.id as any)}
+              >
+                <CardHeader className="p-3">
+                  <CardTitle className="text-base">{strategy.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3 pt-0">
+                  <p className="flex justify-between">
+                    <span className="text-sm">{t('repayment.debtFreeIn')}:</span>
+                    <span className="font-medium">{strategy.months} {t('form.months')}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="text-sm">{t('repayment.totalInterestPaid')}:</span>
+                    <span className="font-medium">{formatCurrency(strategy.interest)}</span>
+                  </p>
+                  <p className="flex justify-between">
+                    <span className="text-sm">{t('repayment.projectDate')}:</span>
+                    <span className="font-medium">{strategy.date}</span>
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
           
           {/* Timeline chart */}
           {timelineData.length > 0 && (
@@ -304,7 +293,7 @@ const DebtFreeTimeline = ({
               <p className="text-sm text-muted-foreground mt-1">{t('dashboard.currentDebt')}: {formatCurrency(totalDebt)}</p>
             </div>
             
-            {activeCards.length > 0 && getSelectedPlan().timeline.length > 0 && (
+            {activeCards.length > 0 && getSelectedPlan().creditCardFreeMonth && (
               <div className="relative pl-8 pb-6">
                 <div className="absolute left-0 w-6 h-6 rounded-full bg-muted flex items-center justify-center">
                   <CreditCard className="h-3 w-3" />
