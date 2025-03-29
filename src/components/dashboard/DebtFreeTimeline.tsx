@@ -5,7 +5,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle, DollarSign, BadgePercent } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
@@ -20,9 +21,11 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  ComposedChart,
+  Area,
+  Bar
 } from 'recharts';
-import { calculateEffectiveMinPayment } from '@/utils/creditCardCalculations';
 
 interface DebtFreeTimelineProps {
   totalDebt: number;
@@ -52,11 +55,10 @@ const DebtFreeTimeline = ({
   const navigate = useNavigate();
   
   // Generate combined debts from loans and credit cards
-  const combinedDebts = useMemo(() => {
-    const debts = combineDebts(activeLoans, activeCards);
-    console.log('Combined debts:', debts);
-    return debts;
-  }, [activeLoans, activeCards]);
+  const combinedDebts = useMemo(() => 
+    combineDebts(activeLoans, activeCards), 
+    [activeLoans, activeCards]
+  );
   
   // Calculate total minimum payments correctly for both loan and credit card debts
   const totalMinPayments = useMemo(() => {
@@ -94,70 +96,68 @@ const DebtFreeTimeline = ({
       return sum + minPayment;
     }, 0);
     
-    const total = loanMinPayments + cardMinPayments;
-    console.log('Total minimum payments:', { loanMinPayments, cardMinPayments, total });
-    
-    return total;
+    return loanMinPayments + cardMinPayments;
   }, [activeLoans, activeCards]);
   
+  // Ensure minimum payment is never less than 10 to avoid division by zero or negative values
+  const safeMinPayment = Math.max(totalMinPayments, 10);
+  
   // State for payment slider (start at monthly budget or minimum payments, whichever is higher)
-  const [paymentAmount, setPaymentAmount] = useState(Math.max(monthlyBudget || 0, totalMinPayments || 0));
+  const [paymentAmount, setPaymentAmount] = useState(
+    Math.max(monthlyBudget || 0, safeMinPayment)
+  );
   
   // Update payment amount if minimum payments or budget changes
   useEffect(() => {
-    const newAmount = Math.max(monthlyBudget || 0, totalMinPayments || 0);
-    console.log('Updating payment amount:', { monthlyBudget, totalMinPayments, newAmount });
+    const newAmount = Math.max(monthlyBudget || 0, safeMinPayment);
     setPaymentAmount(newAmount);
-  }, [totalMinPayments, monthlyBudget]);
+  }, [safeMinPayment, monthlyBudget]);
   
   // State for selected strategy
   const [selectedStrategy, setSelectedStrategy] = useState<'avalanche' | 'snowball' | 'equal'>('avalanche');
+  
+  // State for chart view mode
+  const [chartView, setChartView] = useState<'combined' | 'separate'>('combined');
   
   // Calculate plans with different strategies only when dependencies change
   const avalanchePlan = useMemo(() => {
     if (combinedDebts.length === 0) {
       return {
-        isViable: false,
+        isViable: true,
         totalMonths: 0,
         totalInterestPaid: 0,
         timeline: [],
         monthlyAllocation: []
       };
     }
-    const plan = generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche');
-    console.log('Avalanche plan:', plan);
-    return plan;
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche');
   }, [combinedDebts, paymentAmount]);
   
   const snowballPlan = useMemo(() => {
     if (combinedDebts.length === 0) {
       return {
-        isViable: false,
+        isViable: true,
         totalMonths: 0,
         totalInterestPaid: 0,
         timeline: [],
         monthlyAllocation: []
       };
     }
-    const plan = generateRepaymentPlan(combinedDebts, paymentAmount, 'snowball');
-    console.log('Snowball plan:', plan);
-    return plan;
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'snowball');
   }, [combinedDebts, paymentAmount]);
   
   // Calculate equal distribution plan (custom strategy)
   const equalPlan = useMemo(() => {
     if (combinedDebts.length === 0) {
       return {
-        isViable: false,
+        isViable: true,
         totalMonths: 0,
         totalInterestPaid: 0,
         timeline: [],
         monthlyAllocation: []
       };
     }
-    const plan = generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
-    console.log('Equal distribution plan:', plan);
-    return plan;
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
   }, [combinedDebts, paymentAmount]);
   
   // Get debt-free dates for each strategy with proper future dates
@@ -202,6 +202,7 @@ const DebtFreeTimeline = ({
     }
   };
   
+  // Improved timeline data preparation with better sampling for longer timelines
   const timelineData = useMemo(() => {
     const plan = getSelectedPlan();
     
@@ -209,22 +210,57 @@ const DebtFreeTimeline = ({
       return [];
     }
     
-    // Simplify the timeline to include fewer data points for better chart rendering
-    // Take one data point per quarter (every 3 months) plus the last point
-    const simplifiedTimeline = [];
+    const timeline = plan.timeline;
+    const totalPeriods = timeline.length;
     
-    for (let i = 0; i < plan.timeline.length; i++) {
-      if (i % 3 === 0 || i === plan.timeline.length - 1) {
-        simplifiedTimeline.push({
-          month: i + 1,
-          balance: plan.timeline[i].totalRemaining,
-          totalInterest: plan.timeline[i].totalInterestPaid
-        });
+    // For small datasets, include all points
+    if (totalPeriods <= 24) {
+      return timeline.map((point, index) => ({
+        month: index + 1,
+        balance: point.totalRemaining,
+        interest: point.totalInterestPaid,
+        interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+        monthlyInterest: index > 0 ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid : 0
+      }));
+    }
+    
+    // For larger datasets, use intelligent sampling to preserve important features
+    const simplifiedTimeline = [];
+    const samplingRate = Math.ceil(totalPeriods / 24); // Aim for about 24 points
+    
+    // Always include first and last points
+    let lastIncludedMonth = -samplingRate;
+    
+    for (let i = 0; i < totalPeriods; i++) {
+      // Include points at regular intervals, or if there's a significant change
+      const isRegularSample = i % samplingRate === 0;
+      const isLastPoint = i === totalPeriods - 1;
+      const isSignificantChange = i > 0 && Math.abs(timeline[i].totalRemaining - timeline[i - 1].totalRemaining) > totalDebt * 0.05;
+      
+      if (isRegularSample || isLastPoint || isSignificantChange) {
+        // Avoid points too close together
+        if (i - lastIncludedMonth >= samplingRate / 2 || isLastPoint) {
+          lastIncludedMonth = i;
+          
+          simplifiedTimeline.push({
+            month: i + 1,
+            balance: timeline[i].totalRemaining,
+            interest: timeline[i].totalInterestPaid,
+            interestRate: timeline[i].totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+            monthlyInterest: i > 0 ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid : 0
+          });
+        }
       }
     }
     
     return simplifiedTimeline;
-  }, [selectedStrategy, avalanchePlan, snowballPlan, equalPlan]);
+  }, [selectedStrategy, avalanchePlan, snowballPlan, equalPlan, totalDebt]);
+  
+  // Calculate the maximum interest value for scaling the chart
+  const maxInterest = useMemo(() => {
+    if (timelineData.length === 0) return 0;
+    return Math.max(...timelineData.map(point => point.interest));
+  }, [timelineData]);
   
   // Helper function for strategy card styling
   const getStrategyCardClass = (strategyId: string) => {
@@ -238,10 +274,37 @@ const DebtFreeTimeline = ({
   };
   
   // Check if payment amount is valid (at least meet minimum payments)
-  const isValidPayment = paymentAmount >= totalMinPayments;
+  const isValidPayment = paymentAmount >= safeMinPayment;
   
   // Check if we have any debt to pay
-  const hasDebt = totalDebt > 0;
+  const hasDebt = totalDebt > 0 && combinedDebts.length > 0;
+  
+  // Custom tooltip for the chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border rounded-md p-3 shadow-md">
+          <p className="font-medium">{t('repayment.month')} {label}</p>
+          {payload[0] && (
+            <p className="text-primary">
+              {t('repayment.balance')}: {formatCurrency(payload[0].value)}
+            </p>
+          )}
+          {payload[1] && (
+            <p className="text-destructive">
+              {t('repayment.totalInterestPaid')}: {formatCurrency(payload[1].value)}
+            </p>
+          )}
+          {payload[2] && (
+            <p className="text-amber-500">
+              {t('repayment.monthlyInterest')}: {formatCurrency(payload[2].value)}
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
   
   return (
     <Card>
@@ -264,7 +327,7 @@ const DebtFreeTimeline = ({
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium">{t('repayment.minimumPayments')}:</p>
-                  <p className="text-2xl font-bold">{formatCurrency(totalMinPayments)}/{t('form.months')}</p>
+                  <p className="text-2xl font-bold">{formatCurrency(safeMinPayment)}/{t('form.months')}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">{t('dashboard.currentPaymentAmount')}:</p>
@@ -285,15 +348,15 @@ const DebtFreeTimeline = ({
                 </label>
                 <Slider
                   value={[paymentAmount]}
-                  min={totalMinPayments > 0 ? totalMinPayments : 1}
-                  max={Math.max(totalMinPayments * 3, monthlyBudget * 2)}
+                  min={safeMinPayment}
+                  max={Math.max(safeMinPayment * 3, monthlyBudget * 2, safeMinPayment + 500)}
                   step={10}
                   onValueChange={(value) => setPaymentAmount(value[0])}
                   className={`w-full ${!isValidPayment ? 'border-destructive' : ''}`}
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{t('dashboard.minimum')}: {formatCurrency(totalMinPayments)}</span>
-                  <span>{t('dashboard.maximum')}: {formatCurrency(Math.max(totalMinPayments * 3, monthlyBudget * 2))}</span>
+                  <span>{t('dashboard.minimum')}: {formatCurrency(safeMinPayment)}</span>
+                  <span>{t('dashboard.maximum')}: {formatCurrency(Math.max(safeMinPayment * 3, monthlyBudget * 2, safeMinPayment + 500))}</span>
                 </div>
               </div>
               
@@ -345,47 +408,119 @@ const DebtFreeTimeline = ({
                 </div>
               )}
               
-              {/* Timeline chart */}
+              {/* Chart view tabs */}
               {timelineData.length > 0 && isValidPayment && (
-                <div className="h-64 mt-4">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={timelineData}
-                      margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="month" 
-                        label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
-                      />
-                      <YAxis 
-                        tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                        label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
-                      />
-                      <Tooltip 
-                        formatter={(value: any) => formatCurrency(value)} 
-                        labelFormatter={(value) => `${t('repayment.month')} ${value}`}
-                      />
-                      <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="balance" 
-                        name={t('repayment.balance')}
-                        stroke="#3b82f6" 
-                        dot={false} 
-                        activeDot={{ r: 6 }} 
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="totalInterest" 
-                        name={t('repayment.totalInterestPaid')}
-                        stroke="#ef4444" 
-                        dot={false} 
-                        activeDot={{ r: 6 }} 
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+                <Tabs value={chartView} onValueChange={(value) => setChartView(value as 'combined' | 'separate')} className="mt-4">
+                  <TabsList className="grid grid-cols-2 w-full sm:w-auto">
+                    <TabsTrigger value="combined">
+                      <DollarSign className="mr-2 h-4 w-4" />
+                      {t('repayment.combinedView')}
+                    </TabsTrigger>
+                    <TabsTrigger value="separate">
+                      <BadgePercent className="mr-2 h-4 w-4" />
+                      {t('repayment.separateView')}
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  {/* Combined view (traditional line chart) */}
+                  <TabsContent value="combined">
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart
+                          data={timelineData}
+                          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis 
+                            dataKey="month" 
+                            label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
+                          />
+                          <YAxis 
+                            yAxisId="left"
+                            tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
+                            label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
+                          />
+                          <YAxis 
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(value) => `${Math.round(value / 1000)}k`}
+                            label={{ value: `${t('repayment.interest')}`, angle: 90, position: 'insideRight' }}
+                            domain={[0, maxInterest * 1.1]} // Scale the interest axis
+                          />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend />
+                          <Area
+                            yAxisId="left"
+                            type="monotone"
+                            dataKey="balance"
+                            name={t('repayment.balance')}
+                            fill="#3b82f6"
+                            stroke="#3b82f6"
+                            fillOpacity={0.2}
+                          />
+                          <Line 
+                            yAxisId="right"
+                            type="monotone" 
+                            dataKey="interest" 
+                            name={t('repayment.totalInterestPaid')}
+                            stroke="#ef4444" 
+                            dot={false} 
+                            activeDot={{ r: 6 }}
+                            strokeWidth={2} 
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </TabsContent>
+                  
+                  {/* Separate view (bar chart for interest) */}
+                  <TabsContent value="separate">
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart
+                          data={timelineData}
+                          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                        >
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis 
+                            dataKey="month" 
+                            label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
+                          />
+                          <YAxis 
+                            yAxisId="left"
+                            tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
+                            label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
+                          />
+                          <YAxis 
+                            yAxisId="right"
+                            orientation="right"
+                            tickFormatter={(value) => formatCurrency(value).replace('€', '')}
+                            label={{ value: `${t('repayment.monthlyInterest')}`, angle: 90, position: 'insideRight' }}
+                            domain={[0, 'auto']}
+                          />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend />
+                          <Line 
+                            yAxisId="left"
+                            type="monotone" 
+                            dataKey="balance" 
+                            name={t('repayment.balance')}
+                            stroke="#3b82f6" 
+                            dot={false}
+                            strokeWidth={2}
+                          />
+                          <Bar 
+                            yAxisId="right"
+                            dataKey="monthlyInterest" 
+                            name={t('repayment.monthlyInterest')}
+                            fill="#f59e0b" 
+                            barSize={15}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               )}
               
               {/* Timeline milestones */}

@@ -15,8 +15,7 @@ export const generateRepaymentPlan = (
 ): RepaymentPlan => {
   if (!debts || debts.length === 0) {
     return {
-      isViable: false,
-      insufficientBudgetMessage: "No debts provided",
+      isViable: true,
       totalMonths: 0,
       totalInterestPaid: 0,
       timeline: [],
