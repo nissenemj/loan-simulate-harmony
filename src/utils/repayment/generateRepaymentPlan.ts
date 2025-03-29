@@ -23,8 +23,22 @@ export const generateRepaymentPlan = (
     };
   }
 
+  // Filter out zero balance debts
+  const activeDebts = debts.filter(debt => debt.balance > 0 && debt.isActive !== false);
+  
+  if (activeDebts.length === 0) {
+    return {
+      isViable: true,
+      totalMonths: 0,
+      totalInterestPaid: 0,
+      timeline: [],
+      monthlyAllocation: [],
+      creditCardFreeMonth: 0
+    };
+  }
+
   // Step 1: Calculate minimum payments for all debts
-  const totalMinPayment = debts.reduce((sum, debt) => sum + debt.minPayment, 0);
+  const totalMinPayment = activeDebts.reduce((sum, debt) => sum + debt.minPayment, 0);
 
   // Step 2: Check if budget is sufficient to cover all minimum payments
   if (monthlyBudget < totalMinPayment) {
@@ -35,20 +49,6 @@ export const generateRepaymentPlan = (
       totalInterestPaid: 0,
       timeline: [],
       monthlyAllocation: []
-    };
-  }
-
-  // Filter out zero balance debts
-  const activeDebts = debts.filter(debt => debt.balance > 0);
-  
-  if (activeDebts.length === 0) {
-    return {
-      isViable: true,
-      totalMonths: 0,
-      totalInterestPaid: 0,
-      timeline: [],
-      monthlyAllocation: [],
-      creditCardFreeMonth: 0
     };
   }
 
@@ -65,15 +65,14 @@ export const generateRepaymentPlan = (
     totalPayment: debt.minPayment
   }));
 
-  // Step 5: Allocate extra funds to the highest priority debt
+  // Step 5: Allocate extra funds based on strategy
   const extraBudget = monthlyBudget - totalMinPayment;
   if (extraBudget > 0 && prioritizedDebts.length > 0) {
     if (equalDistribution) {
       // Distribute extra budget equally among all debts
-      const activeDebts = prioritizedDebts.filter(debt => debt.balance > 0);
-      const extraPerDebt = extraBudget / activeDebts.length;
+      const extraPerDebt = extraBudget / prioritizedDebts.length;
       
-      activeDebts.forEach(debt => {
+      prioritizedDebts.forEach(debt => {
         const allocation = initialAllocation.find(a => a.id === debt.id);
         if (allocation) {
           allocation.extraPayment = extraPerDebt;
