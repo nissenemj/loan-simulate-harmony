@@ -157,7 +157,7 @@ export const fi: typeof en = {
       question3: 'Voinko käyttää sovellusta opintolainoihin?',
       answer3: 'Ehdottomasti! Sovellus toimii kaikentyyppisillä lainoilla, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat.',
       question4: 'Mikä on lumivyöry- ja lumipallostrategioiden ero?',
-      answer4: 'Lumivyörymenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästääkseen eniten korkokuluissa. Lumipallostrategia keskittyy maksamaan ensin pienimmät velat luodakseen liike-energiaa ja motivaatiota.',
+      answer4: 'Lumivyörymenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästää eniten korkokuluissa. Lumipallostrategia keskittyy maksamaan ensin pienimmät velat luodakseen liike-energiaa ja motivaatiota.',
     },
     finalCta: {
       title: 'Aloita velaton matkasi tänään',
@@ -257,7 +257,7 @@ export const fi: typeof en = {
     payoffScheduleDescription: "Milloin kukin velka maksetaan pois",
     payoffTime: "Maksuaika",
     totalRemaining: "Jäljellä oleva kokonaisvelka",
-    noPlanYet: "Ei vielä maksusuunnitelmaa",
+    noPlanYet: "Ei viel�� maksusuunnitelmaa",
     enterBudgetPrompt: "Anna kuukausittainen budjettisi ja klikkaa Laske nähdäksesi maksusuunnitelmasi.",
     calculateNow: "Laske nyt",
     summaryTab: "Velkatiivistelmä",
@@ -551,8 +551,8 @@ export const fi: typeof en = {
     monthlyBudget: 'Kuukausibudjetti',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
   },
-  export: {
-    exportToPDF: "Vie PDF",
-    exportToCSV: "Vie CSV"
+  exportSection: {
+    exportToPDF: 'Vie PDF-muodossa',
+    exportToCSV: 'Vie CSV-muodossa'
   }
 };
