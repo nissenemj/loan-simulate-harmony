@@ -535,7 +535,17 @@ export const en = {
     viewDetailedTimeline: 'View Detailed Timeline',
     helpWithDebt: 'Need Help with Your Debt?',
     year: 'year',
-    goToRepaymentPlan: 'Go to Repayment Plan'
+    goToRepaymentPlan: 'Go to Repayment Plan',
+    currentPaymentAmount: 'Current payment amount',
+    monthlyPaymentAmount: 'Monthly payment amount',
+    minimum: 'Minimum',
+    maximum: 'Maximum',
+    recommendedStrategy: 'Recommended strategy',
+    recommendation: 'Recommendation',
+    equalStrategy: 'Equal Distribution',
+    snowballStrategy: 'Snowball',
+    avalancheStrategy: 'Avalanche',
+    equalDistribution: 'Equal Distribution Strategy',
   },
   blog: {
     pageTitle: "Blog | Loan Simulate Harmony",

@@ -1,4 +1,3 @@
-
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -161,7 +160,7 @@ export const fi: typeof en = {
       answer4: 'Lumivyörymenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästääkseen eniten korkokuluissa. Lumipallostrategia keskittyy maksamaan ensin pienimmät velat luodakseen liike-energiaa ja motivaatiota.',
     },
     finalCta: {
-      title: 'Aloita velaton matkasi tänään',
+      title: 'Aloita velaton matkasi tänä��n',
       subtitle: 'Liity tuhansiin käyttäjiin, jotka ovat jo ottaneet hallintaan taloudellisen tulevaisuutensa.',
       buttonText: 'Rekisteröidy nyt - Se on ilmaista',
     },
@@ -233,7 +232,7 @@ export const fi: typeof en = {
     selectMethod: "Valitse menetelmä",
     avalancheMethod: "Korkein korko ensin (Lumivyöry)",
     snowballMethod: "Pienin saldo ensin (Lumipallo)",
-    avalancheDescription: "Korkeimman koron velkojen maksaminen ensin säästää eniten rahaa ajan mittaan.",
+    avalancheDescription: "Korkeimman koron velkojen maksaminen ensin säästää eniten rahaa ajan myötä.",
     snowballDescription: "Pienimpien saldojen maksaminen ensin luo nopeita voittoja motivaatiota varten.",
     calculatePlan: "Laske maksusuunnitelma",
     insufficientBudget: "Riittämätön budjetti",
@@ -540,7 +539,17 @@ export const fi: typeof en = {
     viewDetailedTimeline: 'Näytä yksityiskohtainen aikataulu',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
     year: 'vuosi',
-    goToRepaymentPlan: 'Tee maksusuunnitelma'
+    goToRepaymentPlan: 'Tee maksusuunnitelma',
+    currentPaymentAmount: 'Nykyinen maksusumma',
+    monthlyPaymentAmount: 'Kuukausittainen maksusumma',
+    minimum: 'Minimi',
+    maximum: 'Maksimi',
+    recommendedStrategy: 'Suositeltu strategia',
+    recommendation: 'Suositus',
+    equalStrategy: 'Tasajako',
+    snowballStrategy: 'Lumipallo',
+    avalancheStrategy: 'Lumivyöry',
+    equalDistribution: 'Tasajakostrategia'
   },
   blog: {
     pageTitle: "Blogi | Lainasimulaattori",

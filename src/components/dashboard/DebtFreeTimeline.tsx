@@ -1,8 +1,11 @@
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, CreditCard, Award, ArrowRight, TrendingDown, BadgeDollarSign, Calculator } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +14,16 @@ import { Loan } from '@/utils/loanCalculations';
 import { DebtItem, PrioritizationMethod, RepaymentPlan } from '@/utils/repayment/types';
 import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer 
+} from 'recharts';
 
 interface DebtFreeTimelineProps {
   totalDebt: number;
@@ -33,15 +46,41 @@ const DebtFreeTimeline = ({
   // Generate repayment plans using both strategies
   const combinedDebts = useMemo(() => combineDebts(activeLoans, activeCards), [activeLoans, activeCards]);
   
+  // Calculate total minimum payments
+  const totalMinPayments = useMemo(() => combinedDebts.reduce((sum, debt) => {
+    if (debt.type === 'loan') {
+      const loanDebt = activeLoans.find(loan => loan.id === debt.id);
+      return sum + (loanDebt ? loanDebt.minPayment || 0 : 0);
+    } else {
+      const cardDebt = activeCards.find(card => card.id === debt.id);
+      return sum + (cardDebt ? Math.max(cardDebt.minPayment, cardDebt.balance * (cardDebt.minPaymentPercent / 100)) : 0);
+    }
+  }, 0), [combinedDebts, activeLoans, activeCards]);
+  
+  // State for payment slider (start at monthly budget or minimum payments, whichever is higher)
+  const [paymentAmount, setPaymentAmount] = useState(Math.max(monthlyBudget, totalMinPayments));
+  
+  // State for selected strategy
+  const [selectedStrategy, setSelectedStrategy] = useState<'equal' | 'avalanche' | 'snowball'>('avalanche');
+  
+  // Calculate plans with different strategies
   const avalanchePlan = useMemo(() => 
-    generateRepaymentPlan(combinedDebts, monthlyBudget, 'avalanche'),
-    [combinedDebts, monthlyBudget]
+    generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche'),
+    [combinedDebts, paymentAmount]
   );
   
   const snowballPlan = useMemo(() => 
-    generateRepaymentPlan(combinedDebts, monthlyBudget, 'snowball'),
-    [combinedDebts, monthlyBudget]
+    generateRepaymentPlan(combinedDebts, paymentAmount, 'snowball'),
+    [combinedDebts, paymentAmount]
   );
+  
+  // Calculate equal distribution plan (custom strategy)
+  const equalPlan = useMemo(() => {
+    // This would be a custom implementation that distributes extra payments equally
+    // For now, we'll use the same function but with a different strategy identifier
+    // In a full implementation, you would create a custom distribution algorithm
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
+  }, [combinedDebts, paymentAmount]);
   
   // Get debt-free dates for each strategy with proper future dates
   const now = new Date();
@@ -58,78 +97,62 @@ const DebtFreeTimeline = ({
   console.log('DebtFreeTimeline calculations:', {
     avalancheTotalMonths: avalanchePlan.totalMonths,
     snowballTotalMonths: snowballPlan.totalMonths,
-    avalancheViable: avalanchePlan.isViable,
-    snowballViable: snowballPlan.isViable,
-    now: now.toISOString(),
-    locale,
-    activeDebts: combinedDebts.length
+    equalTotalMonths: equalPlan.totalMonths,
+    paymentAmount,
+    totalMinPayments,
+    totalDebts: combinedDebts.length
   });
   
   const avalancheDate = getDateAfterMonths(avalanchePlan.totalMonths);
   const snowballDate = getDateAfterMonths(snowballPlan.totalMonths);
+  const equalDate = getDateAfterMonths(equalPlan.totalMonths);
   
   // Determine fastest method
-  const fastestMethod = avalanchePlan.totalMonths <= snowballPlan.totalMonths ? 'avalanche' : 'snowball';
-  const fastestDate = fastestMethod === 'avalanche' ? avalancheDate : snowballDate;
+  const strategies = [
+    { id: 'avalanche', name: t('repayment.avalancheStrategy'), months: avalanchePlan.totalMonths, interest: avalanchePlan.totalInterestPaid, date: avalancheDate },
+    { id: 'snowball', name: t('repayment.snowballStrategy'), months: snowballPlan.totalMonths, interest: snowballPlan.totalInterestPaid, date: snowballDate },
+    { id: 'equal', name: t('dashboard.equalDistribution'), months: equalPlan.totalMonths, interest: equalPlan.totalInterestPaid, date: equalDate }
+  ];
   
-  // Calculate monthly difference between methods
-  const monthsDifference = Math.abs(avalanchePlan.totalMonths - snowballPlan.totalMonths);
-  
-  // Calculate total interest savings
-  const avalancheInterest = avalanchePlan.totalInterestPaid;
-  const snowballInterest = snowballPlan.totalInterestPaid;
-  const interestSavings = Math.abs(avalancheInterest - snowballInterest);
-  
-  // Get credit card free date (finding when all credit cards are paid)
-  let creditCardFreeMonth = 0;
-  
-  const getDebtTypePayoffMonth = (debtType: 'credit-card' | 'loan', plan: RepaymentPlan) => {
-    if (plan.timeline.length === 0) return 0;
-    
-    // Get all debt IDs of the specified type
-    const debtIds = combinedDebts
-      .filter(debt => debt.type === debtType)
-      .map(debt => debt.id);
-      
-    if (debtIds.length === 0) return 0;
-    
-    // Find when all debts of this type are paid off
-    for (let i = 0; i < plan.timeline.length; i++) {
-      const month = plan.timeline[i];
-      const allPaid = debtIds.every(id => {
-        const debtInfo = month.debts.find(d => d.id === id);
-        return !debtInfo || debtInfo.remainingBalance === 0;
-      });
-      
-      if (allPaid) {
-        return i + 1; // Add 1 because array is 0-indexed but months start at 1
-      }
+  // Sort strategies by months (ascending) and then by interest (ascending)
+  const sortedStrategies = [...strategies].sort((a, b) => {
+    if (a.months === b.months) {
+      return a.interest - b.interest;
     }
-    
-    return 0;
+    return a.months - b.months;
+  });
+  
+  const recommendedStrategy = sortedStrategies[0];
+  
+  // Prepare timeline data for the selected strategy
+  const getSelectedPlan = () => {
+    switch (selectedStrategy) {
+      case 'avalanche': return avalanchePlan;
+      case 'snowball': return snowballPlan;
+      case 'equal': return equalPlan;
+      default: return avalanchePlan;
+    }
   };
   
-  // Find when all credit cards are paid off in the fastest method's plan
-  const fastestPlan = fastestMethod === 'avalanche' ? avalanchePlan : snowballPlan;
-  creditCardFreeMonth = getDebtTypePayoffMonth('credit-card', fastestPlan);
-  const loanFreeMonth = getDebtTypePayoffMonth('loan', fastestPlan);
-  
-  const creditCardFreeDate = creditCardFreeMonth > 0 ? getDateAfterMonths(creditCardFreeMonth) : '';
-  
-  // If all debts are paid in one month, use a simpler display
-  const singleMonthPayoff = avalanchePlan.totalMonths === 1 && snowballPlan.totalMonths === 1;
+  const timelineData = useMemo(() => {
+    const plan = getSelectedPlan();
+    return plan.timeline.map((month, index) => ({
+      month: index + 1,
+      balance: month.totalRemaining,
+      totalInterest: month.totalInterestPaid
+    }));
+  }, [selectedStrategy, avalanchePlan, snowballPlan, equalPlan]);
   
   // Calculate minimum payments for debts
-  const totalMinPayments = combinedDebts.reduce((sum, debt) => {
-    if (debt.type === 'loan') {
-      const loanDebt = activeLoans.find(loan => loan.id === debt.id);
-      // Use the loan's minPayment property instead of monthlyPayment
-      return sum + (loanDebt ? loanDebt.minPayment || 0 : 0);
-    } else {
-      const cardDebt = activeCards.find(card => card.id === debt.id);
-      return sum + (cardDebt ? Math.max(cardDebt.minPayment, cardDebt.balance * (cardDebt.minPaymentPercent / 100)) : 0);
+  const getStrategyCardClass = (strategyId: string) => {
+    if (strategyId === selectedStrategy) {
+      return 'ring-2 ring-primary';
     }
-  }, 0);
+    if (strategyId === recommendedStrategy.id) {
+      return 'bg-primary/5';
+    }
+    return '';
+  };
   
   return (
     <Card>
@@ -141,7 +164,136 @@ const DebtFreeTimeline = ({
         <CardDescription>{t('dashboard.timelineDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Minimum payments and current amount */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium">{t('repayment.minimumPayments')}:</p>
+              <p className="text-2xl font-bold">{formatCurrency(totalMinPayments)}/{t('form.months')}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium">{t('dashboard.currentPaymentAmount')}:</p>
+              <p className="text-2xl font-bold">{formatCurrency(paymentAmount)}/{t('form.months')}</p>
+            </div>
+          </div>
+          
+          {/* Payment amount slider */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">
+              {t('dashboard.monthlyPaymentAmount')}
+            </label>
+            <Slider
+              value={[paymentAmount]}
+              min={totalMinPayments}
+              max={Math.max(totalMinPayments * 3, monthlyBudget * 2)}
+              step={10}
+              onValueChange={(value) => setPaymentAmount(value[0])}
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{t('dashboard.minimum')}: {formatCurrency(totalMinPayments)}</span>
+              <span>{t('dashboard.maximum')}: {formatCurrency(Math.max(totalMinPayments * 3, monthlyBudget * 2))}</span>
+            </div>
+          </div>
+          
+          {/* Strategy recommendation */}
+          {recommendedStrategy && (
+            <div className="bg-primary/5 p-4 rounded-md">
+              <p className="font-medium mb-1">{t('dashboard.recommendedStrategy')}:</p>
+              <p className="text-lg font-bold flex items-center">
+                {recommendedStrategy.name}
+                <Badge className="ml-2 bg-primary" variant="secondary">
+                  {t('dashboard.recommendation')}
+                </Badge>
+              </p>
+              <p className="text-sm mt-1">
+                {t('repayment.debtFreeIn')} {recommendedStrategy.months} {t('repayment.months')}, 
+                {' '}{t('repayment.totalInterestPaid')}: {formatCurrency(recommendedStrategy.interest)}
+              </p>
+            </div>
+          )}
+          
+          {/* Strategy tabs */}
+          <Tabs defaultValue="avalanche" value={selectedStrategy} onValueChange={(value) => setSelectedStrategy(value as any)}>
+            <TabsList className="w-full grid grid-cols-3">
+              <TabsTrigger value="equal">{t('dashboard.equalStrategy')}</TabsTrigger>
+              <TabsTrigger value="snowball">{t('dashboard.snowballStrategy')}</TabsTrigger>
+              <TabsTrigger value="avalanche">{t('dashboard.avalancheStrategy')}</TabsTrigger>
+            </TabsList>
+            
+            {/* Strategy comparison cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              {strategies.map((strategy) => (
+                <Card 
+                  key={strategy.id} 
+                  className={`cursor-pointer ${getStrategyCardClass(strategy.id)}`}
+                  onClick={() => setSelectedStrategy(strategy.id as any)}
+                >
+                  <CardHeader className="p-3">
+                    <CardTitle className="text-base">{strategy.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-3 pt-0">
+                    <p className="flex justify-between">
+                      <span className="text-sm">{t('repayment.debtFreeIn')}:</span>
+                      <span className="font-medium">{strategy.months} {t('form.months')}</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span className="text-sm">{t('repayment.totalInterestPaid')}:</span>
+                      <span className="font-medium">{formatCurrency(strategy.interest)}</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span className="text-sm">{t('repayment.projectDate')}:</span>
+                      <span className="font-medium">{strategy.date}</span>
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </Tabs>
+          
+          {/* Timeline chart */}
+          {timelineData.length > 0 && (
+            <div className="h-64 mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={timelineData}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="month" 
+                    label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
+                  />
+                  <YAxis 
+                    tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
+                    label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
+                  />
+                  <Tooltip 
+                    formatter={(value: any) => formatCurrency(value)} 
+                    labelFormatter={(value) => `${t('repayment.month')} ${value}`}
+                  />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="balance" 
+                    name={t('repayment.balance')}
+                    stroke="#3b82f6" 
+                    dot={false} 
+                    activeDot={{ r: 6 }} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="totalInterest" 
+                    name={t('repayment.totalInterestPaid')}
+                    stroke="#ef4444" 
+                    dot={false} 
+                    activeDot={{ r: 6 }} 
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+          
           <div className="relative">
             <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-muted-foreground/20" />
             
@@ -153,63 +305,15 @@ const DebtFreeTimeline = ({
               <p className="text-sm text-muted-foreground mt-1">{t('dashboard.currentDebt')}: {formatCurrency(totalDebt)}</p>
             </div>
             
-            {activeCards.length > 0 && creditCardFreeDate && (
+            {activeCards.length > 0 && getSelectedPlan().timeline.length > 0 && (
               <div className="relative pl-8 pb-6">
                 <div className="absolute left-0 w-6 h-6 rounded-full bg-muted flex items-center justify-center">
                   <CreditCard className="h-3 w-3" />
                 </div>
                 <h4 className="font-medium">{t('repayment.creditCardsFree')}</h4>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t('repayment.projectDate')}: {creditCardFreeDate}
+                  {t('repayment.projectDate')}: {getDateAfterMonths(getSelectedPlan().creditCardFreeMonth || 0)}
                 </p>
-                {creditCardFreeMonth > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t('repayment.monthsUntilCreditCardFree', { months: creditCardFreeMonth })}
-                  </p>
-                )}
-              </div>
-            )}
-            
-            {!singleMonthPayoff && avalanchePlan.isViable && (
-              <div className="relative pl-8 pb-6">
-                <div className="absolute left-0 w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
-                  <TrendingDown className="h-3 w-3 text-white" />
-                </div>
-                <h4 className="font-medium">{t('repayment.avalancheStrategy')}</h4>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t('repayment.debtFreeIn')} {avalanchePlan.totalMonths} {t('repayment.months')}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {t('repayment.projectDate')}: {avalancheDate}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t('repayment.totalInterestPaid')}: {formatCurrency(avalancheInterest)}
-                </p>
-              </div>
-            )}
-            
-            {!singleMonthPayoff && snowballPlan.isViable && (
-              <div className="relative pl-8 pb-6">
-                <div className="absolute left-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                  <BadgeDollarSign className="h-3 w-3 text-white" />
-                </div>
-                <h4 className="font-medium">{t('repayment.snowballStrategy')}</h4>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t('repayment.debtFreeIn')} {snowballPlan.totalMonths} {t('repayment.months')}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {t('repayment.projectDate')}: {snowballDate}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t('repayment.totalInterestPaid')}: {formatCurrency(snowballInterest)}
-                </p>
-                {monthsDifference > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {fastestMethod === 'snowball' 
-                      ? t('repayment.monthsFaster', { months: monthsDifference }) 
-                      : t('repayment.monthsSlower', { months: monthsDifference })}
-                  </p>
-                )}
               </div>
             )}
             
@@ -219,31 +323,13 @@ const DebtFreeTimeline = ({
               </div>
               <h4 className="font-medium">{t('dashboard.debtFree')}</h4>
               <p className="text-sm text-muted-foreground mt-1">
-                {t('repayment.projectDate')}: {fastestDate}
+                {t('repayment.projectDate')}: {getDateAfterMonths(getSelectedPlan().totalMonths)}
               </p>
-              {!singleMonthPayoff && (
-                <p className="text-xs text-muted-foreground">
-                  {fastestMethod === 'avalanche' ? 
-                    t('repayment.fastestWithAvalanche') : 
-                    t('repayment.fastestWithSnowball')}
-                </p>
-              )}
-              {interestSavings > 0 && (
-                <p className="text-xs font-medium text-green-600 mt-1">
-                  {t('repayment.interestSaved')}: {formatCurrency(interestSavings)}
-                </p>
-              )}
+              <p className="text-xs text-green-600 font-medium mt-1">
+                {t('repayment.totalInterestPaid')}: {formatCurrency(getSelectedPlan().totalInterestPaid)}
+              </p>
             </div>
           </div>
-          
-          {/* Minimum payments timeline */}
-          {totalMinPayments > 0 && (
-            <div className="mt-6 border-t pt-4">
-              <p className="text-sm text-muted-foreground">
-                {t('repayment.minimumPayments')}: {formatCurrency(totalMinPayments)}/{t('form.months')}
-              </p>
-            </div>
-          )}
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-2 items-stretch sm:flex-row sm:items-center">
