@@ -37,13 +37,13 @@ export const simulateRepayment = (
       totalRemaining: 0,
       totalPaid: 0,
       totalInterestPaid: 0,
-      strategy: method // Add strategy information to monthly data
+      strategy: method 
     };
     
     // Get debts that still have balance
     let remainingDebts = currentDebts.filter(debt => debt.balance > 0);
     
-    // Re-prioritize every month to handle changing balances (especially important for snowball)
+    // Re-prioritize every month to handle changing balances
     let prioritizedRemainingDebts = prioritizeDebts(remainingDebts, method);
     
     // Apply extra payment from the pool according to the chosen strategy
@@ -73,10 +73,8 @@ export const simulateRepayment = (
       extraPaymentPool = 0; // Reset pool after allocation
     }
     
-    // Process debts in order of priority (important for snowball/avalanche methods)
-    for (let priorityIndex = 0; priorityIndex < prioritizedRemainingDebts.length; priorityIndex++) {
-      const debt = prioritizedRemainingDebts[priorityIndex];
-      
+    // Process each debt to calculate interest and apply payments
+    for (const debt of remainingDebts) {
       // Skip debts with zero balance
       if (debt.balance <= 0) continue;
       
@@ -128,42 +126,43 @@ export const simulateRepayment = (
       monthData.totalPaid += actualPayment;
       monthData.totalInterestPaid += actualInterestPaid;
       
-      // Key improvement: Immediately redirect excess payment
-      // if this debt is now paid off and we have an excess payment
-      if (debt.balance <= 0 && (excessPayment > 0 || allocation.minPayment > 0)) {
+      // Check if debt is now paid off - this is the critical snowball logic
+      if (debt.balance <= 0) {
+        const freedUpPayment = allocation.minPayment + excessPayment;
+        
         if (equalDistribution) {
-          // Equal distribution: add to pool for next redistribution
-          extraPaymentPool += excessPayment + allocation.minPayment;
+          // For equal distribution, add to pool for next month
+          extraPaymentPool += freedUpPayment;
         } else {
-          // Snowball/Avalanche: redirect to next debt in priority
-          const nextDebts = prioritizedRemainingDebts.slice(priorityIndex + 1);
+          // For snowball/avalanche, immediately redirect to next highest priority debt
+          // Reprioritize the REMAINING debts after this one is paid off
+          const remainingUnpaidDebts = currentDebts.filter(d => d.balance > 0);
           
-          if (nextDebts.length > 0) {
-            // Get the next highest priority debt with balance
-            const nextDebtId = nextDebts[0].id;
-            const nextAllocation = currentAllocation.find(a => a.id === nextDebtId);
+          if (remainingUnpaidDebts.length > 0) {
+            // Get new priority order for remaining debts
+            const newPrioritizedDebts = prioritizeDebts(remainingUnpaidDebts, method);
             
-            if (nextAllocation) {
-              // Add the excess payment to the next debt's extra payment
-              if (excessPayment > 0) {
-                nextAllocation.extraPayment += excessPayment;
+            if (newPrioritizedDebts.length > 0) {
+              // Get highest priority debt according to strategy
+              const nextDebtId = newPrioritizedDebts[0].id;
+              const nextAllocation = currentAllocation.find(a => a.id === nextDebtId);
+              
+              if (nextAllocation) {
+                // Redirect the freed-up payment to this debt
+                nextAllocation.extraPayment += freedUpPayment;
                 nextAllocation.totalPayment = nextAllocation.minPayment + nextAllocation.extraPayment;
               }
-              
-              // Also add the base monthly payment from the paid-off debt
-              nextAllocation.extraPayment += allocation.minPayment;
-              nextAllocation.totalPayment = nextAllocation.minPayment + nextAllocation.extraPayment;
             }
           } else {
-            // No next debt, add to pool for next month
-            extraPaymentPool += excessPayment + allocation.minPayment;
+            // No debts left, add to pool for next month
+            extraPaymentPool += freedUpPayment;
           }
         }
         
-        // Zero out the current allocation since it's paid off
+        // Zero out the paid-off debt's allocation
+        allocation.minPayment = 0;
         allocation.extraPayment = 0;
         allocation.totalPayment = 0;
-        allocation.minPayment = 0;
       }
     }
     
