@@ -10,7 +10,8 @@ import { simulateRepayment } from './simulateRepayment';
 export const generateRepaymentPlan = (
   debts: DebtItem[],
   monthlyBudget: number,
-  method: PrioritizationMethod
+  method: PrioritizationMethod,
+  equalDistribution: boolean = false
 ): RepaymentPlan => {
   if (!debts || debts.length === 0) {
     return {
@@ -54,12 +55,27 @@ export const generateRepaymentPlan = (
   // Step 5: Allocate extra funds to the highest priority debt
   const extraBudget = monthlyBudget - totalMinPayment;
   if (extraBudget > 0 && prioritizedDebts.length > 0) {
-    const highestPriorityDebtId = prioritizedDebts[0].id;
-    const allocationForHighestPriority = initialAllocation.find(a => a.id === highestPriorityDebtId);
-    
-    if (allocationForHighestPriority) {
-      allocationForHighestPriority.extraPayment = extraBudget;
-      allocationForHighestPriority.totalPayment = allocationForHighestPriority.minPayment + extraBudget;
+    if (equalDistribution) {
+      // Distribute extra budget equally among all debts
+      const activeDebts = prioritizedDebts.filter(debt => debt.balance > 0);
+      const extraPerDebt = extraBudget / activeDebts.length;
+      
+      activeDebts.forEach(debt => {
+        const allocation = initialAllocation.find(a => a.id === debt.id);
+        if (allocation) {
+          allocation.extraPayment = extraPerDebt;
+          allocation.totalPayment = allocation.minPayment + extraPerDebt;
+        }
+      });
+    } else {
+      // Apply all extra to highest priority debt
+      const highestPriorityDebtId = prioritizedDebts[0].id;
+      const allocationForHighestPriority = initialAllocation.find(a => a.id === highestPriorityDebtId);
+      
+      if (allocationForHighestPriority) {
+        allocationForHighestPriority.extraPayment = extraBudget;
+        allocationForHighestPriority.totalPayment = allocationForHighestPriority.minPayment + extraBudget;
+      }
     }
   }
 
@@ -70,12 +86,47 @@ export const generateRepaymentPlan = (
   const totalMonths = timeline.length;
   const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);
 
+  // Step 8: Find when all credit cards are paid off
+  const creditCardFreeMonth = findCreditCardFreeMonth(debts, timeline);
+
   // Return the complete repayment plan
   return {
     isViable: true,
     totalMonths,
     totalInterestPaid,
     timeline,
-    monthlyAllocation: initialAllocation
+    monthlyAllocation: initialAllocation,
+    creditCardFreeMonth
   };
 };
+
+/**
+ * Find the month when all credit cards are paid off
+ */
+function findCreditCardFreeMonth(debts: DebtItem[], timeline: RepaymentPlan['timeline']): number | undefined {
+  // Get all credit card IDs
+  const creditCardIds = new Set(
+    debts.filter(debt => debt.type === 'credit-card').map(debt => debt.id)
+  );
+  
+  // If no credit cards, return undefined
+  if (creditCardIds.size === 0) {
+    return undefined;
+  }
+  
+  // Find the month when all credit cards are paid off
+  for (let i = 0; i < timeline.length; i++) {
+    const month = timeline[i];
+    
+    // Check if all credit cards have zero balance
+    const allCreditCardsPaid = !month.debts.some(
+      debt => creditCardIds.has(debt.id) && debt.remainingBalance > 0
+    );
+    
+    if (allCreditCardsPaid) {
+      return month.month;
+    }
+  }
+  
+  return undefined;
+}

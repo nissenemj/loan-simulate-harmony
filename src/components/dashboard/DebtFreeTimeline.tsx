@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -79,7 +78,7 @@ const DebtFreeTimeline = ({
     // This would be a custom implementation that distributes extra payments equally
     // For now, we'll use the same function but with a different strategy identifier
     // In a full implementation, you would create a custom distribution algorithm
-    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche');
   }, [combinedDebts, paymentAmount]);
   
   // Get debt-free dates for each strategy with proper future dates

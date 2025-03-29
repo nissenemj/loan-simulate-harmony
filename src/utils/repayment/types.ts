@@ -43,4 +43,5 @@ export interface RepaymentPlan {
   totalInterestPaid: number;
   isViable: boolean;
   insufficientBudgetMessage?: string;
+  creditCardFreeMonth?: number; // Added property for the credit card free month
 }
