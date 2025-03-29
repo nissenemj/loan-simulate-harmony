@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle, DollarSign, BadgePercent } from 'lucide-react';
+import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle, DollarSign } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
@@ -23,8 +22,7 @@ import {
   Legend, 
   ResponsiveContainer,
   ComposedChart,
-  Area,
-  Bar
+  Area
 } from 'recharts';
 
 interface DebtFreeTimelineProps {
@@ -115,9 +113,6 @@ const DebtFreeTimeline = ({
   
   // State for selected strategy
   const [selectedStrategy, setSelectedStrategy] = useState<'avalanche' | 'snowball' | 'equal'>('avalanche');
-  
-  // State for chart view mode
-  const [chartView, setChartView] = useState<'combined' | 'separate'>('combined');
   
   // Calculate plans with different strategies only when dependencies change
   const avalanchePlan = useMemo(() => {
@@ -413,120 +408,57 @@ const DebtFreeTimeline = ({
                 </div>
               )}
               
-              {/* Chart view tabs */}
+              {/* Chart - only show combinedView */}
               {timelineData.length > 0 && isValidPayment && (
-                <Tabs value={chartView} onValueChange={(value) => setChartView(value as 'combined' | 'separate')} className="mt-4">
-                  <TabsList className="grid grid-cols-2 w-full sm:w-auto">
-                    <TabsTrigger value="combined">
-                      <DollarSign className="mr-2 h-4 w-4" />
-                      {t('repayment.combinedView')}
-                    </TabsTrigger>
-                    <TabsTrigger value="separate">
-                      <BadgePercent className="mr-2 h-4 w-4" />
-                      {t('repayment.separateView')}
-                    </TabsTrigger>
-                  </TabsList>
-                  
-                  {/* Combined view (traditional line chart) */}
-                  <TabsContent value="combined">
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart
-                          data={timelineData}
-                          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis 
-                            dataKey="month" 
-                            label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
-                          />
-                          <YAxis 
-                            yAxisId="left"
-                            tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                            label={{ value: t('repayment.balance'), angle: -90, position: 'insideLeft' }}
-                          />
-                          <YAxis 
-                            yAxisId="right"
-                            orientation="right"
-                            tickFormatter={(value) => `${Math.round(value / 1000)}k`}
-                            label={{ value: t('repayment.interest'), angle: 90, position: 'insideRight' }}
-                            domain={[0, maxInterest * 1.1]} // Scale the interest axis
-                          />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Legend />
-                          <Area
-                            yAxisId="left"
-                            type="monotone"
-                            dataKey="balance"
-                            name={t('repayment.balance')}
-                            fill="#3b82f6"
-                            stroke="#3b82f6"
-                            fillOpacity={0.2}
-                          />
-                          <Line 
-                            yAxisId="right"
-                            type="monotone" 
-                            dataKey="interest" 
-                            name={t('repayment.totalInterestPaid')}
-                            stroke="#ef4444" 
-                            dot={false} 
-                            activeDot={{ r: 6 }}
-                            strokeWidth={2} 
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </TabsContent>
-                  
-                  {/* Separate view (bar chart for monthly interest) - Fixed labels and logic */}
-                  <TabsContent value="separate">
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <ComposedChart
-                          data={timelineData}
-                          margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis 
-                            dataKey="month" 
-                            label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
-                          />
-                          <YAxis 
-                            yAxisId="left"
-                            tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                            label={{ value: t('repayment.balance'), angle: -90, position: 'insideLeft' }}
-                          />
-                          <YAxis 
-                            yAxisId="right"
-                            orientation="right"
-                            label={{ value: t('repayment.monthlyInterest'), angle: 90, position: 'insideRight' }}
-                            // Fix: Use proper formatting and scale for monthly interest
-                            tickFormatter={(value) => `${Math.round(value)}`}
-                            domain={[0, 'auto']}
-                          />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Legend />
-                          <Line 
-                            yAxisId="left"
-                            type="monotone" 
-                            dataKey="balance" 
-                            name={t('repayment.balance')}
-                            stroke="#3b82f6" 
-                            dot={false}
-                            strokeWidth={2}
-                          />
-                          <Bar 
-                            yAxisId="right"
-                            dataKey="monthlyInterest" 
-                            name={t('repayment.monthlyInterest')}
-                            fill="#f59e0b" 
-                            barSize={15}
-                          />
-                        </ComposedChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </TabsContent>
-                </Tabs>
+                <div className="mt-4">
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart
+                        data={timelineData}
+                        margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="month" 
+                          label={{ value: "Kuukaudet", position: 'insideBottomRight', offset: -5 }} 
+                        />
+                        <YAxis 
+                          yAxisId="left"
+                          tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
+                          label={{ value: "Velka", angle: -90, position: 'insideLeft' }}
+                        />
+                        <YAxis 
+                          yAxisId="right"
+                          orientation="right"
+                          tickFormatter={(value) => `${Math.round(value / 1000)}k`}
+                          label={{ value: "Korko", angle: 90, position: 'insideRight' }}
+                          domain={[0, maxInterest * 1.1]} // Scale the interest axis
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend />
+                        <Area
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="balance"
+                          name="Velka"
+                          fill="#3b82f6"
+                          stroke="#3b82f6"
+                          fillOpacity={0.2}
+                        />
+                        <Line 
+                          yAxisId="right"
+                          type="monotone" 
+                          dataKey="interest" 
+                          name="Maksettu korko"
+                          stroke="#ef4444" 
+                          dot={false} 
+                          activeDot={{ r: 6 }}
+                          strokeWidth={2} 
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               )}
               
               {/* Timeline milestones */}
