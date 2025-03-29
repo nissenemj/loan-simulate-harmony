@@ -512,7 +512,6 @@ export const fi: typeof en = {
     progress: 'Edistyminen',
     minimumPayments: 'Minimierät',
     extraBudget: 'Ylimääräinen budjetti',
-    highestInterestDebt: 'Korkein korko',
     debtFreeTimeline: 'Velaton aikajana',
     timelineDescription: 'Näe miten velkasi kehittyy ajan myötä',
     debtBreakdown: 'Velkaerittely',
