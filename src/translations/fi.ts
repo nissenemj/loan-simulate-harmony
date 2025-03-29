@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -550,6 +551,7 @@ export const fi: typeof en = {
     equalDistribution: 'Tasainen jakelu',
     monthlyBudget: 'Kuukausibudjetti',
     helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
+    // Add the missing export-related keys
     exportToPDF: 'Vie PDF-muodossa',
     exportToCSV: 'Vie CSV-muodossa',
     comparing: 'Vertaillaan',

@@ -92,8 +92,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         currentDebtKey: translationsToUse['dashboard.currentDebt'],
         debtFreeKey: translationsToUse['dashboard.debtFree'],
         timelineDescKey: translationsToUse['dashboard.timelineDescription'],
-        avalancheKey: translationsToUse['repayment.fastestWithAvalanche'],
-        snowballKey: translationsToUse['repayment.fastestWithSnowball'],
+        exportToPDFKey: translationsToUse['dashboard.exportToPDF'],
+        exportToCSVKey: translationsToUse['dashboard.exportToCSV'],
       }
     });
   };
