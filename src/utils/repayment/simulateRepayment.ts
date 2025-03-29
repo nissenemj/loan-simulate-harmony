@@ -31,6 +31,12 @@ export const simulateRepayment = (
   let extraPaymentPool = 0;
   
   while (currentDebts.some(debt => debt.balance > 0) && month <= MAX_MONTHS) {
+    // Get debts that still have balance
+    let remainingDebts = currentDebts.filter(debt => debt.balance > 0);
+    
+    // Re-prioritize every month to handle changing balances
+    let prioritizedRemainingDebts = prioritizeDebts(remainingDebts, method);
+    
     const monthData = {
       month,
       debts: [] as { id: string; name: string; remainingBalance: number; payment: number; interestPaid: number; }[],
@@ -39,12 +45,6 @@ export const simulateRepayment = (
       totalInterestPaid: 0,
       strategy: method 
     };
-    
-    // Get debts that still have balance
-    let remainingDebts = currentDebts.filter(debt => debt.balance > 0);
-    
-    // Re-prioritize every month to handle changing balances
-    let prioritizedRemainingDebts = prioritizeDebts(remainingDebts, method);
     
     // Apply extra payment from the pool according to the chosen strategy
     if (extraPaymentPool > 0 && prioritizedRemainingDebts.length > 0) {
@@ -126,22 +126,41 @@ export const simulateRepayment = (
       monthData.totalPaid += actualPayment;
       monthData.totalInterestPaid += actualInterestPaid;
       
-      // Check if debt is now paid off - this is the critical snowball logic
-      if (debt.balance <= 0) {
-        // Use allocation.totalPayment (min + extra) for the freed up payment
-        const freedUpPayment = allocation.minPayment + allocation.extraPayment;
+      // If we paid off the debt or have excess payment, handle snowball/avalanche logic
+      if (debt.balance <= 0 || excessPayment > 0) {
+        // Amount to redistribute (excess payment + monthly min payment if debt is paid off)
+        let amountToRedistribute = excessPayment;
         
-        if (equalDistribution) {
-          // For equal distribution, add to pool for next month
-          extraPaymentPool += freedUpPayment;
-        } else {
-          // For snowball/avalanche, immediately redirect to next highest priority debt
-          // Reprioritize the REMAINING debts after this one is paid off
-          const remainingUnpaidDebts = currentDebts.filter(d => d.balance > 0);
+        // If debt is now paid off, add its allocation to redistribution
+        if (debt.balance <= 0) {
+          // Use allocation.totalPayment (min + extra) for the freed up payment
+          amountToRedistribute += allocation.totalPayment - actualPayment;
           
-          if (remainingUnpaidDebts.length > 0) {
-            // Get new priority order for remaining debts
-            const newPrioritizedDebts = prioritizeDebts(remainingUnpaidDebts, method);
+          // Zero out the paid-off debt's allocation for future months
+          allocation.minPayment = 0;
+          allocation.extraPayment = 0;
+          allocation.totalPayment = 0;
+        }
+        
+        // Only redistribute if we have an amount to redistribute
+        if (amountToRedistribute > 0.01) { // Use a small threshold to handle floating point
+          // Get updated list of debts with balances after this payment
+          const updatedRemainingDebts = currentDebts.filter(d => d.balance > 0);
+          
+          if (equalDistribution && updatedRemainingDebts.length > 0) {
+            // For equal distribution, add to pool for immediate redistribution
+            const amountPerDebt = amountToRedistribute / updatedRemainingDebts.length;
+            
+            for (const remainingDebt of updatedRemainingDebts) {
+              const remainingAllocation = currentAllocation.find(a => a.id === remainingDebt.id);
+              if (remainingAllocation) {
+                remainingAllocation.extraPayment += amountPerDebt;
+                remainingAllocation.totalPayment = remainingAllocation.minPayment + remainingAllocation.extraPayment;
+              }
+            }
+          } else if (updatedRemainingDebts.length > 0) {
+            // For snowball/avalanche, redirect based on new priority order
+            const newPrioritizedDebts = prioritizeDebts(updatedRemainingDebts, method);
             
             if (newPrioritizedDebts.length > 0) {
               // Get highest priority debt according to strategy
@@ -149,21 +168,16 @@ export const simulateRepayment = (
               const nextAllocation = currentAllocation.find(a => a.id === nextDebtId);
               
               if (nextAllocation) {
-                // Redirect the freed-up payment to this debt
-                nextAllocation.extraPayment += freedUpPayment;
+                // Redirect the amount to this debt
+                nextAllocation.extraPayment += amountToRedistribute;
                 nextAllocation.totalPayment = nextAllocation.minPayment + nextAllocation.extraPayment;
               }
             }
           } else {
-            // No debts left, add to pool for next month
-            extraPaymentPool += freedUpPayment;
+            // No debts left with balance, add to pool for next month if any
+            extraPaymentPool += amountToRedistribute;
           }
         }
-        
-        // Zero out the paid-off debt's allocation
-        allocation.minPayment = 0;
-        allocation.extraPayment = 0;
-        allocation.totalPayment = 0;
       }
     }
     
@@ -174,7 +188,7 @@ export const simulateRepayment = (
     timeline.push(monthData);
     
     // Check if all debts are paid off
-    if (monthData.totalRemaining <= 0) {
+    if (monthData.totalRemaining <= 0.01) { // Use small threshold for floating point comparison
       break;
     }
     

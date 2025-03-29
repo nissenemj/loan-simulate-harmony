@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -22,7 +22,7 @@ import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
-  const [creditCards, setCreditCards] = useLocalStorage<CreditCardType[]>("creditCards", []);
+  const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
@@ -83,7 +83,7 @@ const Dashboard = () => {
   // Calculate the estimated debt-free date
   const getDebtFreeDate = () => {
     // If we have a valid repayment plan, use its timeline
-    if (repaymentPlan.isViable && repaymentPlan.timeline.length > 0) {
+    if (repaymentPlan.isViable && repaymentPlan.timeline && repaymentPlan.timeline.length > 0) {
       const totalMonths = repaymentPlan.totalMonths;
       const now = new Date();
       const debtFreeDate = new Date(now);

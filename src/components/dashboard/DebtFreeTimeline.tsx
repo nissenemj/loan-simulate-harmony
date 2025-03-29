@@ -137,7 +137,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   
   // Prepare data for chart - use repayment plan timeline
   const prepareChartData = useCallback((activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
-    if (!activePlan.isViable || activePlan.timeline.length === 0) {
+    if (!activePlan.isViable || !activePlan.timeline || activePlan.timeline.length === 0) {
       console.log('No viable plan or empty timeline');
       return [];
     }
@@ -145,52 +145,49 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     // Get the maximum number of months to display
     const maxMonths = Math.max(
       activePlan.timeline.length,
-      (comparisonPlan && comparisonPlan.isViable) ? comparisonPlan.timeline.length : 0
+      (comparisonPlan && comparisonPlan.isViable && comparisonPlan.timeline) ? comparisonPlan.timeline.length : 0
     );
     
     const dataPoints = [];
     
     for (let i = 0; i < maxMonths; i++) {
-      // Get data for active plan
-      const activeMonth = i < activePlan.timeline.length ? activePlan.timeline[i] : null;
-      
-      // Get data for comparison plan if enabled
-      const comparisonMonth = (showComparison && comparisonPlan && comparisonPlan.isViable && 
-                              i < comparisonPlan.timeline.length) ? 
-                              comparisonPlan.timeline[i] : null;
-      
       // Create data point with consistent structure
       const dataPoint: any = {
         month: i + 1,
         date: formatDate(i),
+        // Initialize all values to avoid undefined values in chart
+        RemainingDebt: 0,
+        Principal: 0,
+        Interest: 0
       };
       
-      // Add active plan data
-      if (activeMonth) {
-        dataPoint["RemainingDebt"] = activeMonth.totalRemaining;
-        dataPoint["Principal"] = activeMonth.debts.reduce(
-          (sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0
-        );
-        dataPoint["Interest"] = activeMonth.totalInterestPaid;
-      } else if (i > 0) {
-        // If we're past the end of the active timeline, use zero values
-        dataPoint["RemainingDebt"] = 0;
-        dataPoint["Principal"] = 0;
-        dataPoint["Interest"] = 0;
+      // Get data for active plan
+      if (i < activePlan.timeline.length) {
+        const activeMonth = activePlan.timeline[i];
+        dataPoint.RemainingDebt = activeMonth.totalRemaining;
+        
+        // Calculate principal by subtracting interest from total payment
+        const principal = activeMonth.totalPaid - activeMonth.totalInterestPaid;
+        dataPoint.Principal = principal;
+        dataPoint.Interest = activeMonth.totalInterestPaid;
       }
       
       // Add comparison plan data if enabled
-      if (showComparison && comparisonMonth) {
-        dataPoint["RemainingDebt_Comparison"] = comparisonMonth.totalRemaining;
-        dataPoint["Principal_Comparison"] = comparisonMonth.debts.reduce(
-          (sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0
-        );
-        dataPoint["Interest_Comparison"] = comparisonMonth.totalInterestPaid;
-      } else if (showComparison && i > 0 && dataPoint["RemainingDebt_Comparison"] !== undefined) {
-        // If we're past the end of the comparison timeline but have shown it before, use zero
-        dataPoint["RemainingDebt_Comparison"] = 0;
-        dataPoint["Principal_Comparison"] = 0;
-        dataPoint["Interest_Comparison"] = 0;
+      if (showComparison && comparisonPlan && comparisonPlan.isViable && comparisonPlan.timeline) {
+        // Initialize comparison values
+        dataPoint.RemainingDebt_Comparison = 0;
+        dataPoint.Principal_Comparison = 0;
+        dataPoint.Interest_Comparison = 0;
+        
+        if (i < comparisonPlan.timeline.length) {
+          const comparisonMonth = comparisonPlan.timeline[i];
+          dataPoint.RemainingDebt_Comparison = comparisonMonth.totalRemaining;
+          
+          // Calculate principal by subtracting interest from total payment
+          const principal = comparisonMonth.totalPaid - comparisonMonth.totalInterestPaid;
+          dataPoint.Principal_Comparison = principal;
+          dataPoint.Interest_Comparison = comparisonMonth.totalInterestPaid;
+        }
       }
       
       dataPoints.push(dataPoint);
@@ -245,7 +242,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     const plans = generatePlans();
     const activePlan = getActivePlan(plans, strategy);
     
-    if (!activePlan.isViable || activePlan.timeline.length === 0) {
+    if (!activePlan.isViable || !activePlan.timeline || activePlan.timeline.length === 0) {
       return;
     }
     
@@ -254,12 +251,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     const csvContent = [
       headers.join(','),
       ...activePlan.timeline.map((month: any) => {
-        const principal = month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0);
+        const principal = month.totalPaid - month.totalInterestPaid;
         return [
           month.month,
           formatDate(month.month - 1),
           month.totalRemaining.toFixed(2),
-          (principal + month.totalInterestPaid).toFixed(2),
+          month.totalPaid.toFixed(2),
           principal.toFixed(2),
           month.totalInterestPaid.toFixed(2)
         ].join(',');
@@ -275,13 +272,24 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     document.body.removeChild(link);
   };
 
+  // Handle extra payment change
+  const handleExtraPaymentChange = (values: number[]) => {
+    if (values && values.length > 0) {
+      const newExtraPayment = values[0];
+      setExtraPayment(newExtraPayment);
+      
+      // Plans will be recalculated in useEffect
+      console.log('Extra payment changed to:', newExtraPayment);
+    }
+  };
+  
   // Generate all plans for current parameters
   const plans = generatePlans();
   const activePlan = getActivePlan(plans, strategy);
   const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
 
   // Ensure we have valid data before rendering
-  const hasValidData = activePlan.isViable && activePlan.timeline.length > 0;
+  const hasValidData = activePlan.isViable && activePlan.timeline && activePlan.timeline.length > 0;
   const currentMonth = 1;
   
   // Get the summary statistics from the repayment plan
@@ -321,17 +329,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         return t('dashboard.equalStrategy') || 'Tasainen jakelu';
       default:
         return strat;
-    }
-  };
-  
-  // Handle extra payment change
-  const handleExtraPaymentChange = (values: number[]) => {
-    if (values && values.length > 0) {
-      const newExtraPayment = values[0];
-      setExtraPayment(newExtraPayment);
-      
-      // Plans will be recalculated in useEffect
-      console.log('Extra payment changed to:', newExtraPayment);
     }
   };
   
@@ -713,8 +710,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                     <li className="flex justify-between">
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
-                        {formatCurrency(hasValidData && activePlan.timeline.length > 0 ? 
-                          activePlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
+                        {formatCurrency(hasValidData && activePlan.timeline && activePlan.timeline.length > 0 ? 
+                          activePlan.timeline[0].totalPaid : 0)}
                       </span>
                     </li>
                   </ul>
@@ -733,8 +730,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                     <li className="flex justify-between">
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
-                        {formatCurrency(comparisonPlan.timeline.length > 0 ? 
-                          comparisonPlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
+                        {formatCurrency(comparisonPlan.timeline && comparisonPlan.timeline.length > 0 ? 
+                          comparisonPlan.timeline[0].totalPaid : 0)}
                       </span>
                     </li>
                   </ul>
