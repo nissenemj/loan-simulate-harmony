@@ -210,13 +210,20 @@ const DebtFreeTimeline = ({
     
     // For small datasets, include all points
     if (totalPeriods <= 24) {
-      return timeline.map((point, index) => ({
-        month: index + 1,
-        balance: point.totalRemaining,
-        interest: point.totalInterestPaid,
-        interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
-        monthlyInterest: index > 0 ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid : point.totalInterestPaid
-      }));
+      return timeline.map((point, index) => {
+        // Calculate monthly interest (current month's total interest - previous month's total interest)
+        const monthlyInterest = index > 0 
+          ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid 
+          : point.totalInterestPaid;
+        
+        return {
+          month: index + 1,
+          balance: point.totalRemaining,
+          interest: point.totalInterestPaid,
+          interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+          monthlyInterest: monthlyInterest
+        };
+      });
     }
     
     // For larger datasets, use intelligent sampling to preserve important features
@@ -237,7 +244,7 @@ const DebtFreeTimeline = ({
         if (i - lastIncludedMonth >= samplingRate / 2 || isLastPoint) {
           lastIncludedMonth = i;
           
-          // Calculate monthly interest correctly
+          // Calculate monthly interest correctly (current month's total interest minus previous month's total)
           const monthlyInterest = i > 0 
             ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid 
             : timeline[i].totalInterestPaid;
@@ -287,17 +294,17 @@ const DebtFreeTimeline = ({
           <p className="font-medium">{t('repayment.month')} {label}</p>
           {payload[0] && (
             <p className="text-primary">
-              {t('repayment.balance')}: {formatCurrency(payload[0].value)}
+              {t('dashboard.remainingDebt')}: {formatCurrency(payload[0].value)}
             </p>
           )}
           {payload[1] && (
             <p className="text-destructive">
-              {t('repayment.totalInterestPaid')}: {formatCurrency(payload[1].value)}
+              {t('dashboard.totalInterestPaid')}: {formatCurrency(payload[1].value)}
             </p>
           )}
           {payload[2] && (
             <p className="text-amber-500">
-              {t('repayment.monthlyInterest')}: {formatCurrency(payload[2].value)}
+              {t('dashboard.monthlyInterest')}: {formatCurrency(payload[2].value)}
             </p>
           )}
         </div>
@@ -420,18 +427,18 @@ const DebtFreeTimeline = ({
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis 
                           dataKey="month" 
-                          label={{ value: "Kuukaudet", position: 'insideBottomRight', offset: -5 }} 
+                          label={{ value: t('dashboard.months'), position: 'insideBottomRight', offset: -5 }} 
                         />
                         <YAxis 
                           yAxisId="left"
                           tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                          label={{ value: "Velka", angle: -90, position: 'insideLeft' }}
+                          label={{ value: t('dashboard.debt'), angle: -90, position: 'insideLeft' }}
                         />
                         <YAxis 
                           yAxisId="right"
                           orientation="right"
                           tickFormatter={(value) => `${Math.round(value / 1000)}k`}
-                          label={{ value: "Korko", angle: 90, position: 'insideRight' }}
+                          label={{ value: t('dashboard.interest'), angle: 90, position: 'insideRight' }}
                           domain={[0, maxInterest * 1.1]} // Scale the interest axis
                         />
                         <Tooltip content={<CustomTooltip />} />
@@ -440,7 +447,7 @@ const DebtFreeTimeline = ({
                           yAxisId="left"
                           type="monotone"
                           dataKey="balance"
-                          name="Velka"
+                          name={t('dashboard.debt')}
                           fill="#3b82f6"
                           stroke="#3b82f6"
                           fillOpacity={0.2}
@@ -449,11 +456,22 @@ const DebtFreeTimeline = ({
                           yAxisId="right"
                           type="monotone" 
                           dataKey="interest" 
-                          name="Maksettu korko"
+                          name={t('dashboard.totalInterestPaid')}
                           stroke="#ef4444" 
                           dot={false} 
                           activeDot={{ r: 6 }}
                           strokeWidth={2} 
+                        />
+                        <Line 
+                          yAxisId="right"
+                          type="monotone" 
+                          dataKey="monthlyInterest" 
+                          name={t('dashboard.monthlyInterest')}
+                          stroke="#f59e0b" 
+                          dot={false} 
+                          activeDot={{ r: 4 }}
+                          strokeWidth={1.5} 
+                          strokeDasharray="4 4"
                         />
                       </ComposedChart>
                     </ResponsiveContainer>

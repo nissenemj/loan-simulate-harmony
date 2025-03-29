@@ -135,6 +135,7 @@ export const calculateUtilizationRate = (balance: number, limit: number): number
  * Get comprehensive credit card calculations
  */
 export const calculateCreditCard = (card: CreditCard): CreditCardCalculationResult => {
+  // Ensure we're calculating monthly interest correctly
   const monthlyInterest = calculateMonthlyInterest(card.balance, card.apr);
   
   const effectivePayment = card.fullPayment 

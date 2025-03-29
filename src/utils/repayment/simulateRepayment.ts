@@ -128,7 +128,7 @@ export const simulateRepayment = (
       
       // Check if debt is now paid off - this is the critical snowball logic
       if (debt.balance <= 0) {
-        // Fix: Use allocation.extraPayment instead of excessPayment
+        // Use allocation.totalPayment (min + extra) for the freed up payment
         const freedUpPayment = allocation.minPayment + allocation.extraPayment;
         
         if (equalDistribution) {
