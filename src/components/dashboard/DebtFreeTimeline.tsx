@@ -1,10 +1,10 @@
+
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle, DollarSign } from 'lucide-react';
 import { formatCurrency } from '@/utils/loanCalculations';
 import { useNavigate } from 'react-router-dom';
@@ -512,7 +512,7 @@ const DebtFreeTimeline = ({
         
         <Button 
           variant="default" 
-          onClick={() => navigate('/debt-summary?tab=repayment')}
+          onClick={() => navigate('/debt-summary?tab=repayment-plan')}
           className="flex items-center"
         >
           <Calculator className="mr-2 h-4 w-4" />

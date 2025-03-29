@@ -71,7 +71,7 @@ const PaymentPlanSummary = ({
         )}
       </CardContent>
       <CardFooter>
-        <Button variant="outline" onClick={() => navigate('/debt-summary')}>
+        <Button variant="outline" onClick={() => navigate('/debt-summary?tab=repayment-plan')}>
           {t('dashboard.viewFullPlan')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
