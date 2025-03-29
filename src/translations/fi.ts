@@ -510,7 +510,6 @@ export const fi: typeof en = {
     debtFree: "Velaton",
     currentDebt: "Nykyinen velka",
     totalDebt: "Kokonaisvelka",
-    monthlyPayment: "Kuukausimaksu",
     principal: "Pääoma",
     monthlyInterest: "Kuukausikorko",
     totalInterestPaid: "Maksetaan korkoa yhteensä",
