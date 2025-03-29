@@ -45,16 +45,22 @@ const DebtFreeTimeline = ({
   // Generate repayment plans using both strategies
   const combinedDebts = useMemo(() => combineDebts(activeLoans, activeCards), [activeLoans, activeCards]);
   
-  // Calculate total minimum payments
-  const totalMinPayments = useMemo(() => combinedDebts.reduce((sum, debt) => {
-    if (debt.type === 'loan') {
-      const loanDebt = activeLoans.find(loan => loan.id === debt.id);
-      return sum + (loanDebt ? loanDebt.minPayment || 0 : 0);
-    } else {
-      const cardDebt = activeCards.find(card => card.id === debt.id);
-      return sum + (cardDebt ? Math.max(cardDebt.minPayment, cardDebt.balance * (cardDebt.minPaymentPercent / 100)) : 0);
-    }
-  }, 0), [combinedDebts, activeLoans, activeCards]);
+  // Calculate total minimum payments correctly for both loan and credit card debts
+  const totalMinPayments = useMemo(() => {
+    // For loans: Use the monthly payment from loan calculation
+    const loanMinPayments = activeLoans.reduce((sum, loan) => {
+      return sum + (loan.minPayment || 0);
+    }, 0);
+    
+    // For credit cards: Use either the fixed minimum payment or percentage, whichever is higher
+    const cardMinPayments = activeCards.reduce((sum, card) => {
+      const percentPayment = card.balance * (card.minPaymentPercent / 100);
+      const minPayment = Math.max(card.minPayment, percentPayment);
+      return sum + minPayment;
+    }, 0);
+    
+    return loanMinPayments + cardMinPayments;
+  }, [activeLoans, activeCards]);
   
   // State for payment slider (start at monthly budget or minimum payments, whichever is higher)
   const [paymentAmount, setPaymentAmount] = useState(Math.max(monthlyBudget, totalMinPayments));

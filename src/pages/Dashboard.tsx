@@ -45,10 +45,17 @@ const Dashboard = () => {
   // Calculate total minimum payments
   const totalMinPayments = 
     activeLoans.reduce((sum, loan) => {
-      return sum + (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12));
+      // Use loan.minPayment if available, otherwise calculate it
+      if (loan.minPayment) {
+        return sum + loan.minPayment;
+      } else {
+        // Fallback calculation if minPayment is not directly available
+        return sum + (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12));
+      }
     }, 0) + 
     activeCards.reduce((sum, card) => {
-      return sum + Math.max(card.minPayment, card.balance * card.minPaymentPercent / 100);
+      const percentPayment = card.balance * (card.minPaymentPercent / 100);
+      return sum + Math.max(card.minPayment, percentPayment);
     }, 0);
   
   // Calculate extra budget available
