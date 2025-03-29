@@ -91,8 +91,8 @@ export const generateRepaymentPlan = (
     }
   }
 
-  // Step 6: Simulate repayment with the allocation
-  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method);
+  // Step 6: Simulate repayment with the allocation - pass the equalDistribution parameter
+  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistribution);
 
   // Step 7: Calculate total months and interest paid
   const totalMonths = timeline.length;
