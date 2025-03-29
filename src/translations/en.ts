@@ -55,7 +55,6 @@ export const en = {
     cookieSettings: 'Cookie Settings'
   },
   form: {
-    loanDetails: 'Loan Details',
     loanName: 'Loan Name',
     loanAmount: 'Loan Amount',
     loanType: 'Loan Type',
@@ -274,7 +273,24 @@ export const en = {
     avalancheStrategy: 'Avalanche',
     equalStrategy: 'Equal Distribution',
     equalDistribution: 'Equal Distribution Strategy',
-    // Add missing exportSection properties in the dashboard section
+    monthlyBudget: 'Monthly Budget',
+    helpWithDebt: 'Need help with your debt?',
+    paymentPlanSummary: 'Payment Plan Summary',
+    paymentPlanDescription: 'Your current payment allocation based on budget and interest rates.',
+    minimumPayments: 'Minimum Payments',
+    extraBudget: 'Extra Budget',
+    prioritizedDebt: 'Prioritized Debt',
+    allocatingExtra: 'Allocating extra {{amount}} to highest interest debt.',
+    viewFullPlan: 'View Full Plan',
+    tip1: 'Pay more than the minimum payment whenever possible.',
+    tip2: 'Focus on high-interest debt first to save money.',
+    tip3: 'Review your spending to find more money for debt payments.',
+    viewGlossary: 'View Financial Glossary',
+    debtSummaryCard: 'Debt Summary Card',
+    allDebts: 'All Debts',
+    loans: 'Loans',
+    creditCards: 'Credit Cards',
+    // Export section
     exportToPDF: 'Export to PDF',
     exportToCSV: 'Export to CSV',
     comparing: 'Comparing',
@@ -288,7 +304,6 @@ export const en = {
     interest: 'Interest',
     today: 'Today',
     paymentDuration: 'Payment Duration',
-    interestPayments: 'Interest Payments',
     initialPayment: 'Initial Payment',
     fasterPayoff: 'faster payoff',
     slowerPayoff: 'slower payoff',
@@ -469,7 +484,6 @@ export const en = {
     paymentSchedule: 'Payment Schedule',
     sortDebtsBy: 'Sort Debts By',
     balance: 'Balance',
-    interestRate: 'Interest Rate',
     paymentPercentages: 'Payment Percentages',
     current: 'Current',
     original: 'Original',
@@ -508,7 +522,6 @@ export const en = {
     goalName: 'Goal Name',
     goalAmount: 'Goal Amount',
     targetDate: 'Target Date',
-    calculateSavingsNeeded: 'Calculate Savings Needed',
     savingsNeeded: 'Savings Needed',
     savings: 'Savings',
     savingsVsDebts: 'Savings vs Debts',
@@ -664,5 +677,9 @@ export const en = {
     copyLink: "Copy Link",
     copiedToClipboard: "Link copied to clipboard",
     copyFailed: "Failed to copy link"
+  },
+  language: {
+    en: 'English',
+    fi: 'Suomi'
   }
 };
