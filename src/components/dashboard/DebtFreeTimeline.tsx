@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -70,7 +70,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   monthlyBudget
 }) => {
   const { t, locale } = useLanguage();
-  const [extraPayment, setExtraPayment] = useState(0);
+  const [extraPayment, setExtraPayment] = useState<number>(0);
   const [strategy, setStrategy] = useState<RepaymentStrategy>('avalanche');
   const [comparisonStrategy, setComparisonStrategy] = useState<RepaymentStrategy | null>(null);
   const [showComparison, setShowComparison] = useState(false);
@@ -80,35 +80,40 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   // Create debt items from loans and credit cards
   const debtItems = convertToDebtItems(activeLoans, activeCards);
   
-  // Generate repayment plans for all strategies
-  const generatePlans = () => {
+  // Memoized function to generate repayment plans
+  const generatePlans = useCallback(() => {
+    // Calculate the total budget (base budget + extra payment)
+    const totalBudget = monthlyBudget + extraPayment;
+    
+    console.log('Generating plans with budget:', totalBudget, 'Extra payment:', extraPayment);
+    
     // Generate plans for each strategy with the current extra payment
     const avalanchePlan = generateRepaymentPlan(
       debtItems,
-      monthlyBudget + extraPayment,
+      totalBudget,
       'avalanche',
       false // not equally distributed
     );
     
     const snowballPlan = generateRepaymentPlan(
       debtItems,
-      monthlyBudget + extraPayment,
+      totalBudget,
       'snowball',
       false // not equally distributed
     );
     
     const equalPlan = generateRepaymentPlan(
       debtItems,
-      monthlyBudget + extraPayment,
+      totalBudget,
       'avalanche', // Method doesn't matter for equal distribution
       true // equally distributed
     );
     
     return { avalanchePlan, snowballPlan, equalPlan };
-  };
+  }, [debtItems, monthlyBudget, extraPayment]);
   
   // Get the active plan based on current strategy
-  const getActivePlan = (plans: any, selectedStrategy: RepaymentStrategy) => {
+  const getActivePlan = useCallback((plans: any, selectedStrategy: RepaymentStrategy) => {
     switch (selectedStrategy) {
       case 'avalanche':
         return plans.avalanchePlan;
@@ -119,21 +124,22 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       default:
         return plans.avalanchePlan;
     }
-  };
+  }, []);
   
   // Format date helper function
-  const formatDate = (month: number): string => {
+  const formatDate = useCallback((month: number): string => {
     const date = new Date();
     date.setMonth(date.getMonth() + month);
     return date.toLocaleDateString(locale || 'fi-FI', {
       year: 'numeric',
       month: 'short',
     });
-  };
+  }, [locale]);
   
   // Prepare data for chart - use repayment plan timeline
-  const prepareChartData = (activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
+  const prepareChartData = useCallback((activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
     if (!activePlan.isViable || activePlan.timeline.length === 0) {
+      console.log('No viable plan or empty timeline');
       return [];
     }
     
@@ -163,10 +169,15 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       
       return dataPoint;
     });
-  };
+  }, [formatDate]);
   
   // Effect to recalculate plans when inputs change
   useEffect(() => {
+    if (debtItems.length === 0) {
+      setChartData([]);
+      return;
+    }
+    
     const plans = generatePlans();
     const activePlan = getActivePlan(plans, strategy);
     const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
@@ -180,7 +191,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       totalInterestPaid: activePlan.totalInterestPaid,
       dataPoints: newChartData.length
     });
-  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems]);
+  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems, generatePlans, getActivePlan, prepareChartData]);
   
   // Export to PDF
   const exportToPDF = async () => {
@@ -287,8 +298,10 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   
   // Handle extra payment change
   const handleExtraPaymentChange = (values: number[]) => {
-    setExtraPayment(values[0]);
-    console.log('Extra payment changed to:', values[0]);
+    if (values && values.length > 0) {
+      setExtraPayment(values[0]);
+      console.log('Extra payment changed to:', values[0]);
+    }
   };
   
   return (
@@ -414,146 +427,156 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
           </div>
           
           <div className="h-[400px]" ref={chartRef}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={chartData}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                stackOffset="none"
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="date" 
-                  label={{ 
-                    value: t('table.months') || 'Kuukaudet', 
-                    position: 'insideBottom', 
-                    offset: -5 
-                  }} 
-                />
-                <YAxis 
-                  yAxisId="left"
-                  orientation="left"
-                  tickFormatter={(value) => `${formatCurrency(value)}`}
-                  label={{ 
-                    value: t('dashboard.debt') || 'Velka', 
-                    angle: -90, 
-                    position: 'insideLeft' 
-                  }}
-                />
-                <YAxis 
-                  yAxisId="right"
-                  orientation="right"
-                  tickFormatter={(value) => `${formatCurrency(value)}`}
-                  label={{ 
-                    value: t('dashboard.payment') || 'Maksu', 
-                    angle: 90, 
-                    position: 'insideRight' 
-                  }}
-                />
-                <Tooltip 
-                  formatter={(value, name) => {
-                    // Format based on the data type
-                    const formattedValue = formatCurrency(Number(value));
-                    
-                    // Translate series names
-                    let translatedName = name;
-                    if (name === 'RemainingDebt') translatedName = t('dashboard.remainingDebt') || 'Jäljellä oleva velka';
-                    else if (name === 'Principal') translatedName = t('dashboard.principal') || 'Pääoma';
-                    else if (name === 'Interest') translatedName = t('dashboard.interest') || 'Korko';
-                    else if (name === 'RemainingDebt_Comparison') {
-                      translatedName = `${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    else if (name === 'Principal_Comparison') {
-                      translatedName = `${t('dashboard.principal') || 'Pääoma'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    else if (name === 'Interest_Comparison') {
-                      translatedName = `${t('dashboard.interest') || 'Korko'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    
-                    return [formattedValue, translatedName];
-                  }}
-                  labelFormatter={(label) => `${t('dashboard.date') || 'Päivämäärä'}: ${label}`}
-                />
-                <Legend />
-                
-                <ReferenceLine 
-                  x={currentMonth} 
-                  stroke="#ff0000" 
-                  label={{ 
-                    value: t('dashboard.today') || "Tänään", 
-                    position: "top",
-                    fill: "#ff0000"
-                  }} 
-                  strokeWidth={2}
-                  strokeDasharray="3 3"
-                  yAxisId="left"
-                />
-                
-                {/* Primary strategy */}
-                <Area 
-                  type="monotone" 
-                  dataKey="RemainingDebt" 
-                  name={t('dashboard.remainingDebt') || 'Jäljellä oleva velka'}
-                  stroke="#3b82f6" 
-                  fill="#3b82f6" 
-                  fillOpacity={0.6}
-                  yAxisId="left"
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="Principal" 
-                  name={t('dashboard.principal') || 'Pääoma'}
-                  stroke="#10b981" 
-                  fill="#10b981" 
-                  fillOpacity={0.6}
-                  yAxisId="right"
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="Interest" 
-                  name={t('dashboard.interest') || 'Korko'}
-                  stroke="#f59e0b" 
-                  fill="#f59e0b" 
-                  fillOpacity={0.6}
-                  yAxisId="right"
-                />
-                
-                {/* Comparison strategy (if enabled) */}
-                {showComparison && comparisonStrategy && (
-                  <>
-                    <Area 
-                      type="monotone" 
-                      dataKey="RemainingDebt_Comparison" 
-                      name={`${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#6366f1" 
-                      fill="#6366f1" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="left"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="Principal_Comparison"
-                      name={`${t('dashboard.principal') || 'Pääoma'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#22c55e" 
-                      fill="#22c55e" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="right"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="Interest_Comparison"
-                      name={`${t('dashboard.interest') || 'Korko'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#eab308" 
-                      fill="#eab308" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="right"
-                    />
-                  </>
-                )}
-              </AreaChart>
-            </ResponsiveContainer>
+            {debtItems.length > 0 && chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={chartData}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  stackOffset="none"
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="date" 
+                    label={{ 
+                      value: t('table.months') || 'Kuukaudet', 
+                      position: 'insideBottom', 
+                      offset: -5 
+                    }} 
+                  />
+                  <YAxis 
+                    yAxisId="left"
+                    orientation="left"
+                    tickFormatter={(value) => `${formatCurrency(value)}`}
+                    label={{ 
+                      value: t('dashboard.debt') || 'Velka', 
+                      angle: -90, 
+                      position: 'insideLeft' 
+                    }}
+                  />
+                  <YAxis 
+                    yAxisId="right"
+                    orientation="right"
+                    tickFormatter={(value) => `${formatCurrency(value)}`}
+                    label={{ 
+                      value: t('dashboard.payment') || 'Maksu', 
+                      angle: 90, 
+                      position: 'insideRight' 
+                    }}
+                  />
+                  <Tooltip 
+                    formatter={(value, name) => {
+                      // Format based on the data type
+                      const formattedValue = formatCurrency(Number(value));
+                      
+                      // Translate series names
+                      let translatedName = name;
+                      if (name === 'RemainingDebt') translatedName = t('dashboard.remainingDebt') || 'Jäljellä oleva velka';
+                      else if (name === 'Principal') translatedName = t('dashboard.principal') || 'Pääoma';
+                      else if (name === 'Interest') translatedName = t('dashboard.interest') || 'Korko';
+                      else if (name === 'RemainingDebt_Comparison') {
+                        translatedName = `${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                      }
+                      else if (name === 'Principal_Comparison') {
+                        translatedName = `${t('dashboard.principal') || 'Pääoma'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                      }
+                      else if (name === 'Interest_Comparison') {
+                        translatedName = `${t('dashboard.interest') || 'Korko'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                      }
+                      
+                      return [formattedValue, translatedName];
+                    }}
+                    labelFormatter={(label) => `${t('dashboard.date') || 'Päivämäärä'}: ${label}`}
+                  />
+                  <Legend />
+                  
+                  <ReferenceLine 
+                    x={currentMonth} 
+                    stroke="#ff0000" 
+                    label={{ 
+                      value: t('dashboard.today') || "Tänään", 
+                      position: "top",
+                      fill: "#ff0000"
+                    }} 
+                    strokeWidth={2}
+                    strokeDasharray="3 3"
+                    yAxisId="left"
+                  />
+                  
+                  {/* Primary strategy */}
+                  <Area 
+                    type="monotone" 
+                    dataKey="RemainingDebt" 
+                    name={t('dashboard.remainingDebt') || 'Jäljellä oleva velka'}
+                    stroke="#3b82f6" 
+                    fill="#3b82f6" 
+                    fillOpacity={0.6}
+                    yAxisId="left"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="Principal" 
+                    name={t('dashboard.principal') || 'Pääoma'}
+                    stroke="#10b981" 
+                    fill="#10b981" 
+                    fillOpacity={0.6}
+                    yAxisId="right"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="Interest" 
+                    name={t('dashboard.interest') || 'Korko'}
+                    stroke="#f59e0b" 
+                    fill="#f59e0b" 
+                    fillOpacity={0.6}
+                    yAxisId="right"
+                  />
+                  
+                  {/* Comparison strategy (if enabled) */}
+                  {showComparison && comparisonStrategy && (
+                    <>
+                      <Area 
+                        type="monotone" 
+                        dataKey="RemainingDebt_Comparison" 
+                        name={`${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${getStrategyName(comparisonStrategy)})`}
+                        stroke="#6366f1" 
+                        fill="#6366f1" 
+                        fillOpacity={0.3}
+                        strokeDasharray="5 5"
+                        yAxisId="left"
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="Principal_Comparison"
+                        name={`${t('dashboard.principal') || 'Pääoma'} (${getStrategyName(comparisonStrategy)})`}
+                        stroke="#22c55e" 
+                        fill="#22c55e" 
+                        fillOpacity={0.3}
+                        strokeDasharray="5 5"
+                        yAxisId="right"
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="Interest_Comparison"
+                        name={`${t('dashboard.interest') || 'Korko'} (${getStrategyName(comparisonStrategy)})`}
+                        stroke="#eab308" 
+                        fill="#eab308" 
+                        fillOpacity={0.3}
+                        strokeDasharray="5 5"
+                        yAxisId="right"
+                      />
+                    </>
+                  )}
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center">
+                <p className="text-muted-foreground">
+                  {debtItems.length === 0 ? 
+                    (t('results.noActiveLoans') || 'Ei aktiivisia lainoja.') : 
+                    (t('results.noData') || 'Ei tietoja näytettäväksi')}
+                </p>
+              </div>
+            )}
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
