@@ -23,7 +23,7 @@ export const generateRepaymentPlan = (
     };
   }
 
-  // Filter out zero balance debts
+  // Filter out zero balance debts and inactive debts
   const activeDebts = debts.filter(debt => debt.balance > 0 && debt.isActive !== false);
   
   if (activeDebts.length === 0) {
@@ -80,7 +80,7 @@ export const generateRepaymentPlan = (
         }
       });
     } else {
-      // Apply all extra to highest priority debt
+      // Apply all extra to highest priority debt based on strategy
       const highestPriorityDebtId = prioritizedDebts[0].id;
       const allocationForHighestPriority = initialAllocation.find(a => a.id === highestPriorityDebtId);
       

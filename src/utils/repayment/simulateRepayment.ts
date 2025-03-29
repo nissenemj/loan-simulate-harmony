@@ -29,10 +29,6 @@ export const simulateRepayment = (
   // Track extra payment amount available for redistribution
   let extraPaymentPool = 0;
   
-  console.log('Starting debt simulation with method:', method);
-  console.log('Initial debts:', JSON.stringify(currentDebts.map(d => ({ id: d.id, name: d.name, balance: d.balance }))));
-  console.log('Initial allocation:', JSON.stringify(currentAllocation));
-  
   while (currentDebts.some(debt => debt.balance > 0) && month <= MAX_MONTHS) {
     const monthData = {
       month,
@@ -49,21 +45,12 @@ export const simulateRepayment = (
     // Re-prioritize every month to handle changing balances (especially important for snowball)
     const prioritizedRemainingDebts = prioritizeDebts(remainingDebts, method);
     
-    if (month % 12 === 0 || month === 1) {
-      console.log(`Month ${month} - Prioritized debts:`, 
-        prioritizedRemainingDebts.map(d => ({ id: d.id, name: d.name, balance: d.balance, interest: d.interestRate }))
-      );
-    }
-    
     // Add any extra payment from the pool to the highest priority debt
     if (extraPaymentPool > 0 && prioritizedRemainingDebts.length > 0) {
       const highestPriorityDebtId = prioritizedRemainingDebts[0].id;
       const allocation = currentAllocation.find(a => a.id === highestPriorityDebtId);
       
       if (allocation) {
-        if (month % 12 === 0 || month === 1) {
-          console.log(`Month ${month} - Adding extra payment ${extraPaymentPool.toFixed(2)} to debt ${highestPriorityDebtId}`);
-        }
         allocation.extraPayment += extraPaymentPool;
         allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
         extraPaymentPool = 0; // Reset pool after allocation
@@ -112,9 +99,6 @@ export const simulateRepayment = (
         const excess = principalPayment - debt.balance;
         if (excess > 0.01) { // Only consider significant amounts
           extraPaymentPool += excess;
-          if (month % 12 === 0 || month === 1) {
-            console.log(`Month ${month} - Debt ${debt.id} paid off, adding ${excess.toFixed(2)} to extra payment pool`);
-          }
           principalPayment = debt.balance;
         }
       }
@@ -149,11 +133,6 @@ export const simulateRepayment = (
       // Get the remaining debts with balance > 0
       const remainingDebtsWithBalance = currentDebts.filter(debt => debt.balance > 0);
       
-      if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
-        console.log(`Month ${month} - Debts paid off:`, justPaidOffDebts.map(d => d.id));
-        console.log(`Month ${month} - Remaining debts:`, remainingDebtsWithBalance.map(d => d.id));
-      }
-      
       // If there are remaining debts with balance, prioritize them
       if (remainingDebtsWithBalance.length > 0) {
         // Reprioritize debts (important for snowball method which depends on current balances)
@@ -175,18 +154,12 @@ export const simulateRepayment = (
             
             if (targetAllocation) {
               // Add the payment to the target debt
-              if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
-                console.log(`Month ${month} - Redistributing ${amountToRedistribute.toFixed(2)} from debt ${paidOffDebt.id} to debt ${targetDebtId}`);
-              }
               targetAllocation.extraPayment += amountToRedistribute;
               targetAllocation.totalPayment = targetAllocation.minPayment + targetAllocation.extraPayment;
             }
           } else {
             // If no debts remaining, add to extra payment pool for future use
             extraPaymentPool += amountToRedistribute;
-            if (month % 12 === 0 || month === 1 || justPaidOffDebts.length > 0) {
-              console.log(`Month ${month} - No remaining debts, adding ${amountToRedistribute.toFixed(2)} to extra payment pool`);
-            }
           }
           
           // Set the paid off debt's allocation to zero
@@ -209,8 +182,6 @@ export const simulateRepayment = (
   if (month > MAX_MONTHS) {
     console.warn('Repayment plan calculation hit maximum months limit');
   }
-  
-  console.log('Debt simulation completed. Total months:', month);
   
   return {
     timeline,

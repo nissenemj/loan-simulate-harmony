@@ -22,7 +22,7 @@ export const prioritizeDebts = (
       }
       // Secondary sort: Smallest balance when interest rates are equal
       return a.balance - b.balance;
-    } else {
+    } else if (method === 'snowball') {
       // Primary sort: Smallest balance first
       const balanceDiff = a.balance - b.balance;
       if (Math.abs(balanceDiff) > 0.01) {
@@ -30,6 +30,9 @@ export const prioritizeDebts = (
       }
       // Secondary sort: Highest interest rate when balances are very close
       return b.interestRate - a.interestRate;
+    } else {
+      // Fallback for minimum payments or other strategies
+      return a.id.localeCompare(b.id); // Stable sort by ID
     }
   });
 };
