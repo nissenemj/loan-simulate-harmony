@@ -1,4 +1,3 @@
-
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -66,7 +65,8 @@ export const fi: typeof en = {
     welcomeBack: "Tervetuloa takaisin!",
     loginError: "Kirjautuminen epäonnistui",
     signupSuccess: "Rekisteröityminen onnistui",
-    checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi"
+    checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi",
+    signupError: "Rekisteröityminen epäonnistui"
   },
   toast: {
     loanAdded: 'Laina lisätty onnistuneesti',
@@ -512,7 +512,6 @@ export const fi: typeof en = {
     progress: 'Edistyminen',
     minimumPayments: 'Minimierät',
     extraBudget: 'Ylimääräinen budjetti',
-    paymentPlan: 'Maksusuunnitelma',
     highestInterestDebt: 'Korkein korko',
     debtFreeTimeline: 'Velaton aikajana',
     timelineDescription: 'Näe miten velkasi kehittyy ajan myötä',
@@ -573,4 +572,3 @@ export const fi: typeof en = {
     exportToCSV: "Vie CSV"
   }
 };
-
