@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -80,6 +79,16 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   // Create debt items from loans and credit cards
   const debtItems = convertToDebtItems(activeLoans, activeCards);
   
+  // Format date helper function
+  const formatDate = useCallback((month: number): string => {
+    const date = new Date();
+    date.setMonth(date.getMonth() + month);
+    return date.toLocaleDateString(locale || 'fi-FI', {
+      year: 'numeric',
+      month: 'short',
+    });
+  }, [locale]);
+  
   // Memoized function to generate repayment plans
   const generatePlans = useCallback(() => {
     // Calculate the total budget (base budget + extra payment)
@@ -126,16 +135,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     }
   }, []);
   
-  // Format date helper function
-  const formatDate = useCallback((month: number): string => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + month);
-    return date.toLocaleDateString(locale || 'fi-FI', {
-      year: 'numeric',
-      month: 'short',
-    });
-  }, [locale]);
-  
   // Prepare data for chart - use repayment plan timeline
   const prepareChartData = useCallback((activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
     if (!activePlan.isViable || activePlan.timeline.length === 0) {
@@ -143,32 +142,61 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       return [];
     }
     
-    return activePlan.timeline.map((month: any, i: number) => {
-      const comparisonMonth = comparisonPlan && comparisonPlan.isViable && i < comparisonPlan.timeline.length
-        ? comparisonPlan.timeline[i]
-        : null;
+    // Get the maximum number of months to display
+    const maxMonths = Math.max(
+      activePlan.timeline.length,
+      (comparisonPlan && comparisonPlan.isViable) ? comparisonPlan.timeline.length : 0
+    );
+    
+    const dataPoints = [];
+    
+    for (let i = 0; i < maxMonths; i++) {
+      // Get data for active plan
+      const activeMonth = i < activePlan.timeline.length ? activePlan.timeline[i] : null;
       
-      // Extract data from the active plan
-      const dataPoint = {
-        month: month.month,
-        date: formatDate(month.month - 1),
-        "RemainingDebt": month.totalRemaining,
-        "Principal": month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
-        "Interest": month.totalInterestPaid,
+      // Get data for comparison plan if enabled
+      const comparisonMonth = (showComparison && comparisonPlan && comparisonPlan.isViable && 
+                              i < comparisonPlan.timeline.length) ? 
+                              comparisonPlan.timeline[i] : null;
+      
+      // Create data point with consistent structure
+      const dataPoint: any = {
+        month: i + 1,
+        date: formatDate(i),
       };
       
-      // Add comparison data if available
-      if (showComparison && comparisonMonth) {
-        return {
-          ...dataPoint,
-          "RemainingDebt_Comparison": comparisonMonth.totalRemaining,
-          "Principal_Comparison": comparisonMonth.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
-          "Interest_Comparison": comparisonMonth.totalInterestPaid,
-        };
+      // Add active plan data
+      if (activeMonth) {
+        dataPoint["RemainingDebt"] = activeMonth.totalRemaining;
+        dataPoint["Principal"] = activeMonth.debts.reduce(
+          (sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0
+        );
+        dataPoint["Interest"] = activeMonth.totalInterestPaid;
+      } else if (i > 0) {
+        // If we're past the end of the active timeline, use zero values
+        dataPoint["RemainingDebt"] = 0;
+        dataPoint["Principal"] = 0;
+        dataPoint["Interest"] = 0;
       }
       
-      return dataPoint;
-    });
+      // Add comparison plan data if enabled
+      if (showComparison && comparisonMonth) {
+        dataPoint["RemainingDebt_Comparison"] = comparisonMonth.totalRemaining;
+        dataPoint["Principal_Comparison"] = comparisonMonth.debts.reduce(
+          (sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0
+        );
+        dataPoint["Interest_Comparison"] = comparisonMonth.totalInterestPaid;
+      } else if (showComparison && i > 0 && dataPoint["RemainingDebt_Comparison"] !== undefined) {
+        // If we're past the end of the comparison timeline but have shown it before, use zero
+        dataPoint["RemainingDebt_Comparison"] = 0;
+        dataPoint["Principal_Comparison"] = 0;
+        dataPoint["Interest_Comparison"] = 0;
+      }
+      
+      dataPoints.push(dataPoint);
+    }
+    
+    return dataPoints;
   }, [formatDate]);
   
   // Effect to recalculate plans when inputs change
@@ -299,9 +327,68 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   // Handle extra payment change
   const handleExtraPaymentChange = (values: number[]) => {
     if (values && values.length > 0) {
-      setExtraPayment(values[0]);
-      console.log('Extra payment changed to:', values[0]);
+      const newExtraPayment = values[0];
+      setExtraPayment(newExtraPayment);
+      
+      // Plans will be recalculated in useEffect
+      console.log('Extra payment changed to:', newExtraPayment);
     }
+  };
+  
+  // Calculate budget impact data for increased budgets
+  const getBudgetImpactData = useCallback(() => {
+    const increments = [50, 100, 200, 500];
+    const baselineMonths = hasValidData ? activePlan.totalMonths : 0;
+    const baselineInterest = hasValidData ? activePlan.totalInterestPaid : 0;
+    
+    return increments.map(increment => {
+      // Create a new plan with increased budget
+      const plan = generateRepaymentPlan(
+        debtItems, 
+        monthlyBudget + extraPayment + increment, // Include current extraPayment
+        strategy as PrioritizationMethod
+      );
+      
+      if (!plan.isViable) {
+        return {
+          increment,
+          totalBudget: monthlyBudget + extraPayment + increment,
+          months: Infinity,
+          interest: Infinity,
+          monthsSaved: 0,
+          interestSaved: 0
+        };
+      }
+      
+      return {
+        increment,
+        totalBudget: monthlyBudget + extraPayment + increment,
+        months: plan.totalMonths,
+        interest: plan.totalInterestPaid,
+        monthsSaved: baselineMonths - plan.totalMonths,
+        interestSaved: baselineInterest - plan.totalInterestPaid
+      };
+    });
+  }, [debtItems, monthlyBudget, extraPayment, strategy, hasValidData, activePlan]);
+  
+  // Calculate impact of additional payment
+  const calculateAdditionalPaymentImpact = (additionalAmount: number) => {
+    const plan = generateRepaymentPlan(
+      debtItems, 
+      monthlyBudget + extraPayment + additionalAmount, 
+      strategy as PrioritizationMethod
+    );
+    
+    if (!plan.isViable || !hasValidData) return null;
+    
+    const monthsSaved = activePlan.totalMonths - plan.totalMonths;
+    const interestSaved = activePlan.totalInterestPaid - plan.totalInterestPaid;
+    
+    return {
+      monthsSaved,
+      interestSaved,
+      newTotalMonths: plan.totalMonths
+    };
   };
   
   return (
@@ -674,10 +761,43 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
               </div>
             </div>
           )}
+          
+          {/* Budget impact section */}
+          <div className="mt-6">
+            <h3 className="text-xl font-medium mb-4">{t('dashboard.budgetImpact') || 'Budjetin vaikutus'}</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead className="bg-muted text-muted-foreground">
+                  <tr>
+                    <th className="p-2 text-left">{t('dashboard.additionalPayment') || 'Lisämaksu'}</th>
+                    <th className="p-2 text-left">{t('dashboard.totalBudget') || 'Kokonaisbudjetti'}</th>
+                    <th className="p-2 text-left">{t('dashboard.newPayoffTime') || 'Uusi maksuaika'}</th>
+                    <th className="p-2 text-left">{t('dashboard.timeReduction') || 'Ajan vähennys'}</th>
+                    <th className="p-2 text-left">{t('dashboard.interestSavings') || 'Korkosäästö'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {getBudgetImpactData().map((impact, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="p-2">+{formatCurrency(impact.increment)}/kk</td>
+                      <td className="p-2">{formatCurrency(impact.totalBudget)}/kk</td>
+                      <td className="p-2">{impact.months} {t('form.months') || 'kuukautta'}</td>
+                      <td className="p-2 text-green-600">
+                        {impact.monthsSaved > 0 && "-"}{impact.monthsSaved} {t('form.months') || 'kuukautta'}
+                      </td>
+                      <td className="p-2 text-green-600">
+                        {formatCurrency(impact.interestSaved)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
   );
-};
+}
 
 export default DebtFreeTimeline;
