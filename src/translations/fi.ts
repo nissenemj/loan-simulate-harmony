@@ -100,7 +100,7 @@ export const fi: typeof en = {
     benefits: {
       title: 'Ota ote taloudellisesta tulevaisuudestasi',
       item1: {
-        title: 'Yksil��llinen takaisinmaksusuunnitelma',
+        title: 'Yksil����llinen takaisinmaksusuunnitelma',
         description: 'Luo räätälöity velan takaisinmaksusuunnitelma käyttäen lumivyöry- tai lumipallostrategiaa.'
       },
       item2: {
