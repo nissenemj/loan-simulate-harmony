@@ -39,11 +39,25 @@ export const generateRepaymentPlan = (
     };
   }
 
+  // Filter out zero balance debts
+  const activeDebts = debts.filter(debt => debt.balance > 0);
+  
+  if (activeDebts.length === 0) {
+    return {
+      isViable: true,
+      totalMonths: 0,
+      totalInterestPaid: 0,
+      timeline: [],
+      monthlyAllocation: [],
+      creditCardFreeMonth: 0
+    };
+  }
+
   // Step 3: Prioritize debts according to the method
-  const prioritizedDebts = prioritizeDebts(debts, method);
+  const prioritizedDebts = prioritizeDebts(activeDebts, method);
 
   // Step 4: Allocate budget - first cover minimum payments for all debts
-  const initialAllocation: RepaymentPlan['monthlyAllocation'] = debts.map(debt => ({
+  const initialAllocation: RepaymentPlan['monthlyAllocation'] = activeDebts.map(debt => ({
     id: debt.id,
     name: debt.name,
     type: debt.type,
@@ -80,14 +94,14 @@ export const generateRepaymentPlan = (
   }
 
   // Step 6: Simulate repayment with the allocation
-  const { timeline, finalAllocation } = simulateRepayment(debts, initialAllocation, method);
+  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method);
 
   // Step 7: Calculate total months and interest paid
   const totalMonths = timeline.length;
   const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);
 
   // Step 8: Find when all credit cards are paid off
-  const creditCardFreeMonth = findCreditCardFreeMonth(debts, timeline);
+  const creditCardFreeMonth = findCreditCardFreeMonth(activeDebts, timeline);
 
   // Return the complete repayment plan
   return {
