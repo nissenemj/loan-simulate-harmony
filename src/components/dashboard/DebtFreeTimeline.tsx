@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,7 +23,6 @@ interface DebtFreeTimelineProps {
 
 type RepaymentStrategy = 'annuity' | 'equal-principal';
 
-// Function to calculate payment schedule for the active debts
 const calculatePaymentSchedule = (
   loans: Loan[], 
   cards: CreditCard[], 
@@ -32,18 +30,15 @@ const calculatePaymentSchedule = (
   extraPayment: number = 0,
   strategy: RepaymentStrategy = 'annuity'
 ) => {
-  // Calculate total minimum payments
   const loanMinPayments = loans.reduce((sum, loan) => {
     const monthlyInterestRate = loan.interestRate / 100 / 12;
     const termMonths = loan.termYears * 12;
     
     let minPayment;
     if (strategy === 'annuity') {
-      // Annuity formula (fixed total payment)
       minPayment = loan.amount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, termMonths) / 
                    (Math.pow(1 + monthlyInterestRate, termMonths) - 1);
     } else {
-      // Equal principal (principal is fixed, total payment decreases)
       const principalPayment = loan.amount / termMonths;
       const interestPayment = loan.amount * monthlyInterestRate;
       minPayment = principalPayment + interestPayment;
@@ -60,24 +55,20 @@ const calculatePaymentSchedule = (
   const totalMinPayment = loanMinPayments + cardMinPayments;
   const availableBudget = Math.max(monthlyBudget + extraPayment, totalMinPayment);
   
-  // Calculate remaining balance over time
   let remainingDebt = loans.reduce((sum, loan) => sum + loan.amount, 0) + 
                      cards.reduce((sum, card) => sum + card.balance, 0);
   
   const months = [];
-  const maxMonths = 360; // 30 years as safety cap
+  const maxMonths = 360;
   let month = 0;
   
-  // Initial debt and payment breakdown
   let totalPrincipal = 0;
   let totalInterest = 0;
   
   while (remainingDebt > 1 && month < maxMonths) {
-    // For strategy comparison, we need to track interest and principal
     let monthlyInterest = 0;
     let monthlyPrincipal = 0;
     
-    // Calculate interest for loans
     loans.forEach(loan => {
       if (loan.amount <= 0) return;
       
@@ -87,7 +78,6 @@ const calculatePaymentSchedule = (
       monthlyInterest += interestForMonth;
     });
     
-    // Calculate interest for credit cards
     cards.forEach(card => {
       if (card.balance <= 0) return;
       
@@ -97,18 +87,14 @@ const calculatePaymentSchedule = (
       monthlyInterest += interestForMonth;
     });
     
-    // Calculate principal payment (total payment - interest)
     const effectivePayment = Math.min(availableBudget, remainingDebt + monthlyInterest);
     monthlyPrincipal = Math.max(0, effectivePayment - monthlyInterest);
     
-    // Update remaining debt
     remainingDebt = Math.max(0, remainingDebt - monthlyPrincipal);
     
-    // Track cumulative principal and interest
     totalPrincipal += monthlyPrincipal;
     totalInterest += monthlyInterest;
     
-    // Add data point for this month
     months.push({
       month: month + 1,
       remainingDebt,
@@ -139,7 +125,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   const [showComparison, setShowComparison] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
   
-  // Calculate payment schedule with current parameters
   const paymentSchedule = calculatePaymentSchedule(
     activeLoans, 
     activeCards, 
@@ -148,7 +133,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     strategy
   );
   
-  // Calculate comparison payment schedule if needed
   const comparisonSchedule = showComparison && comparisonStrategy 
     ? calculatePaymentSchedule(
         activeLoans, 
@@ -159,17 +143,14 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       )
     : [];
   
-  // Get today's date for the reference line
   const today = new Date();
-  const currentMonth = 1; // First month in the simulation is the current month
+  const currentMonth = 1;
   
-  // Prepare data for the chart
   const chartData = paymentSchedule.map((month, i) => {
     const comparisonMonth = comparisonSchedule[i];
     
     return {
       month: month.month,
-      // Finnish translations for the chart
       "Jäljellä oleva velka": month.remainingDebt,
       "Pääoma": month.principal,
       "Korko": month.interest,
@@ -181,7 +162,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     };
   });
   
-  // Export functions
   const exportToPDF = async () => {
     if (!chartRef.current) return;
     
@@ -203,7 +183,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   const exportToCSV = () => {
     const headers = ['Kuukausi', 'Jäljellä oleva velka', 'Kuukausimaksu', 'Pääoma', 'Korko'];
     
-    // Create CSV content
     const csvContent = [
       headers.join(','),
       ...paymentSchedule.map(month => 
@@ -217,7 +196,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       )
     ].join('\n');
     
-    // Create download link
     const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -338,7 +316,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
               <div className="text-2xl font-bold">
                 {paymentSchedule.length > 0 
                   ? formatCurrency(paymentSchedule.reduce((sum, month) => sum + month.interest, 0))
-                  : formatCurrency(totalDebt * 0.2)} {/* Fallback estimate */}
+                  : formatCurrency(totalDebt * 0.2)}
               </div>
             </div>
           </div>
@@ -385,7 +363,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                 />
                 <Legend />
                 
-                {/* Reference line for today */}
                 <ReferenceLine 
                   x={currentMonth} 
                   stroke="#ff0000" 
@@ -396,9 +373,9 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                   }} 
                   strokeWidth={2}
                   strokeDasharray="3 3"
+                  yAxisId="left"
                 />
                 
-                {/* Primary strategy areas */}
                 <Area 
                   type="monotone" 
                   dataKey="Jäljellä oleva velka" 
@@ -427,7 +404,6 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                   yAxisId="right"
                 />
                 
-                {/* Comparison strategy areas if enabled */}
                 {showComparison && comparisonStrategy && (
                   <>
                     <Area 
