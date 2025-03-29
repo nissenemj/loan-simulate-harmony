@@ -220,7 +220,7 @@ const DebtFreeTimeline = ({
         balance: point.totalRemaining,
         interest: point.totalInterestPaid,
         interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
-        monthlyInterest: index > 0 ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid : 0
+        monthlyInterest: index > 0 ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid : point.totalInterestPaid
       }));
     }
     
@@ -242,12 +242,17 @@ const DebtFreeTimeline = ({
         if (i - lastIncludedMonth >= samplingRate / 2 || isLastPoint) {
           lastIncludedMonth = i;
           
+          // Calculate monthly interest correctly
+          const monthlyInterest = i > 0 
+            ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid 
+            : timeline[i].totalInterestPaid;
+          
           simplifiedTimeline.push({
             month: i + 1,
             balance: timeline[i].totalRemaining,
             interest: timeline[i].totalInterestPaid,
             interestRate: timeline[i].totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
-            monthlyInterest: i > 0 ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid : 0
+            monthlyInterest: monthlyInterest
           });
         }
       }
@@ -438,13 +443,13 @@ const DebtFreeTimeline = ({
                           <YAxis 
                             yAxisId="left"
                             tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                            label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
+                            label={{ value: t('repayment.balance'), angle: -90, position: 'insideLeft' }}
                           />
                           <YAxis 
                             yAxisId="right"
                             orientation="right"
                             tickFormatter={(value) => `${Math.round(value / 1000)}k`}
-                            label={{ value: `${t('repayment.interest')}`, angle: 90, position: 'insideRight' }}
+                            label={{ value: t('repayment.interest'), angle: 90, position: 'insideRight' }}
                             domain={[0, maxInterest * 1.1]} // Scale the interest axis
                           />
                           <Tooltip content={<CustomTooltip />} />
@@ -473,7 +478,7 @@ const DebtFreeTimeline = ({
                     </div>
                   </TabsContent>
                   
-                  {/* Separate view (bar chart for interest) */}
+                  {/* Separate view (bar chart for monthly interest) - Fixed labels and logic */}
                   <TabsContent value="separate">
                     <div className="h-64">
                       <ResponsiveContainer width="100%" height="100%">
@@ -489,13 +494,14 @@ const DebtFreeTimeline = ({
                           <YAxis 
                             yAxisId="left"
                             tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                            label={{ value: `${t('repayment.balance')}`, angle: -90, position: 'insideLeft' }}
+                            label={{ value: t('repayment.balance'), angle: -90, position: 'insideLeft' }}
                           />
                           <YAxis 
                             yAxisId="right"
                             orientation="right"
-                            tickFormatter={(value) => formatCurrency(value).replace('€', '')}
-                            label={{ value: `${t('repayment.monthlyInterest')}`, angle: 90, position: 'insideRight' }}
+                            label={{ value: t('repayment.monthlyInterest'), angle: 90, position: 'insideRight' }}
+                            // Fix: Use proper formatting and scale for monthly interest
+                            tickFormatter={(value) => `${Math.round(value)}`}
                             domain={[0, 'auto']}
                           />
                           <Tooltip content={<CustomTooltip />} />
