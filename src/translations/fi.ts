@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -500,9 +501,9 @@ export const fi: typeof en = {
     fi: "Suomi"
   },
   dashboard: {
-    title: "Kojelauta",
-    welcome: "Tervetuloa",
-    user: "Käyttäjä",
+    title: 'Kojelauta',
+    welcome: 'Tervetuloa',
+    user: 'Käyttäjä',
     welcomeSubtitle: 'Tässä on yhteenveto velkatilanteestasi.',
     viewDebtSummary: 'Näytä velkayhteenveto',
     totalDebt: 'Kokonaisvelka',
@@ -510,7 +511,7 @@ export const fi: typeof en = {
     remainingDebt: 'Jäljellä oleva velka',
     debtFreeDate: 'Velaton päivä',
     progress: 'Edistyminen',
-    monthlyDebtPayments: 'Kuukausittaiset velkaerät',
+    monthlyPayments: 'Kuukausittaiset velkaerät', // Changed from monthlyDebtPayments to match EN structure
     minimumPayments: 'Minimierät',
     extraPayment: 'Lisämaksu',
     debtPaymentPlan: 'Velanmaksusuunnitelma',
@@ -541,7 +542,31 @@ export const fi: typeof en = {
     totalInterestPaid: 'Maksettava korkojen kokonaissumma',
     monthlyBudget: 'Kuukausibudjetti',
     timeToDebtFree: 'Aika velattomaksi',
-    equalDistribution: 'Tasainen jako'
+    equalDistribution: 'Tasainen jako',
+    now: 'Nyt',
+    currentDebt: 'Nykyinen velka',
+    debtFree: 'Velaton',
+    viewDetailedTimeline: 'Näytä yksityiskohtainen aikajana',
+    projectDate: 'Arvioitu päivämäärä',
+    creditCardsFree: 'Luottokorteista vapaa',
+    progressMessage: 'Olet jo maksanut {{percentage}}% velastasi - jatka samaan malliin!',
+    paymentPlanSummary: 'Maksusuunnitelman yhteenveto',
+    paymentPlanDescription: 'Velkojen takaisinmaksustrategiasi yhdellä silmäyksellä',
+    extraBudget: 'Ylimääräinen budjetti',
+    prioritizedDebt: 'Priorisoitu velka',
+    interestRate: 'korkoprosentti',
+    allocatingExtra: 'Kohdistetaan ylimääräinen {{amount}} tälle velalle',
+    viewFullPlan: 'Näytä koko suunnitelma',
+    allDebts: 'Kaikki velat',
+    year: 'vuosi',
+    goToRepaymentPlan: 'Siirry takaisinmaksusuunnitelmaan',
+    currentPaymentAmount: 'Nykyinen maksusumma',
+    minimum: 'Minimi',
+    maximum: 'Maksimi',
+    recommendedStrategy: 'Suositeltu strategia',
+    recommendation: 'Suositus',
+    equalStrategy: 'Tasainen jakelu',
+    helpWithDebt: 'Tarvitsetko apua velkasi kanssa?',
   },
   export: {
     exportToPDF: "Vie PDF",
