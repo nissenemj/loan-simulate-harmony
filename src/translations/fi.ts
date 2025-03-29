@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -643,4 +644,10 @@ export const fi: typeof en = {
     savingsCalculator: 'Säästölaskuri',
     refinanceLoans: 'Uudelleenrahoituslainat',
     switchToPartner: 'Siirry kumppanin sivulle',
-    compareOffers: 'Vertaile tarjouksia',
+    compareOffers: 'Vertaile tarjouksia'
+  },
+  language: {
+    en: 'English',
+    fi: 'Suomi'
+  }
+};
