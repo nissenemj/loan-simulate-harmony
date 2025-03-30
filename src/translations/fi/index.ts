@@ -43,7 +43,7 @@ export const fi: TranslationsType = {
   repayment,
   savings,
   summary,
-  affiliate, // Ensuring affiliate is included here
+  affiliate,
   blog,
   language,
   landing,
