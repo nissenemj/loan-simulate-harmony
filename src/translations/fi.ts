@@ -1,4 +1,3 @@
-
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -130,7 +129,7 @@ export const fi: typeof en = {
     enterValidLimit: 'Syötä kelvollinen luottoraja',
     enterValidAPR: 'Syötä kelvollinen vuosikorko',
     enterValidMinPayment: 'Syötä kelvollinen vähimmäismaksu',
-    enterValidMinPaymentPercent: 'Syötä kelvollinen vähimmäismaksuprosentti',
+    enterValidMinPaymentPercent: 'Syötä kelvollinen vähimmäismaksu prosentti',
     calculationMethod: 'Vähimmäismaksutapa',
     percentageOfBalance: 'Prosenttiosuus saldosta',
     fixedAmount: 'Kiinteä summa',
@@ -307,7 +306,6 @@ export const fi: typeof en = {
     interestPaid: 'Korkoa maksetaan',
     includesExtra: 'Sisältää lisämaksun',
     monthlyPayment: 'Kuukausimaksu',
-    // Adding missing dashboard keys from English translation
     paymentPlanSummary: 'Maksusuunnitelman yhteenveto',
     paymentPlanDescription: 'Nykyinen maksusuunnitelmasi perustuen budjettiin ja korkoihin.',
     minimumPayments: 'Vähimmäismaksut',
@@ -316,7 +314,7 @@ export const fi: typeof en = {
     allocatingExtra: 'Kohdistetaan ylimääräiset {{amount}} korkeimman koron velkaan.',
     viewFullPlan: 'Katso koko suunnitelma',
     tip1: 'Maksa enemmän kuin vähimmäismaksu aina kun mahdollista.',
-    tip2: 'Keskity ensin korkeakorkoisiin velkoihin säästääksesi rahaa.',
+    tip2: 'Keskity ensin korkeakorkoisiin veloihin säästääksesi rahaa.',
     tip3: 'Tarkista menosi löytääksesi lisää rahaa velkojen maksuun.',
     viewGlossary: 'Katso talouslukutaidon sanasto',
     debtSummaryCard: 'Velkatiivistelmäkortti',
@@ -664,7 +662,6 @@ export const fi: typeof en = {
     advertisementDisclaimer: 'Mainos',
     sponsored: 'Sponsoroitu',
     monthlyPaymentReduction: 'Kuukausimaksun alennus',
-    totalSavings: 'Kokonaissäästöt',
     applyNow: 'Hae nyt',
     offers: 'Tarjoukset'
   },
