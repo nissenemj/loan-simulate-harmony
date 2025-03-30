@@ -57,5 +57,5 @@ export const budgetImpact = {
   totalBudget: 'Kokonaisbudjetti',
   newPayoffTime: 'Uusi maksuaika',
   timeReduction: 'Ajan vähennys',
-  interestSavings: 'Korkosäästöt'
+  korkosäästöt: 'Korkosäästöt'
 };
