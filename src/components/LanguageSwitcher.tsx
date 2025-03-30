@@ -3,21 +3,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Globe } from 'lucide-react';
-import { toast } from 'sonner';
 
 const LanguageSwitcher: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
-  
-  const handleLanguageChange = (newLanguage: 'en' | 'fi') => {
-    if (newLanguage !== language) {
-      setLanguage(newLanguage);
-      toast.success(
-        newLanguage === 'en' 
-          ? 'Language changed to English' 
-          : 'Kieli vaihdettu suomeksi'
-      );
-    }
-  };
   
   return (
     <div className="flex items-center space-x-2">
@@ -28,7 +16,7 @@ const LanguageSwitcher: React.FC = () => {
       <Button
         variant={language === 'en' ? 'default' : 'outline'}
         size="sm"
-        onClick={() => handleLanguageChange('en')}
+        onClick={() => setLanguage('en')}
         className="px-3 py-1 h-auto text-xs"
         aria-label={t('language.en')}
       >
@@ -37,7 +25,7 @@ const LanguageSwitcher: React.FC = () => {
       <Button
         variant={language === 'fi' ? 'default' : 'outline'}
         size="sm"
-        onClick={() => handleLanguageChange('fi')}
+        onClick={() => setLanguage('fi')}
         className="px-3 py-1 h-auto text-xs"
         aria-label={t('language.fi')}
       >

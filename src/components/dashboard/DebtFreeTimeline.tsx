@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -70,7 +70,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   monthlyBudget
 }) => {
   const { t, locale } = useLanguage();
-  const [extraPayment, setExtraPayment] = useState<number>(0);
+  const [extraPayment, setExtraPayment] = useState(0);
   const [strategy, setStrategy] = useState<RepaymentStrategy>('avalanche');
   const [comparisonStrategy, setComparisonStrategy] = useState<RepaymentStrategy | null>(null);
   const [showComparison, setShowComparison] = useState(false);
@@ -80,50 +80,35 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   // Create debt items from loans and credit cards
   const debtItems = convertToDebtItems(activeLoans, activeCards);
   
-  // Format date helper function
-  const formatDate = useCallback((month: number): string => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + month);
-    return date.toLocaleDateString(locale || 'fi-FI', {
-      year: 'numeric',
-      month: 'short',
-    });
-  }, [locale]);
-  
-  // Generate repayment plans for different strategies
-  const generatePlans = useCallback(() => {
-    // Calculate the total budget (base budget + extra payment)
-    const totalBudget = monthlyBudget + extraPayment;
-    
-    console.log('Generating plans with budget:', totalBudget, 'Extra payment:', extraPayment);
-    
+  // Generate repayment plans for all strategies
+  const generatePlans = () => {
     // Generate plans for each strategy with the current extra payment
     const avalanchePlan = generateRepaymentPlan(
       debtItems,
-      totalBudget,
+      monthlyBudget + extraPayment,
       'avalanche',
       false // not equally distributed
     );
     
     const snowballPlan = generateRepaymentPlan(
       debtItems,
-      totalBudget,
+      monthlyBudget + extraPayment,
       'snowball',
       false // not equally distributed
     );
     
     const equalPlan = generateRepaymentPlan(
       debtItems,
-      totalBudget,
+      monthlyBudget + extraPayment,
       'avalanche', // Method doesn't matter for equal distribution
       true // equally distributed
     );
     
     return { avalanchePlan, snowballPlan, equalPlan };
-  }, [debtItems, monthlyBudget, extraPayment]);
+  };
   
   // Get the active plan based on current strategy
-  const getActivePlan = useCallback((plans: any, selectedStrategy: RepaymentStrategy) => {
+  const getActivePlan = (plans: any, selectedStrategy: RepaymentStrategy) => {
     switch (selectedStrategy) {
       case 'avalanche':
         return plans.avalanchePlan;
@@ -134,98 +119,54 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       default:
         return plans.avalanchePlan;
     }
-  }, []);
+  };
   
-  // Improved function to prepare chart data from repayment plans
-  const prepareChartData = useCallback((activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
-    if (!activePlan.isViable || !activePlan.timeline || activePlan.timeline.length === 0) {
-      console.log('No viable plan or empty timeline');
+  // Format date helper function
+  const formatDate = (month: number): string => {
+    const date = new Date();
+    date.setMonth(date.getMonth() + month);
+    return date.toLocaleDateString(locale || 'fi-FI', {
+      year: 'numeric',
+      month: 'short',
+    });
+  };
+  
+  // Prepare data for chart - use repayment plan timeline
+  const prepareChartData = (activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
+    if (!activePlan.isViable || activePlan.timeline.length === 0) {
       return [];
     }
     
-    // Get the maximum number of months to display
-    const maxMonths = Math.max(
-      activePlan.timeline.length,
-      (comparisonPlan && comparisonPlan.isViable && comparisonPlan.timeline) ? comparisonPlan.timeline.length : 0
-    );
-    
-    const dataPoints = [];
-    
-    // Initialize running totals for cumulative calculations
-    let cumulativePrincipal = 0;
-    let cumulativeInterest = 0;
-    let comparisonCumulativePrincipal = 0;
-    let comparisonCumulativeInterest = 0;
-    
-    for (let i = 0; i < maxMonths; i++) {
-      // Create data point with consistent structure
-      const dataPoint: any = {
-        month: i + 1,
-        date: formatDate(i),
-        // Initialize all values to avoid undefined values in chart
-        RemainingDebt: 0,
-        Principal: 0,
-        Interest: 0,
-        CumulativePrincipal: 0,
-        CumulativeInterest: 0
+    return activePlan.timeline.map((month: any, i: number) => {
+      const comparisonMonth = comparisonPlan && comparisonPlan.isViable && i < comparisonPlan.timeline.length
+        ? comparisonPlan.timeline[i]
+        : null;
+      
+      // Extract data from the active plan
+      const dataPoint = {
+        month: month.month,
+        date: formatDate(month.month - 1),
+        "RemainingDebt": month.totalRemaining,
+        "Principal": month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
+        "Interest": month.totalInterestPaid,
       };
       
-      // Get data for active plan
-      if (i < activePlan.timeline.length) {
-        const activeMonth = activePlan.timeline[i];
-        dataPoint.RemainingDebt = activeMonth.totalRemaining;
-        
-        // Calculate principal by subtracting interest from total payment
-        const principal = activeMonth.totalPaid - activeMonth.totalInterestPaid;
-        dataPoint.Principal = principal;
-        dataPoint.Interest = activeMonth.totalInterestPaid;
-        
-        // Update cumulative values
-        cumulativePrincipal += principal;
-        cumulativeInterest += activeMonth.totalInterestPaid;
-        dataPoint.CumulativePrincipal = cumulativePrincipal;
-        dataPoint.CumulativeInterest = cumulativeInterest;
+      // Add comparison data if available
+      if (showComparison && comparisonMonth) {
+        return {
+          ...dataPoint,
+          "RemainingDebt_Comparison": comparisonMonth.totalRemaining,
+          "Principal_Comparison": comparisonMonth.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
+          "Interest_Comparison": comparisonMonth.totalInterestPaid,
+        };
       }
       
-      // Add comparison plan data if enabled
-      if (showComparison && comparisonPlan && comparisonPlan.isViable && comparisonPlan.timeline) {
-        // Initialize comparison values
-        dataPoint.RemainingDebt_Comparison = 0;
-        dataPoint.Principal_Comparison = 0;
-        dataPoint.Interest_Comparison = 0;
-        dataPoint.CumulativePrincipal_Comparison = 0;
-        dataPoint.CumulativeInterest_Comparison = 0;
-        
-        if (i < comparisonPlan.timeline.length) {
-          const comparisonMonth = comparisonPlan.timeline[i];
-          dataPoint.RemainingDebt_Comparison = comparisonMonth.totalRemaining;
-          
-          // Calculate principal by subtracting interest from total payment
-          const principal = comparisonMonth.totalPaid - comparisonMonth.totalInterestPaid;
-          dataPoint.Principal_Comparison = principal;
-          dataPoint.Interest_Comparison = comparisonMonth.totalInterestPaid;
-          
-          // Update cumulative values for comparison
-          comparisonCumulativePrincipal += principal;
-          comparisonCumulativeInterest += comparisonMonth.totalInterestPaid;
-          dataPoint.CumulativePrincipal_Comparison = comparisonCumulativePrincipal;
-          dataPoint.CumulativeInterest_Comparison = comparisonCumulativeInterest;
-        }
-      }
-      
-      dataPoints.push(dataPoint);
-    }
-    
-    return dataPoints;
-  }, [formatDate]);
+      return dataPoint;
+    });
+  };
   
   // Effect to recalculate plans when inputs change
   useEffect(() => {
-    if (debtItems.length === 0) {
-      setChartData([]);
-      return;
-    }
-    
     const plans = generatePlans();
     const activePlan = getActivePlan(plans, strategy);
     const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
@@ -239,7 +180,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       totalInterestPaid: activePlan.totalInterestPaid,
       dataPoints: newChartData.length
     });
-  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems, generatePlans, getActivePlan, prepareChartData]);
+  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems]);
   
   // Export to PDF
   const exportToPDF = async () => {
@@ -265,7 +206,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     const plans = generatePlans();
     const activePlan = getActivePlan(plans, strategy);
     
-    if (!activePlan.isViable || !activePlan.timeline || activePlan.timeline.length === 0) {
+    if (!activePlan.isViable || activePlan.timeline.length === 0) {
       return;
     }
     
@@ -274,12 +215,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     const csvContent = [
       headers.join(','),
       ...activePlan.timeline.map((month: any) => {
-        const principal = month.totalPaid - month.totalInterestPaid;
+        const principal = month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0);
         return [
           month.month,
           formatDate(month.month - 1),
           month.totalRemaining.toFixed(2),
-          month.totalPaid.toFixed(2),
+          (principal + month.totalInterestPaid).toFixed(2),
           principal.toFixed(2),
           month.totalInterestPaid.toFixed(2)
         ].join(',');
@@ -295,24 +236,13 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     document.body.removeChild(link);
   };
 
-  // Improved handler for extra payment change
-  const handleExtraPaymentChange = (values: number[]) => {
-    if (values && values.length > 0) {
-      const newExtraPayment = values[0];
-      setExtraPayment(newExtraPayment);
-      
-      // Plans will be recalculated in useEffect
-      console.log('Extra payment changed to:', newExtraPayment);
-    }
-  };
-  
   // Generate all plans for current parameters
   const plans = generatePlans();
   const activePlan = getActivePlan(plans, strategy);
   const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
 
   // Ensure we have valid data before rendering
-  const hasValidData = activePlan.isViable && activePlan.timeline && activePlan.timeline.length > 0;
+  const hasValidData = activePlan.isViable && activePlan.timeline.length > 0;
   const currentMonth = 1;
   
   // Get the summary statistics from the repayment plan
@@ -327,7 +257,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   const comparisonTotalInterest = (showComparison && comparisonPlan && comparisonPlan.isViable) ? 
     comparisonPlan.totalInterestPaid : 0;
   
-  // Improved strategy change handler
+  // Handle strategy change
   const handleStrategyChange = (newStrategy: RepaymentStrategy) => {
     if (newStrategy === strategy) return;
     
@@ -355,62 +285,10 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     }
   };
   
-  // Improved budget impact data calculation
-  const getBudgetImpactData = useCallback(() => {
-    const increments = [50, 100, 200, 500];
-    const baselineMonths = hasValidData ? activePlan.totalMonths : 0;
-    const baselineInterest = hasValidData ? activePlan.totalInterestPaid : 0;
-    
-    return increments.map(increment => {
-      // Create a new plan with increased budget
-      const plan = generateRepaymentPlan(
-        debtItems, 
-        monthlyBudget + extraPayment + increment, // Include current extraPayment
-        strategy as PrioritizationMethod,
-        strategy === 'equal' // use equal distribution only if current strategy is equal
-      );
-      
-      if (!plan.isViable) {
-        return {
-          increment,
-          totalBudget: monthlyBudget + extraPayment + increment,
-          months: Infinity,
-          interest: Infinity,
-          monthsSaved: 0,
-          interestSaved: 0
-        };
-      }
-      
-      return {
-        increment,
-        totalBudget: monthlyBudget + extraPayment + increment,
-        months: plan.totalMonths,
-        interest: plan.totalInterestPaid,
-        monthsSaved: baselineMonths - plan.totalMonths,
-        interestSaved: baselineInterest - plan.totalInterestPaid
-      };
-    });
-  }, [debtItems, monthlyBudget, extraPayment, strategy, hasValidData, activePlan]);
-  
-  // Calculate impact of additional payment
-  const calculateAdditionalPaymentImpact = (additionalAmount: number) => {
-    const plan = generateRepaymentPlan(
-      debtItems, 
-      monthlyBudget + extraPayment + additionalAmount, 
-      strategy as PrioritizationMethod,
-      strategy === 'equal' // use equal distribution only if current strategy is equal
-    );
-    
-    if (!plan.isViable || !hasValidData) return null;
-    
-    const monthsSaved = activePlan.totalMonths - plan.totalMonths;
-    const interestSaved = activePlan.totalInterestPaid - plan.totalInterestPaid;
-    
-    return {
-      monthsSaved,
-      interestSaved,
-      newTotalMonths: plan.totalMonths
-    };
+  // Handle extra payment change
+  const handleExtraPaymentChange = (values: number[]) => {
+    setExtraPayment(values[0]);
+    console.log('Extra payment changed to:', values[0]);
   };
   
   return (
@@ -536,156 +414,146 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
           </div>
           
           <div className="h-[400px]" ref={chartRef}>
-            {debtItems.length > 0 && chartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={chartData}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                  stackOffset="none"
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="date" 
-                    label={{ 
-                      value: t('table.months') || 'Kuukaudet', 
-                      position: 'insideBottom', 
-                      offset: -5 
-                    }} 
-                  />
-                  <YAxis 
-                    yAxisId="left"
-                    orientation="left"
-                    tickFormatter={(value) => `${formatCurrency(value)}`}
-                    label={{ 
-                      value: t('dashboard.debt') || 'Velka', 
-                      angle: -90, 
-                      position: 'insideLeft' 
-                    }}
-                  />
-                  <YAxis 
-                    yAxisId="right"
-                    orientation="right"
-                    tickFormatter={(value) => `${formatCurrency(value)}`}
-                    label={{ 
-                      value: t('dashboard.payment') || 'Maksu', 
-                      angle: 90, 
-                      position: 'insideRight' 
-                    }}
-                  />
-                  <Tooltip 
-                    formatter={(value, name) => {
-                      // Format based on the data type
-                      const formattedValue = formatCurrency(Number(value));
-                      
-                      // Translate series names
-                      let translatedName = name;
-                      if (name === 'RemainingDebt') translatedName = t('dashboard.remainingDebt') || 'Jäljellä oleva velka';
-                      else if (name === 'Principal') translatedName = t('dashboard.principal') || 'Pääoma';
-                      else if (name === 'Interest') translatedName = t('dashboard.interest') || 'Korko';
-                      else if (name === 'RemainingDebt_Comparison') {
-                        translatedName = `${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                      }
-                      else if (name === 'Principal_Comparison') {
-                        translatedName = `${t('dashboard.principal') || 'Pääoma'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                      }
-                      else if (name === 'Interest_Comparison') {
-                        translatedName = `${t('dashboard.interest') || 'Korko'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                      }
-                      
-                      return [formattedValue, translatedName];
-                    }}
-                    labelFormatter={(label) => `${t('dashboard.date') || 'Päivämäärä'}: ${label}`}
-                  />
-                  <Legend />
-                  
-                  <ReferenceLine 
-                    x={currentMonth} 
-                    stroke="#ff0000" 
-                    label={{ 
-                      value: t('dashboard.today') || "Tänään", 
-                      position: "top",
-                      fill: "#ff0000"
-                    }} 
-                    strokeWidth={2}
-                    strokeDasharray="3 3"
-                    yAxisId="left"
-                  />
-                  
-                  {/* Primary strategy */}
-                  <Area 
-                    type="monotone" 
-                    dataKey="RemainingDebt" 
-                    name={t('dashboard.remainingDebt') || 'Jäljellä oleva velka'}
-                    stroke="#3b82f6" 
-                    fill="#3b82f6" 
-                    fillOpacity={0.6}
-                    yAxisId="left"
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="Principal" 
-                    name={t('dashboard.principal') || 'Pääoma'}
-                    stroke="#10b981" 
-                    fill="#10b981" 
-                    fillOpacity={0.6}
-                    yAxisId="right"
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="Interest" 
-                    name={t('dashboard.interest') || 'Korko'}
-                    stroke="#f59e0b" 
-                    fill="#f59e0b" 
-                    fillOpacity={0.6}
-                    yAxisId="right"
-                  />
-                  
-                  {/* Comparison strategy (if enabled) */}
-                  {showComparison && comparisonStrategy && (
-                    <>
-                      <Area 
-                        type="monotone" 
-                        dataKey="RemainingDebt_Comparison" 
-                        name={`${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${getStrategyName(comparisonStrategy)})`}
-                        stroke="#6366f1" 
-                        fill="#6366f1" 
-                        fillOpacity={0.3}
-                        strokeDasharray="5 5"
-                        yAxisId="left"
-                      />
-                      <Area 
-                        type="monotone" 
-                        dataKey="Principal_Comparison"
-                        name={`${t('dashboard.principal') || 'Pääoma'} (${getStrategyName(comparisonStrategy)})`}
-                        stroke="#22c55e" 
-                        fill="#22c55e" 
-                        fillOpacity={0.3}
-                        strokeDasharray="5 5"
-                        yAxisId="right"
-                      />
-                      <Area 
-                        type="monotone" 
-                        dataKey="Interest_Comparison"
-                        name={`${t('dashboard.interest') || 'Korko'} (${getStrategyName(comparisonStrategy)})`}
-                        stroke="#eab308" 
-                        fill="#eab308" 
-                        fillOpacity={0.3}
-                        strokeDasharray="5 5"
-                        yAxisId="right"
-                      />
-                    </>
-                  )}
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  {debtItems.length === 0 ? 
-                    (t('results.noActiveLoans') || 'Ei aktiivisia lainoja.') : 
-                    (t('results.noData') || 'Ei tietoja näytettäväksi')}
-                </p>
-              </div>
-            )}
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                stackOffset="none"
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="date" 
+                  label={{ 
+                    value: t('table.months') || 'Kuukaudet', 
+                    position: 'insideBottom', 
+                    offset: -5 
+                  }} 
+                />
+                <YAxis 
+                  yAxisId="left"
+                  orientation="left"
+                  tickFormatter={(value) => `${formatCurrency(value)}`}
+                  label={{ 
+                    value: t('dashboard.debt') || 'Velka', 
+                    angle: -90, 
+                    position: 'insideLeft' 
+                  }}
+                />
+                <YAxis 
+                  yAxisId="right"
+                  orientation="right"
+                  tickFormatter={(value) => `${formatCurrency(value)}`}
+                  label={{ 
+                    value: t('dashboard.payment') || 'Maksu', 
+                    angle: 90, 
+                    position: 'insideRight' 
+                  }}
+                />
+                <Tooltip 
+                  formatter={(value, name) => {
+                    // Format based on the data type
+                    const formattedValue = formatCurrency(Number(value));
+                    
+                    // Translate series names
+                    let translatedName = name;
+                    if (name === 'RemainingDebt') translatedName = t('dashboard.remainingDebt') || 'Jäljellä oleva velka';
+                    else if (name === 'Principal') translatedName = t('dashboard.principal') || 'Pääoma';
+                    else if (name === 'Interest') translatedName = t('dashboard.interest') || 'Korko';
+                    else if (name === 'RemainingDebt_Comparison') {
+                      translatedName = `${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                    }
+                    else if (name === 'Principal_Comparison') {
+                      translatedName = `${t('dashboard.principal') || 'Pääoma'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                    }
+                    else if (name === 'Interest_Comparison') {
+                      translatedName = `${t('dashboard.interest') || 'Korko'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
+                    }
+                    
+                    return [formattedValue, translatedName];
+                  }}
+                  labelFormatter={(label) => `${t('dashboard.date') || 'Päivämäärä'}: ${label}`}
+                />
+                <Legend />
+                
+                <ReferenceLine 
+                  x={currentMonth} 
+                  stroke="#ff0000" 
+                  label={{ 
+                    value: t('dashboard.today') || "Tänään", 
+                    position: "top",
+                    fill: "#ff0000"
+                  }} 
+                  strokeWidth={2}
+                  strokeDasharray="3 3"
+                  yAxisId="left"
+                />
+                
+                {/* Primary strategy */}
+                <Area 
+                  type="monotone" 
+                  dataKey="RemainingDebt" 
+                  name={t('dashboard.remainingDebt') || 'Jäljellä oleva velka'}
+                  stroke="#3b82f6" 
+                  fill="#3b82f6" 
+                  fillOpacity={0.6}
+                  yAxisId="left"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="Principal" 
+                  name={t('dashboard.principal') || 'Pääoma'}
+                  stroke="#10b981" 
+                  fill="#10b981" 
+                  fillOpacity={0.6}
+                  yAxisId="right"
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="Interest" 
+                  name={t('dashboard.interest') || 'Korko'}
+                  stroke="#f59e0b" 
+                  fill="#f59e0b" 
+                  fillOpacity={0.6}
+                  yAxisId="right"
+                />
+                
+                {/* Comparison strategy (if enabled) */}
+                {showComparison && comparisonStrategy && (
+                  <>
+                    <Area 
+                      type="monotone" 
+                      dataKey="RemainingDebt_Comparison" 
+                      name={`${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${getStrategyName(comparisonStrategy)})`}
+                      stroke="#6366f1" 
+                      fill="#6366f1" 
+                      fillOpacity={0.3}
+                      strokeDasharray="5 5"
+                      yAxisId="left"
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="Principal_Comparison"
+                      name={`${t('dashboard.principal') || 'Pääoma'} (${getStrategyName(comparisonStrategy)})`}
+                      stroke="#22c55e" 
+                      fill="#22c55e" 
+                      fillOpacity={0.3}
+                      strokeDasharray="5 5"
+                      yAxisId="right"
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="Interest_Comparison"
+                      name={`${t('dashboard.interest') || 'Korko'} (${getStrategyName(comparisonStrategy)})`}
+                      stroke="#eab308" 
+                      fill="#eab308" 
+                      fillOpacity={0.3}
+                      strokeDasharray="5 5"
+                      yAxisId="right"
+                    />
+                  </>
+                )}
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -735,8 +603,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                     <li className="flex justify-between">
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
-                        {formatCurrency(hasValidData && activePlan.timeline && activePlan.timeline.length > 0 ? 
-                          activePlan.timeline[0].totalPaid : 0)}
+                        {formatCurrency(hasValidData && activePlan.timeline.length > 0 ? 
+                          activePlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
                       </span>
                     </li>
                   </ul>
@@ -755,8 +623,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
                     <li className="flex justify-between">
                       <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
                       <span className="font-medium">
-                        {formatCurrency(comparisonPlan.timeline && comparisonPlan.timeline.length > 0 ? 
-                          comparisonPlan.timeline[0].totalPaid : 0)}
+                        {formatCurrency(comparisonPlan.timeline.length > 0 ? 
+                          comparisonPlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
                       </span>
                     </li>
                   </ul>
@@ -783,43 +651,10 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
               </div>
             </div>
           )}
-          
-          {/* Budget impact section */}
-          <div className="mt-6">
-            <h3 className="text-xl font-medium mb-4">{t('dashboard.budgetImpact') || 'Budjetin vaikutus'}</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead className="bg-muted text-muted-foreground">
-                  <tr>
-                    <th className="p-2 text-left">{t('dashboard.additionalPayment') || 'Lisämaksu'}</th>
-                    <th className="p-2 text-left">{t('dashboard.totalBudget') || 'Kokonaisbudjetti'}</th>
-                    <th className="p-2 text-left">{t('dashboard.newPayoffTime') || 'Uusi maksuaika'}</th>
-                    <th className="p-2 text-left">{t('dashboard.timeReduction') || 'Ajan vähennys'}</th>
-                    <th className="p-2 text-left">{t('dashboard.interestSavings') || 'Korkosäästö'}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getBudgetImpactData().map((impact, index) => (
-                    <tr key={index} className="border-b">
-                      <td className="p-2">+{formatCurrency(impact.increment)}/kk</td>
-                      <td className="p-2">{formatCurrency(impact.totalBudget)}/kk</td>
-                      <td className="p-2">{impact.months} {t('form.months') || 'kuukautta'}</td>
-                      <td className="p-2 text-green-600">
-                        {impact.monthsSaved > 0 && "-"}{impact.monthsSaved} {t('form.months') || 'kuukautta'}
-                      </td>
-                      <td className="p-2 text-green-600">
-                        {formatCurrency(impact.interestSaved)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
   );
-}
+};
 
 export default DebtFreeTimeline;

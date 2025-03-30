@@ -1,6 +1,5 @@
 
 import { useEffect, useState, useRef } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 // Define the global adsbygoogle object for TypeScript
 declare global {
@@ -24,7 +23,6 @@ const AdSenseBanner = ({
 }: AdSenseBannerProps) => {
   const [hasMarketingConsent, setHasMarketingConsent] = useState<boolean>(false);
   const adContainerRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
   
   useEffect(() => {
     // Check if user has given consent for marketing cookies
@@ -99,7 +97,7 @@ const AdSenseBanner = ({
           className="bg-muted/10 flex items-center justify-center text-xs text-muted-foreground p-2"
           style={{ minHeight: '100px' }}
         >
-          <p>{t('ads.consentRequired')}</p>
+          <p>Mainokset käytettävissä evästeasetuksissa.</p>
         </div>
       </div>
     );

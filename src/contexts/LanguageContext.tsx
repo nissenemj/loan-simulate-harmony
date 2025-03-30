@@ -1,8 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { en, TranslationsType } from '@/translations/en';
+import { en } from '@/translations/en';
 import { fi } from '@/translations/fi';
-import { useLocalStorage } from '@/hooks/use-local-storage';
 
 type Translations = {
   [key: string]: string | any;
@@ -14,7 +13,6 @@ type LanguageContextType = {
   translations: Translations;
   setLanguage: (language: 'en' | 'fi') => void;
   t: (key: string, params?: Record<string, string | number>) => string;
-  isKeyMissing: (key: string) => boolean;
 };
 
 // Convert the nested translations object into a flat structure for easier lookup
@@ -61,22 +59,21 @@ const LanguageContext = createContext<LanguageContextType>({
   translations: fiTranslations,
   setLanguage: () => {},
   t: () => '',
-  isKeyMissing: () => false,
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Use local storage hook instead of direct localStorage access
-  const [savedLanguage, setSavedLanguage] = useLocalStorage<'en' | 'fi'>('language', 'fi');
-  const [language, setLanguage] = useState<'en' | 'fi'>(savedLanguage);
-  const [translations, setTranslations] = useState<Translations>(
-    language === 'en' ? enTranslations : fiTranslations
-  );
-  const [locale, setLocale] = useState(language === 'en' ? 'en-US' : 'fi-FI');
+  // Default to Finnish if there's no stored preference
+  const [language, setLanguage] = useState<'en' | 'fi'>('fi');
+  const [translations, setTranslations] = useState<Translations>(fiTranslations);
+  const [locale, setLocale] = useState('fi-FI');
   
   useEffect(() => {
-    // Set initial language from localStorage
-    handleSetLanguage(savedLanguage);
-  }, [savedLanguage]);
+    // Check for saved language preference
+    const savedLanguage = localStorage.getItem('language') as 'en' | 'fi';
+    if (savedLanguage) {
+      handleSetLanguage(savedLanguage);
+    }
+  }, []);
     
   const handleSetLanguage = (lang: 'en' | 'fi') => {
     setLanguage(lang);
@@ -85,16 +82,18 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const translationsToUse = lang === 'en' ? enTranslations : fiTranslations;
     setTranslations(translationsToUse);
     setLocale(lang === 'en' ? 'en-US' : 'fi-FI');
-    setSavedLanguage(lang);
+    localStorage.setItem('language', lang);
     
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
       translationsSize: Object.keys(translationsToUse).length,
-      sampleTranslations: {
-        homeKey: translationsToUse['landing.hero.headline'],
-        loansKey: translationsToUse['tabs.loans'],
-        creditCardsKey: translationsToUse['tabs.creditCards'],
-        dashboardKey: translationsToUse['tabs.dashboard']
+      debtFreeTimelineTranslations: {
+        nowKey: translationsToUse['dashboard.now'],
+        currentDebtKey: translationsToUse['dashboard.currentDebt'],
+        debtFreeKey: translationsToUse['dashboard.debtFree'],
+        timelineDescKey: translationsToUse['dashboard.timelineDescription'],
+        exportToPDFKey: translationsToUse['dashboard.exportToPDF'],
+        exportToCSVKey: translationsToUse['dashboard.exportToCSV'],
       }
     });
   };
@@ -118,21 +117,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     
     return translation;
   };
-
-  // Helper function to check if a key is missing from translations
-  const isKeyMissing = (key: string): boolean => {
-    return translations[key] === undefined;
-  };
   
   return (
-    <LanguageContext.Provider value={{ 
-      language, 
-      locale, 
-      translations, 
-      setLanguage: handleSetLanguage, 
-      t,
-      isKeyMissing
-    }}>
+    <LanguageContext.Provider value={{ language, locale, translations, setLanguage: handleSetLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

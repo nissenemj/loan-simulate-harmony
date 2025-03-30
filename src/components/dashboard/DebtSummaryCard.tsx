@@ -10,7 +10,7 @@ interface DebtSummaryCardProps {
   totalDebt: number;
   debtFreeDate: string;
   totalMinPayments: number;
-  totalAmountToPay: number;
+  totalAmountToPay: number; // Changed from optional to required
 }
 
 const DebtSummaryCard = ({ 
@@ -44,7 +44,7 @@ const DebtSummaryCard = ({
           </div>
           
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-muted-foreground">{t('dashboard.totalMonthlyPayment')}</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalMonthlyPayment')}</h3>
             <div className="text-2xl font-bold">
               <AnimatedNumber
                 value={totalMinPayments}
@@ -54,7 +54,7 @@ const DebtSummaryCard = ({
           </div>
           
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-muted-foreground">{t('results.totalPaid')}</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.totalAmountPaid')}</h3>
             <div className="text-2xl font-bold flex items-center">
               <Calculator className="mr-2 h-5 w-5 text-primary" />
               <AnimatedNumber

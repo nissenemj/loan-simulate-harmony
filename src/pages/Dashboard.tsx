@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -17,8 +17,6 @@ import DebtBreakdownTabs from '@/components/dashboard/DebtBreakdownTabs';
 import FinancialTips from '@/components/dashboard/FinancialTips';
 import DebtFreeTimeline from '@/components/dashboard/DebtFreeTimeline';
 import LoanSummary from '@/components/LoanSummary';
-import { DebtItem } from '@/utils/repayment/types';
-import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -36,71 +34,29 @@ const Dashboard = () => {
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
   
+  // Calculate the estimated debt-free date
+  const now = new Date();
+  const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 3));
+  const formattedDebtFreeDate = debtFreeDate.toLocaleDateString('fi-FI');
+  
   // Monthly budget for debt repayment (should ideally come from user settings)
   const monthlyBudget = 1500;
   
-  // Convert loans and credit cards to debt items for repayment calculations
-  const convertToDebtItems = (loans: Loan[], cards: CreditCardType[]): DebtItem[] => {
-    const debtItems: DebtItem[] = [];
-    
-    // Convert loans to debt items
-    loans.forEach(loan => {
-      debtItems.push({
-        id: loan.id,
-        name: loan.name,
-        balance: loan.amount,
-        interestRate: loan.interestRate,
-        minPayment: loan.minPayment || (loan.amount / (loan.termYears * 12)),
-        type: 'loan',
-        isActive: loan.isActive
-      });
-    });
-    
-    // Convert credit cards to debt items
-    cards.forEach(card => {
-      const percentPayment = card.balance * (card.minPaymentPercent / 100);
-      const minPayment = Math.max(card.minPayment, percentPayment);
-      
-      debtItems.push({
-        id: card.id,
-        name: card.name,
-        balance: card.balance,
-        interestRate: card.apr,
-        minPayment: minPayment,
-        type: 'credit-card',
-        isActive: card.isActive
-      });
-    });
-    
-    return debtItems;
-  };
-  
-  const debtItems = convertToDebtItems(activeLoans, activeCards);
-  
-  // Generate a repayment plan with the default monthly budget
-  const repaymentPlan = generateRepaymentPlan(debtItems, monthlyBudget, 'avalanche', false);
-  
-  // Calculate the estimated debt-free date
-  const getDebtFreeDate = () => {
-    // If we have a valid repayment plan, use its timeline
-    if (repaymentPlan.isViable && repaymentPlan.timeline && repaymentPlan.timeline.length > 0) {
-      const totalMonths = repaymentPlan.totalMonths;
-      const now = new Date();
-      const debtFreeDate = new Date(now);
-      debtFreeDate.setMonth(now.getMonth() + totalMonths);
-      return debtFreeDate.toLocaleDateString('fi-FI');
-    }
-    
-    // Fallback calculation if the repayment plan isn't viable
-    const now = new Date();
-    const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 3));
-    return debtFreeDate.toLocaleDateString('fi-FI');
-  };
-  
-  const formattedDebtFreeDate = getDebtFreeDate();
-  
   // Calculate total minimum payments
-  const totalMinPayments = debtItems.reduce((sum, debt) => sum + debt.minPayment, 0);
+  const totalMinPayments = 
+    activeLoans.reduce((sum, loan) => {
+      // Use loan.minPayment if available, otherwise calculate it
+      if (loan.minPayment) {
+        return sum + loan.minPayment;
+      } else {
+        // Fallback calculation if minPayment is not directly available
+        return sum + (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12));
+      }
+    }, 0) + 
+    activeCards.reduce((sum, card) => {
+      const percentPayment = card.balance * (card.minPaymentPercent / 100);
+      return sum + Math.max(card.minPayment, percentPayment);
+    }, 0);
   
   // Calculate extra budget available
   const extraBudget = Math.max(0, monthlyBudget - totalMinPayments);
@@ -122,18 +78,14 @@ const Dashboard = () => {
 
   // Calculate total amount to pay
   const calculateTotalAmountToPay = () => {
-    if (repaymentPlan.isViable) {
-      // Use the total from the repayment plan: principal + interest
-      return totalDebt + repaymentPlan.totalInterestPaid;
-    }
-    
-    // Fallback calculation if repayment plan isn't viable
     const loanTotal = activeLoans.reduce((sum, loan) => {
+      // Calculate simple interest over the loan term
       const interest = loan.amount * (loan.interestRate / 100) * loan.termYears;
       return sum + loan.amount + interest;
     }, 0);
     
     const cardTotal = activeCards.reduce((sum, card) => {
+      // Rough estimate for credit cards (assumes paying off over 24 months)
       const interest = card.balance * (card.apr / 100) * 2;
       return sum + card.balance + interest;
     }, 0);
@@ -149,8 +101,7 @@ const Dashboard = () => {
     activeCards: activeCards.length,
     totalDebt,
     totalMinPayments,
-    totalAmountToPay,
-    repaymentMonths: repaymentPlan.totalMonths
+    totalAmountToPay
   });
   
   return (
