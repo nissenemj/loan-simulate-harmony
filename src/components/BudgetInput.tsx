@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { CalculatorIcon, TrendingUp, CoinsIcon } from 'lucide-react';
+import { CalculatorIcon, TrendingUp, CoinsIcon, ArrowRight } from 'lucide-react';
 
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
@@ -85,6 +85,15 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("repayment.snowballStrategy")}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.snowballDesc")}</span>
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+              <RadioGroupItem value="equal" id="equal" />
+              <Label htmlFor="equal" className="flex flex-col cursor-pointer w-full">
+                <span className="font-medium text-wrap break-words">{t("dashboard.equalDistribution") || "Equal Distribution"}</span>
+                <span className="text-xs text-muted-foreground text-wrap break-words">
+                  {t("repayment.equalDesc") || "Distributes extra payments equally across all debts."}
+                </span>
               </Label>
             </div>
           </RadioGroup>

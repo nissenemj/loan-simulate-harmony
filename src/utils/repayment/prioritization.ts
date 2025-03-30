@@ -13,6 +13,12 @@ export const prioritizeDebts = (
   // Filter to only include active debts with positive balances
   const activeDebts = debts.filter(debt => debt.isActive !== false && debt.balance > 0);
   
+  if (method === 'equal') {
+    // For equal method, the order doesn't matter as much since payments are distributed equally
+    // But we'll sort by ID for consistency
+    return [...activeDebts].sort((a, b) => a.id.localeCompare(b.id));
+  }
+  
   return [...activeDebts].sort((a, b) => {
     if (method === 'avalanche') {
       // Primary sort: Highest interest rate first

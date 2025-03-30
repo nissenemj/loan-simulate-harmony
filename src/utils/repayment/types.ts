@@ -3,7 +3,7 @@ import { Loan } from '../loanCalculations';
 import { CreditCard } from '../creditCardCalculations';
 
 export type DebtType = 'loan' | 'credit-card';
-export type PrioritizationMethod = 'avalanche' | 'snowball';
+export type PrioritizationMethod = 'avalanche' | 'snowball' | 'equal';
 
 export interface DebtItem {
   id: string;

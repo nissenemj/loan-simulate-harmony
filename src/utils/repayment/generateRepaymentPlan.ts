@@ -11,7 +11,7 @@ export const generateRepaymentPlan = (
   debts: DebtItem[],
   monthlyBudget: number,
   method: PrioritizationMethod,
-  equalDistribution: boolean = false
+  equalDistribution: boolean = method === 'equal'
 ): RepaymentPlan => {
   if (!debts || debts.length === 0) {
     return {
@@ -68,7 +68,7 @@ export const generateRepaymentPlan = (
   // Step 5: Allocate extra funds based on strategy
   const extraBudget = monthlyBudget - totalMinPayment;
   if (extraBudget > 0 && prioritizedDebts.length > 0) {
-    if (equalDistribution) {
+    if (method === 'equal' || equalDistribution) {
       // Distribute extra budget equally among all debts
       const extraPerDebt = extraBudget / prioritizedDebts.length;
       
@@ -91,8 +91,9 @@ export const generateRepaymentPlan = (
     }
   }
 
-  // Step 6: Simulate repayment with the allocation - pass the equalDistribution parameter
-  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistribution);
+  // Step 6: Simulate repayment with the allocation
+  const equalDistributionFlag = method === 'equal' || equalDistribution;
+  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistributionFlag);
 
   // Step 7: Calculate total months and interest paid
   const totalMonths = timeline.length;
