@@ -95,7 +95,7 @@ const DebtSummaryCard = ({
           className="w-full" 
           onClick={() => navigate('/debt-summary')}
         >
-          {t('dashboard.viewDetailedBreakdown')}
+          {t('dashboard.viewDetailedBreakdown') || 'Näytä yksityiskohtainen erittely'}
         </Button>
       </CardFooter>
     </Card>

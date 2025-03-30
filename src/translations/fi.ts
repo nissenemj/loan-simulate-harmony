@@ -505,6 +505,7 @@ export const fi: typeof en = {
     welcomeSubtitle: 'Tervetuloa velkasimulointisovellukseen',
     user: 'käyttäjä',
     viewDebtSummary: 'Näytä velkasi yhteenveto',
+    viewDetailedBreakdown: 'Näytä yksityiskohtainen erittely',
     totalDebt: 'Kokonaisvelka',
     paidDebt: 'Maksettu velka',
     remainingDebt: 'Jäljellä oleva velka',
@@ -549,7 +550,12 @@ export const fi: typeof en = {
     equalStrategy: 'Tasajako',
     snowballStrategy: 'Lumipallo',
     avalancheStrategy: 'Lumivyöry',
-    equalDistribution: 'Tasajakostrategia'
+    equalDistribution: 'Tasajakostrategia',
+    estimatedInterestCost: 'Arvioitu korkokustannus',
+    estimatedDebtFreeDate: 'Arvioitu velaton päivämäärä',
+    totalToPayOff: 'Kokonaissumma maksettavaksi',
+    minimumMonthlyPayments: 'Kuukausittaiset vähimmäismaksut',
+    perMonth: 'kuukaudessa',
   },
   blog: {
     pageTitle: "Blogi | Lainasimulaattori",
