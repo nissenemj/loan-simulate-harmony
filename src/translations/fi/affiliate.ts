@@ -30,7 +30,7 @@ export const affiliate = {
   applyNow: 'Hae nyt',
   offers: 'Tarjoukset',
   
-  // Preserve existing translations from the current Finnish version
+  // Additional properties to match the English version
   description: 'Koska olemme sitoutuneet parhaan mahdollisen taloudellisen tuen tarjoamiseen, olemme kumppaneina huolellisesti valittujen rahoituslaitosten kanssa vastataksemme yksilöllisiin tarpeisiisi. Alla olevat suositukset on valittu niiden kilpailukykyisten tarjousten, luotettavuuden ja asiakastyytyväisyyden arvosanojen perusteella.',
   personalLoans: 'Henkilökohtaiset lainat',
   mortgages: 'Asuntolainat',

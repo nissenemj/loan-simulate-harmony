@@ -51,5 +51,44 @@ export const table = {
   endDate: 'Loppupäivä',
   apply: 'Käytä',
   clear: 'Tyhjennä',
-  all: 'Kaikki'
+  all: 'Kaikki',
+  
+  // Table column headers
+  utilizationRate: 'Käyttöaste',
+  payoffTime: 'Maksuaika',
+  
+  // Loan specific
+  termYears: 'Laina-aika (vuosia)',
+  year: 'vuosi',
+  
+  // Form placeholders for loans
+  placeholderName: 'Syötä lainan nimi',
+  placeholderAmount: 'Syötä lainan määrä',
+  placeholderInterestRate: 'Syötä korkoprosentti',
+  placeholderTermYears: 'Syötä laina-aika vuosina',
+  placeholderMonthlyFee: 'Syötä kuukausimaksu',
+  
+  // Form placeholders for credit cards - these will be merged with existing ones
+  placeholderCreditLimit: 'Syötä luottoraja',
+  placeholderApr: 'Syötä vuosikorko',
+  placeholderMinPayment: 'Syötä vähimmäismaksu',
+  
+  // Loan section translations
+  loansSection: 'Lainat',
+  creditCardsSection: 'Luottokortit',
+  totalSummarySection: 'Yhteenveto',
+  
+  // Loan form labels
+  loanTitle: 'Laina',
+  repaymentType: 'Takaisinmaksutyyppi',
+  interestType: 'Korkotyyppi',
+  monthlyFee: 'Kuukausimaksu',
+  monthlyFeeDescription: 'Kuukausittaiset tilinhoitokulut',
+  
+  // Loan types
+  annuity: 'Annuiteetti',
+  fixed: 'Kiinteä',
+  
+  // Form buttons
+  submit: 'Lisää laina'
 };

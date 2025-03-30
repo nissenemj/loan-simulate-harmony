@@ -16,5 +16,29 @@ export const debtSummary = {
   creditUtilization: 'Luoton käyttöaste',
   remainingDebt: 'Jäljellä oleva velka',
   paidDebt: 'Maksettu velka',
-  debtFreeDate: 'Velaton päivämäärä'
+  debtFreeDate: 'Velaton päivämäärä',
+  
+  // Table related translations
+  tableSummary: 'Velkatiivistelmätaulukko',
+  loanName: 'Lainan nimi',
+  monthlyPayment: 'Kuukausimaksu',
+  monthlyInterest: 'Kuukausittainen korko',
+  totalInterestEstimate: 'Korkoarvio yhteensä',
+  totalAmountToBePaid: 'Maksettava kokonaissumma',
+  totalLoans: 'Lainat yhteensä',
+  noLoansMessage: 'Ei lisättyjä lainoja',
+  
+  // Credit card table related translations
+  cardName: 'Kortin nimi',
+  totalCards: 'Kortit yhteensä',
+  noCardsMessage: 'Ei lisättyjä luottokortteja',
+  
+  // Actions
+  payoffButton: 'Maksa pois',
+  actions: 'Toiminnot',
+  
+  // Early payoff savings
+  savingsTitle: 'Säästöt',
+  earlyPayoffSavings: 'Maksamalla nyt säästät',
+  earlyPayoffExplanation: 'Lainojen maksaminen pois aikaisin voi säästää merkittäviä korkomaksuja.'
 };

@@ -73,5 +73,9 @@ export const summary = {
   nextStep: 'Seuraava askel',
   paydownHighInterest: 'Maksa ensin korkeakorkoiset velat',
   consolidateDebt: 'Yhdistä velkasi',
-  increasePayments: 'Lisää maksuja'
+  increasePayments: 'Lisää maksuja',
+  
+  // Additional summary specific keys
+  summaryTab: 'Yhteenveto',
+  planTab: 'Suunnitelma'
 };

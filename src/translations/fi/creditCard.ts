@@ -25,5 +25,17 @@ export const creditCard = {
   noCardsAdded: 'Ei lisättyjä luottokortteja',
   table: {
     utilizationRate: 'Käyttöaste'
-  }
+  },
+  
+  // Form placeholders
+  placeholderName: 'Syötä kortin nimi',
+  placeholderBalance: 'Syötä nykyinen saldo',
+  placeholderCreditLimit: 'Syötä luottoraja',
+  placeholderApr: 'Syötä vuosikorko',
+  placeholderMinPayment: 'Syötä vähimmäismaksu',
+  
+  // Additional form labels
+  fullPayment: 'Maksa kokonaan',
+  autoCalculated: 'Automaattisesti laskettu',
+  submit: 'Lisää kortti'
 };

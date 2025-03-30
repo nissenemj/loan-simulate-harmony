@@ -51,5 +51,11 @@ export const budgetImpact = {
   detailedBreakdown: 'Yksityiskohtainen erittely',
   graphProjection: 'Graafinen ennuste',
   calculateImpact: 'Laske vaikutus',
-  applyToRepaymentPlan: 'Käytä takaisinmaksusuunnitelmaan'
+  applyToRepaymentPlan: 'Käytä takaisinmaksusuunnitelmaan',
+  
+  // Budget impact table
+  totalBudget: 'Kokonaisbudjetti',
+  newPayoffTime: 'Uusi maksuaika',
+  timeReduction: 'Ajan vähennys',
+  interestSavings: 'Korkosäästöt'
 };

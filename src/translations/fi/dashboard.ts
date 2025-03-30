@@ -140,5 +140,14 @@ export const dashboard = {
   totalInterestPaid: 'Maksettava korkosumma',
   interestPaid: 'Korkoa maksetaan',
   includesExtra: 'Sisältää lisämaksun',
-  monthlyPayment: 'Kuukausimaksu'
+  monthlyPayment: 'Kuukausimaksu',
+  
+  // Additional dashboard sections
+  loansSection: 'Lainat-osio',
+  creditCardsSection: 'Luottokortit-osio',
+  totalSummarySection: 'Yhteenveto-osio',
+  
+  // Savings related
+  savingsTitle: 'Säästöt',
+  earlyPayoffSavings: 'Maksamalla nyt säästät'
 };
