@@ -18,6 +18,10 @@ import { affiliate } from './affiliate';
 import { blog } from './blog';
 import { language } from './language';
 import { landing } from './landing';
+import { debtSummary } from './debtSummary';
+import { budgetImpact } from './budgetImpact';
+import { glossary } from './glossary';
+import { ads } from './ads';
 
 // Import the translation type from EN
 import { TranslationsType } from '../en';
@@ -42,5 +46,9 @@ export const fi: TranslationsType = {
   affiliate,
   blog,
   language,
-  landing
+  landing,
+  debtSummary,
+  budgetImpact,
+  glossary,
+  ads
 };

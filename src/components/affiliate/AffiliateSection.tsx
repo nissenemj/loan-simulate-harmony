@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { affiliateLinks, affiliateBanners, affiliateRecommendations } from '@/utils/affiliateData';
@@ -7,10 +8,9 @@ import AffiliateRecommendation from './AffiliateRecommendation';
 import { BadgeDollarSign, HandCoins, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+
 const AffiliateSection = () => {
-  const {
-    t
-  } = useLanguage();
+  const { t } = useLanguage();
 
   // Get recommendations by category
   const getRecommendationsByCategory = (category: string) => {
@@ -25,9 +25,13 @@ const AffiliateSection = () => {
   // Get investment recommendations
   const investmentRecommendations = affiliateRecommendations.filter(rec => rec.category === 'investment');
 
-  // Get education recommendations including Storytel
-  const educationRecommendations = affiliateRecommendations.filter(rec => rec.category === 'education');
-  return <div className="space-y-8">
+  // Get education recommendations excluding Storytel
+  const educationRecommendations = affiliateRecommendations.filter(
+    rec => rec.category === 'education' && !rec.title.includes('Storytel')
+  );
+
+  return (
+    <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold tracking-tight">{t("affiliate.title")}</h2>
         <p className="text-muted-foreground">
@@ -64,8 +68,10 @@ const AffiliateSection = () => {
               {/* Display loan banners */}
               {getBannersByCategory('loan').slice(0, 2).map(banner => <AffiliateBanner key={banner.id} banner={banner} />)}
               
-              {/* Display education banners */}
-              {getBannersByCategory('education').map(banner => <AffiliateBanner key={banner.id} banner={banner} />)}
+              {/* Display education banners excluding Storytel */}
+              {getBannersByCategory('education')
+                .filter(banner => !banner.title.includes('Storytel'))
+                .map(banner => <AffiliateBanner key={banner.id} banner={banner} />)}
 
               {/* Display investment banners */}
               {getBannersByCategory('investment').slice(0, 1).map(banner => <AffiliateBanner key={banner.id} banner={banner} />)}
@@ -80,7 +86,7 @@ const AffiliateSection = () => {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
                 <BadgeDollarSign className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.competitiveLoansTitle") || "Kilpailuta lainasi ja säästä"}
+                {t("affiliate.competitiveLoansTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -108,32 +114,32 @@ const AffiliateSection = () => {
             </CardContent>
           </Card>
 
-          {/* Education (Storytel and Nordnet) */}
+          {/* Education card (exclude Storytel) */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
                 <BookOpen className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.wantToLearnMore") || "Haluatko oppia lisää?"}
+                {t("affiliate.wantToLearnMore")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {/* Include Storytel */}
-                {affiliateLinks.filter(link => link.category === 'education' || link.category === 'investment' && link.title.includes('Nordnet')).map(link => <AffiliateLink key={link.id} link={link} />)}
+                {/* Include investment links but exclude Storytel */}
+                {affiliateLinks.filter(link => 
+                  (link.category === 'education' && !link.title.includes('Storytel')) || 
+                  (link.category === 'investment' && link.title.includes('Nordnet'))
+                ).map(link => <AffiliateLink key={link.id} link={link} />)}
               </div>
             </CardContent>
           </Card>
 
-          {/* Display education recommendations */}
+          {/* Display education recommendations (exclude Storytel) */}
           {educationRecommendations.map(recommendation => <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />)}
           
           {/* Display investment recommendations */}
           {investmentRecommendations.map(recommendation => <AffiliateRecommendation key={recommendation.id} recommendation={recommendation} />)}
         </div>
       </div>
-
-      {/* Storytel specific disclaimer - Fixed properly with proper t() entries */}
-      
 
       {/* Disclaimer */}
       <Separator className="my-6" />
@@ -142,6 +148,8 @@ const AffiliateSection = () => {
           {t("affiliate.disclaimer")}
         </p>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default AffiliateSection;

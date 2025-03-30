@@ -18,6 +18,10 @@ import { affiliate } from './affiliate';
 import { blog } from './blog';
 import { language } from './language';
 import { landing } from './landing';
+import { debtSummary } from './debtSummary';
+import { budgetImpact } from './budgetImpact';
+import { glossary } from './glossary';
+import { ads } from './ads';
 
 // Export the combined translations
 export const en = {
@@ -39,7 +43,11 @@ export const en = {
   affiliate,
   blog,
   language,
-  landing
+  landing,
+  debtSummary,
+  budgetImpact,
+  glossary,
+  ads
 };
 
 // Define the type based on the complete English translations
