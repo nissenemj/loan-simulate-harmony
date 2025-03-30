@@ -16,10 +16,14 @@ export const creditCard = {
   enterValidLimit: 'Syötä kelvollinen luottoraja',
   enterValidAPR: 'Syötä kelvollinen vuosikorko',
   enterValidMinPayment: 'Syötä kelvollinen vähimmäismaksu',
-  enterValidMinPaymentPercent: 'Syötä kelvollinen vähimmäismaksu prosentti',
-  calculationMethod: 'Vähimmäismaksutapa',
+  enterValidMinPaymentPercent: 'Syötä kelvollinen vähimmäismaksuprosentti',
+  calculationMethod: 'Vähimmäismaksun laskentamenetelmä',
   percentageOfBalance: 'Prosenttiosuus saldosta',
   fixedAmount: 'Kiinteä summa',
-  percentOrMinimum: 'Prosenttiosuus tai minimimaksu (suurempi)',
-  fixedOrPercentMinimum: 'Kiinteä määrä tai prosenttiosuuden minimi'
+  percentOrMinimum: 'Prosenttiosuus tai vähimmäismäärä (kumpi tahansa on suurempi)',
+  fixedOrPercentMinimum: 'Kiinteä summa tai prosenttiosuuden vähimmäismäärä',
+  noCardsAdded: 'Ei lisättyjä luottokortteja',
+  table: {
+    utilizationRate: 'Käyttöaste'
+  }
 };
