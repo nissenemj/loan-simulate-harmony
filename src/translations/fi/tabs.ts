@@ -13,6 +13,7 @@ export const tabs = {
   blog: 'Blogi',
   profile: 'Profiili',
   glossary: 'Sanasto',
+  affiliate: 'Yhteistyökumppanit', // Added this required property
   
   // Additional tabs and sections
   summaryTab: 'Yhteenveto',
