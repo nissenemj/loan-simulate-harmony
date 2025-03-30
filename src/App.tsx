@@ -13,7 +13,6 @@ import LoanTerms from "./pages/LoanTerms";
 import DebtSummaryPage from "./pages/DebtSummaryPage";
 import Auth from "./pages/Auth";
 import NavigationHeader from "./components/NavigationHeader";
-import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/LandingPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -49,16 +48,16 @@ const App = () => (
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={
-                  <ProtectedRoute>
+                  <>
                     <NavigationHeader />
                     <Dashboard />
-                  </ProtectedRoute>
+                  </>
                 } />
                 <Route path="/loans" element={
-                  <ProtectedRoute>
+                  <>
                     <NavigationHeader />
                     <Index />
-                  </ProtectedRoute>
+                  </>
                 } />
                 <Route path="/terms" element={
                   <>
@@ -67,20 +66,16 @@ const App = () => (
                   </>
                 } />
                 <Route path="/debt-summary" element={
-                  <ProtectedRoute>
+                  <>
                     <NavigationHeader />
                     <DebtSummaryPage />
-                  </ProtectedRoute>
+                  </>
                 } />
                 
                 {/* Blog pages */}
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:postId" element={<BlogPost />} />
-                <Route path="/admin/blog" element={
-                  <ProtectedRoute>
-                    <BlogAdmin />
-                  </ProtectedRoute>
-                } />
+                <Route path="/admin/blog" element={<BlogAdmin />} />
                 
                 {/* Legal pages */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />

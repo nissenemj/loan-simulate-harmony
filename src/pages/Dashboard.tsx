@@ -103,6 +103,9 @@ const Dashboard = () => {
     totalMinPayments,
     totalAmountToPay
   });
+
+  // Use a guest username if no user is logged in
+  const username = user?.email?.split('@')[0] || t('dashboard.guest');
   
   return (
     <div className="container max-w-7xl mx-auto py-6 px-4 md:px-6">
@@ -113,7 +116,7 @@ const Dashboard = () => {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.welcome')}, {user?.email?.split('@')[0] || t('dashboard.user')}</h1>
+            <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.welcome')}, {username}</h1>
             <p className="text-muted-foreground">{t('dashboard.welcomeSubtitle')}</p>
           </div>
           
