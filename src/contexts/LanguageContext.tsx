@@ -87,13 +87,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
       translationsSize: Object.keys(translationsToUse).length,
-      debtFreeTimelineTranslations: {
-        nowKey: translationsToUse['dashboard.now'],
-        currentDebtKey: translationsToUse['dashboard.currentDebt'],
-        debtFreeKey: translationsToUse['dashboard.debtFree'],
-        timelineDescKey: translationsToUse['dashboard.timelineDescription'],
-        exportToPDFKey: translationsToUse['dashboard.exportToPDF'],
-        exportToCSVKey: translationsToUse['dashboard.exportToCSV'],
+      sampleTranslations: {
+        homeKey: translationsToUse['landing.hero.headline'],
+        loansKey: translationsToUse['tabs.loans'],
+        creditCardsKey: translationsToUse['tabs.creditCards'],
+        dashboardKey: translationsToUse['tabs.dashboard']
       }
     });
   };
