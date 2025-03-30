@@ -1,4 +1,3 @@
-
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -290,7 +289,6 @@ export const en = {
     allDebts: 'All Debts',
     loans: 'Loans',
     creditCards: 'Credit Cards',
-    // Export section
     exportToPDF: 'Export to PDF',
     exportToCSV: 'Export to CSV',
     comparing: 'Comparing',
@@ -661,6 +659,7 @@ export const en = {
     potentialSavings: 'Potential Savings',
     advertisementDisclaimer: 'Advertisement',
     sponsored: 'Sponsored',
+    applyNow: 'Apply Now',
     offers: 'Offers'
   },
   blog: {
