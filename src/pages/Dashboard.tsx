@@ -1,14 +1,21 @@
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, HelpCircle, Download, Calculator } from 'lucide-react';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { toast } from 'sonner';
 
 // Newly created components
 import DebtSummaryCard from '@/components/dashboard/DebtSummaryCard';
@@ -17,6 +24,7 @@ import DebtBreakdownTabs from '@/components/dashboard/DebtBreakdownTabs';
 import FinancialTips from '@/components/dashboard/FinancialTips';
 import DebtFreeTimeline from '@/components/dashboard/DebtFreeTimeline';
 import LoanSummary from '@/components/LoanSummary';
+import ScenarioComparisonTool from '@/components/dashboard/ScenarioComparisonTool';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -24,6 +32,9 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  
+  // State for selected scenario (default is current reality)
+  const [showScenarioComparison, setShowScenarioComparison] = useState(false);
   
   // Make sure we're only using active loans and credit cards
   const activeLoans = loans.filter(loan => loan.isActive);
@@ -107,6 +118,60 @@ const Dashboard = () => {
   // Use a guest username if no user is logged in
   const username = user?.email?.split('@')[0] || t('dashboard.guest');
   
+  // Export data as CSV
+  const exportDataAsCSV = () => {
+    // Create data arrays for loans and credit cards
+    const loanData = activeLoans.map(loan => ({
+      type: 'Loan',
+      name: loan.name,
+      amount: loan.amount,
+      interestRate: loan.interestRate,
+      termYears: loan.termYears,
+      monthlyPayment: loan.minPayment || (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12))
+    }));
+    
+    const cardData = activeCards.map(card => ({
+      type: 'Credit Card',
+      name: card.name,
+      amount: card.balance,
+      interestRate: card.apr,
+      termYears: 'N/A',
+      monthlyPayment: Math.max(card.minPayment, card.balance * (card.minPaymentPercent / 100))
+    }));
+    
+    // Combine data
+    const allData = [...loanData, ...cardData];
+    
+    // Create CSV header
+    const header = ['Type', 'Name', 'Amount', 'Interest Rate (%)', 'Term (Years)', 'Monthly Payment'];
+    
+    // Create CSV content
+    const csvContent = [
+      header.join(','),
+      ...allData.map(item => [
+        item.type,
+        `"${item.name}"`, // Wrap in quotes to handle commas in names
+        item.amount.toFixed(2),
+        item.interestRate.toFixed(2),
+        item.termYears,
+        item.monthlyPayment.toFixed(2)
+      ].join(','))
+    ].join('\n');
+    
+    // Create a download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'debt_data.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success(t('dashboard.dataExported') || 'Data exported successfully');
+  };
+  
   return (
     <div className="container max-w-7xl mx-auto py-6 px-4 md:px-6">
       <Helmet>
@@ -121,12 +186,52 @@ const Dashboard = () => {
           </div>
           
           <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={exportDataAsCSV}>
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('dashboard.exportData') || 'Export debt data as CSV'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant={showScenarioComparison ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => setShowScenarioComparison(!showScenarioComparison)}
+                  >
+                    <Calculator className="mr-2 h-4 w-4" />
+                    {t('dashboard.compareScenarios') || 'Compare Scenarios'}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t('dashboard.compareScenariosTooltip') || 'Compare different repayment scenarios'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
             <Button variant="outline" size="sm" onClick={() => navigate('/debt-summary')}>
               {t('dashboard.viewDebtSummary')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
+        
+        {showScenarioComparison && (
+          <ScenarioComparisonTool 
+            activeLoans={activeLoans}
+            activeCards={activeCards}
+            monthlyBudget={monthlyBudget}
+            onClose={() => setShowScenarioComparison(false)}
+          />
+        )}
         
         <DebtSummaryCard 
           totalDebt={totalDebt}
