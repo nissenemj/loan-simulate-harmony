@@ -27,9 +27,6 @@ export const simulateRepayment = (
   let month = 1;
   const MAX_MONTHS = 3600; // 300 years safety limit
   
-  // Track extra payment amount available for redistribution
-  let extraPaymentPool = 0;
-  
   while (currentDebts.some(debt => debt.balance > 0) && month <= MAX_MONTHS) {
     // Get debts that still have balance
     let remainingDebts = currentDebts.filter(debt => debt.balance > 0);
@@ -46,32 +43,8 @@ export const simulateRepayment = (
       strategy: method 
     };
     
-    // Apply extra payment from the pool according to the chosen strategy
-    if (extraPaymentPool > 0 && prioritizedRemainingDebts.length > 0) {
-      if (equalDistribution) {
-        // Distribute equally among remaining debts
-        const extraPerDebt = extraPaymentPool / prioritizedRemainingDebts.length;
-        
-        for (const debt of prioritizedRemainingDebts) {
-          const allocation = currentAllocation.find(a => a.id === debt.id);
-          if (allocation) {
-            allocation.extraPayment += extraPerDebt;
-            allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
-          }
-        }
-      } else {
-        // Follow strategy - put all extra to highest priority debt
-        const highestPriorityDebtId = prioritizedRemainingDebts[0].id;
-        const allocation = currentAllocation.find(a => a.id === highestPriorityDebtId);
-        
-        if (allocation) {
-          allocation.extraPayment += extraPaymentPool;
-          allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
-        }
-      }
-      
-      extraPaymentPool = 0; // Reset pool after allocation
-    }
+    // Extra payment pool to collect freed-up payments
+    let extraPaymentPool = 0;
     
     // Process each debt to calculate interest and apply payments
     for (const debt of remainingDebts) {
@@ -89,7 +62,7 @@ export const simulateRepayment = (
       // Calculate available payment
       let availablePayment = allocation.totalPayment;
       
-      // Improved interest handling
+      // Calculate principal payment (payment minus interest)
       let principalPayment;
       let actualInterestPaid;
       
@@ -112,6 +85,7 @@ export const simulateRepayment = (
       const actualPayment = principalPayment + actualInterestPaid;
       
       // Update debt balance
+      const previousBalance = debt.balance;
       debt.balance = Math.max(0, debt.balance - principalPayment);
       
       // Add to month data
@@ -126,56 +100,53 @@ export const simulateRepayment = (
       monthData.totalPaid += actualPayment;
       monthData.totalInterestPaid += actualInterestPaid;
       
-      // If we paid off the debt or have excess payment, handle snowball/avalanche logic
+      // If debt is paid off or we have excess payment, handle redistribution
       if (debt.balance <= 0 || excessPayment > 0) {
-        // Amount to redistribute (excess payment + monthly min payment if debt is paid off)
-        let amountToRedistribute = excessPayment;
-        
-        // If debt is now paid off, add its allocation to redistribution
+        // Add excess payment and any freed allocation to pool
         if (debt.balance <= 0) {
-          // Use allocation.totalPayment (min + extra) for the freed up payment
-          amountToRedistribute += allocation.totalPayment - actualPayment;
+          // If debt is fully paid off, free up its entire allocation for future months
+          extraPaymentPool += allocation.totalPayment - actualPayment;
           
-          // Zero out the paid-off debt's allocation for future months
+          // Update allocation for future months - debt is paid off
           allocation.minPayment = 0;
           allocation.extraPayment = 0;
           allocation.totalPayment = 0;
+        } else if (excessPayment > 0) {
+          extraPaymentPool += excessPayment;
         }
-        
-        // Only redistribute if we have an amount to redistribute
-        if (amountToRedistribute > 0.01) { // Use a small threshold to handle floating point
-          // Get updated list of debts with balances after this payment
-          const updatedRemainingDebts = currentDebts.filter(d => d.balance > 0);
+      }
+    }
+    
+    // After processing all debts, redistribute the extra payment pool for next month
+    if (extraPaymentPool > 0) {
+      // Get updated debts that still have balances
+      const debtsWithBalance = currentDebts.filter(d => d.balance > 0);
+      
+      if (debtsWithBalance.length > 0) {
+        // Apply different redistribution strategies
+        if (equalDistribution) {
+          // Equal distribution: split extra among all remaining debts
+          const extraPerDebt = extraPaymentPool / debtsWithBalance.length;
           
-          if (equalDistribution && updatedRemainingDebts.length > 0) {
-            // For equal distribution, add to pool for immediate redistribution
-            const amountPerDebt = amountToRedistribute / updatedRemainingDebts.length;
-            
-            for (const remainingDebt of updatedRemainingDebts) {
-              const remainingAllocation = currentAllocation.find(a => a.id === remainingDebt.id);
-              if (remainingAllocation) {
-                remainingAllocation.extraPayment += amountPerDebt;
-                remainingAllocation.totalPayment = remainingAllocation.minPayment + remainingAllocation.extraPayment;
-              }
+          for (const debt of debtsWithBalance) {
+            const allocation = currentAllocation.find(a => a.id === debt.id);
+            if (allocation) {
+              allocation.extraPayment += extraPerDebt;
+              allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
             }
-          } else if (updatedRemainingDebts.length > 0) {
-            // For snowball/avalanche, redirect based on new priority order
-            const newPrioritizedDebts = prioritizeDebts(updatedRemainingDebts, method);
+          }
+        } else {
+          // Follow prioritization strategy for redistribution
+          const prioritizedDebts = prioritizeDebts(debtsWithBalance, method);
+          if (prioritizedDebts.length > 0) {
+            // Add all extra to highest priority debt
+            const topPriorityDebt = prioritizedDebts[0];
+            const allocation = currentAllocation.find(a => a.id === topPriorityDebt.id);
             
-            if (newPrioritizedDebts.length > 0) {
-              // Get highest priority debt according to strategy
-              const nextDebtId = newPrioritizedDebts[0].id;
-              const nextAllocation = currentAllocation.find(a => a.id === nextDebtId);
-              
-              if (nextAllocation) {
-                // Redirect the amount to this debt
-                nextAllocation.extraPayment += amountToRedistribute;
-                nextAllocation.totalPayment = nextAllocation.minPayment + nextAllocation.extraPayment;
-              }
+            if (allocation) {
+              allocation.extraPayment += extraPaymentPool;
+              allocation.totalPayment = allocation.minPayment + allocation.extraPayment;
             }
-          } else {
-            // No debts left with balance, add to pool for next month if any
-            extraPaymentPool += amountToRedistribute;
           }
         }
       }

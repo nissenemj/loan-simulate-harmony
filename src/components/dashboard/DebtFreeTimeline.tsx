@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -89,7 +90,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     });
   }, [locale]);
   
-  // Memoized function to generate repayment plans
+  // Generate repayment plans for different strategies
   const generatePlans = useCallback(() => {
     // Calculate the total budget (base budget + extra payment)
     const totalBudget = monthlyBudget + extraPayment;
@@ -135,7 +136,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     }
   }, []);
   
-  // Prepare data for chart - use repayment plan timeline
+  // Improved function to prepare chart data from repayment plans
   const prepareChartData = useCallback((activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
     if (!activePlan.isViable || !activePlan.timeline || activePlan.timeline.length === 0) {
       console.log('No viable plan or empty timeline');
@@ -150,6 +151,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     
     const dataPoints = [];
     
+    // Initialize running totals for cumulative calculations
+    let cumulativePrincipal = 0;
+    let cumulativeInterest = 0;
+    let comparisonCumulativePrincipal = 0;
+    let comparisonCumulativeInterest = 0;
+    
     for (let i = 0; i < maxMonths; i++) {
       // Create data point with consistent structure
       const dataPoint: any = {
@@ -158,7 +165,9 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         // Initialize all values to avoid undefined values in chart
         RemainingDebt: 0,
         Principal: 0,
-        Interest: 0
+        Interest: 0,
+        CumulativePrincipal: 0,
+        CumulativeInterest: 0
       };
       
       // Get data for active plan
@@ -170,6 +179,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         const principal = activeMonth.totalPaid - activeMonth.totalInterestPaid;
         dataPoint.Principal = principal;
         dataPoint.Interest = activeMonth.totalInterestPaid;
+        
+        // Update cumulative values
+        cumulativePrincipal += principal;
+        cumulativeInterest += activeMonth.totalInterestPaid;
+        dataPoint.CumulativePrincipal = cumulativePrincipal;
+        dataPoint.CumulativeInterest = cumulativeInterest;
       }
       
       // Add comparison plan data if enabled
@@ -178,6 +193,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
         dataPoint.RemainingDebt_Comparison = 0;
         dataPoint.Principal_Comparison = 0;
         dataPoint.Interest_Comparison = 0;
+        dataPoint.CumulativePrincipal_Comparison = 0;
+        dataPoint.CumulativeInterest_Comparison = 0;
         
         if (i < comparisonPlan.timeline.length) {
           const comparisonMonth = comparisonPlan.timeline[i];
@@ -187,6 +204,12 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
           const principal = comparisonMonth.totalPaid - comparisonMonth.totalInterestPaid;
           dataPoint.Principal_Comparison = principal;
           dataPoint.Interest_Comparison = comparisonMonth.totalInterestPaid;
+          
+          // Update cumulative values for comparison
+          comparisonCumulativePrincipal += principal;
+          comparisonCumulativeInterest += comparisonMonth.totalInterestPaid;
+          dataPoint.CumulativePrincipal_Comparison = comparisonCumulativePrincipal;
+          dataPoint.CumulativeInterest_Comparison = comparisonCumulativeInterest;
         }
       }
       
@@ -272,7 +295,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     document.body.removeChild(link);
   };
 
-  // Handle extra payment change
+  // Improved handler for extra payment change
   const handleExtraPaymentChange = (values: number[]) => {
     if (values && values.length > 0) {
       const newExtraPayment = values[0];
@@ -304,7 +327,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
   const comparisonTotalInterest = (showComparison && comparisonPlan && comparisonPlan.isViable) ? 
     comparisonPlan.totalInterestPaid : 0;
   
-  // Handle strategy change
+  // Improved strategy change handler
   const handleStrategyChange = (newStrategy: RepaymentStrategy) => {
     if (newStrategy === strategy) return;
     
@@ -332,7 +355,7 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     }
   };
   
-  // Calculate budget impact data for increased budgets
+  // Improved budget impact data calculation
   const getBudgetImpactData = useCallback(() => {
     const increments = [50, 100, 200, 500];
     const baselineMonths = hasValidData ? activePlan.totalMonths : 0;
@@ -343,7 +366,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
       const plan = generateRepaymentPlan(
         debtItems, 
         monthlyBudget + extraPayment + increment, // Include current extraPayment
-        strategy as PrioritizationMethod
+        strategy as PrioritizationMethod,
+        strategy === 'equal' // use equal distribution only if current strategy is equal
       );
       
       if (!plan.isViable) {
@@ -373,7 +397,8 @@ const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
     const plan = generateRepaymentPlan(
       debtItems, 
       monthlyBudget + extraPayment + additionalAmount, 
-      strategy as PrioritizationMethod
+      strategy as PrioritizationMethod,
+      strategy === 'equal' // use equal distribution only if current strategy is equal
     );
     
     if (!plan.isViable || !hasValidData) return null;

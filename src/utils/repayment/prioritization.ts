@@ -31,8 +31,8 @@ export const prioritizeDebts = (
       // Secondary sort: Highest interest rate when balances are very close
       return b.interestRate - a.interestRate;
     } else {
-      // Fallback for minimum payments or other strategies
-      return a.id.localeCompare(b.id); // Stable sort by ID
+      // For equal distribution or other strategies, ensure stable sorting
+      return a.id.localeCompare(b.id);
     }
   });
 };

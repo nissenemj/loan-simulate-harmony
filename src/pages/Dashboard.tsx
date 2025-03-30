@@ -22,7 +22,7 @@ import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
-  const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  const [creditCards, setCreditCards] = useLocalStorage<CreditCardType[]>("creditCards", []);
   const { user } = useAuth();
   const { t } = useLanguage();
   const navigate = useNavigate();
