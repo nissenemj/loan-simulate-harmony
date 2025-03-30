@@ -57,5 +57,6 @@ export const budgetImpact = {
   totalBudget: 'Kokonaisbudjetti',
   newPayoffTime: 'Uusi maksuaika',
   timeReduction: 'Ajan vähennys',
+  // Renamed from korkosäästöt to interestSavings to avoid duplicate property
   interestSavings: 'Korkosäästöt'
 };
