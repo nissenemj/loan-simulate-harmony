@@ -1,658 +1,547 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@/components/ui/label';
-import { CornerDownRight, ArrowRight, Calendar, Download, FileText } from 'lucide-react';
-import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine } from 'recharts';
-import { formatCurrency } from '@/utils/loanCalculations';
-import { Loan } from '@/utils/loanCalculations';
-import { CreditCard } from '@/utils/creditCardCalculations';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
-import { DebtItem, PrioritizationMethod } from '@/utils/repayment/types';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Badge } from '@/components/ui/badge';
+import { Calendar, Clock, CreditCard, Award, ArrowRight, Calculator, AlertCircle, DollarSign } from 'lucide-react';
+import { formatCurrency } from '@/utils/loanCalculations';
+import { useNavigate } from 'react-router-dom';
+import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
+import { Loan } from '@/utils/loanCalculations';
+import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer,
+  ComposedChart,
+  Area
+} from 'recharts';
 
 interface DebtFreeTimelineProps {
   totalDebt: number;
   formattedDebtFreeDate: string;
-  activeLoans: Loan[];
-  activeCards: CreditCard[];
-  monthlyBudget: number;
+  activeCards: CreditCardType[];
+  activeLoans?: Loan[];
+  monthlyBudget?: number;
 }
 
-// Convert loans and credit cards to debt items for repayment calculations
-const convertToDebtItems = (loans: Loan[], cards: CreditCard[]): DebtItem[] => {
-  const debtItems: DebtItem[] = [];
-  
-  // Convert loans to debt items
-  loans.forEach(loan => {
-    debtItems.push({
-      id: loan.id,
-      name: loan.name,
-      balance: loan.amount,
-      interestRate: loan.interestRate,
-      minPayment: loan.minPayment || (loan.amount / (loan.termYears * 12)),
-      type: 'loan',
-      isActive: loan.isActive
-    });
-  });
-  
-  // Convert credit cards to debt items
-  cards.forEach(card => {
-    const percentPayment = card.balance * (card.minPaymentPercent / 100);
-    const minPayment = Math.max(card.minPayment, percentPayment);
-    
-    debtItems.push({
-      id: card.id,
-      name: card.name,
-      balance: card.balance,
-      interestRate: card.apr,
-      minPayment: minPayment,
-      type: 'credit-card',
-      isActive: card.isActive
-    });
-  });
-  
-  return debtItems;
-};
+// Type definition for strategy results
+interface StrategyResult {
+  id: 'avalanche' | 'snowball' | 'equal';
+  name: string;
+  months: number;
+  interest: number;
+  date: string;
+}
 
-type RepaymentStrategy = 'avalanche' | 'snowball' | 'equal';
-
-const DebtFreeTimeline: React.FC<DebtFreeTimelineProps> = ({
-  totalDebt,
-  formattedDebtFreeDate,
-  activeLoans,
-  activeCards,
-  monthlyBudget
-}) => {
+const DebtFreeTimeline = ({ 
+  totalDebt, 
+  formattedDebtFreeDate, 
+  activeCards, 
+  activeLoans = [], 
+  monthlyBudget = 1500 
+}: DebtFreeTimelineProps) => {
   const { t, locale } = useLanguage();
-  const [extraPayment, setExtraPayment] = useState(0);
-  const [strategy, setStrategy] = useState<RepaymentStrategy>('avalanche');
-  const [comparisonStrategy, setComparisonStrategy] = useState<RepaymentStrategy | null>(null);
-  const [showComparison, setShowComparison] = useState(false);
-  const chartRef = useRef<HTMLDivElement>(null);
-  const [chartData, setChartData] = useState<any[]>([]);
+  const navigate = useNavigate();
   
-  // Create debt items from loans and credit cards
-  const debtItems = convertToDebtItems(activeLoans, activeCards);
+  // Generate combined debts from loans and credit cards
+  const combinedDebts = useMemo(() => 
+    combineDebts(activeLoans, activeCards), 
+    [activeLoans, activeCards]
+  );
   
-  // Generate repayment plans for all strategies
-  const generatePlans = () => {
-    // Generate plans for each strategy with the current extra payment
-    const avalanchePlan = generateRepaymentPlan(
-      debtItems,
-      monthlyBudget + extraPayment,
-      'avalanche',
-      false // not equally distributed
-    );
+  // Calculate total minimum payments correctly for both loan and credit card debts
+  const totalMinPayments = useMemo(() => {
+    // For loans: Use the loan's minimum payment or calculate from monthly result
+    const loanMinPayments = activeLoans.reduce((sum, loan) => {
+      if (loan.minPayment && loan.minPayment > 0) {
+        return sum + loan.minPayment;
+      } else {
+        // Calculate based on loan parameters (simplified calculation)
+        const monthlyRate = loan.interestRate / 100 / 12;
+        const totalMonths = loan.termYears * 12;
+        let payment;
+        
+        if (loan.repaymentType === 'custom-payment' && loan.customPayment) {
+          payment = loan.customPayment;
+        } else {
+          // Use annuity formula for standard loan types
+          payment = (loan.amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
+                   (Math.pow(1 + monthlyRate, totalMonths) - 1);
+        }
+        
+        // Add monthly fee if present
+        if (loan.monthlyFee) {
+          payment += loan.monthlyFee;
+        }
+        
+        return sum + payment;
+      }
+    }, 0);
     
-    const snowballPlan = generateRepaymentPlan(
-      debtItems,
-      monthlyBudget + extraPayment,
-      'snowball',
-      false // not equally distributed
-    );
+    // For credit cards: Calculate the effective minimum payment (greater of fixed amount or percentage)
+    const cardMinPayments = activeCards.reduce((sum, card) => {
+      const percentPayment = card.balance * (card.minPaymentPercent / 100);
+      const minPayment = Math.max(card.minPayment, percentPayment);
+      return sum + minPayment;
+    }, 0);
     
-    const equalPlan = generateRepaymentPlan(
-      debtItems,
-      monthlyBudget + extraPayment,
-      'avalanche', // Method doesn't matter for equal distribution
-      true // equally distributed
-    );
+    return loanMinPayments + cardMinPayments;
+  }, [activeLoans, activeCards]);
+  
+  // Ensure minimum payment is never less than 10 to avoid division by zero or negative values
+  const safeMinPayment = Math.max(totalMinPayments, 10);
+  
+  // State for payment slider (start at monthly budget or minimum payments, whichever is higher)
+  const [paymentAmount, setPaymentAmount] = useState(
+    Math.max(monthlyBudget || 0, safeMinPayment)
+  );
+  
+  // Update payment amount if minimum payments or budget changes
+  useEffect(() => {
+    const newAmount = Math.max(monthlyBudget || 0, safeMinPayment);
+    setPaymentAmount(newAmount);
+  }, [safeMinPayment, monthlyBudget]);
+  
+  // State for selected strategy
+  const [selectedStrategy, setSelectedStrategy] = useState<'avalanche' | 'snowball' | 'equal'>('avalanche');
+  
+  // Calculate plans with different strategies only when dependencies change
+  const avalanchePlan = useMemo(() => {
+    if (combinedDebts.length === 0) {
+      return {
+        isViable: true,
+        totalMonths: 0,
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: []
+      };
+    }
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche');
+  }, [combinedDebts, paymentAmount]);
+  
+  const snowballPlan = useMemo(() => {
+    if (combinedDebts.length === 0) {
+      return {
+        isViable: true,
+        totalMonths: 0,
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: []
+      };
+    }
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'snowball');
+  }, [combinedDebts, paymentAmount]);
+  
+  // Calculate equal distribution plan (custom strategy)
+  const equalPlan = useMemo(() => {
+    if (combinedDebts.length === 0) {
+      return {
+        isViable: true,
+        totalMonths: 0,
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: []
+      };
+    }
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
+  }, [combinedDebts, paymentAmount]);
+  
+  // Get debt-free dates for each strategy with proper future dates
+  const now = new Date();
+  
+  const getDateAfterMonths = (months: number) => {
+    if (months <= 0) return '';
     
-    return { avalanchePlan, snowballPlan, equalPlan };
+    const date = new Date(now);
+    date.setMonth(date.getMonth() + months);
+    return date.toLocaleDateString(locale);
   };
   
-  // Get the active plan based on current strategy
-  const getActivePlan = (plans: any, selectedStrategy: RepaymentStrategy) => {
+  const avalancheDate = getDateAfterMonths(avalanchePlan.totalMonths);
+  const snowballDate = getDateAfterMonths(snowballPlan.totalMonths);
+  const equalDate = getDateAfterMonths(equalPlan.totalMonths);
+  
+  // Define strategy information
+  const strategies: StrategyResult[] = useMemo(() => [
+    { id: 'avalanche', name: t('repayment.avalancheStrategy'), months: avalanchePlan.totalMonths, interest: avalanchePlan.totalInterestPaid, date: avalancheDate },
+    { id: 'snowball', name: t('repayment.snowballStrategy'), months: snowballPlan.totalMonths, interest: snowballPlan.totalInterestPaid, date: snowballDate },
+    { id: 'equal', name: t('dashboard.equalDistribution'), months: equalPlan.totalMonths, interest: equalPlan.totalInterestPaid, date: equalDate }
+  ], [t, avalanchePlan, snowballPlan, equalPlan, avalancheDate, snowballDate, equalDate]);
+  
+  // Sort strategies by months (ascending) and then by interest (ascending)
+  const sortedStrategies = useMemo(() => [...strategies].sort((a, b) => {
+    if (a.months === b.months) {
+      return a.interest - b.interest;
+    }
+    return a.months - b.months;
+  }), [strategies]);
+  
+  const recommendedStrategy = sortedStrategies[0];
+  
+  // Prepare timeline data for the selected strategy
+  const getSelectedPlan = () => {
     switch (selectedStrategy) {
-      case 'avalanche':
-        return plans.avalanchePlan;
-      case 'snowball':
-        return plans.snowballPlan;
-      case 'equal':
-        return plans.equalPlan;
-      default:
-        return plans.avalanchePlan;
+      case 'avalanche': return avalanchePlan;
+      case 'snowball': return snowballPlan;
+      case 'equal': return equalPlan;
+      default: return avalanchePlan;
     }
   };
   
-  // Format date helper function
-  const formatDate = (month: number): string => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + month);
-    return date.toLocaleDateString(locale || 'fi-FI', {
-      year: 'numeric',
-      month: 'short',
-    });
-  };
-  
-  // Prepare data for chart - use repayment plan timeline
-  const prepareChartData = (activePlan: any, comparisonPlan: any | null, showComparison: boolean) => {
-    if (!activePlan.isViable || activePlan.timeline.length === 0) {
+  // Improved timeline data preparation with better sampling for longer timelines
+  const timelineData = useMemo(() => {
+    const plan = getSelectedPlan();
+    
+    if (!plan.timeline || plan.timeline.length === 0) {
       return [];
     }
     
-    return activePlan.timeline.map((month: any, i: number) => {
-      const comparisonMonth = comparisonPlan && comparisonPlan.isViable && i < comparisonPlan.timeline.length
-        ? comparisonPlan.timeline[i]
-        : null;
-      
-      // Extract data from the active plan
-      const dataPoint = {
-        month: month.month,
-        date: formatDate(month.month - 1),
-        "RemainingDebt": month.totalRemaining,
-        "Principal": month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
-        "Interest": month.totalInterestPaid,
-      };
-      
-      // Add comparison data if available
-      if (showComparison && comparisonMonth) {
+    const timeline = plan.timeline;
+    const totalPeriods = timeline.length;
+    
+    // For small datasets, include all points
+    if (totalPeriods <= 24) {
+      return timeline.map((point, index) => {
+        // Calculate monthly interest (current month's total interest - previous month's total interest)
+        const monthlyInterest = index > 0 
+          ? point.totalInterestPaid - timeline[index - 1].totalInterestPaid 
+          : point.totalInterestPaid;
+        
         return {
-          ...dataPoint,
-          "RemainingDebt_Comparison": comparisonMonth.totalRemaining,
-          "Principal_Comparison": comparisonMonth.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0),
-          "Interest_Comparison": comparisonMonth.totalInterestPaid,
+          month: index + 1,
+          balance: point.totalRemaining,
+          interest: point.totalInterestPaid,
+          interestRate: point.totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+          monthlyInterest: monthlyInterest
         };
+      });
+    }
+    
+    // For larger datasets, use intelligent sampling to preserve important features
+    const simplifiedTimeline = [];
+    const samplingRate = Math.ceil(totalPeriods / 24); // Aim for about 24 points
+    
+    // Always include first and last points
+    let lastIncludedMonth = -samplingRate;
+    
+    for (let i = 0; i < totalPeriods; i++) {
+      // Include points at regular intervals, or if there's a significant change
+      const isRegularSample = i % samplingRate === 0;
+      const isLastPoint = i === totalPeriods - 1;
+      const isSignificantChange = i > 0 && Math.abs(timeline[i].totalRemaining - timeline[i - 1].totalRemaining) > totalDebt * 0.05;
+      
+      if (isRegularSample || isLastPoint || isSignificantChange) {
+        // Avoid points too close together
+        if (i - lastIncludedMonth >= samplingRate / 2 || isLastPoint) {
+          lastIncludedMonth = i;
+          
+          // Calculate monthly interest correctly (current month's total interest minus previous month's total)
+          const monthlyInterest = i > 0 
+            ? timeline[i].totalInterestPaid - timeline[i - 1].totalInterestPaid 
+            : timeline[i].totalInterestPaid;
+          
+          simplifiedTimeline.push({
+            month: i + 1,
+            balance: timeline[i].totalRemaining,
+            interest: timeline[i].totalInterestPaid,
+            interestRate: timeline[i].totalInterestPaid / (totalDebt + 0.01) * 100, // Avoid division by zero
+            monthlyInterest: monthlyInterest
+          });
+        }
       }
-      
-      return dataPoint;
-    });
-  };
-  
-  // Effect to recalculate plans when inputs change
-  useEffect(() => {
-    const plans = generatePlans();
-    const activePlan = getActivePlan(plans, strategy);
-    const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
-    
-    const newChartData = prepareChartData(activePlan, comparisonPlan, showComparison);
-    setChartData(newChartData);
-    
-    // Debug log to help troubleshooting
-    console.log('Updated chart data with extraPayment:', extraPayment, {
-      totalMonths: activePlan.totalMonths,
-      totalInterestPaid: activePlan.totalInterestPaid,
-      dataPoints: newChartData.length
-    });
-  }, [extraPayment, strategy, comparisonStrategy, showComparison, monthlyBudget, debtItems]);
-  
-  // Export to PDF
-  const exportToPDF = async () => {
-    if (!chartRef.current) return;
-    
-    try {
-      const canvas = await html2canvas(chartRef.current);
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('landscape');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('velaton-aikajana.pdf');
-    } catch (error) {
-      console.error('PDF export failed:', error);
-    }
-  };
-  
-  // Export to CSV 
-  const exportToCSV = () => {
-    const plans = generatePlans();
-    const activePlan = getActivePlan(plans, strategy);
-    
-    if (!activePlan.isViable || activePlan.timeline.length === 0) {
-      return;
     }
     
-    const headers = ['Kuukausi', 'Päivämäärä', 'Jäljellä oleva velka', 'Kuukausimaksu', 'Pääoma', 'Korko'];
-    
-    const csvContent = [
-      headers.join(','),
-      ...activePlan.timeline.map((month: any) => {
-        const principal = month.debts.reduce((sum: number, debt: any) => sum + (debt.payment - debt.interestPaid), 0);
-        return [
-          month.month,
-          formatDate(month.month - 1),
-          month.totalRemaining.toFixed(2),
-          (principal + month.totalInterestPaid).toFixed(2),
-          principal.toFixed(2),
-          month.totalInterestPaid.toFixed(2)
-        ].join(',');
-      })
-    ].join('\n');
-    
-    const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'velaton-aikajana.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Generate all plans for current parameters
-  const plans = generatePlans();
-  const activePlan = getActivePlan(plans, strategy);
-  const comparisonPlan = comparisonStrategy ? getActivePlan(plans, comparisonStrategy) : null;
-
-  // Ensure we have valid data before rendering
-  const hasValidData = activePlan.isViable && activePlan.timeline.length > 0;
-  const currentMonth = 1;
+    return simplifiedTimeline;
+  }, [selectedStrategy, avalanchePlan, snowballPlan, equalPlan, totalDebt]);
   
-  // Get the summary statistics from the repayment plan
-  const totalMonths = hasValidData ? activePlan.totalMonths : 0;
-  const totalInterestPaid = hasValidData ? activePlan.totalInterestPaid : 0;
-  const yearsPart = Math.floor(totalMonths / 12);
-  const monthsPart = totalMonths % 12;
+  // Calculate the maximum interest value for scaling the chart
+  const maxInterest = useMemo(() => {
+    if (timelineData.length === 0) return 0;
+    return Math.max(...timelineData.map(point => point.interest));
+  }, [timelineData]);
   
-  // Compare strategies if showing comparison
-  const comparisonTotalMonths = (showComparison && comparisonPlan && comparisonPlan.isViable) ? 
-    comparisonPlan.totalMonths : 0;
-  const comparisonTotalInterest = (showComparison && comparisonPlan && comparisonPlan.isViable) ? 
-    comparisonPlan.totalInterestPaid : 0;
-  
-  // Handle strategy change
-  const handleStrategyChange = (newStrategy: RepaymentStrategy) => {
-    if (newStrategy === strategy) return;
-    
-    setStrategy(newStrategy);
-    
-    // If comparison is visible, make sure we're not comparing the same strategy
-    if (showComparison && comparisonStrategy === newStrategy) {
-      // Find a different strategy to show as comparison
-      const strategies: RepaymentStrategy[] = ['avalanche', 'snowball', 'equal'];
-      const otherStrategies = strategies.filter(s => s !== newStrategy);
-      setComparisonStrategy(otherStrategies[0]);
+  // Helper function for strategy card styling
+  const getStrategyCardClass = (strategyId: string) => {
+    if (strategyId === selectedStrategy) {
+      return 'ring-2 ring-primary';
     }
-  };
-  
-  const getStrategyName = (strat: RepaymentStrategy): string => {
-    switch (strat) {
-      case 'avalanche':
-        return t('dashboard.avalancheStrategy') || 'Lumivyöry';
-      case 'snowball':
-        return t('dashboard.snowballStrategy') || 'Lumipallo';
-      case 'equal':
-        return t('dashboard.equalStrategy') || 'Tasainen jakelu';
-      default:
-        return strat;
+    if (strategyId === recommendedStrategy.id) {
+      return 'bg-primary/5';
     }
+    return '';
   };
   
-  // Handle extra payment change
-  const handleExtraPaymentChange = (values: number[]) => {
-    setExtraPayment(values[0]);
-    console.log('Extra payment changed to:', values[0]);
+  // Check if payment amount is valid (at least meet minimum payments)
+  const isValidPayment = paymentAmount >= safeMinPayment;
+  
+  // Check if we have any debt to pay
+  const hasDebt = totalDebt > 0 && combinedDebts.length > 0;
+  
+  // Custom tooltip for the chart
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border rounded-md p-3 shadow-md">
+          <p className="font-medium">{t('repayment.month')} {label}</p>
+          {payload[0] && (
+            <p className="text-primary">
+              {t('dashboard.remainingDebt')}: {formatCurrency(payload[0].value)}
+            </p>
+          )}
+          {payload[1] && (
+            <p className="text-destructive">
+              {t('dashboard.totalInterestPaid')}: {formatCurrency(payload[1].value)}
+            </p>
+          )}
+          {payload[2] && (
+            <p className="text-amber-500">
+              {t('dashboard.monthlyInterest')}: {formatCurrency(payload[2].value)}
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
   };
   
   return (
-    <Card className="overflow-hidden">
+    <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>{t('dashboard.debtFreeTimeline')}</span>
-          <div className="flex space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={exportToPDF}
-              aria-label={t('dashboard.exportToPDF') || 'Vie PDF-muodossa'}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              {t('dashboard.exportToPDF') || 'Vie PDF'}
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={exportToCSV}
-              aria-label={t('dashboard.exportToCSV') || 'Vie CSV-muodossa'}
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              {t('dashboard.exportToCSV') || 'Vie CSV'}
-            </Button>
-          </div>
+        <CardTitle className="flex items-center">
+          <Calendar className="mr-2 h-5 w-5 text-primary" />
+          {t('dashboard.debtFreeTimeline')}
         </CardTitle>
-        <CardDescription>
-          {t('dashboard.timelineDescription') || 'Näe miten velkasi kehittyy ajan myötä'}
-        </CardDescription>
-        
-        <div className="mt-4 space-y-4">
-          <div>
-            <Label htmlFor="extra-payment">{t('dashboard.extraPayment') || 'Lisämaksu kuukaudessa'}</Label>
-            <div className="flex items-center gap-4">
-              <Slider
-                id="extra-payment"
-                min={0}
-                max={2000}
-                step={50}
-                value={[extraPayment]}
-                onValueChange={handleExtraPaymentChange}
-                aria-label={t('dashboard.extraPayment') || 'Lisämaksu kuukaudessa'}
-                className="flex-1"
-              />
-              <span className="w-20 text-right font-medium">{formatCurrency(extraPayment)}</span>
-            </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Label htmlFor="strategy-select">{t('dashboard.repaymentStrategy') || 'Takaisinmaksustrategia'}</Label>
-              <Tabs
-                value={strategy}
-                onValueChange={(value) => handleStrategyChange(value as RepaymentStrategy)}
-                className="mt-1"
-              >
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="avalanche">{t('dashboard.avalancheStrategy') || 'Lumivyöry'}</TabsTrigger>
-                  <TabsTrigger value="snowball">{t('dashboard.snowballStrategy') || 'Lumipallo'}</TabsTrigger>
-                  <TabsTrigger value="equal">{t('dashboard.equalStrategy') || 'Tasainen'}</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="comparison-toggle">{t('dashboard.compareStrategies') || 'Vertaa strategioita'}</Label>
-                <Button 
-                  variant={showComparison ? "secondary" : "outline"} 
-                  size="sm"
-                  onClick={() => {
-                    if (showComparison) {
-                      setShowComparison(false);
-                    } else {
-                      setShowComparison(true);
-                      // Choose a different strategy for comparison
-                      const strategies: RepaymentStrategy[] = ['avalanche', 'snowball', 'equal'];
-                      const otherStrategies = strategies.filter(s => s !== strategy);
-                      setComparisonStrategy(otherStrategies[0]);
-                    }
-                  }}
-                >
-                  {showComparison ? 
-                    (t('dashboard.hideComparison') || 'Piilota vertailu') : 
-                    (t('dashboard.showComparison') || 'Näytä vertailu')}
-                </Button>
-              </div>
-              
-              {showComparison && comparisonStrategy && (
-                <div className="mt-1 text-sm text-muted-foreground">
-                  {t('dashboard.comparing') || 'Vertaillaan'}: <span className="font-medium">{getStrategyName(strategy)}</span> vs <span className="font-medium">{getStrategyName(comparisonStrategy)}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <CardDescription>{t('dashboard.timelineDescription')}</CardDescription>
       </CardHeader>
-      
       <CardContent>
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-primary/5 p-4 rounded-lg text-center">
-              <div className="text-sm text-muted-foreground mb-1">{t('dashboard.currentDebt') || 'Nykyinen velka'}</div>
-              <div className="text-2xl font-bold">{formatCurrency(totalDebt)}</div>
+          {!hasDebt ? (
+            <div className="p-4 text-center">
+              <p>{t('dashboard.noDebtToDisplay')}</p>
             </div>
-            
-            <div className="bg-primary/5 p-4 rounded-lg text-center">
-              <div className="text-sm text-muted-foreground mb-1">{t('dashboard.estimatedDebtFreeDate') || 'Arvioitu velaton päivä'}</div>
-              <div className="text-2xl font-bold">{hasValidData ? `${totalMonths} ${t('form.months') || 'kuukautta'}` : formattedDebtFreeDate}</div>
-              <div className="text-xs text-muted-foreground">{yearsPart} {t('table.years') || 'vuotta'} {monthsPart} {t('form.months') || 'kuukautta'}</div>
-            </div>
-            
-            <div className="bg-primary/5 p-4 rounded-lg text-center">
-              <div className="text-sm text-muted-foreground mb-1">{t('dashboard.totalInterestPaid') || 'Maksettava korkosumma'}</div>
-              <div className="text-2xl font-bold">
-                {hasValidData 
-                  ? formatCurrency(totalInterestPaid)
-                  : formatCurrency(totalDebt * 0.2)}
+          ) : (
+            <>
+              {/* Minimum payments and current amount */}
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium">{t('repayment.minimumPayments')}:</p>
+                  <p className="text-2xl font-bold">{formatCurrency(safeMinPayment)}/{t('form.months')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">{t('dashboard.currentPaymentAmount')}:</p>
+                  <p className="text-2xl font-bold">{formatCurrency(paymentAmount)}/{t('form.months')}</p>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="h-[400px]" ref={chartRef}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={chartData}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                stackOffset="none"
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="date" 
-                  label={{ 
-                    value: t('table.months') || 'Kuukaudet', 
-                    position: 'insideBottom', 
-                    offset: -5 
-                  }} 
+              
+              {/* Payment amount slider */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium flex items-center justify-between">
+                  <span>{t('dashboard.monthlyPaymentAmount')}</span>
+                  {!isValidPayment && (
+                    <span className="text-destructive flex items-center text-xs">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {t('repayment.minPaymentRequired')}
+                    </span>
+                  )}
+                </label>
+                <Slider
+                  value={[paymentAmount]}
+                  min={safeMinPayment}
+                  max={Math.max(safeMinPayment * 3, monthlyBudget * 2, safeMinPayment + 500)}
+                  step={10}
+                  onValueChange={(value) => setPaymentAmount(value[0])}
+                  className={`w-full ${!isValidPayment ? 'border-destructive' : ''}`}
                 />
-                <YAxis 
-                  yAxisId="left"
-                  orientation="left"
-                  tickFormatter={(value) => `${formatCurrency(value)}`}
-                  label={{ 
-                    value: t('dashboard.debt') || 'Velka', 
-                    angle: -90, 
-                    position: 'insideLeft' 
-                  }}
-                />
-                <YAxis 
-                  yAxisId="right"
-                  orientation="right"
-                  tickFormatter={(value) => `${formatCurrency(value)}`}
-                  label={{ 
-                    value: t('dashboard.payment') || 'Maksu', 
-                    angle: 90, 
-                    position: 'insideRight' 
-                  }}
-                />
-                <Tooltip 
-                  formatter={(value, name) => {
-                    // Format based on the data type
-                    const formattedValue = formatCurrency(Number(value));
-                    
-                    // Translate series names
-                    let translatedName = name;
-                    if (name === 'RemainingDebt') translatedName = t('dashboard.remainingDebt') || 'Jäljellä oleva velka';
-                    else if (name === 'Principal') translatedName = t('dashboard.principal') || 'Pääoma';
-                    else if (name === 'Interest') translatedName = t('dashboard.interest') || 'Korko';
-                    else if (name === 'RemainingDebt_Comparison') {
-                      translatedName = `${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    else if (name === 'Principal_Comparison') {
-                      translatedName = `${t('dashboard.principal') || 'Pääoma'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    else if (name === 'Interest_Comparison') {
-                      translatedName = `${t('dashboard.interest') || 'Korko'} (${comparisonStrategy && getStrategyName(comparisonStrategy)})`;
-                    }
-                    
-                    return [formattedValue, translatedName];
-                  }}
-                  labelFormatter={(label) => `${t('dashboard.date') || 'Päivämäärä'}: ${label}`}
-                />
-                <Legend />
-                
-                <ReferenceLine 
-                  x={currentMonth} 
-                  stroke="#ff0000" 
-                  label={{ 
-                    value: t('dashboard.today') || "Tänään", 
-                    position: "top",
-                    fill: "#ff0000"
-                  }} 
-                  strokeWidth={2}
-                  strokeDasharray="3 3"
-                  yAxisId="left"
-                />
-                
-                {/* Primary strategy */}
-                <Area 
-                  type="monotone" 
-                  dataKey="RemainingDebt" 
-                  name={t('dashboard.remainingDebt') || 'Jäljellä oleva velka'}
-                  stroke="#3b82f6" 
-                  fill="#3b82f6" 
-                  fillOpacity={0.6}
-                  yAxisId="left"
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="Principal" 
-                  name={t('dashboard.principal') || 'Pääoma'}
-                  stroke="#10b981" 
-                  fill="#10b981" 
-                  fillOpacity={0.6}
-                  yAxisId="right"
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="Interest" 
-                  name={t('dashboard.interest') || 'Korko'}
-                  stroke="#f59e0b" 
-                  fill="#f59e0b" 
-                  fillOpacity={0.6}
-                  yAxisId="right"
-                />
-                
-                {/* Comparison strategy (if enabled) */}
-                {showComparison && comparisonStrategy && (
-                  <>
-                    <Area 
-                      type="monotone" 
-                      dataKey="RemainingDebt_Comparison" 
-                      name={`${t('dashboard.remainingDebt') || 'Jäljellä oleva velka'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#6366f1" 
-                      fill="#6366f1" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="left"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="Principal_Comparison"
-                      name={`${t('dashboard.principal') || 'Pääoma'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#22c55e" 
-                      fill="#22c55e" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="right"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="Interest_Comparison"
-                      name={`${t('dashboard.interest') || 'Korko'} (${getStrategyName(comparisonStrategy)})`}
-                      stroke="#eab308" 
-                      fill="#eab308" 
-                      fillOpacity={0.3}
-                      strokeDasharray="5 5"
-                      yAxisId="right"
-                    />
-                  </>
-                )}
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 border rounded-md">
-              <h4 className="text-sm font-medium mb-2">{t('dashboard.totalDebt') || 'Kokonaisvelka nyt'}</h4>
-              <p className="text-2xl font-bold">{formatCurrency(totalDebt)}</p>
-            </div>
-            <div className="p-4 border rounded-md">
-              <h4 className="text-sm font-medium mb-2">{t('dashboard.monthlyPayment') || 'Kuukausimaksu'}</h4>
-              <p className="text-2xl font-bold">{formatCurrency(monthlyBudget + extraPayment)}</p>
-              {extraPayment > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  {t('dashboard.includesExtra') || 'Sisältää lisämaksun'}: {formatCurrency(extraPayment)}
-                </p>
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>{t('dashboard.minimum')}: {formatCurrency(safeMinPayment)}</span>
+                  <span>{t('dashboard.maximum')}: {formatCurrency(Math.max(safeMinPayment * 3, monthlyBudget * 2, safeMinPayment + 500))}</span>
+                </div>
+              </div>
+              
+              {/* Strategy recommendation */}
+              {recommendedStrategy && isValidPayment && recommendedStrategy.months > 0 && (
+                <div className="bg-primary/5 p-4 rounded-md">
+                  <p className="font-medium mb-1">{t('dashboard.recommendedStrategy')}:</p>
+                  <p className="text-lg font-bold flex items-center">
+                    {recommendedStrategy.name}
+                    <Badge className="ml-2 bg-primary" variant="secondary">
+                      {t('dashboard.recommendation')}
+                    </Badge>
+                  </p>
+                  <p className="text-sm mt-1">
+                    {t('repayment.debtFreeIn')} {recommendedStrategy.months} {t('repayment.months')}, 
+                    {' '}{t('repayment.totalInterestPaid')}: {formatCurrency(recommendedStrategy.interest)}
+                  </p>
+                </div>
               )}
-            </div>
-            <div className="p-4 border rounded-md">
-              <h4 className="text-sm font-medium mb-2">{t('dashboard.paymentDuration') || 'Maksuaika'}</h4>
-              <p className="text-2xl font-bold">{totalMonths} {t('form.months') || 'kuukautta'}</p>
-              <p className="text-xs text-muted-foreground">
-                {yearsPart} {t('table.years') || 'vuotta'} {monthsPart} {t('form.months') || 'kuukautta'}
-              </p>
-            </div>
-            <div className="p-4 border rounded-md">
-              <h4 className="text-sm font-medium mb-2">{t('dashboard.interestPaid') || 'Korkoa maksetaan'}</h4>
-              <p className="text-2xl font-bold">
-                {formatCurrency(totalInterestPaid)}
-              </p>
-            </div>
-          </div>
-          
-          {showComparison && comparisonStrategy && comparisonPlan && comparisonPlan.isViable && (
-            <div className="bg-muted p-4 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">{t('dashboard.strategyComparison') || 'Strategiavertailu'}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="text-sm font-medium mb-2">{getStrategyName(strategy)}</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.paymentDuration') || 'Maksuaika'}:</span>
-                      <span className="font-medium">{totalMonths} {t('form.months') || 'kuukautta'}</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.interestPayments') || 'Korkomaksut'}:</span>
-                      <span className="font-medium">{formatCurrency(totalInterestPaid)}</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
-                      <span className="font-medium">
-                        {formatCurrency(hasValidData && activePlan.timeline.length > 0 ? 
-                          activePlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
-                      </span>
-                    </li>
-                  </ul>
+              
+              {/* Strategy cards */}
+              {isValidPayment && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                  {strategies.map((strategy) => (
+                    <Card 
+                      key={strategy.id} 
+                      className={`cursor-pointer transition-all hover:shadow ${getStrategyCardClass(strategy.id)}`}
+                      onClick={() => setSelectedStrategy(strategy.id)}
+                    >
+                      <CardHeader className="p-3">
+                        <CardTitle className="text-base">{strategy.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-3 pt-0">
+                        <p className="flex justify-between">
+                          <span className="text-sm">{t('repayment.debtFreeIn')}:</span>
+                          <span className="font-medium">{strategy.months} {t('form.months')}</span>
+                        </p>
+                        <p className="flex justify-between">
+                          <span className="text-sm">{t('repayment.totalInterestPaid')}:</span>
+                          <span className="font-medium">{formatCurrency(strategy.interest)}</span>
+                        </p>
+                        <p className="flex justify-between">
+                          <span className="text-sm">{t('repayment.projectDate')}:</span>
+                          <span className="font-medium">{strategy.date}</span>
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
-                <div>
-                  <h4 className="text-sm font-medium mb-2">{getStrategyName(comparisonStrategy)}</h4>
-                  <ul className="space-y-1 text-sm">
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.paymentDuration') || 'Maksuaika'}:</span>
-                      <span className="font-medium">{comparisonTotalMonths} {t('form.months') || 'kuukautta'}</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.interestPayments') || 'Korkomaksut'}:</span>
-                      <span className="font-medium">{formatCurrency(comparisonTotalInterest)}</span>
-                    </li>
-                    <li className="flex justify-between">
-                      <span>{t('dashboard.initialPayment') || 'Alkumaksu'}:</span>
-                      <span className="font-medium">
-                        {formatCurrency(comparisonPlan.timeline.length > 0 ? 
-                          comparisonPlan.timeline[0].debts.reduce((sum: number, debt: any) => sum + debt.payment, 0) : 0)}
-                      </span>
-                    </li>
-                  </ul>
+              )}
+              
+              {/* Chart - only show combinedView */}
+              {timelineData.length > 0 && isValidPayment && (
+                <div className="mt-4">
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart
+                        data={timelineData}
+                        margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="month" 
+                          label={{ value: t('dashboard.months'), position: 'insideBottomRight', offset: -5 }} 
+                        />
+                        <YAxis 
+                          yAxisId="left"
+                          tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
+                          label={{ value: t('dashboard.debt'), angle: -90, position: 'insideLeft' }}
+                        />
+                        <YAxis 
+                          yAxisId="right"
+                          orientation="right"
+                          tickFormatter={(value) => `${Math.round(value / 1000)}k`}
+                          label={{ value: t('dashboard.interest'), angle: 90, position: 'insideRight' }}
+                          domain={[0, maxInterest * 1.1]} // Scale the interest axis
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Legend />
+                        <Area
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="balance"
+                          name={t('dashboard.debt')}
+                          fill="#3b82f6"
+                          stroke="#3b82f6"
+                          fillOpacity={0.2}
+                        />
+                        <Line 
+                          yAxisId="right"
+                          type="monotone" 
+                          dataKey="interest" 
+                          name={t('dashboard.totalInterestPaid')}
+                          stroke="#ef4444" 
+                          dot={false} 
+                          activeDot={{ r: 6 }}
+                          strokeWidth={2} 
+                        />
+                        <Line 
+                          yAxisId="right"
+                          type="monotone" 
+                          dataKey="monthlyInterest" 
+                          name={t('dashboard.monthlyInterest')}
+                          stroke="#f59e0b" 
+                          dot={false} 
+                          activeDot={{ r: 4 }}
+                          strokeWidth={1.5} 
+                          strokeDasharray="4 4"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 text-sm">
-                <p className="font-medium">
-                  {getStrategyName(strategy)} vs {getStrategyName(comparisonStrategy)}:
-                </p>
-                <p>
-                  {totalMonths < comparisonTotalMonths 
-                    ? `${Math.abs(totalMonths - comparisonTotalMonths)} ${t('form.months') || 'kuukautta'} ${t('dashboard.fasterPayoff') || 'nopeampi maksuaika'}` 
-                    : totalMonths > comparisonTotalMonths
-                      ? `${Math.abs(totalMonths - comparisonTotalMonths)} ${t('form.months') || 'kuukautta'} ${t('dashboard.slowerPayoff') || 'hitaampi maksuaika'}`
-                      : t('dashboard.samePayoffTime') || "Sama maksuaika molemmilla strategioilla"
-                  }
-                </p>
-                <p>
-                  {totalInterestPaid < comparisonTotalInterest
-                    ? `${t('dashboard.youSave') || 'Säästät'} ${formatCurrency(Math.abs(comparisonTotalInterest - totalInterestPaid))} ${t('dashboard.inInterest') || 'korkomaksuissa'}` 
-                    : `${t('dashboard.youPay') || 'Maksat'} ${formatCurrency(Math.abs(totalInterestPaid - comparisonTotalInterest))} ${t('dashboard.moreInterest') || 'enemmän korkoja'}`
-                  }
-                </p>
-              </div>
-            </div>
+              )}
+              
+              {/* Timeline milestones */}
+              {isValidPayment && getSelectedPlan().totalMonths > 0 && (
+                <div className="relative">
+                  <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-muted-foreground/20" />
+                  
+                  <div className="relative pl-8 pb-6">
+                    <div className="absolute left-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                      <Clock className="h-3 w-3 text-primary-foreground" />
+                    </div>
+                    <h4 className="font-medium">{t('dashboard.now')}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{t('dashboard.currentDebt')}: {formatCurrency(totalDebt)}</p>
+                  </div>
+                  
+                  {activeCards.length > 0 && getSelectedPlan().creditCardFreeMonth && (
+                    <div className="relative pl-8 pb-6">
+                      <div className="absolute left-0 w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                        <CreditCard className="h-3 w-3" />
+                      </div>
+                      <h4 className="font-medium">{t('repayment.creditCardsFree')}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {t('repayment.projectDate')}: {getDateAfterMonths(getSelectedPlan().creditCardFreeMonth || 0)}
+                      </p>
+                    </div>
+                  )}
+                  
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
+                      <Award className="h-3 w-3 text-white" />
+                    </div>
+                    <h4 className="font-medium">{t('dashboard.debtFree')}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('repayment.projectDate')}: {getDateAfterMonths(getSelectedPlan().totalMonths)}
+                    </p>
+                    <p className="text-xs text-green-600 font-medium mt-1">
+                      {t('repayment.totalInterestPaid')}: {formatCurrency(getSelectedPlan().totalInterestPaid)}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </CardContent>
+      <CardFooter className="flex flex-col gap-2 items-stretch sm:flex-row sm:items-center">
+        <Button variant="outline" onClick={() => navigate('/debt-summary')}>
+          {t('dashboard.viewDetailedTimeline')}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+        
+        <Button 
+          variant="default" 
+          onClick={() => navigate('/debt-summary?tab=repayment-plan')}
+          className="flex items-center"
+        >
+          <Calculator className="mr-2 h-4 w-4" />
+          {t('dashboard.goToRepaymentPlan')}
+        </Button>
+      </CardFooter>
+      <div className="px-6 pb-4 pt-0 text-sm text-muted-foreground">
+        <p>
+          {t('repayment.timelineExplanation')}. {t('repayment.avalancheDesc')} {t('repayment.snowballDesc')}.
+        </p>
+      </div>
     </Card>
   );
 };
