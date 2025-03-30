@@ -1,0 +1,25 @@
+
+export const creditCard = {
+  title: 'Luottokortti',
+  name: 'Kortin nimi',
+  balance: 'Saldo',
+  limit: 'Luottoraja',
+  apr: 'Vuosikorko (APR)',
+  minPayment: 'Vähimmäismaksu',
+  minPaymentPercent: 'Vähimmäismaksu %',
+  addCreditCard: 'Lisää luottokortti',
+  updateCreditCard: 'Päivitä luottokortti',
+  creditCardDetails: 'Luottokortin tiedot',
+  payments: 'Maksut',
+  enterValidName: 'Syötä kelvollinen nimi',
+  enterValidBalance: 'Syötä kelvollinen saldo',
+  enterValidLimit: 'Syötä kelvollinen luottoraja',
+  enterValidAPR: 'Syötä kelvollinen vuosikorko',
+  enterValidMinPayment: 'Syötä kelvollinen vähimmäismaksu',
+  enterValidMinPaymentPercent: 'Syötä kelvollinen vähimmäismaksu prosentti',
+  calculationMethod: 'Vähimmäismaksutapa',
+  percentageOfBalance: 'Prosenttiosuus saldosta',
+  fixedAmount: 'Kiinteä summa',
+  percentOrMinimum: 'Prosenttiosuus tai minimimaksu (suurempi)',
+  fixedOrPercentMinimum: 'Kiinteä määrä tai prosenttiosuuden minimi'
+};

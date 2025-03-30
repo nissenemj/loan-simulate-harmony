@@ -1,0 +1,26 @@
+
+export const auth = {
+  signIn: 'Sign In',
+  signUp: 'Sign Up',
+  signOut: 'Sign Out',
+  email: 'Email',
+  password: 'Password',
+  forgotPassword: 'Forgot password?',
+  resetPassword: 'Reset Password',
+  googleSignIn: 'Continue with Google',
+  appleSignIn: 'Continue with Apple',
+  noAccount: 'Don\'t have an account?',
+  alreadyHaveAccount: 'Already have an account?',
+  continueWithEmail: 'Continue with Email',
+  createAccount: 'Create Account',
+  accountCreated: 'Account created successfully!',
+  passwordResetSent: 'Password reset link sent',
+  passwordReset: 'Password reset successfully',
+  incorrectCredentials: 'Incorrect credentials',
+  emailExists: 'Email already exists',
+  invalidEmail: 'Invalid email address',
+  passwordTooWeak: 'Password is too weak',
+  networkError: 'Network error, please try again later',
+  unexpectedError: 'Unexpected error, please try again later',
+  loggedInAs: 'Logged in as'
+};
