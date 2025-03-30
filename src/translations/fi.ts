@@ -160,7 +160,7 @@ export const fi: typeof en = {
       answer4: 'Lumivyörymenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästääkseen eniten korkokuluissa. Lumipallostrategia keskittyy maksamaan ensin pienimmät velat luodakseen liike-energiaa ja motivaatiota.',
     },
     finalCta: {
-      title: 'Aloita velaton matkasi tänä��n',
+      title: 'Aloita velaton matkasi tänä���n',
       subtitle: 'Liity tuhansiin käyttäjiin, jotka ovat jo ottaneet hallintaan taloudellisen tulevaisuutensa.',
       buttonText: 'Rekisteröidy nyt - Se on ilmaista',
     },
@@ -257,7 +257,7 @@ export const fi: typeof en = {
     payoffScheduleDescription: "Milloin kukin velka maksetaan pois",
     payoffTime: "Maksuaika",
     totalRemaining: "Jäljellä oleva kokonaisvelka",
-    noPlanYet: "Ei vielä maksusuunnitelmaa",
+    noPlanYet: "Ei viel�� maksusuunnitelmaa",
     enterBudgetPrompt: "Anna kuukausittainen budjettisi ja klikkaa Laske nähdäksesi maksusuunnitelmasi.",
     calculateNow: "Laske nyt",
     summaryTab: "Velkatiivistelmä",
