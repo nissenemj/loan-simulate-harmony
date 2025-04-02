@@ -672,7 +672,18 @@ export const en = {
     savingsImpact: "Savings Impact"
   },
   navigation: {
-    debtStrategies: "Debt Strategies"
+    dashboard: 'Dashboard',
+    calculator: 'Loan Calculator',
+    debtStrategies: 'Debt Strategies',
+    blog: 'Blog',
+    account: 'Account',
+    menu: 'Menu',
+    language: 'Language'
+  },
+  theme: {
+    light: "Light",
+    dark: "Dark",
+    system: "System"
   }
 };
 

@@ -1,4 +1,3 @@
-
 // fi.ts
 
 export const fi = {
@@ -6,6 +5,25 @@ export const fi = {
     title: "Velkaneuvoja",
     description: "Simuloi ja suunnittele velkojesi maksamista.",
     language: "Kieli",
+    footer: "Tehty ❤️ Finance Wizards"
+  },
+  tabs: {
+    dashboard: "Dashboard",
+    loans: "Lainat",
+    creditCards: "Luottokortit",
+    debtSummary: "Velkasumma",
+    glossary: "Sanasto",
+    affiliate: "Kumppanit",
+    blog: "Blogi",
+  },
+  navigation: {
+    dashboard: "Dashboard",
+    calculator: "Lainasimulaattori",
+    debtStrategies: "Velanlyhennysstrategiat",
+    blog: "Blogi",
+    account: "Tili",
+    menu: "Valikko",
+    language: "Kieli"
   },
   form: {
     labels: {
@@ -172,53 +190,6 @@ export const fi = {
     tableSummary: "Velkasuhteen yhteenveto",
     totalAmountPaid: "Kokonaismaksettu summa",
     metaDescription: "Tarkastele velkojesi kokonaistilannetta, mukaan lukien lainat ja luottokortit."
-  },
-  navigation: {
-    dashboard: "Dashboard",
-    loanSimulator: "Lainasimulaattori",
-    creditCardSimulator: "Luottokorttisimulaattori",
-    debtStrategies: "Velanlyhennysstrategiat",
-    repaymentCalculator: "Lyhennyslaskuri",
-    settings: "Asetukset",
-    logout: "Kirjaudu ulos",
-    login: "Kirjaudu sisään",
-    register: "Rekisteröidy",
-  },
-  dashboard: {
-    title: "Dashboard",
-    welcome: "Tervetuloa",
-    welcomeSubtitle: "Hallitse velkojasi ja suunnittele talouttasi.",
-    viewDebtSummary: "Näytä velkojen yhteenveto",
-    guest: "Vieras",
-    compareScenarios: "Vertaa skenaarioita",
-    compareScenariosTooltip: "Vertaa eri lyhennysskenaarioita",
-    dataExported: "Tiedot viety onnistuneesti",
-    exportData: "Vie velkatiedot CSV-muodossa",
-    paymentPlanSummary: "Lyhennysuunnitelman tiivistelmä",
-    paymentPlanDescription: "Aktiivinen lyhennysuunnitelmasi",
-    monthlyBudget: "Kuukausittainen budjetti",
-    minimumPayments: "Minimimaksut",
-    extraBudget: "Ylimääräinen budjetti",
-    prioritizedDebt: "Priorisoitu velka",
-    interestRate: "Korkoprosentti",
-    allocatingExtra: "Kohdennetaan {{amount}} ylimääräistä",
-    viewFullPlan: "Näytä koko suunnitelma",
-    totalDebt: "Velat yhteensä",
-    estimatedInterestCost: "Arvioidut korkokulut",
-    estimatedDebtFreeDate: "Arvioitu velattomuuspäivä",
-    totalToPayOff: "Maksettava yhteensä",
-    minimumMonthlyPayments: "Kuukausittaiset minimimaksut",
-    perMonth: "kuukaudessa",
-    viewDetailedBreakdown: "Näytä yksityiskohtainen erittely"
-  },
-  settings: {
-    title: "Asetukset",
-    language: "Kieli",
-    theme: "Teema",
-    currency: "Valuutta",
-    notifications: "Ilmoitukset",
-    profile: "Profiili",
-    account: "Tili",
   },
   auth: {
     login: "Kirjaudu sisään",
@@ -398,6 +369,11 @@ export const fi = {
     debtFreeDate: "Arvioitu päivämäärä, jolloin kaikki velkasi on maksettu nykyisillä maksusummilla.",
     minimumPayments: "Yhdistetyt vähimmäismaksut, jotka vaaditaan kaikille lainoillesi ja luottokorteillesi.",
     totalToPayOff: "Kokonaissumma, mukaan lukien pääoma ja korko, jonka maksat kaikkien velkojesi elinkaaren aikana."
+  },
+  theme: {
+    light: "Vaalea",
+    dark: "Tumma",
+    system: "Järjestelmä"
   }
 };
 

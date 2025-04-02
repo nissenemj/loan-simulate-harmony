@@ -24,39 +24,32 @@ import {
 import { ModeToggle } from "@/components/ModeToggle";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const NavigationHeader = () => {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const isMobile = useIsMobile();
-
-  const handleLanguageChange = (newLanguage: 'en' | 'fi') => {
-    setLanguage(newLanguage);
-    setOpen(false);
-  };
 
   const handleLogout = async () => {
     await logout();
     setOpen(false);
   };
 
-  const links = [];
-
-  if (user) {
-    links.push(
-      { href: "/dashboard", label: t("navigation.dashboard") },
-      { href: "/app", label: t("navigation.calculator") },
-      { href: "/debt-strategies", label: t("navigation.debtStrategies") },
-      { href: "/blog", label: t("navigation.blog") }
-    );
-  } else {
-    links.push(
-      { href: "/app", label: t("navigation.calculator") },
-      { href: "/debt-strategies", label: t("navigation.debtStrategies") },
-      { href: "/blog", label: t("navigation.blog") }
-    );
-  }
+  // Define navigation links based on authentication status
+  const links = user 
+    ? [
+        { href: "/dashboard", label: t("navigation.dashboard") },
+        { href: "/app", label: t("navigation.calculator") },
+        { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/blog", label: t("navigation.blog") }
+      ]
+    : [
+        { href: "/app", label: t("navigation.calculator") },
+        { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/blog", label: t("navigation.blog") }
+      ];
 
   return (
     <header className="bg-background sticky top-0 z-50 w-full border-b">
@@ -64,7 +57,9 @@ const NavigationHeader = () => {
         <Link to="/" className="flex items-center font-semibold">
           {t("app.title")}
         </Link>
+        
         {isMobile ? (
+          // Mobile navigation with sheet/drawer
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="sm">
@@ -86,30 +81,14 @@ const NavigationHeader = () => {
                     </Link>
                   </Button>
                 ))}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {t("navigation.language")}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>{t("navigation.selectLanguage")}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                      {t("language.en")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleLanguageChange('fi')}>
-                      {t("language.fi")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                
+                <LanguageSwitcher />
                 <ModeToggle />
+                
                 {user ? (
-                  <>
-                    <Button variant="destructive" onClick={handleLogout}>
-                      {t("auth.logout")}
-                    </Button>
-                  </>
+                  <Button variant="destructive" onClick={handleLogout}>
+                    {t("auth.logout")}
+                  </Button>
                 ) : (
                   <Button variant="secondary" asChild onClick={() => setOpen(false)}>
                     <Link to="/auth">{t("auth.login")}</Link>
@@ -119,6 +98,7 @@ const NavigationHeader = () => {
             </SheetContent>
           </Sheet>
         ) : (
+          // Desktop navigation
           <div className="flex items-center gap-4">
             <NavigationMenu>
               <NavigationMenuList>
@@ -134,6 +114,9 @@ const NavigationHeader = () => {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
+            
+            <LanguageSwitcher />
+            
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -155,17 +138,9 @@ const NavigationHeader = () => {
                     </DropdownMenuItem>
                   </>
                 )}
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>{t("navigation.language")}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                  {t("language.en")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleLanguageChange('fi')}>
-                  {t("language.fi")}
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            
             <ModeToggle />
           </div>
         )}
