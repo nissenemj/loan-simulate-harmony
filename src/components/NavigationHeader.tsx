@@ -66,7 +66,7 @@ const NavigationHeader = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="sm:w-64">
+            <SheetContent side="left" className="sm:max-w-xs">
               <SheetHeader>
                 <SheetTitle>{t("app.title")}</SheetTitle>
                 <SheetDescription>
@@ -82,15 +82,20 @@ const NavigationHeader = () => {
                   </Button>
                 ))}
                 
-                <LanguageSwitcher />
-                <ModeToggle />
+                <div className="mt-2">
+                  <LanguageSwitcher />
+                </div>
+                
+                <div className="mt-2">
+                  <ModeToggle />
+                </div>
                 
                 {user ? (
-                  <Button variant="destructive" onClick={handleLogout}>
+                  <Button variant="destructive" onClick={handleLogout} className="mt-4">
                     {t("auth.logout")}
                   </Button>
                 ) : (
-                  <Button variant="secondary" asChild onClick={() => setOpen(false)}>
+                  <Button variant="secondary" asChild onClick={() => setOpen(false)} className="mt-4">
                     <Link to="/auth">{t("auth.login")}</Link>
                   </Button>
                 )}
@@ -115,33 +120,35 @@ const NavigationHeader = () => {
               </NavigationMenuList>
             </NavigationMenu>
             
-            <LanguageSwitcher />
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  <User className="mr-2 h-4 w-4" />
-                  {user ? user.email : t("navigation.account")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                {!user ? (
-                  <DropdownMenuItem asChild>
-                    <Link to="/auth">{t("auth.login")}</Link>
-                  </DropdownMenuItem>
-                ) : (
-                  <>
-                    <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      {t("auth.logout")}
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="ml-2">
+                    <User className="h-4 w-4 mr-2" />
+                    {user ? user.email : t("navigation.account")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  {!user ? (
+                    <DropdownMenuItem asChild>
+                      <Link to="/auth">{t("auth.login")}</Link>
                     </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <ModeToggle />
+                  ) : (
+                    <>
+                      <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout}>
+                        {t("auth.logout")}
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <ModeToggle />
+            </div>
           </div>
         )}
       </div>
