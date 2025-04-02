@@ -8,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
+  logout: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -53,9 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
     navigate("/");
   };
+  
+  // Adding the logout method as an alias to signOut for compatibility
+  const logout = signOut;
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signOut }}>
+    <AuthContext.Provider value={{ user, session, isLoading, signOut, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,3 +1,4 @@
+
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -37,6 +38,87 @@ export const fi: typeof en = {
       title: 'Tuki',
       description: 'Tarvitsetko apua? Ota yhteyttä tukitiimiimme'
     }
+  },
+  calculator: {
+    debtPayoffCalculator: 'Velan maksusuunnitelma',
+    debtPayoffTimeline: 'Velkamaksun aikajana',
+    extraPaymentImpact: 'Lisämaksun vaikutus',
+    debtConsolidation: 'Velkojen yhdistäminen',
+    addYourDebts: 'Lisää velkasi',
+    debtName: 'Velan nimi',
+    debtNamePlaceholder: 'Esim. Asuntolaina',
+    balance: 'Saldo',
+    interestRate: 'Korkoprosentti',
+    minimumPayment: 'Vähimmäismaksu',
+    addDebt: 'Lisää velka',
+    yourDebts: 'Velkasi',
+    actions: 'Toiminnot',
+    remove: 'Poista',
+    total: 'Yhteensä',
+    paymentStrategy: 'Maksustrategia',
+    avalanche: 'Lumivyöry',
+    snowball: 'Lumipallo',
+    avalancheStrategy: 'Lumivyörystrategia',
+    snowballStrategy: 'Lumipallostrategia',
+    avalancheDescription: 'Maksa korkeimman koron velat ensin säästääksesi koroissa',
+    snowballDescription: 'Maksa pienimmät velat ensin saadaksesi nopeita voittoja',
+    additionalMonthlyPayment: 'Lisämaksut kuukaudessa',
+    additionalPaymentDescription: 'Kuinka paljon lisärahaa voit käyttää velkojen maksuun kuukausittain?',
+    additionalPayment: 'Lisämaksu',
+    totalMonthlyPayment: 'Kokonaismaksu kuukaudessa',
+    paymentResults: 'Maksusuunnitelman tulokset',
+    payoffDate: 'Maksupäivä',
+    estimatedCompletion: 'Arvioitu valmistuminen',
+    months: 'kuukautta',
+    totalInterest: 'Kokonaiskorko',
+    interestPaid: 'Maksettu korko',
+    totalPaid: 'Maksettu yhteensä',
+    principalPlusInterest: 'Pääoma + korko',
+    saveResults: 'Tallenna tulokset',
+    timelineDescription: 'Näe kuukausittain kuinka velkasi pienenee',
+    monthly: 'Kuukausittain',
+    quarterly: 'Neljännesvuosittain',
+    yearly: 'Vuosittain',
+    previous: 'Edellinen',
+    month: 'Kuukausi',
+    of: '/',
+    next: 'Seuraava',
+    remainingBalances: 'Jäljellä olevat saldot',
+    payment: 'Maksu',
+    principalPaid: 'Pääoma maksettu',
+    remainingBalance: 'Jäljellä oleva saldo',
+    paidOff: 'Maksettu',
+    debtsPaidOff: 'Tässä kuussa maksetut velat:',
+    congratulations: 'Onnittelut!',
+    debtFreeMessage: 'Olet nyt velaton. Säilytä hyvät taloustavat!',
+    selectDebt: 'Valitse velka',
+    selectDebtPlaceholder: 'Valitse velka',
+    extraPaymentAmount: 'Lisämaksu',
+    extraPaymentDescription: 'Näe kuinka lisämaksu tiettyyn velkaan vaikuttaa kokonaisaikatauluusi',
+    impactResults: 'Vaikutuksen tulokset',
+    monthsSaved: 'Säästetyt kuukaudet',
+    interestSaved: 'Säästetty korko',
+    newPayoffDate: 'Uusi maksupäivä',
+    extraPaymentTip: 'Vinkki:',
+    extraPaymentTipDescription: 'Kohdistamalla lisämaksuja yhteen velkaan kerrallaan voit säästää merkittävästi korkokuluissa.',
+    consolidationDescription: 'Näe miten velkojen yhdistäminen vaikuttaisi maksuaikatauluusi ja korkokuluihin',
+    noDebtsAdded: 'Ei lisättyjä velkoja. Lisää velkasi nähdäksesi mahdolliset yhdistämisvaihtoehdot.',
+    consolidationDisclaimer: 'Tärkeä huomautus:',
+    consolidationDisclaimerText: 'Nämä laskelmat ovat arvioita. Todelliset ehdot vaihtelevat luottopisteytyksen, lainantarjoajan ja muiden tekijöiden mukaan.',
+    option: 'Vaihtoehto',
+    term: 'Aika',
+    potentialSavings: 'Mahdolliset säästöt',
+    saved: 'säästetty',
+    more: 'enemmän',
+    consolidationConsiderations: 'Huomioitavat asiat:',
+    considerationFees: 'Tarkista mahdolliset järjestelymaksut, jotka voivat vaikuttaa säästöihin.',
+    considerationCredit: 'Luottopisteytys vaikuttaa merkittävästi tarjottuihin korkoihin.',
+    considerationCollateral: 'Jotkin yhdistämisvaihtoehdot vaativat vakuuden, mikä lisää riskiä.',
+    considerationBehavior: 'Varmista, että ratkaiset taustalla olevat taloushaasteet välttääksesi lisävelkaantumisen.',
+    personalLoan: 'Henkilökohtainen laina',
+    balanceTransfer: 'Saldosiirto (intro-tarjous)',
+    homeEquityLoan: 'Asuntolaina',
+    debtConsolidationLoan: 'Velkojen yhdistämislaina'
   },
   auth: {
     login: 'Kirjaudu',
@@ -412,7 +494,14 @@ export const fi: typeof en = {
     actions: "Toiminnot",
     title: "Velkatiivistelmä",
     totalAmountPaid: "Maksettava kokonaissumma",
-    includingInterestAndFees: "Sisältäen pääoman, korot ja maksut"
+    includingInterestAndFees: "Sisältäen pääoman, korot ja maksut",
+    viewDetailedBreakdown: "Näytä yksityiskohtainen erittely"
+  },
+  debtStrategies: {
+    pageTitle: "Velkastrategiat",
+    pageDescription: "Tutki erilaisia strategioita velkojesi maksamiseen ja vertaile niiden vaikutuksia.",
+    noDebtAlert: "Ei velkoja lisätty. Lisää velkoja päästäksesi käyttämään laskureita.",
+    calculateFirst: "Laske ensin maksusuunnitelma velkojesi maksamiseksi."
   },
   recommendations: {
     title: "Takaisinmaksusuositukset",
@@ -590,6 +679,20 @@ export const fi: typeof en = {
     savingsImpact: "Säästövaikutus"
   },
   navigation: {
-    debtStrategies: "Velkastrategiat"
+    debtStrategies: "Velkastrategiat",
+    dashboard: "Kojelauta",
+    calculator: "Laskuri",
+    blog: "Blogi",
+    menu: "Valikko",
+    language: "Kieli",
+    selectLanguage: "Valitse kieli",
+    english: "Englanti",
+    finnish: "Suomi",
+    account: "Tili"
+  },
+  theme: {
+    light: "Vaalea",
+    dark: "Tumma",
+    system: "Järjestelmä"
   }
 };

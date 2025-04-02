@@ -8,7 +8,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 // Pages
 import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
-import DebtSummary from '@/pages/DebtSummary';
+import DebtSummaryPage from '@/pages/DebtSummaryPage';
 import LoanTerms from '@/pages/LoanTerms';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import CookiePolicy from '@/pages/CookiePolicy';
@@ -42,7 +42,7 @@ const App = () => {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/app" element={<Index />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/debt-summary" element={<DebtSummary />} />
+                <Route path="/debt-summary" element={<DebtSummaryPage />} />
                 <Route path="/debt-strategies" element={<DebtStrategies />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
