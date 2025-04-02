@@ -1,3 +1,4 @@
+
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 /**
@@ -161,8 +162,8 @@ export function calculatePaymentPlan(
     // Increment month
     currentMonth++;
     
-    // Safety check to prevent infinite loops
-    if (currentMonth > 1200) { // 100 years
+    // Safety check to prevent infinite loops - INCREASING FROM 1200 TO 480 MONTHS (40 YEARS)
+    if (currentMonth > 480) { // Changed from 1200 (100 years) to 480 (40 years)
       throw new Error('Payment calculation exceeded maximum number of months');
     }
   }

@@ -25,7 +25,7 @@ export const simulateRepayment = (
   
   // Simulate until all debts are paid off
   let month = 1;
-  const MAX_MONTHS = 3600; // 300 years safety limit
+  const MAX_MONTHS = 480; // Changed from 3600 (300 years) to 480 (40 years)
   
   // Track extra payment amount available for redistribution
   let extraPaymentPool = 0;

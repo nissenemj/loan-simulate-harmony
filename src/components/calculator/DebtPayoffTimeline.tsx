@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Debt, MonthlyPaymentPlan, PaymentStrategy } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
@@ -6,8 +7,9 @@ import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 interface DebtPayoffTimelineProps {
   debts: Debt[];
@@ -100,6 +102,28 @@ export function DebtPayoffTimeline({
     setCurrentMonth(Math.min(totalMonths - 1, currentMonth + 1));
   };
   
+  // Navigate to first month
+  const goToFirstMonth = () => {
+    setCurrentMonth(0);
+  };
+  
+  // Navigate to last month
+  const goToLastMonth = () => {
+    setCurrentMonth(totalMonths - 1);
+  };
+  
+  // Jump forward multiple months
+  const jumpForward = () => {
+    const jumpAmount = viewMode === 'monthly' ? 12 : viewMode === 'quarterly' ? 4 : 2;
+    setCurrentMonth(Math.min(totalMonths - 1, currentMonth + jumpAmount));
+  };
+  
+  // Jump backward multiple months
+  const jumpBackward = () => {
+    const jumpAmount = viewMode === 'monthly' ? 12 : viewMode === 'quarterly' ? 4 : 2;
+    setCurrentMonth(Math.max(0, currentMonth - jumpAmount));
+  };
+  
   // Get current month data
   const currentMonthData = filteredPlan[currentMonth];
   
@@ -140,35 +164,77 @@ export function DebtPayoffTimeline({
               </TabsList>
             </Tabs>
             
-            <div className="flex items-center justify-between mt-4">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={goToPreviousMonth}
-                disabled={currentMonth === 0}
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                {t('calculator.previous')}
-              </Button>
-              
-              <div className="text-center">
-                <div className="text-lg font-semibold">
-                  {currentMonthData && formatDate(currentMonthData.date)}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {t('calculator.month')} {currentMonth + 1} {t('calculator.of')} {totalMonths}
-                </div>
-              </div>
-              
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={goToNextMonth}
-                disabled={currentMonth === totalMonths - 1}
-              >
-                {t('calculator.next')}
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
+            <div className="mt-4">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={goToFirstMonth}
+                      disabled={currentMonth === 0}
+                    >
+                      <ChevronsLeft className="h-4 w-4" />
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={jumpBackward}
+                      disabled={currentMonth === 0}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft className="h-4 w-4 -ml-2" />
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={goToPreviousMonth}
+                      disabled={currentMonth === 0}
+                    />
+                  </PaginationItem>
+                  
+                  <PaginationItem>
+                    <div className="text-center px-4">
+                      <div className="text-lg font-semibold">
+                        {currentMonthData && formatDate(currentMonthData.date)}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {t('calculator.month')} {currentMonth + 1} {t('calculator.of')} {totalMonths}
+                      </div>
+                    </div>
+                  </PaginationItem>
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={goToNextMonth}
+                      disabled={currentMonth === totalMonths - 1}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={jumpForward}
+                      disabled={currentMonth === totalMonths - 1}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4 -ml-2" />
+                    </Button>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={goToLastMonth}
+                      disabled={currentMonth === totalMonths - 1}
+                    >
+                      <ChevronsRight className="h-4 w-4" />
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
             
             {currentMonthData && (
