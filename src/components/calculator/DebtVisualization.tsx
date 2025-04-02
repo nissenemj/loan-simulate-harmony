@@ -127,12 +127,12 @@ export function DebtVisualization({ debts, paymentPlan }: DebtVisualizationProps
     return null;
   };
   
-  // Format y-axis values
-  const formatYAxis = (value: number) => {
+  // Format y-axis values - fixed TypeScript error by making the return type always string
+  const formatYAxis = (value: number): string => {
     if (value >= 1000) {
       return `${(value / 1000).toFixed(0)}k`;
     }
-    return value;
+    return value.toString();
   };
   
   if (debts.length === 0) {

@@ -17,7 +17,7 @@ interface DebtConsolidationCalculatorProps {
  * Allows users to see potential consolidation options for their debts
  */
 export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculatorProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [consolidationOptions, setConsolidationOptions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   
@@ -66,7 +66,10 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t('calculator.debtConsolidation')}</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingDown className="h-5 w-5 text-primary" />
+            {t('calculator.debtConsolidation')}
+          </CardTitle>
           <CardDescription>{t('calculator.consolidationDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
