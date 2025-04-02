@@ -1,4 +1,3 @@
-
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 /**
@@ -80,6 +79,21 @@ export function calculatePaymentPlan(
     // Then, allocate remaining payment to debts according to strategy
     const payments: DebtPayment[] = [];
     
+    // Re-sort working debts according to strategy to ensure proper prioritization
+    // This is important when debts are partially paid off
+    let activePrioritizedDebts = workingDebts
+      .filter(debt => debt.remainingBalance > 0)
+      .sort((a, b) => {
+        if (strategy === 'avalanche') {
+          return b.interestRate - a.interestRate;
+        } else if (strategy === 'snowball') {
+          return a.remainingBalance - b.remainingBalance;
+        } else if (strategy === 'custom' && customOrder) {
+          return customOrder.indexOf(a.id) - customOrder.indexOf(b.id);
+        }
+        return 0;
+      });
+    
     // Process each debt
     for (const debt of workingDebts) {
       if (debt.remainingBalance <= 0) {
@@ -94,8 +108,9 @@ export function calculatePaymentPlan(
       // Start with minimum payment
       let paymentAmount = Math.min(debt.minimumPayment, debt.remainingBalance);
       
-      // Add additional payment if this is the highest priority debt
-      if (remainingPayment > 0 && debt.id === sortedDebts[0].id) {
+      // Add additional payment if this is the highest priority debt with remaining balance
+      // Check if this is the highest priority debt based on re-sorted list
+      if (remainingPayment > 0 && debt.id === activePrioritizedDebts[0].id) {
         const additionalPayment = Math.min(remainingPayment, debt.remainingBalance - paymentAmount);
         paymentAmount += additionalPayment;
         remainingPayment -= additionalPayment;
@@ -111,7 +126,7 @@ export function calculatePaymentPlan(
       const payment: DebtPayment = {
         debtId: debt.id,
         amount: paymentAmount,
-        interestPaid: interestAmount,
+        interestPaid: Math.min(interestAmount, paymentAmount), // Ensure interest paid doesn't exceed payment
         principalPaid: principalAmount,
         remainingBalance: newRemainingBalance
       };
@@ -120,7 +135,7 @@ export function calculatePaymentPlan(
       
       // Update monthly totals
       monthlyPlan.totalPaid += paymentAmount;
-      monthlyPlan.totalInterestPaid += interestAmount;
+      monthlyPlan.totalInterestPaid += payment.interestPaid;
       monthlyPlan.totalPrincipalPaid += principalAmount;
       monthlyPlan.totalRemainingBalance += newRemainingBalance;
       
@@ -131,22 +146,6 @@ export function calculatePaymentPlan(
       
       // Update working debt
       debt.remainingBalance = newRemainingBalance;
-    }
-    
-    // If any debts were paid off, resort the list for next month
-    if (monthlyPlan.debtsCompleted.length > 0) {
-      workingDebts = workingDebts
-        .filter(debt => debt.remainingBalance > 0)
-        .sort((a, b) => {
-          if (strategy === 'avalanche') {
-            return b.interestRate - a.interestRate;
-          } else if (strategy === 'snowball') {
-            return a.remainingBalance - b.remainingBalance;
-          } else if (strategy === 'custom' && customOrder) {
-            return customOrder.indexOf(a.id) - customOrder.indexOf(b.id);
-          }
-          return 0;
-        });
     }
     
     // Add payments to monthly plan
@@ -162,8 +161,8 @@ export function calculatePaymentPlan(
     // Increment month
     currentMonth++;
     
-    // Safety check to prevent infinite loops - INCREASING FROM 1200 TO 480 MONTHS (40 YEARS)
-    if (currentMonth > 480) { // Changed from 1200 (100 years) to 480 (40 years)
+    // Safety check to prevent infinite loops
+    if (currentMonth > 480) { // 40 years
       throw new Error('Payment calculation exceeded maximum number of months');
     }
   }
@@ -338,6 +337,11 @@ export function compareScenarios(
     customPaymentOrder?: string[];
   }[]
 ) {
+  // Check if there are any debts to analyze
+  if (!debts.length) {
+    throw new Error('No debts provided for scenario comparison');
+  }
+  
   // Calculate minimum payment sum
   const minimumPaymentSum = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
   
@@ -348,23 +352,39 @@ export function compareScenarios(
   return scenarios.map(scenario => {
     const totalMonthlyPayment = minimumPaymentSum + scenario.additionalMonthlyPayment;
     
-    const scenarioPlan = calculatePaymentPlan(
-      debts,
-      totalMonthlyPayment,
-      scenario.strategy,
-      scenario.customPaymentOrder
-    );
-    
-    return {
-      scenarioId: scenario.id,
-      scenarioName: scenario.name,
-      totalMonths: scenarioPlan.totalMonths,
-      totalInterestPaid: scenarioPlan.totalInterestPaid,
-      totalPaid: scenarioPlan.totalPaid,
-      payoffDate: scenarioPlan.payoffDate,
-      monthsSaved: baselineScenario.totalMonths - scenarioPlan.totalMonths,
-      interestSaved: baselineScenario.totalInterestPaid - scenarioPlan.totalInterestPaid,
-      moneySaved: baselineScenario.totalPaid - scenarioPlan.totalPaid
-    };
+    try {
+      const scenarioPlan = calculatePaymentPlan(
+        debts,
+        totalMonthlyPayment,
+        scenario.strategy,
+        scenario.customPaymentOrder
+      );
+      
+      return {
+        scenarioId: scenario.id,
+        scenarioName: scenario.name,
+        totalMonths: scenarioPlan.totalMonths,
+        totalInterestPaid: scenarioPlan.totalInterestPaid,
+        totalPaid: scenarioPlan.totalPaid,
+        payoffDate: scenarioPlan.payoffDate,
+        monthsSaved: baselineScenario.totalMonths - scenarioPlan.totalMonths,
+        interestSaved: baselineScenario.totalInterestPaid - scenarioPlan.totalInterestPaid,
+        moneySaved: baselineScenario.totalPaid - scenarioPlan.totalPaid
+      };
+    } catch (error) {
+      console.error(`Error calculating scenario ${scenario.name}:`, error);
+      // Return a fallback object if calculation fails
+      return {
+        scenarioId: scenario.id,
+        scenarioName: scenario.name,
+        totalMonths: 0,
+        totalInterestPaid: 0,
+        totalPaid: 0,
+        payoffDate: new Date().toISOString().split('T')[0],
+        monthsSaved: 0,
+        interestSaved: 0,
+        moneySaved: 0
+      };
+    }
   });
 }

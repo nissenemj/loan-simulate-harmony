@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Debt } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { compareScenarios } from '@/utils/calculator/debtCalculator';
 
 interface StrategyComparisonChartProps {
   debts: Debt[];
@@ -13,82 +14,66 @@ interface StrategyComparisonChartProps {
 export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps) {
   const { t, locale } = useTranslation();
   
-  // This is a simplified calculation just for demonstration purposes
-  // In a real application, we would use more complex calculations from utility functions
-  
-  // Total debt amount
-  const totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0);
-  
-  // Simple calculation of months to payoff using different strategies and additional payments
-  const calculateMonths = (strategy: 'avalanche' | 'snowball', additionalPayment: number = 0) => {
-    const totalMinPayment = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
-    const monthlyPayment = totalMinPayment + additionalPayment;
+  // Use actual calculation utilities for accurate comparisons
+  const { timeData, interestData } = useMemo(() => {
+    if (debts.length === 0) {
+      return { timeData: [], interestData: [] };
+    }
     
-    // Simplified estimate - would be more complex in real calculation
-    const avgInterestRate = debts.reduce((sum, debt) => sum + debt.interestRate * debt.balance, 0) / totalDebt;
+    // Define scenarios to compare
+    const scenarios = [
+      {
+        id: 'min-avalanche',
+        name: t('visualization.minimumAvalanche'),
+        additionalMonthlyPayment: 0,
+        strategy: 'avalanche' as const
+      },
+      {
+        id: 'min-snowball',
+        name: t('visualization.minimumSnowball'),
+        additionalMonthlyPayment: 0,
+        strategy: 'snowball' as const
+      },
+      {
+        id: 'extra100-avalanche',
+        name: t('visualization.extra100Avalanche'),
+        additionalMonthlyPayment: 100,
+        strategy: 'avalanche' as const
+      },
+      {
+        id: 'extra100-snowball',
+        name: t('visualization.extra100Snowball'),
+        additionalMonthlyPayment: 100,
+        strategy: 'snowball' as const
+      }
+    ];
     
-    // Apply a small multiplier based on strategy (just for demonstration)
-    const strategyMultiplier = strategy === 'avalanche' ? 0.95 : 1.05;
-    
-    // Simple formula for months to pay off debt (very simplified)
-    const months = (totalDebt / monthlyPayment) * (1 + (avgInterestRate / 100 / 12)) * strategyMultiplier;
-    
-    return Math.ceil(months);
-  };
+    try {
+      // Use the actual compareScenarios utility
+      const comparisonResults = compareScenarios(debts, scenarios);
+      
+      // Transform results for charts
+      const timeData = comparisonResults.map(result => ({
+        name: result.scenarioName,
+        months: result.totalMonths
+      }));
+      
+      const interestData = comparisonResults.map(result => ({
+        name: result.scenarioName,
+        interest: result.totalInterestPaid
+      }));
+      
+      return { timeData, interestData };
+    } catch (error) {
+      console.error('Error comparing scenarios:', error);
+      return { timeData: [], interestData: [] };
+    }
+  }, [debts, t]);
   
-  // Calculate total interest paid (simplified)
-  const calculateTotalInterest = (strategy: 'avalanche' | 'snowball', additionalPayment: number = 0) => {
-    const months = calculateMonths(strategy, additionalPayment);
-    const totalMinPayment = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
-    const monthlyPayment = totalMinPayment + additionalPayment;
-    
-    // Simplified calculation
-    const totalPaid = months * monthlyPayment;
-    const totalInterest = totalPaid - totalDebt;
-    
-    return Math.max(0, totalInterest);
-  };
-  
-  // Prepare data for the charts
-  const timeData = [
-    {
-      name: t('visualization.minimumAvalanche'),
-      months: calculateMonths('avalanche', 0),
-    },
-    {
-      name: t('visualization.minimumSnowball'),
-      months: calculateMonths('snowball', 0),
-    },
-    {
-      name: t('visualization.extra100Avalanche'),
-      months: calculateMonths('avalanche', 100),
-    },
-    {
-      name: t('visualization.extra100Snowball'),
-      months: calculateMonths('snowball', 100),
-    },
-  ];
-  
-  const interestData = [
-    {
-      name: t('visualization.minimumAvalanche'),
-      interest: calculateTotalInterest('avalanche', 0),
-    },
-    {
-      name: t('visualization.minimumSnowball'),
-      interest: calculateTotalInterest('snowball', 0),
-    },
-    {
-      name: t('visualization.extra100Avalanche'),
-      interest: calculateTotalInterest('avalanche', 100),
-    },
-    {
-      name: t('visualization.extra100Snowball'),
-      interest: calculateTotalInterest('snowball', 100),
-    },
-  ];
-  
-  const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
+  // Memoize the formatter for better performance
+  const formatter = useMemo(() => {
+    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
+  }, [locale]);
   
   return (
     <Card>
@@ -104,46 +89,70 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
           </TabsList>
           
           <TabsContent value="time">
-            <div className="h-80">
+            <div className="h-64 md:h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={timeData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis
-                    label={{ value: t('visualization.monthsToPayoff'), angle: -90, position: 'insideLeft' }}
-                  />
-                  <Tooltip 
-                    formatter={(value) => [`${value} ${t('visualization.months')}`, t('visualization.timeToPayoff')]}
-                  />
-                  <Legend />
-                  <Bar dataKey="months" name={t('visualization.monthsToPayoff')} fill="#8884d8" />
-                </BarChart>
+                {timeData.length > 0 ? (
+                  <BarChart
+                    data={timeData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="name" 
+                      angle={-20} 
+                      textAnchor="end" 
+                      height={60}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis
+                      label={{ value: t('visualization.monthsToPayoff'), angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip 
+                      formatter={(value) => [`${value} ${t('visualization.months')}`, t('visualization.timeToPayoff')]}
+                    />
+                    <Legend />
+                    <Bar dataKey="months" name={t('visualization.monthsToPayoff')} fill="#8884d8" />
+                  </BarChart>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    {t('visualization.noDataAvailable')}
+                  </div>
+                )}
               </ResponsiveContainer>
             </div>
           </TabsContent>
           
           <TabsContent value="interest">
-            <div className="h-80">
+            <div className="h-64 md:h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={interestData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis
-                    label={{ value: t('visualization.totalInterestPaid'), angle: -90, position: 'insideLeft' }}
-                    tickFormatter={(value) => formatter.format(value).replace(/[^\d.]/g, '')}
-                  />
-                  <Tooltip 
-                    formatter={(value) => [formatter.format(Number(value)), t('visualization.totalInterestPaid')]}
-                  />
-                  <Legend />
-                  <Bar dataKey="interest" name={t('visualization.totalInterestPaid')} fill="#FF8042" />
-                </BarChart>
+                {interestData.length > 0 ? (
+                  <BarChart
+                    data={interestData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="name"
+                      angle={-20} 
+                      textAnchor="end" 
+                      height={60}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis
+                      label={{ value: t('visualization.totalInterestPaid'), angle: -90, position: 'insideLeft' }}
+                      tickFormatter={(value) => formatter.format(value).replace(/[^\d.]/g, '')}
+                    />
+                    <Tooltip 
+                      formatter={(value) => [formatter.format(Number(value)), t('visualization.totalInterestPaid')]}
+                    />
+                    <Legend />
+                    <Bar dataKey="interest" name={t('visualization.totalInterestPaid')} fill="#FF8042" />
+                  </BarChart>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    {t('visualization.noDataAvailable')}
+                  </div>
+                )}
               </ResponsiveContainer>
             </div>
           </TabsContent>

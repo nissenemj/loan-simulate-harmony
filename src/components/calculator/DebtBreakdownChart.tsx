@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/contexts/LanguageContext';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, Sector } from 'recharts';
+import { useCurrencyFormatter } from '@/utils/formatting';
 
 interface DebtBreakdownChartProps {
   debts: Debt[];
@@ -11,18 +12,81 @@ interface DebtBreakdownChartProps {
 }
 
 export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartProps) {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
+  const currencyFormatter = useCurrencyFormatter();
   
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A259FF', '#4CAF50', '#F44336', '#E91E63'];
+  // An array of colors for the pie chart segments
+  const COLORS = [
+    '#0088FE', '#00C49F', '#FFBB28', '#FF8042', 
+    '#A259FF', '#4CAF50', '#F44336', '#E91E63',
+    '#3F51B5', '#009688', '#FFC107', '#607D8B'
+  ];
   
-  const data = debts.map((debt, index) => ({
-    name: debt.name,
-    value: debt.balance,
-    color: COLORS[index % COLORS.length],
-    type: debt.type || 'debt'
-  }));
+  // State for the active pie segment
+  const [activeIndex, setActiveIndex] = React.useState<number | undefined>(undefined);
 
-  const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
+  // Prepare and memoize data for the chart to prevent unnecessary recalculations
+  const { pieData, totalBalance } = useMemo(() => {
+    // Filter out any debts with zero or negative balance
+    const validDebts = debts.filter(debt => debt.balance > 0);
+    
+    // Calculate total balance
+    const total = validDebts.reduce((sum, debt) => sum + debt.balance, 0);
+    
+    // Prepare data for the pie chart with percentage calculation
+    const data = validDebts.map((debt, index) => ({
+      name: debt.name,
+      value: debt.balance,
+      color: COLORS[index % COLORS.length],
+      type: debt.type || 'generic debt',
+      percentage: (debt.balance / total) * 100
+    }));
+    
+    return { pieData: data, totalBalance: total };
+  }, [debts, COLORS]);
+
+  // Handlers for mouse events on pie segments
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+  
+  const onPieLeave = () => {
+    setActiveIndex(undefined);
+  };
+
+  // Render active shape with more details
+  const renderActiveShape = (props: any) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload } = props;
+    
+    return (
+      <g>
+        <text x={cx} y={cy - 15} dy={8} textAnchor="middle" fill="#333">
+          {payload.name}
+        </text>
+        <text x={cx} y={cy + 15} dy={8} textAnchor="middle" fill="#999">
+          {currencyFormatter.format(payload.value)} ({payload.percentage.toFixed(1)}%)
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius + 10}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={innerRadius - 5}
+          outerRadius={innerRadius - 2}
+          fill={fill}
+        />
+      </g>
+    );
+  };
   
   return (
     <Card className="w-full">
@@ -31,33 +95,61 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
           <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
           <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
         </div>
+        {totalBalance > 0 && (
+          <div className="text-right">
+            <div className="text-sm text-muted-foreground">{t('visualization.totalDebt')}</div>
+            <div className="text-xl font-bold">{currencyFormatter.format(totalBalance)}</div>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <div className="h-64 md:h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius="80%"
-                fill="#8884d8"
-                dataKey="value"
-                nameKey="name"
-                label={({ name, percent }) => 
-                  percent > 0.05 ? `${name}: ${(percent * 100).toFixed(0)}%` : ''
-                }
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip 
-                formatter={(value) => formatter.format(Number(value))}
-              />
-              <Legend layout="horizontal" verticalAlign="bottom" align="center" />
-            </PieChart>
+            {pieData.length > 0 ? (
+              <PieChart>
+                <Pie
+                  activeIndex={activeIndex}
+                  activeShape={renderActiveShape}
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="50%"
+                  outerRadius="70%"
+                  fill="#8884d8"
+                  dataKey="value"
+                  nameKey="name"
+                  label={({ name, percent }) => 
+                    percent > 0.05 ? `${name}: ${(percent * 100).toFixed(0)}%` : ''
+                  }
+                  onMouseEnter={onPieEnter}
+                  onMouseLeave={onPieLeave}
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                  formatter={(value) => currencyFormatter.format(Number(value))}
+                />
+                <Legend 
+                  layout="horizontal" 
+                  verticalAlign="bottom" 
+                  align="center"
+                  formatter={(value, entry: any) => {
+                    const item = pieData.find(d => d.name === value);
+                    return (
+                      <span style={{ color: entry.color }}>
+                        {value} - {item ? currencyFormatter.format(item.value) : ''}
+                      </span>
+                    );
+                  }}
+                />
+              </PieChart>
+            ) : (
+              <div className="flex items-center justify-center h-full text-muted-foreground">
+                {t('visualization.noDebtsToVisualize')}
+              </div>
+            )}
           </ResponsiveContainer>
         </div>
       </CardContent>
