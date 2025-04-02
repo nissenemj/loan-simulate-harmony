@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Debt, MonthlyPaymentPlan, PaymentStrategy } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
@@ -189,10 +188,15 @@ export function DebtPayoffTimeline({
                     </Button>
                   </PaginationItem>
                   <PaginationItem>
-                    <PaginationPrevious 
+                    <Button 
+                      variant="outline"
                       onClick={goToPreviousMonth}
                       disabled={currentMonth === 0}
-                    />
+                      className="gap-1"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      <span>{t('pagination.previous')}</span>
+                    </Button>
                   </PaginationItem>
                   
                   <PaginationItem>
@@ -207,10 +211,15 @@ export function DebtPayoffTimeline({
                   </PaginationItem>
                   
                   <PaginationItem>
-                    <PaginationNext 
+                    <Button 
+                      variant="outline"
                       onClick={goToNextMonth}
                       disabled={currentMonth === totalMonths - 1}
-                    />
+                      className="gap-1"
+                    >
+                      <span>{t('pagination.next')}</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
                   </PaginationItem>
                   <PaginationItem>
                     <Button 
