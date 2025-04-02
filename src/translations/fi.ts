@@ -1,6 +1,7 @@
+
 // fi.ts
 
-export default {
+export const fi = {
   app: {
     title: "Velkaneuvoja",
     description: "Simuloi ja suunnittele velkojesi maksamista.",
@@ -278,7 +279,6 @@ export default {
     next: "Seuraava",
     month: "Kuukausi",
     of: " / ",
-    totalPaid: "Maksettu yhteensä",
     interestPaid: "Maksettu korko",
     principalPaid: "Maksettu pääoma",
     remainingBalances: "Jäljellä olevat saldot",
@@ -336,4 +336,11 @@ export default {
     interestSaved: "Säästetty korko",
     monthsSaved: "Säästetyt kuukaudet"
   },
+  language: {
+    en: "English",
+    fi: "Suomi"
+  }
 };
+
+// Also export as default for backward compatibility
+export default fi;

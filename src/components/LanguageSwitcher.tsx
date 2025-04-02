@@ -18,7 +18,7 @@ const LanguageSwitcher: React.FC = () => {
         size="sm"
         onClick={() => setLanguage('en')}
         className="px-3 py-1 h-auto text-xs"
-        aria-label={t('language.en')}
+        aria-label="English"
       >
         {t('language.en')}
       </Button>
@@ -27,7 +27,7 @@ const LanguageSwitcher: React.FC = () => {
         size="sm"
         onClick={() => setLanguage('fi')}
         className="px-3 py-1 h-auto text-xs"
-        aria-label={t('language.fi')}
+        aria-label="Suomi"
       >
         {t('language.fi')}
       </Button>
