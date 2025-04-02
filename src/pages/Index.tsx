@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { 
@@ -21,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { affiliateBanners } from "@/utils/affiliateData";
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
+import UnderConstructionBanner from "@/components/UnderConstructionBanner";
 
 export default function Index() {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -87,6 +89,8 @@ export default function Index() {
 
   return (
     <div className="container mx-auto py-8 space-y-8">
+      <UnderConstructionBanner />
+      
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{t("tabs.loans")}</h1>
       </div>
