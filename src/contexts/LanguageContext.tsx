@@ -84,17 +84,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setLocale(lang === 'en' ? 'en-US' : 'fi-FI');
     localStorage.setItem('language', lang);
     
+    // Update document language for accessibility
+    document.documentElement.lang = lang;
+    
     // Debug log to help troubleshooting
     console.log(`Language changed to ${lang}`, { 
-      translationsSize: Object.keys(translationsToUse).length,
-      debtFreeTimelineTranslations: {
-        nowKey: translationsToUse['dashboard.now'],
-        currentDebtKey: translationsToUse['dashboard.currentDebt'],
-        debtFreeKey: translationsToUse['dashboard.debtFree'],
-        timelineDescKey: translationsToUse['dashboard.timelineDescription'],
-        avalancheKey: translationsToUse['repayment.fastestWithAvalanche'],
-        snowballKey: translationsToUse['repayment.fastestWithSnowball'],
-      }
+      translationsSize: Object.keys(translationsToUse).length
     });
   };
   
@@ -127,5 +122,5 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 export const useLanguage = () => useContext(LanguageContext);
 
-// Add the missing export for useTranslation as an alias for useLanguage
+// Add the export for useTranslation as an alias for useLanguage
 export const useTranslation = useLanguage;

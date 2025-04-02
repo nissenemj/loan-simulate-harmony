@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -61,7 +62,7 @@ const NavigationHeader = () => {
     <header className="bg-background sticky top-0 z-50 w-full border-b">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center font-semibold">
-          {t("app.name")}
+          {t("app.title")}
         </Link>
         {isMobile ? (
           <Sheet open={open} onOpenChange={setOpen}>
@@ -72,7 +73,7 @@ const NavigationHeader = () => {
             </SheetTrigger>
             <SheetContent side="left" className="sm:w-64">
               <SheetHeader>
-                <SheetTitle>{t("app.name")}</SheetTitle>
+                <SheetTitle>{t("app.title")}</SheetTitle>
                 <SheetDescription>
                   {t("navigation.menu")}
                 </SheetDescription>
@@ -95,10 +96,10 @@ const NavigationHeader = () => {
                     <DropdownMenuLabel>{t("navigation.selectLanguage")}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                      {t("navigation.english")}
+                      {t("language.en")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleLanguageChange('fi')}>
-                      {t("navigation.finnish")}
+                      {t("language.fi")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -158,10 +159,10 @@ const NavigationHeader = () => {
                 <DropdownMenuLabel>{t("navigation.language")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                  {t("navigation.english")}
+                  {t("language.en")}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleLanguageChange('fi')}>
-                  {t("navigation.finnish")}
+                  {t("language.fi")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -4,7 +4,8 @@ export const fi = {
     title: "Velkavapaus",
     subtitle: "Välitön ratkaisu velkatilanteeseesi",
     footer: "© 2024 Velkavapaus. Kaikki oikeudet pidätetään.",
-    language: "Kieli"
+    language: "Kieli",
+    name: "Velkavapaus"
   },
   tabs: {
     dashboard: "Kojelauta",
@@ -36,7 +37,24 @@ export const fi = {
     passwordResetSuccess: "Salasana vaihdettu onnistuneesti!",
     passwordResetError: "Salasanan vaihto epäonnistui. Yritä uudelleen.",
     loginError: "Kirjautuminen epäonnistui. Tarkista kirjautumistietosi.",
-    signupError: "Rekisteröityminen epäonnistui. Yritä eri sähköpostiosoitetta."
+    signupError: "Rekisteröityminen epäonnistui. Yritä eri sähköpostiosoitetta.",
+    dashboard: "Kojelauta",
+    signIn: "Kirjaudu sisään",
+    signUp: "Rekisteröidy",
+    noAccount: "Etkö ole käyttäjä?",
+    alreadyHaveAccount: "Onko sinulla jo tili?",
+    successTitle: "Tervetuloa!",
+    successMessage: "Olet nyt kirjautunut sisään.",
+    errorTitle: "Virhe",
+    invalidCredentials: "Virheellinen sähköposti tai salasana.",
+    welcome: "Tervetuloa Lainalaskuriin",
+    description: "Kirjaudu tilillesi tai luo uusi",
+    loggingIn: "Kirjaudutaan...",
+    signingUp: "Rekisteröidytään...",
+    loginSuccess: "Kirjautuminen onnistui",
+    welcomeBack: "Tervetuloa takaisin!",
+    signupSuccess: "Rekisteröityminen onnistui",
+    checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi"
   },
   loans: {
     addLoan: "Lisää laina",
@@ -117,6 +135,20 @@ export const fi = {
     creditCardSummary: "Luottokortin yhteenveto",
     paymentSchedule: "Maksuaikataulu"
   },
+  toast: {
+    loanAdded: "Laina lisätty onnistuneesti",
+    loanUpdated: "Laina päivitetty onnistuneesti",
+    loanDeleted: "Laina poistettu onnistuneesti",
+    cardAdded: "Luottokortti lisätty onnistuneesti",
+    cardUpdated: "Luottokortti päivitetty onnistuneesti",
+    cardDeleted: "Luottokortti poistettu onnistuneesti",
+    loanActivated: "Laina aktivoitu",
+    loanDeactivated: "Laina deaktivoitu",
+    loanPaidOff: "Laina maksettu",
+    cardPaidOff: "Kortti maksettu",
+    cardActivated: "Kortti aktivoitu",
+    cardDeactivated: "Kortti deaktivoitu"
+  },
   calculator: {
     debtPayoffCalculator: "Velanmaksulaskuri",
     debtPayoffTimeline: "Velanmaksun aikajana",
@@ -126,9 +158,11 @@ export const fi = {
     debtName: "Velan nimi",
     debtNamePlaceholder: "esim. Autolaina",
     debtAmount: "Velan määrä",
+    balance: "Saldo",
     interestRate: "Korkoprosentti",
     minimumPayment: "Vähimmäismaksu",
     add: "Lisää",
+    addDebt: "Lisää velka",
     remove: "Poista",
     calculatePayment: "Laske takaisinmaksu",
     totalMonthlyPayment: "Kuukausimaksu yhteensä",
@@ -175,7 +209,41 @@ export const fi = {
     homeEquityLoan: "Asuntolaina",
     debtConsolidationLoan: "Yhdistämislaina",
     noDebtsAdded: "Ei velkoja lisätty. Lisää velkoja käyttääksesi velanmaksulaskuria.",
-    addDebts: "Lisää velkoja"
+    addDebts: "Lisää velkoja",
+    yourDebts: "Velkasi",
+    actions: "Toiminnot",
+    total: "Yhteensä",
+    avalanche: "Laviini",
+    snowball: "Lumipallo",
+    avalancheDescription: "Maksa korkeimman koron velat ensin minimoidaksesi korkomenot.",
+    snowballDescription: "Maksa pienimmät velat ensin saadaksesi nopeita voittoja ja motivaatiota.",
+    additionalMonthlyPayment: "Kuukausittainen lisämaksu",
+    additionalPaymentDescription: "Vähimmäismaksujen lisäksi maksettava summa nopeuttaaksesi velanmaksua.",
+    paymentResults: "Maksutulokset",
+    estimatedCompletion: "Arvioitu valmistumispäivä",
+    totalPaid: "Maksettu yhteensä",
+    principalPlusInterest: "Pääoma + Korko",
+    saveResults: "Tallenna tulokset",
+    of: "/ ",
+    monthly: "Kuukausittain",
+    quarterly: "Neljännesvuosittain",
+    yearly: "Vuosittain",
+    previous: "Edellinen",
+    next: "Seuraava",
+    remainingBalances: "Jäljellä olevat saldot",
+    principalPaid: "Maksettu pääoma",
+    paidOff: "Maksettu!",
+    debtsPaidOff: "Tässä kuussa maksetut velat",
+    congratulations: "Onnittelut!",
+    debtFreeMessage: "Olet nyt velaton. Jatka hyviä taloustottumuksia!",
+    selectDebt: "Valitse velka",
+    selectDebtPlaceholder: "Valitse velka",
+    impactResults: "Vaikutustulokset",
+    extraPaymentTip: "Vinkki: Kohdista korkean koron velkoihin",
+    extraPaymentTipDescription: "Saadaksesi suurimman vaikutuksen, tee lisämaksuja korkeimman koron velkaan.",
+    timelineDescription: "Näe kuinka velkasi maksetaan pois kuukausi kuukaudelta.",
+    consolidationDescription: "Tutki mahdollisuuksia yhdistää velkasi yhdeksi lainaksi.",
+    extraPaymentDescription: "Näe miten lisämaksun tekeminen vaikuttaa velan takaisinmaksuun."
   },
   visualization: {
     debtBreakdown: "Velkojen erittely",
@@ -263,7 +331,51 @@ export const fi = {
     repaymentPlan: "Takaisinmaksusuunnitelma",
     fastestWithAvalanche: "Nopein takaisinmaksu laviinistrategialla",
     fastestWithSnowball: "Nopein takaisinmaksu lumipallostrategialla",
-    extraPaymentImpact: "Lisämaksun vaikutus"
+    extraPaymentImpact: "Lisämaksun vaikutus",
+    title: "Kojelauta",
+    welcome: "Tervetuloa",
+    user: "Käyttäjä",
+    welcomeSubtitle: "Tässä velkojenhallintakatsauksesi",
+    viewDebtSummary: "Katso velkayhteenveto",
+    viewDetailedBreakdown: "Katso yksityiskohtainen erittely",
+    paidDebt: "Maksettu velka",
+    remainingDebt: "Jäljellä oleva velka",
+    progress: "Edistyminen",
+    progressMessage: "Olet jo maksanut {{percentage}}% velastasi - jatka samaan malliin!",
+    paymentPlanSummary: "Maksusuunnitelman yhteenveto",
+    paymentPlanDescription: "Velkojenmaksustrategiasi yhdellä silmäyksellä",
+    monthlyBudget: "Kuukausibudjetti",
+    minimumPayments: "Vähimmäismaksut",
+    extraBudget: "Ylimääräinen budjetti",
+    prioritizedDebt: "Priorisoitu velka",
+    interestRate: "korkoprosentti",
+    allocatingExtra: "Kohdistaa ylimääräisen {{amount}} tähän velkaan",
+    viewFullPlan: "Katso koko suunnitelma",
+    debtBreakdown: "Velkojen erittely",
+    allDebts: "Kaikki velat",
+    loans: "Lainat",
+    creditCards: "Luottokortit",
+    creditCardsFree: "Luottokortit maksettu",
+    projectDate: "Arvioitu päivämäärä",
+    viewDetailedTimeline: "Katso yksityiskohtainen aikajana",
+    helpWithDebt: "Tarvitsetko apua velkasi kanssa?",
+    year: "vuosi",
+    goToRepaymentPlan: "Siirry takaisinmaksusuunnitelmaan",
+    currentPaymentAmount: "Nykyinen maksusumma",
+    monthlyPaymentAmount: "Kuukausittainen maksusumma",
+    minimum: "Minimi",
+    maximum: "Maksimi",
+    recommendedStrategy: "Suositeltu strategia",
+    recommendation: "Suositus",
+    equalStrategy: "Tasainen jako",
+    snowballStrategy: "Lumipallo",
+    avalancheStrategy: "Laviini",
+    equalDistribution: "Tasaisen jaon strategia",
+    estimatedInterestCost: "Arvioitu korkokustannus",
+    estimatedDebtFreeDate: "Arvioitu velaton päivä",
+    totalToPayOff: "Maksettava kokonaissumma",
+    minimumMonthlyPayments: "Kuukausittaiset vähimmäismaksut",
+    perMonth: "per kuukausi"
   },
   debtStrategies: {
     pageTitle: "Velkamaksustrategiat",
@@ -315,7 +427,75 @@ export const fi = {
     debtOrder: "Velkojen järjestys",
     dragToReorder: "Vedä järjestääksesi velat uudelleen",
     reorderDebts: "Järjestä velat uudelleen",
-    debtsOrdered: "Velat järjestetty: "
+    debtsOrdered: "Velat järjestetty: ",
+    annuity: "Annuiteetti",
+    equalPrincipal: "Tasalyhennys",
+    fixedInstallment: "Kiinteä erä",
+    customPayment: "Mukautettu maksu",
+    budgetTitle: "Kuukausibudjetti",
+    budgetDescription: "Syötä kuukausibudjettisi velanmaksuun",
+    monthlyBudget: "Kuukausibudjetti",
+    prioritizationMethod: "Priorisointimenetelmä",
+    selectMethod: "Valitse menetelmä",
+    avalancheMethod: "Korkein korko ensin (Laviini)",
+    snowballMethod: "Pienin saldo ensin (Lumipallo)",
+    avalancheDescription: "Korkeakorkoisimpien velkojen maksaminen ensin säästää eniten rahaa pitkällä aikavälillä.",
+    snowballDescription: "Pienimpien saldojen maksaminen ensin luo nopeita voittoja motivaation lisäämiseksi.",
+    calculatePlan: "Laske takaisinmaksusuunnitelma",
+    insufficientBudget: "Riittämätön budjetti",
+    budgetTooLow: "Budjettisi on liian alhainen kattaakseen kaikkien vähimmäismaksut.",
+    planSummary: "Takaisinmaksusuunnitelman yhteenveto",
+    planDescription: "Budjettisi ja velkojesi perusteella tässä on tiesi taloudelliseen vapauteen.",
+    timeToFreedom: "Aika velattomaksi",
+    firstDebtPaidOff: "Ensimmäinen velka maksettu",
+    monthlyAllocation: "Kuukausimaksujen kohdentaminen",
+    allocationDescription: "Miten kuukausibudjettisi jakautuu velkojen kesken",
+    debtName: "Velan nimi",
+    minPayment: "Vähimmäismaksu",
+    extraPayment: "Lisämaksu",
+    total: "Yhteensä",
+    balanceTimeline: "Velkasaldon aikajana",
+    balanceTimelineDescription: "Miten kokonaisvelkasi pienenee ajan myötä",
+    debtPayoffSchedule: "Velanmaksuaikataulu",
+    payoffScheduleDescription: "Milloin kukin velka maksetaan pois",
+    payoffTime: "Takaisinmaksuaika",
+    totalRemaining: "Jäljellä oleva kokonaisvelka",
+    noPlanYet: "Ei vielä takaisinmaksusuunnitelmaa",
+    enterBudgetPrompt: "Syötä kuukausibudjettisi ja napsauta Laske nähdäksesi takaisinmaksusuunnitelmasi.",
+    calculateNow: "Laske nyt",
+    summaryTab: "Velkakatsaus",
+    planTab: "Takaisinmaksusuunnitelma",
+    strategyComparison: "Takaisinmaksustrategiavertailu",
+    strategyComparisonDesc: "Vertaile eri takaisinmaksustrategioita ja niiden vaikutusta velkojesi maksuun",
+    payoffTimeline: "Takaisinmaksuaikataulu",
+    debtDetails: "Velkatiedot",
+    timelineExplanation: "Tämä kaavio näyttää, kuinka nopeasti kukin velka maksetaan pois valitulla strategialla",
+    paymentFlowVisualization: "Maksuvirtavisualisointi",
+    paymentFlowDescription: "Näe miten maksut siirtyvät velasta toiseen, kun ne maksetaan pois",
+    paymentFlowExplanation: "Kun velka on maksettu pois, sen budjetti siirretään seuraavaan priorisoituun velkaan",
+    minimumPayments: "Vähimmäismaksut",
+    snowball: "Lumipallostrategia",
+    avalanche: "Laviinistrategia",
+    totalMonths: "Kuukaudet yhteensä",
+    totalInterest: "Korko yhteensä",
+    strategySummary: "Strategian yhteenveto",
+    savingsVsMinimum: "Säästöt vs. minimi",
+    bestStrategy: "Paras strategia",
+    loadingPlans: "Ladataan maksusuunnitelmia...",
+    title: "Takaisinmaksusuunnitelma",
+    budget: "Budjetti",
+    budgetPlaceholder: "Syötä kuukausibudjetti",
+    strategy: "Strategia",
+    highestInterestDesc: "Maksa korkeimman koron velat ensin",
+    lowestBalanceDesc: "Maksa pienimmät velat ensin",
+    debtFreeIn: "Velaton",
+    monthsFaster: "{{months}} kuukautta nopeammin",
+    monthsSlower: "{{months}} kuukautta hitaammin",
+    creditCardsFree: "Luottokortit maksettu",
+    monthsUntilCreditCardFree: "{{months}} kuukautta kunnes kaikki luottokortit on maksettu",
+    interestSaved: "Säästetty korko",
+    avalancheDesc: "Korkein korko ensin",
+    snowballDesc: "Pienin saldo ensin"
   },
   affiliate: {
     recommendedLoans: "Suositellut lainat",
@@ -335,7 +515,14 @@ export const fi = {
     creditScoreRequired: "Vaadittu luottoluokitus",
     compare: "Vertaile",
     disclaimer: "Vastuuvapauslauseke: Tuotteistamme jotkin sisältävät kumppanilinkkejä. Jos päätät hakea lainaa tai luottokorttia kumppanimme kautta, saatamme saada korvauksen. Tämä ei vaikuta arvosteluihimme tai suosituksiimme, jotka perustuvat huolelliseen tutkimukseen ja tuotevertailuun.",
-    advertisement: "Mainos"
+    advertisement: "Mainos",
+    title: "Tarvitsetko lisäapua velkojen hallintaan?",
+    subtitle: "Nämä luotetut kumppanit tarjoavat palveluita, jotka voivat täydentää velkamatkaasi.",
+    compareLoans: "Vertaile lainoja",
+    refinanceTitle: "Harkitse jälleenrahoitusta",
+    refinanceText: "Löydä parempi korkoprosentti ja säästä rahaa.",
+    creditCardTitle: "Parhaat luottokortit",
+    creditCardText: "Tutustu luottokorttitarjouksiin ja etuihin."
   },
   navigation: {
     dashboard: "Kojelauta",
@@ -346,10 +533,390 @@ export const fi = {
     blog: "Blogi",
     settings: "Asetukset",
     help: "Ohje",
-    logout: "Kirjaudu ulos"
+    logout: "Kirjaudu ulos",
+    calculator: "Laskuri",
+    account: "Tili",
+    language: "Kieli",
+    selectLanguage: "Valitse kieli",
+    english: "English",
+    finnish: "Suomi",
+    menu: "Valikko"
   },
   language: {
     en: "English",
     fi: "Suomi"
+  },
+  form: {
+    name: "Nimi",
+    amount: "Määrä",
+    interestRate: "Korkoprosentti",
+    termYears: "Laina-aika (vuotta)",
+    repaymentType: "Takaisinmaksutyyppi",
+    interestType: "Korkotyyppi",
+    customPayment: "Mukautettu maksu",
+    addLoan: "Lisää laina",
+    addCreditCard: "Lisää luottokortti",
+    monthlyPayment: "Kuukausimaksu",
+    months: "kuukautta",
+    balance: "Saldo",
+    limit: "Raja",
+    apr: "Vuosikorko",
+    minPayment: "Vähimmäismaksu",
+    fullPayment: "Täysi maksu",
+    isActive: "Aktiivinen",
+    save: "Tallenna",
+    cancel: "Peruuta",
+    title: "Uusi laina",
+    editTitle: "Muokkaa lainaa",
+    submit: "Lisää laina",
+    update: "Päivitä laina",
+    placeholderName: "esim. Asuntolaina",
+    placeholderAmount: "10000",
+    placeholderInterestRate: "5.0",
+    placeholderTermYears: "10",
+    estimatedTerm: "Arvioitu aika",
+    paymentTooSmall: "Maksusumma liian pieni",
+    years: "vuotta",
+    placeholderCustomPayment: "200",
+    monthlyFee: "Kuukausimaksu",
+    placeholderMonthlyFee: "5.0",
+    monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle"
+  },
+  interest: {
+    fixed: "Kiinteä",
+    variableEuribor: "Vaihtuva (EURIBOR)"
+  },
+  validation: {
+    nameRequired: "Nimi vaaditaan",
+    nameRequiredDesc: "Ole hyvä ja anna lainalle nimi",
+    invalidAmount: "Virheellinen summa",
+    invalidAmountDesc: "Summan on oltava positiivinen luku",
+    invalidRate: "Virheellinen korkoprosentti",
+    invalidRateDesc: "Korkoprosentin on oltava positiivinen luku",
+    invalidTerm: "Virheellinen laina-aika",
+    invalidTermDesc: "Laina-ajan on oltava positiivinen kokonaisluku",
+    invalidPayment: "Virheellinen maksusumma",
+    invalidPaymentDesc: "Maksusumman on oltava positiivinen luku",
+    paymentTooSmall: "Maksusumma liian pieni",
+    paymentTooSmallDesc: "Maksusumman on oltava suurempi kuin kuukausittainen korko"
+  },
+  loan: {
+    types: {
+      annuity: "Annuiteetti",
+      "equal-principal": "Tasalyhennys",
+      "fixed-installment": "Kiinteä erä",
+      "custom-payment": "Mukautettu maksu"
+    },
+    interestTypes: {
+      fixed: "Kiinteä",
+      "variable-euribor": "Vaihtuva (EURIBOR)"
+    },
+    table: {
+      name: "Lainan nimi",
+      amount: "Määrä",
+      interestRate: "Korkoprosentti",
+      term: "Laina-aika",
+      monthlyPayment: "Kuukausimaksu",
+      totalInterest: "Kokonaiskorko",
+      payoffTime: "Takaisinmaksuaika",
+      active: "Aktiivinen",
+      noLoans: "Ei vielä lainoja."
+    }
+  },
+  creditCard: {
+    title: "Uusi luottokortti",
+    isActive: "Aktiivinen",
+    fullPayment: "Täysi maksu",
+    never: "Ei koskaan",
+    table: {
+      name: "Kortin nimi",
+      balance: "Saldo",
+      apr: "Vuosikorko",
+      minPayment: "Min. maksu",
+      monthlyInterest: "Kuukausikorko",
+      payoffTime: "Takaisinmaksuaika",
+      utilization: "Käyttöaste",
+      active: "Aktiivinen",
+      noCards: "Ei vielä luottokortteja."
+    },
+    summary: {
+      title: "Luottokorttien yhteenveto",
+      totalBalance: "Kokonaissaldo",
+      totalLimit: "Kokonaisraja",
+      totalMinPayment: "Vähimmäismaksut yhteensä",
+      totalMonthlyInterest: "Kuukausikorko yhteensä",
+      totalUtilization: "Kokonaiskäyttöaste"
+    },
+    form: {
+      name: "Kortin nimi",
+      balance: "Saldo",
+      limit: "Luottoraja",
+      apr: "Vuosikorko",
+      minPayment: "Vähimmäismaksu",
+      minPaymentPercent: "Vähimmäismaksu (%)",
+      fullPayment: "Maksa koko saldo kuukausittain",
+      submit: "Lisää luottokortti",
+      placeholderName: "esim. Visa",
+      placeholderBalance: "1000",
+      placeholderCreditLimit: "5000",
+      placeholderApr: "18.0",
+      placeholderMinPayment: "30",
+      autoCalculated: "Automaattisesti laskettu saldosta ja prosentista"
+    }
+  },
+  debtSummary: {
+    pageTitle: "Velkakatsaus",
+    pageDescription: "Yleiskatsaus veloistasi ja mahdollisista säästöistä.",
+    metaDescription: "Saa selkeä yleiskuva veloistasi ja löydä tapoja säästää rahaa.",
+    backButton: "Takaisin laskuriin",
+    totalMonthlyPayment: "Kuukausimaksu yhteensä",
+    totalMonthlyInterest: "Kuukausikorko yhteensä",
+    totalBalance: "Kokonaissaldo",
+    loansSection: "Lainayhteenveto",
+    creditCardsSection: "Luottokorttien yhteenveto",
+    totalSummarySection: "Kokonaisvelkayhteenveto",
+    demoDataMessage: "Näytetään esimerkkidataa. Lisää omat velkasi saadaksesi henkilökohtaisia näkemyksiä.",
+    noLoansMessage: "Ei vielä lainoja. Lisää lainasi nähdäksesi yhteenvedon.",
+    noCardsMessage: "Ei vielä luottokortteja. Lisää luottokorttisi nähdäksesi yhteenvedon.",
+    cardName: "Kortin nimi",
+    monthlyPayment: "Kuukausimaksu",
+    monthlyInterest: "Kuukausikorko",
+    totalInterestEstimate: "Korkoarvio yhteensä",
+    totalCards: "Kortteja yhteensä",
+    neverPaidOff: "Ei koskaan maksettu",
+    loanName: "Lainan nimi",
+    totalLifetimeInterest: "Elinkaaren kokonaiskorko",
+    summaryExplanation: "Tämä yhteenveto näyttää kokonaiskuvan veloistasi ja auttaa priorisoimaan takaisinmaksustrategiaasi.",
+    totalLoans: "Lainoja yhteensä",
+    payoffButton: "Maksa pois",
+    actions: "Toiminnot",
+    title: "Velkakatsaus",
+    totalAmountPaid: "Maksettava kokonaissumma",
+    includingInterestAndFees: "Sisältäen pääoman, koron ja maksut"
+  },
+  recommendations: {
+    title: "Takaisinmaksusuositukset",
+    topPriority: "Ykkössijainen",
+    highInterest: "Korkea korkoprosentti",
+    highTotalInterest: "Korkea kokonaiskorko",
+    topPriorityText: "Maksa tämä laina pois ensimmäisenä säästääksesi eniten.",
+    topPriorityTextPlural: "Maksa nämä lainat ensin säästääksesi eniten.",
+    highInterestText: "Harkitse tämän lainan nopeampaa takaisinmaksua korkean korkoprosentin vuoksi.",
+    highInterestTextPlural: "Harkitse näiden lainojen nopeampaa takaisinmaksua korkean korkoprosentin vuoksi.",
+    highTotalInterestText: "Tämän lainan aikainen takaisinmaksu säästää merkittävän määrän korkoa.",
+    highTotalInterestTextPlural: "Näiden lainojen aikainen takaisinmaksu säästää merkittävän määrän korkoa."
+  },
+  savings: {
+    title: "Potentiaaliset säästöt",
+    description: "Lainojen nopeampi takaisinmaksu voi säästää merkittävästi korkoa.",
+    payingOffNow: "Maksamalla nyt säästät",
+    payOff: "Maksa pois"
+  },
+  table: {
+    name: "Nimi",
+    amount: "Määrä",
+    interestRate: "Korkoprosentti",
+    term: "Laina-aika",
+    monthlyPayment: "Kuukausimaksu",
+    balance: "Saldo",
+    apr: "Vuosikorko",
+    minPayment: "Vähimmäismaksu",
+    actions: "Toiminnot",
+    edit: "Muokkaa",
+    toggleActive: "Vaihda aktiivisuutta",
+    payoff: "Maksa pois",
+    year: "vuosi",
+    years: "vuotta",
+    totalInterest: "Kokonaiskorko",
+    totalPayment: "Kokonaismaksu"
+  },
+  loanTerms: {
+    pageTitle: "Taloudelliset termit",
+    backButton: "Takaisin",
+    introduction: "Taloudelliset termit selitettynä yksinkertaisesti. Ymmärrä taloudelliset termit helposti.",
+    searchPlaceholder: "Etsi termiä...",
+    noResults: "Ei tuloksia. Kokeile toista hakutermiä.",
+    tryCalculator: "Kokeile laskuriamme nähdäksesi miten tämä vaikuttaa lainaasi →",
+    relatedTools: "Liittyvät taloudelliset työkalut",
+    loanCalculator: "Lainalaskuri",
+    loanCalculatorDesc: "Laske lainamaksusi eri takaisinmaksutavoilla",
+    bestLoanOffers: "Etsi parhaat lainatarjoukset",
+    bestLoanOffersDesc: "Vertaile asuntolainakorkoja ja lainavaihotehtoja luotetuilta tarjoajilta",
+    interestRate: {
+      title: "Korkoprosentti",
+      description: "Korkoprosentti on summa, jonka maksat lainanantajalle rahan käytöstä. Se ilmaistaan prosenttiosuutena lainan pääomasta ja maksetaan yleensä kuukausittain."
+    },
+    annuity: {
+      title: "Annuiteetti",
+      description: "Annuiteettilainassa maksat saman summan joka kuukausi koko laina-ajan. Aluksi suurempi osa maksustasi menee korkoon, ja ajan myötä enemmän pääoman vähentämiseen."
+    },
+    principal: {
+      title: "Pääoma",
+      description: "Pääoma on lainaamasi alkuperäinen rahasumma. Kuukausimaksusi koostuu tämän pääoman takaisinmaksusta ja korosta."
+    },
+    euribor: {
+      title: "Euribor",
+      description: "Euribor (Euro Interbank Offered Rate) on viitekorko, johon monet vaihtuvakorkoiset lainat on sidottu. Se heijastaa korkoa, jolla eurooppalaiset pankit lainaavat toisilleen, ja voi muuttua ajan myötä vaikuttaen kokonaiskorkoprosenttiisi."
+    },
+    totalInterest: {
+      title: "Kokonaiskorko",
+      description: "Kokonaiskorko on kaikkien korkomaksujen summa, jotka maksat lainan elinkaaren aikana. Se riippuu lainamäärästä, korkoprosentista, laina-ajasta ja takaisinmaksutyypistä."
+    },
+    termYears: {
+      title: "Laina-aika (vuosia)",
+      description: "Laina-aika on ajanjakso, jonka aikana suostut maksamaan lainan takaisin. Pidempi laina-aika tarkoittaa yleensä pienempiä kuukausimaksuja mutta enemmän maksettua kokonaiskorkoa."
+    },
+    equalPrincipal: {
+      title: "Tasalyhennys",
+      description: "Tasalyhennyslainassa maksat saman verran pääomaa joka kuukausi, mutta korko-osuus pienenee ajan myötä. Näin kuukausimaksusi ovat korkeammat alussa ja pienenevät ajan myötä."
+    },
+    fixedInstallment: {
+      title: "Kiinteä erä",
+      description: "Kiinteän erän lainassa maksat saman summan joka kuukausi. Tämä maksutyyppi on samankaltainen kuin annuiteetti, mutta sitä käytetään usein, kun korkoprosentti voi vaihdella."
+    }
+  },
+  blog: {
+    pageTitle: "Blogi | Velkavapaus",
+    pageDescription: "Lue uusimmat artikkelit ja oppaat taloudenhoidosta, velanhallinnasta ja budjetoinnista Velkavapaus-blogistamme.",
+    title: "Blogi",
+    subtitle: "Uusimmat artikkelit ja oppaat taloudenhoitoon",
+    allPosts: "Kaikki artikkelit",
+    readMore: "Lue lisää",
+    share: "Jaa",
+    shareArticle: "Jaa artikkeli",
+    backToBlog: "Takaisin blogiin",
+    postNotFound: "Artikkelia ei löytynyt",
+    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt.",
+    copyLink: "Kopioi linkki",
+    copiedToClipboard: "Linkki kopioitu leikepöydälle",
+    copyFailed: "Linkin kopiointi epäonnistui"
+  },
+  summary: {
+    totalLoans: "Lainat yhteensä",
+    totalCreditCards: "Luottokorttien saldo yhteensä",
+    monthlyPayment: "Kuukausimaksu yhteensä",
+    savingsImpact: "Säästövaikutus"
+  },
+  guidance: {
+    welcome: "Tervetuloa",
+    subtitle: "Näin käytät sivustoamme ja saat eniten irti palveluistamme.",
+    blog: {
+      title: "Blogi",
+      description: "Tutustu Velkavapauden viimeisimmät vinkit ja oppaat taloudelliseen vapauteen"
+    },
+    profile: {
+      title: "Profiili",
+      description: "Päivitä profiilisi ja seuraa edistymistäsi"
+    },
+    guides: {
+      title: "Oppaat",
+      description: "Lataa PDF-oppaita taloudenhallintaan"
+    },
+    support: {
+      title: "Tuki",
+      description: "Tarvitsetko apua? Ota yhteyttä tukitiimiimme"
+    }
+  },
+  landing: {
+    seo: {
+      title: "Velanmaksu helpoksi - Ilmainen taloustyökalu | Velkavapaus",
+      description: "Luo ilmainen velanmaksusuunnitelma ja ota taloutesi hallintaan Velkavapauden avulla. Aloita velaton matkasi tänään!",
+      keywords: "velanmaksu, lainanhallinta, taloudelliset työkalut, velkalumipal, velkalaviini, taloudellinen vapaus, velaton"
+    },
+    hero: {
+      headline: "Maksa velkasi nopeammin - Aloita talouden hallinta tänään!",
+      subheadline: "Luo ilmainen räätälöity velanmaksusuunnitelma ja ota taloutesi hallintaan.",
+      cta: "Kirjaudu tai rekisteröidy nyt",
+      secondaryCta: "Lue lisää",
+      imageAlt: "Henkilö hymyilee tarkastellessaan talouttaan kannettavalla tietokoneella",
+      loggedInCta: "Siirry kojelaudalle",
+      blogCta: "Tutustu blogiimme"
+    },
+    benefits: {
+      title: "Ota hallintaan taloudellinen tulevaisuutesi",
+      item1: {
+        title: "Räätälöity maksusuunnitelma",
+        description: "Luo yksilöllinen velanmaksusuunnitelma käyttäen laviini- tai lumipallomenetelmää."
+      },
+      item2: {
+        title: "Seuraa edistymistäsi",
+        description: "Visualisoi edistymistäsi interaktiivisella aikajanalla ja pysy motivoituneena."
+      },
+      item3: {
+        title: "Vähennä taloudellista stressiä",
+        description: "Saavuta taloudellinen vapaus nopeammin ja vähennä taloudellista stressiäsi."
+      }
+    },
+    methods: {
+      title: "Valitse velanmaksustrategiasi",
+      subtitle: "Eri menetelmät toimivat eri ihmisille. Löydä mikä toimii sinulle.",
+      avalanche: {
+        title: "Velkalaviini",
+        description: "Velkalaviinimenetelmä keskittyy maksamaan ensin korkeakorkoisimmat velat ja tekemään vähimmäismaksut muille veloille.",
+        benefit1: "Matemaattisesti optimaalisin - säästää eniten korkokuluissa",
+        benefit2: "Lyhentää kokonaismaksuaikaa",
+        benefit3: "Paras niille, joita motivoi pitkän aikavälin säästöt",
+        imageAlt: "Kaavio, joka näyttää vähenevät korkomaksut ajan myötä"
+      },
+      snowball: {
+        title: "Velkalumipalllo",
+        description: "Velkalumipalllomenetelmä keskittyy maksamaan ensin pienimmät velat rakentaakseen vauhtia ja motivaatiota.",
+        benefit1: "Luo aikaisia voittoja motivaation rakentamiseksi",
+        benefit2: "Yksinkertaistaa taloutta vähentämällä maksujen määrää",
+        benefit3: "Paras niille, jotka tarvitsevat psykologisia voittoja",
+        imageAlt: "Kasvava kolikkopino, joka kuvaa lumipalloefektiä"
+      }
+    },
+    affiliate: {
+      title: "Tarvitsetko lisäapua velkojesi hallintaan?",
+      subtitle: "Nämä luotetut kumppanit tarjoavat palveluita, jotka voivat täydentää velanmaksumatkaasi.",
+      compareLoans: "Vertaile lainoja",
+      refinanceTitle: "Harkitse uudelleenrahoitusta",
+      refinanceText: "Löydä parempi korkoprosentti ja säästä rahaa.",
+      creditCardTitle: "Parhaat luottokortit",
+      creditCardText: "Tutustu luottokorttitarjouksiin ja etuihin.",
+      disclaimer: "Saatamme ansaita palkkion, jos käytät näitä linkkejä, mutta tämä ei vaikuta maksamaasi hintaan."
+    },
+    testimonials: {
+      title: "Menestystarinoita",
+      testimonial1: "Tämä sovellus auttoi minua maksamaan 5 000 € velkaa vain vuodessa! Visualisointi piti minut todella motivoituneena.",
+      testimonial2: "Kokeilin monia budjetointisovelluksia, mutta tämä on ainoa, joka todella auttoi minua luomaan realistisen velanmaksusuunnitelman.",
+      testimonial3: "Velklumipalllo-menetelmä muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuonna!"
+    },
+    faq: {
+      title: "Usein kysytyt kysymykset",
+      question1: "Miten sovellus toimii?",
+      answer1: "Syötä velkasi, mukaan lukien lainasummat, korkoprosentit ja vähimmäismaksut. Sovellus laskee optimaalisen takaisinmaksusuunnitelman valitsemasi menetelmän (laviini tai lumipallo) perusteella ja näyttää, milloin olet velaton.",
+      question2: "Onko sovelluksen käyttö ilmaista?",
+      answer2: "Kyllä! Velkavapaus on täysin ilmainen käyttää. Uskomme, että kaikilla tulisi olla pääsy työkaluihin, jotka auttavat parantamaan taloudellista tilannetta.",
+      question3: "Voinko käyttää sovellusta opintolainoihin?",
+      answer3: "Ehdottomasti! Sovellus toimii kaikentyyppisillä lainoilla, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat.",
+      question4: "Mikä on laviini- ja lumipallomenetelmien ero?",
+      answer4: "Laviinimenetelmä priorisoi korkeakorkoisten velkojen maksamista ensin säästääkseen eniten korkoa. Lumipallomenetelmä keskittyy maksamaan pienimmät velat ensin rakentaakseen vauhtia ja motivaatiota."
+    },
+    finalCta: {
+      title: "Aloita velaton matkasi tänään",
+      subtitle: "Liity tuhansien käyttäjien joukkoon, jotka ovat jo ottaneet taloudellisen tulevaisuutensa hallintaan.",
+      buttonText: "Rekisteröidy nyt - Se on ilmaista"
+    },
+    footer: {
+      about: {
+        title: "Tietoa Velkavapaaudesta",
+        description: "Velkavapaus on ilmainen työkalu, joka on suunniteltu auttamaan sinua luomaan ja seuraamaan räätälöityä velanmaksusuunnitelmaa."
+      },
+      links: {
+        title: "Pikalinkit",
+        item1: "Kojelauta",
+        item2: "Lainaehdot",
+        item3: "Velkakatsaus"
+      },
+      legal: {
+        title: "Lakiasiat",
+        privacy: "Tietosuojakäytäntö",
+        terms: "Käyttöehdot",
+        cookies: "Evästekäytäntö"
+      },
+      copyright: "Kaikki oikeudet pidätetään."
+    }
   }
 };
