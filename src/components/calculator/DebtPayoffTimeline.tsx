@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Debt, MonthlyPaymentPlan, PaymentStrategy } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';

@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -152,7 +151,7 @@ const DebtFreeTimeline = ({
         monthlyAllocation: []
       };
     }
-    return generateRepaymentPlan(combinedDebts, paymentAmount, 'avalanche', true);
+    return generateRepaymentPlan(combinedDebts, paymentAmount, 'equal', true);
   }, [combinedDebts, paymentAmount]);
   
   // Get debt-free dates for each strategy with proper future dates
@@ -391,7 +390,7 @@ const DebtFreeTimeline = ({
                     <Card 
                       key={strategy.id} 
                       className={`cursor-pointer transition-all hover:shadow ${getStrategyCardClass(strategy.id)}`}
-                      onClick={() => setSelectedStrategy(strategy.id)}
+                      onClick={() => setSelectedStrategy(strategy.id as 'avalanche' | 'snowball' | 'equal')}
                     >
                       <CardHeader className="p-3">
                         <CardTitle className="text-base">{strategy.name}</CardTitle>
