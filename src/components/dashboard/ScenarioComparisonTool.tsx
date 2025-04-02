@@ -408,7 +408,7 @@ const ScenarioComparisonTool = ({
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <Label htmlFor="monthlyPayment">{t('scenarios.monthlyPayment') || 'Monthly Payment'}</Label>
-                          <span className="text-sm">{formatCurrency(editFormData.monthlyPayment)}</span>
+                          <span className="text-sm">{currencyFormatter.format(editFormData.monthlyPayment)}</span>
                         </div>
                         <Slider
                           id="monthlyPayment"
@@ -424,8 +424,8 @@ const ScenarioComparisonTool = ({
                           }}
                         />
                         <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{formatCurrency(totalMinPayments)}</span>
-                          <span>{formatCurrency(Math.max(totalMinPayments * 2, totalMinPayments + 1000))}</span>
+                          <span>{currencyFormatter.format(totalMinPayments)}</span>
+                          <span>{currencyFormatter.format(Math.max(totalMinPayments * 2, totalMinPayments + 1000))}</span>
                         </div>
                       </div>
                       
@@ -447,7 +447,7 @@ const ScenarioComparisonTool = ({
                               </UITooltip>
                             </TooltipProvider>
                           </Label>
-                          <span className="text-sm">{formatCurrency(editFormData.extraPayment)}</span>
+                          <span className="text-sm">{currencyFormatter.format(editFormData.extraPayment)}</span>
                         </div>
                         <Slider
                           id="extraPayment"
@@ -528,10 +528,10 @@ const ScenarioComparisonTool = ({
                         </div>
                         
                         <div className="text-muted-foreground">{t('scenarios.monthlyPayment') || 'Monthly Payment'}:</div>
-                        <div className="font-medium">{formatCurrency(scenario.monthlyPayment)}</div>
+                        <div className="font-medium">{currencyFormatter.format(scenario.monthlyPayment)}</div>
                         
                         <div className="text-muted-foreground">{t('scenarios.annualExtraPayment') || 'Annual Extra Payment'}:</div>
-                        <div className="font-medium">{formatCurrency(scenario.extraPayment)}</div>
+                        <div className="font-medium">{currencyFormatter.format(scenario.extraPayment)}</div>
                         
                         <div className="text-muted-foreground">{t('repayment.strategy') || 'Strategy'}:</div>
                         <div className="font-medium">{
@@ -554,7 +554,7 @@ const ScenarioComparisonTool = ({
                             
                             <div className="text-muted-foreground">{t('repayment.totalInterestPaid') || 'Total Interest Paid'}:</div>
                             <div className="font-medium">
-                              {formatCurrency(scenarioResults.find(result => result.id === scenario.id)?.totalInterestPaid || 0)}
+                              {currencyFormatter.format(scenarioResults.find(result => result.id === scenario.id)?.totalInterestPaid || 0)}
                             </div>
                           </div>
                         </>
@@ -660,7 +660,7 @@ const ScenarioComparisonTool = ({
                       if (name === 'months') {
                         return [`${value} ${t('repayment.months') || 'months'}`, t('repayment.debtFreeIn') || 'Debt Free In'];
                       } else if (name === 'interest') {
-                        return [formatCurrency(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
+                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
                       }
                       return [value, name];
                     }} />
@@ -695,9 +695,9 @@ const ScenarioComparisonTool = ({
                     />
                     <Tooltip formatter={(value, name) => {
                       if (name === 'interest') {
-                        return [formatCurrency(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
+                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
                       } else if (name === 'averageMonthlyInterest') {
-                        return [formatCurrency(value as number), t('scenarios.avgMonthlyInterest') || 'Avg Monthly Interest'];
+                        return [currencyFormatter.format(value as number), t('scenarios.avgMonthlyInterest') || 'Avg Monthly Interest'];
                       }
                       return [value, name];
                     }} />
