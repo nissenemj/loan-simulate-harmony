@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Info, TrendingDown, CheckCircle2 } from 'lucide-react';
 
 interface DebtConsolidationCalculatorProps {
   debts: Debt[];
@@ -78,7 +79,10 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('calculator.debtConsolidation')}</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingDown className="h-5 w-5 text-primary" />
+          {t('calculator.debtConsolidation')}
+        </CardTitle>
         <CardDescription>{t('calculator.consolidationDescription')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -88,8 +92,11 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
           </Alert>
         )}
         
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded">
-          <p className="font-semibold">{t('calculator.consolidationDisclaimer')}</p>
+        <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 p-4 rounded">
+          <p className="font-semibold flex items-center">
+            <Info className="h-4 w-4 mr-2" />
+            {t('calculator.consolidationDisclaimer')}
+          </p>
           <p className="mt-1 text-sm">
             {t('calculator.consolidationDisclaimerText')}
           </p>
@@ -111,18 +118,22 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
               </TableHeader>
               <TableBody>
                 {consolidationOptions.map((option) => (
-                  <TableRow key={option.id}>
+                  <TableRow key={option.id} className={option.interestSaved > 0 ? "bg-green-50/30 dark:bg-green-950/30" : ""}>
                     <TableCell className="font-medium">{option.name}</TableCell>
                     <TableCell className="text-right">{option.interestRate.toFixed(2)}%</TableCell>
                     <TableCell className="text-right">{option.termMonths} {t('calculator.months')}</TableCell>
                     <TableCell className="text-right">{formatCurrency(option.monthlyPayment)}</TableCell>
                     <TableCell className="text-right">{formatCurrency(option.totalInterestPaid)}</TableCell>
                     <TableCell className="text-right">{formatDate(option.payoffDate)}</TableCell>
-                    <TableCell className={`text-right ${option.interestSaved > 0 ? 'text-green-600 font-semibold' : 'text-red-600'}`}>
-                      {option.interestSaved > 0 
-                        ? `${formatCurrency(option.interestSaved)} ${t('calculator.saved')}`
-                        : `${formatCurrency(Math.abs(option.interestSaved))} ${t('calculator.more')}`
-                      }
+                    <TableCell className={`text-right flex items-center justify-end gap-1 ${option.interestSaved > 0 ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-red-600 dark:text-red-400'}`}>
+                      {option.interestSaved > 0 ? (
+                        <>
+                          <CheckCircle2 className="h-4 w-4" />
+                          {formatCurrency(option.interestSaved)} {t('calculator.saved')}
+                        </>
+                      ) : (
+                        formatCurrency(Math.abs(option.interestSaved)) + " " + t('calculator.more')
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -131,7 +142,7 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
           </div>
         )}
         
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 space-y-2 bg-muted/50 p-4 rounded-lg">
           <h4 className="font-semibold">{t('calculator.consolidationConsiderations')}</h4>
           <ul className="list-disc pl-5 space-y-1">
             <li>{t('calculator.considerationFees')}</li>

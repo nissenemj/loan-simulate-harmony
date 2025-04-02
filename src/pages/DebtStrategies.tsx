@@ -10,7 +10,8 @@ import {
   DebtPayoffCalculator,
   DebtPayoffTimeline,
   DebtConsolidationCalculator,
-  ExtraPaymentCalculator
+  ExtraPaymentCalculator,
+  DebtVisualization
 } from '@/components/calculator';
 import { 
   Tabs, 
@@ -19,7 +20,7 @@ import {
   TabsTrigger 
 } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Info } from 'lucide-react';
+import { Info, Calculator, PieChart, LineChart, TrendingDown, Coins } from 'lucide-react';
 
 const DebtStrategies = () => {
   const { t } = useTranslation();
@@ -62,7 +63,7 @@ const DebtStrategies = () => {
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">
       <Helmet>
-        <title>{t('debtStrategies.pageTitle')} | {t('app.name')}</title>
+        <title>{t('debtStrategies.pageTitle')} | {t('app.title')}</title>
       </Helmet>
       
       <div className="space-y-6">
@@ -81,46 +82,62 @@ const DebtStrategies = () => {
             </AlertDescription>
           </Alert>
         ) : (
-          <Tabs defaultValue="calculator" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-8">
-              <TabsTrigger value="calculator">{t('calculator.debtPayoffCalculator')}</TabsTrigger>
-              <TabsTrigger value="timeline">{t('calculator.debtPayoffTimeline')}</TabsTrigger>
-              <TabsTrigger value="extraPayment">{t('calculator.extraPaymentImpact')}</TabsTrigger>
-              <TabsTrigger value="consolidation">{t('calculator.debtConsolidation')}</TabsTrigger>
-            </TabsList>
+          <>
+            <DebtVisualization debts={debts} paymentPlan={paymentPlan} />
             
-            <TabsContent value="calculator">
-              <DebtPayoffCalculator 
-                initialDebts={debts}
-                onSaveResults={handleSaveResults}
-              />
-            </TabsContent>
-            
-            <TabsContent value="timeline">
-              {paymentPlan ? (
-                <DebtPayoffTimeline 
-                  debts={debts}
-                  additionalPayment={paymentPlan.monthlyPayment - debts.reduce((sum, debt) => sum + debt.minimumPayment, 0)}
-                  strategy={paymentPlan.strategy}
+            <Tabs defaultValue="calculator" className="w-full mt-8">
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
+                <TabsTrigger value="calculator" className="flex items-center gap-2">
+                  <Calculator className="h-4 w-4" />
+                  {t('calculator.debtPayoffCalculator')}
+                </TabsTrigger>
+                <TabsTrigger value="timeline" className="flex items-center gap-2">
+                  <LineChart className="h-4 w-4" />
+                  {t('calculator.debtPayoffTimeline')}
+                </TabsTrigger>
+                <TabsTrigger value="extraPayment" className="flex items-center gap-2">
+                  <Coins className="h-4 w-4" />
+                  {t('calculator.extraPaymentImpact')}
+                </TabsTrigger>
+                <TabsTrigger value="consolidation" className="flex items-center gap-2">
+                  <TrendingDown className="h-4 w-4" />
+                  {t('calculator.debtConsolidation')}
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="calculator">
+                <DebtPayoffCalculator 
+                  initialDebts={debts}
+                  onSaveResults={handleSaveResults}
                 />
-              ) : (
-                <Alert>
-                  <Info className="h-4 w-4" />
-                  <AlertDescription>
-                    {t('debtStrategies.calculateFirst')}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="extraPayment">
-              <ExtraPaymentCalculator debts={debts} />
-            </TabsContent>
-            
-            <TabsContent value="consolidation">
-              <DebtConsolidationCalculator debts={debts} />
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+              
+              <TabsContent value="timeline">
+                {paymentPlan ? (
+                  <DebtPayoffTimeline 
+                    debts={debts}
+                    additionalPayment={paymentPlan.monthlyPayment - debts.reduce((sum, debt) => sum + debt.minimumPayment, 0)}
+                    strategy={paymentPlan.strategy}
+                  />
+                ) : (
+                  <Alert>
+                    <Info className="h-4 w-4" />
+                    <AlertDescription>
+                      {t('debtStrategies.calculateFirst')}
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="extraPayment">
+                <ExtraPaymentCalculator debts={debts} />
+              </TabsContent>
+              
+              <TabsContent value="consolidation">
+                <DebtConsolidationCalculator debts={debts} />
+              </TabsContent>
+            </Tabs>
+          </>
         )}
       </div>
     </div>

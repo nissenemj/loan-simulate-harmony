@@ -60,3 +60,21 @@ export interface ConsolidationOption {
   payoffDate: string;
   interestSaved: number;
 }
+
+export interface ScenarioDefinition {
+  id: string;
+  name: string;
+  additionalMonthlyPayment: number;
+  strategy: PaymentStrategy;
+}
+
+export interface ScenarioComparison {
+  scenarioId: string;
+  scenarioName: string;
+  totalMonths: number;
+  totalPaid: number;
+  totalInterestPaid: number;
+  monthlyPayment: number;
+  payoffDate: string;
+  interestSaved: number;
+}

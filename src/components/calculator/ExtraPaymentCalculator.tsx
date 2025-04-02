@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Info, Lightbulb, Clock, Coins, Calendar } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface ExtraPaymentCalculatorProps {
   debts: Debt[];
@@ -74,6 +76,33 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
     });
   };
   
+  // Prepare chart data
+  const chartData = impact ? [
+    {
+      name: t('calculator.withoutExtraPayment'),
+      interestPaid: impact.originalTotalInterest,
+      fill: '#8B5CF6'
+    },
+    {
+      name: t('calculator.withExtraPayment'),
+      interestPaid: impact.newTotalInterest,
+      fill: '#22C55E'
+    }
+  ] : [];
+  
+  // Custom tooltip formatter for the bar chart
+  const customBarTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip bg-background border border-border p-3 rounded shadow-md">
+          <p className="font-semibold">{label}</p>
+          <p className="text-sm">{formatCurrency(payload[0].value)}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+  
   if (debts.length === 0) {
     return (
       <Card>
@@ -91,10 +120,13 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('calculator.extraPaymentImpact')}</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <Coins className="h-5 w-5 text-primary" />
+          {t('calculator.extraPaymentImpact')}
+        </CardTitle>
         <CardDescription>{t('calculator.extraPaymentDescription')}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         {error && (
           <Alert variant="destructive">
             <AlertDescription>{error}</AlertDescription>
@@ -136,37 +168,77 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
         </div>
         
         {impact && (
-          <div className="mt-6 space-y-4">
-            <h4 className="font-semibold text-lg">{t('calculator.impactResults')}</h4>
+          <div className="mt-6">
+            <h4 className="font-semibold text-lg mb-4">{t('calculator.impactResults')}</h4>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="text-sm text-muted-foreground">{t('calculator.monthsSaved')}</div>
-                <div className="text-2xl font-bold">
-                  {impact.monthsSaved} {t('calculator.months')}
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Card className="bg-muted/30">
+                <CardContent className="p-4">
+                  <div className="flex items-start">
+                    <Clock className="h-8 w-8 mr-3 mt-1 text-blue-500" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t('calculator.monthsSaved')}</p>
+                      <p className="text-2xl font-bold">
+                        {impact.monthsSaved} {t('calculator.months')}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="text-sm text-muted-foreground">{t('calculator.interestSaved')}</div>
-                <div className="text-2xl font-bold">
-                  {formatCurrency(impact.interestSaved)}
-                </div>
-              </div>
+              <Card className="bg-muted/30">
+                <CardContent className="p-4">
+                  <div className="flex items-start">
+                    <Coins className="h-8 w-8 mr-3 mt-1 text-green-500" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t('calculator.interestSaved')}</p>
+                      <p className="text-2xl font-bold">
+                        {formatCurrency(impact.interestSaved)}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="text-sm text-muted-foreground">{t('calculator.newPayoffDate')}</div>
-                <div className="text-2xl font-bold">
-                  {formatDate(impact.newPayoffDate)}
-                </div>
-              </div>
+              <Card className="bg-muted/30">
+                <CardContent className="p-4">
+                  <div className="flex items-start">
+                    <Calendar className="h-8 w-8 mr-3 mt-1 text-purple-500" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">{t('calculator.newPayoffDate')}</p>
+                      <p className="text-xl font-bold">
+                        {formatDate(impact.newPayoffDate)}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
             
-            <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded">
-              <p className="font-semibold">{t('calculator.extraPaymentTip')}</p>
-              <p className="mt-1">
-                {t('calculator.extraPaymentTipDescription')}
-              </p>
+            <div className="h-[300px] mb-6">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis tickFormatter={(value) => formatCurrency(value)} />
+                  <Tooltip content={customBarTooltip} />
+                  <Legend />
+                  <Bar dataKey="interestPaid" name={t('calculator.totalInterest')} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 p-4 rounded flex items-start">
+              <Lightbulb className="h-5 w-5 mr-2 mt-1 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">{t('calculator.extraPaymentTip')}</p>
+                <p className="mt-1">
+                  {t('calculator.extraPaymentTipDescription')}
+                </p>
+              </div>
             </div>
           </div>
         )}

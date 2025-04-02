@@ -1,5 +1,4 @@
-
-import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, Payment, ExtraPaymentImpact, ConsolidationOption } from './types';
+import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, Payment, ExtraPaymentImpact, ConsolidationOption, ScenarioDefinition, ScenarioComparison } from './types';
 import { addMonths, format } from 'date-fns';
 
 /**
@@ -273,6 +272,50 @@ export function calculateConsolidationOptions(
       totalInterestPaid,
       payoffDate,
       interestSaved
+    };
+  });
+}
+
+/**
+ * Compare different debt payoff scenarios
+ * 
+ * @param debts List of debts
+ * @param scenarios Different scenarios to compare
+ * @returns Comparison results for each scenario
+ */
+export function compareScenarios(
+  debts: Debt[],
+  scenarios: ScenarioDefinition[]
+): ScenarioComparison[] {
+  // Validate inputs
+  if (debts.length === 0) {
+    throw new Error('No debts provided');
+  }
+  
+  if (scenarios.length === 0) {
+    throw new Error('No scenarios provided');
+  }
+  
+  // Calculate total minimum payment
+  const totalMinimumPayment = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
+  
+  // Create a baseline plan for comparison (minimum payments with avalanche strategy)
+  const baselinePlan = calculatePaymentPlan(debts, totalMinimumPayment, 'avalanche');
+  
+  // Calculate results for each scenario
+  return scenarios.map(scenario => {
+    const totalPayment = totalMinimumPayment + scenario.additionalMonthlyPayment;
+    const plan = calculatePaymentPlan(debts, totalPayment, scenario.strategy);
+    
+    return {
+      scenarioId: scenario.id,
+      scenarioName: scenario.name,
+      totalMonths: plan.totalMonths,
+      totalPaid: plan.totalPaid,
+      totalInterestPaid: plan.totalInterestPaid,
+      monthlyPayment: plan.monthlyPayment,
+      payoffDate: plan.payoffDate,
+      interestSaved: baselinePlan.totalInterestPaid - plan.totalInterestPaid
     };
   });
 }
