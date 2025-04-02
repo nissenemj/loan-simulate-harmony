@@ -33,9 +33,9 @@ import "./App.css";
 const App = () => {
   return (
     <HelmetProvider>
-      <AuthProvider>
-        <LanguageProvider>
-          <Router>
+      <LanguageProvider>
+        <Router>
+          <AuthProvider>
             <NavigationHeader />
             <main className="min-h-screen mb-8">
               <Routes>
@@ -65,9 +65,9 @@ const App = () => {
             <Footer />
             <CookieConsentBanner />
             <Toaster />
-          </Router>
-        </LanguageProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </Router>
+      </LanguageProvider>
     </HelmetProvider>
   );
 };

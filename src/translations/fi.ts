@@ -1,4 +1,3 @@
-
 // Import the English translations type structure for type safety
 import { en } from './en';
 
@@ -102,7 +101,7 @@ export const fi: typeof en = {
     extraPaymentTip: 'Vinkki:',
     extraPaymentTipDescription: 'Kohdistamalla lisämaksuja yhteen velkaan kerrallaan voit säästää merkittävästi korkokuluissa.',
     consolidationDescription: 'Näe miten velkojen yhdistäminen vaikuttaisi maksuaikatauluusi ja korkokuluihin',
-    noDebtsAdded: 'Ei lisättyjä velkoja. Lisää velkasi nähdäksesi mahdolliset yhdistämisvaihtoehdot.',
+    noDebtsAdded: 'Ei lisättyjä velkoja. Lisää velkasi nähd��ksesi mahdolliset yhdistämisvaihtoehdot.',
     consolidationDisclaimer: 'Tärkeä huomautus:',
     consolidationDisclaimerText: 'Nämä laskelmat ovat arvioita. Todelliset ehdot vaihtelevat luottopisteytyksen, lainantarjoajan ja muiden tekijöiden mukaan.',
     option: 'Vaihtoehto',
@@ -199,7 +198,7 @@ export const fi: typeof en = {
       subtitle: 'Eri menetelmät toimivat eri ihmisille. Löydä mikä toimii sinulle.',
       avalanche: {
         title: 'Velkalumivyöry',
-        description: 'Velkalumivyörymenetelmä keskittyy maksamaan ensin korkeakorkoisia velkoja, samalla kun maksat minimimaksut kaikista muista veloista.',
+        description: 'Velkalumivyörymenetelmä keskittyy maksamista ensin korkeakorkoisia velkoja, samalla kun maksat minimimaksut kaikista muista veloista.',
         benefit1: 'Matemaattisesti optimaalinen - säästää eniten korkokuluissa',
         benefit2: 'Vähentää kokonaismaksuaikaa',
         benefit3: 'Paras niille, joita motivoivat pitkän aikavälin säästöt',
@@ -495,7 +494,7 @@ export const fi: typeof en = {
     title: "Velkatiivistelmä",
     totalAmountPaid: "Maksettava kokonaissumma",
     includingInterestAndFees: "Sisältäen pääoman, korot ja maksut",
-    viewDetailedBreakdown: "Näytä yksityiskohtainen erittely"
+    viewDetailedBreakdown: "Katso tarkempi erittely"
   },
   debtStrategies: {
     pageTitle: "Velkastrategiat",
@@ -594,7 +593,7 @@ export const fi: typeof en = {
     welcomeSubtitle: 'Tervetuloa velkasimulointisovellukseen',
     user: 'käyttäjä',
     viewDebtSummary: 'Näytä velkasi yhteenveto',
-    viewDetailedBreakdown: 'Näytä yksityiskohtainen erittely',
+    viewDetailedBreakdown: 'Katso tarkempi erittely',
     totalDebt: 'Kokonaisvelka',
     paidDebt: 'Maksettu velka',
     remainingDebt: 'Jäljellä oleva velka',
@@ -693,6 +692,6 @@ export const fi: typeof en = {
   theme: {
     light: "Vaalea",
     dark: "Tumma",
-    system: "Järjestelmä"
+    system: "Järjestelm��"
   }
 };
