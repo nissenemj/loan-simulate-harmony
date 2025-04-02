@@ -1,17 +1,24 @@
 
-export type DebtType = 'loan' | 'credit-card';
-export type PaymentStrategy = 'avalanche' | 'snowball' | 'equal';
+/**
+ * Types for debt calculation
+ */
 
+// Debt item interface
 export interface Debt {
   id: string;
   name: string;
   balance: number;
   interestRate: number;
   minimumPayment: number;
-  type?: DebtType;
+  additionalPayment?: number;
+  type?: 'loan' | 'credit-card';
 }
 
-export interface Payment {
+// Payment strategy types
+export type PaymentStrategy = 'avalanche' | 'snowball' | 'custom' | 'equal';
+
+// Monthly payment for a specific debt
+export interface DebtPayment {
   debtId: string;
   amount: number;
   interestPaid: number;
@@ -19,10 +26,11 @@ export interface Payment {
   remainingBalance: number;
 }
 
+// Monthly payment plan for all debts
 export interface MonthlyPaymentPlan {
   month: number;
   date: string;
-  payments: Payment[];
+  payments: DebtPayment[];
   totalPaid: number;
   totalInterestPaid: number;
   totalPrincipalPaid: number;
@@ -30,26 +38,50 @@ export interface MonthlyPaymentPlan {
   debtsCompleted: string[];
 }
 
+// Complete payment plan
 export interface PaymentPlan {
-  strategy: PaymentStrategy;
-  totalMonths: number;
-  totalPaid: number;
-  totalInterestPaid: number;
-  totalPrincipalPaid: number;
   monthlyPlans: MonthlyPaymentPlan[];
+  totalMonths: number;
+  totalInterestPaid: number;
+  totalPaid: number;
+  totalPrincipalPaid?: number;
   payoffDate: string;
+  strategy: PaymentStrategy;
   monthlyPayment: number;
 }
 
-export interface ExtraPaymentImpact {
-  originalPayoffDate: string;
-  newPayoffDate: string;
-  originalTotalInterest: number;
-  newTotalInterest: number;
-  interestSaved: number;
-  monthsSaved: number;
+// What-if scenario
+export interface Scenario {
+  id: string;
+  name: string;
+  additionalMonthlyPayment: number;
+  strategy: PaymentStrategy;
+  customPaymentOrder?: string[];
+  oneTimePayment?: {
+    amount: number;
+    debtId: string;
+    month: number;
+  };
+  interestRateChanges?: {
+    debtId: string;
+    newRate: number;
+  }[];
 }
 
+// Comparison result between scenarios
+export interface ScenarioComparison {
+  scenarioId: string;
+  scenarioName: string;
+  totalMonths: number;
+  totalInterestPaid: number;
+  totalPaid: number;
+  payoffDate: string;
+  monthsSaved: number;
+  interestSaved: number;
+  moneySaved: number;
+}
+
+// Debt consolidation option
 export interface ConsolidationOption {
   id: string;
   name: string;
@@ -57,24 +89,20 @@ export interface ConsolidationOption {
   termMonths: number;
   monthlyPayment: number;
   totalInterestPaid: number;
+  totalPaid: number;
   payoffDate: string;
   interestSaved: number;
+  moneySaved: number;
+  monthsSaved: number;
 }
 
-export interface ScenarioDefinition {
-  id: string;
-  name: string;
-  additionalMonthlyPayment: number;
-  strategy: PaymentStrategy;
-}
-
-export interface ScenarioComparison {
-  scenarioId: string;
-  scenarioName: string;
-  totalMonths: number;
-  totalPaid: number;
-  totalInterestPaid: number;
-  monthlyPayment: number;
-  payoffDate: string;
+// Extra payment impact
+export interface ExtraPaymentImpact {
+  originalPayoffDate?: string;
+  newPayoffDate: string;
+  originalTotalInterest?: number;
+  newTotalInterest?: number;
+  amount: number;
+  monthsSaved: number;
   interestSaved: number;
 }
