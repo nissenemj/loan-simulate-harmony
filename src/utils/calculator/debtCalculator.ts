@@ -1,4 +1,3 @@
-
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 /**
@@ -258,7 +257,9 @@ export function calculateExtraPaymentImpact(
     amount: extraPayment,
     monthsSaved: originalPlan.totalMonths - newPlan.totalMonths,
     interestSaved: originalPlan.totalInterestPaid - newPlan.totalInterestPaid,
-    newPayoffDate: newPlan.payoffDate
+    newPayoffDate: newPlan.payoffDate,
+    originalTotalInterest: originalPlan.totalInterestPaid,
+    newTotalInterest: newPlan.totalInterestPaid
   };
 }
 

@@ -101,4 +101,6 @@ export interface ExtraPaymentImpact {
   monthsSaved: number;
   interestSaved: number;
   newPayoffDate: string;
+  originalTotalInterest: number;  // Added missing property
+  newTotalInterest: number;       // Added missing property
 }

@@ -194,11 +194,17 @@ export async function triggerSync() {
   if ('serviceWorker' in navigator && 'SyncManager' in window) {
     const registration = await navigator.serviceWorker.ready;
     try {
-      // Register for debt sync
-      await registration.sync.register('sync-debts');
-      // Register for payment sync
-      await registration.sync.register('sync-payments');
-      return true;
+      // Check if SyncManager is supported and available
+      if ('sync' in registration) {
+        // Register for debt sync
+        await (registration as any).sync.register('sync-debts');
+        // Register for payment sync
+        await (registration as any).sync.register('sync-payments');
+        return true;
+      } else {
+        console.warn('Background sync is not supported in this browser');
+        return false;
+      }
     } catch (error) {
       console.error('Background sync registration failed:', error);
       return false;
