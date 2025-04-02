@@ -10,12 +10,12 @@ export interface Debt {
   balance: number;
   interestRate: number;
   minimumPayment: number;
+  type?: string;
   additionalPayment?: number;
-  type?: 'loan' | 'credit-card';
 }
 
 // Payment strategy types
-export type PaymentStrategy = 'avalanche' | 'snowball' | 'custom' | 'equal';
+export type PaymentStrategy = 'avalanche' | 'snowball' | 'custom';
 
 // Monthly payment for a specific debt
 export interface DebtPayment {
@@ -44,7 +44,6 @@ export interface PaymentPlan {
   totalMonths: number;
   totalInterestPaid: number;
   totalPaid: number;
-  totalPrincipalPaid?: number;
   payoffDate: string;
   strategy: PaymentStrategy;
   monthlyPayment: number;
@@ -98,11 +97,8 @@ export interface ConsolidationOption {
 
 // Extra payment impact
 export interface ExtraPaymentImpact {
-  originalPayoffDate?: string;
-  newPayoffDate: string;
-  originalTotalInterest?: number;
-  newTotalInterest?: number;
   amount: number;
   monthsSaved: number;
   interestSaved: number;
+  newPayoffDate: string;
 }

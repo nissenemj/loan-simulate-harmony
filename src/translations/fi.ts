@@ -155,6 +155,23 @@ export const fi = {
     neverPaidOff: "Ei koskaan maksettu pois",
     demoDataMessage: "Tämä on demo-dataa. Lisää omat luottokorttisi saadaksesi henkilökohtaisen arvion.",
     actions: "Toiminnot",
+    loanName: "Lainan nimi",
+    monthlyInterestEstimate: "Kuukausikorkoin arvio",
+    totalInterestEstimate: "Kokonaiskoron arvio",
+    noLoansMessage: "Ei lainoja lisätty.",
+    totalLoans: "Lainat yhteensä",
+    totalSummarySection: "Velat yhteensä",
+    backButton: "Takaisin",
+    pageTitle: "Velkojesi yhteenveto",
+    pageDescription: "Tarkastele velkojesi kokonaistilannetta ja maksaskenaarioita.",
+    loansSection: "Lainat",
+    creditCardsSection: "Luottokortit",
+    totalMonthlyPayment: "Kuukausimaksu yhteensä",
+    totalMonthlyInterest: "Kuukausittainen korko yhteensä",
+    totalBalance: "Kokonaissaldo",
+    tableSummary: "Velkasuhteen yhteenveto",
+    totalAmountPaid: "Kokonaismaksettu summa",
+    metaDescription: "Tarkastele velkojesi kokonaistilannetta, mukaan lukien lainat ja luottokortit."
   },
   navigation: {
     dashboard: "Dashboard",
@@ -177,6 +194,22 @@ export const fi = {
     compareScenariosTooltip: "Vertaa eri lyhennysskenaarioita",
     dataExported: "Tiedot viety onnistuneesti",
     exportData: "Vie velkatiedot CSV-muodossa",
+    paymentPlanSummary: "Lyhennysuunnitelman tiivistelmä",
+    paymentPlanDescription: "Aktiivinen lyhennysuunnitelmasi",
+    monthlyBudget: "Kuukausittainen budjetti",
+    minimumPayments: "Minimimaksut",
+    extraBudget: "Ylimääräinen budjetti",
+    prioritizedDebt: "Priorisoitu velka",
+    interestRate: "Korkoprosentti",
+    allocatingExtra: "Kohdennetaan {{amount}} ylimääräistä",
+    viewFullPlan: "Näytä koko suunnitelma",
+    totalDebt: "Velat yhteensä",
+    estimatedInterestCost: "Arvioidut korkokulut",
+    estimatedDebtFreeDate: "Arvioitu velattomuuspäivä",
+    totalToPayOff: "Maksettava yhteensä",
+    minimumMonthlyPayments: "Kuukausittaiset minimimaksut",
+    perMonth: "kuukaudessa",
+    viewDetailedBreakdown: "Näytä yksityiskohtainen erittely"
   },
   settings: {
     title: "Asetukset",
@@ -321,6 +354,11 @@ export const fi = {
     payoffTime: "Maksuaika",
     insufficientBudget: "Riittämätön budjetti",
     budgetTooLow: "Budjettisi on liian pieni velkojesi maksamiseen.",
+    summaryTab: "Yhteenveto",
+    planTab: "Lyhennyssuunnitelma",
+    noPlanYet: "Ei vielä lyhennyssuunnitelmaa",
+    enterBudgetPrompt: "Syötä kuukausittainen budjetti ja laske lyhennyssuunnitelma",
+    calculateNow: "Laske nyt"
   },
   visualization: {
     debtBreakdown: "Velkasuhde",
@@ -337,6 +375,29 @@ export const fi = {
   language: {
     en: "English",
     fi: "Suomi"
+  },
+  toast: {
+    loanPaidOff: "Laina maksettu pois",
+    cardPaidOff: "Luottokortti maksettu pois"
+  },
+  recommendations: {
+    title: "Suositukset",
+    topPriority: "Korkein prioriteetti",
+    topPriorityText: "Tämä laina pitäisi maksaa ensin korkeiden kustannusten vuoksi.",
+    topPriorityTextPlural: "Nämä lainat pitäisi maksaa ensin korkeiden kustannusten vuoksi.",
+    highInterest: "Korkein korko",
+    highInterestText: "Tämä laina maksaa eniten korkoa kuukausittain.",
+    highInterestTextPlural: "Nämä lainat maksavat eniten korkoa kuukausittain.",
+    highTotalInterest: "Korkein kokonaiskorkokustannus",
+    highTotalInterestText: "Tämä laina maksaa eniten korkoa koko laina-ajan aikana.",
+    highTotalInterestTextPlural: "Nämä lainat maksavat eniten korkoa koko laina-ajan aikana."
+  },
+  tooltips: {
+    totalDebt: "Kaikkien aktiivisten lainojen määrien ja luottokorttisaldojen summa.",
+    interestCost: "Arvioidut kokonaiskorot, jotka maksat kaikkien velkojesi osalta nykyisillä koroilla ja maksuilla.",
+    debtFreeDate: "Arvioitu päivämäärä, jolloin kaikki velkasi on maksettu nykyisillä maksusummilla.",
+    minimumPayments: "Yhdistetyt vähimmäismaksut, jotka vaaditaan kaikille lainoillesi ja luottokorteillesi.",
+    totalToPayOff: "Kokonaissumma, mukaan lukien pääoma ja korko, jonka maksat kaikkien velkojesi elinkaaren aikana."
   }
 };
 

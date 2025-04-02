@@ -1,6 +1,5 @@
 
-import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment, ConsolidationOption, ScenarioComparison, ExtraPaymentImpact } from './types';
-import { addMonths, format } from 'date-fns';
+import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 /**
  * Calculate a complete debt payment plan based on the provided debts and strategy
@@ -48,7 +47,6 @@ export function calculatePaymentPlan(
   let currentMonth = 0;
   let totalInterestPaid = 0;
   let totalPaid = 0;
-  let totalPrincipalPaid = 0;
   
   // Continue until all debts are paid off
   while (workingDebts.some(debt => debt.remainingBalance > 0)) {
@@ -94,11 +92,11 @@ export function calculatePaymentPlan(
       const interestAmount = debt.remainingBalance * monthlyInterestRate;
       
       // Start with minimum payment
-      let paymentAmount = Math.min(debt.minimumPayment, debt.remainingBalance + interestAmount);
+      let paymentAmount = Math.min(debt.minimumPayment, debt.remainingBalance);
       
       // Add additional payment if this is the highest priority debt
       if (remainingPayment > 0 && debt.id === sortedDebts[0].id) {
-        const additionalPayment = Math.min(remainingPayment, debt.remainingBalance + interestAmount - paymentAmount);
+        const additionalPayment = Math.min(remainingPayment, debt.remainingBalance - paymentAmount);
         paymentAmount += additionalPayment;
         remainingPayment -= additionalPayment;
       }
@@ -160,7 +158,6 @@ export function calculatePaymentPlan(
     // Update totals
     totalInterestPaid += monthlyPlan.totalInterestPaid;
     totalPaid += monthlyPlan.totalPaid;
-    totalPrincipalPaid += monthlyPlan.totalPrincipalPaid;
     
     // Increment month
     currentMonth++;
@@ -181,7 +178,6 @@ export function calculatePaymentPlan(
     totalMonths: currentMonth,
     totalInterestPaid,
     totalPaid,
-    totalPrincipalPaid,
     payoffDate: payoffDate.toISOString().split('T')[0],
     strategy,
     monthlyPayment: totalMonthlyPayment
@@ -216,9 +212,6 @@ export function sortDebtsByStrategy(
       const indexB = customOrder.indexOf(b.id);
       return indexA - indexB;
     });
-  } else if (strategy === 'equal') {
-    // No specific sorting for equal payments
-    return debtsCopy;
   }
   
   // Default to avalanche if strategy is invalid
@@ -239,7 +232,7 @@ export function calculateExtraPaymentImpact(
   extraPayment: number,
   debtId: string,
   strategy: PaymentStrategy
-): ExtraPaymentImpact {
+) {
   // Calculate minimum payment sum
   const minimumPaymentSum = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
   
@@ -263,12 +256,9 @@ export function calculateExtraPaymentImpact(
   // Calculate impact
   return {
     amount: extraPayment,
-    originalPayoffDate: originalPlan.payoffDate,
-    newPayoffDate: newPlan.payoffDate,
-    originalTotalInterest: originalPlan.totalInterestPaid,
-    newTotalInterest: newPlan.totalInterestPaid,
     monthsSaved: originalPlan.totalMonths - newPlan.totalMonths,
-    interestSaved: originalPlan.totalInterestPaid - newPlan.totalInterestPaid
+    interestSaved: originalPlan.totalInterestPaid - newPlan.totalInterestPaid,
+    newPayoffDate: newPlan.payoffDate
   };
 }
 
@@ -282,7 +272,7 @@ export function calculateExtraPaymentImpact(
 export function calculateConsolidationOptions(
   debts: Debt[],
   consolidationOptions: { name: string; interestRate: number; termMonths: number }[]
-): ConsolidationOption[] {
+) {
   // Calculate total debt balance
   const totalBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
   
@@ -296,13 +286,9 @@ export function calculateConsolidationOptions(
   return consolidationOptions.map(option => {
     // Calculate monthly payment for consolidation loan
     const monthlyInterestRate = option.interestRate / 100 / 12;
-    
-    // Handle zero interest rate case separately to avoid division by zero
-    const monthlyPayment = monthlyInterestRate === 0
-      ? totalBalance / option.termMonths
-      : (totalBalance * monthlyInterestRate * 
-        Math.pow(1 + monthlyInterestRate, option.termMonths) / 
-        (Math.pow(1 + monthlyInterestRate, option.termMonths) - 1));
+    const monthlyPayment = totalBalance * monthlyInterestRate * 
+      Math.pow(1 + monthlyInterestRate, option.termMonths) / 
+      (Math.pow(1 + monthlyInterestRate, option.termMonths) - 1);
     
     // Calculate total interest paid
     const totalPaid = monthlyPayment * option.termMonths;
@@ -349,7 +335,7 @@ export function compareScenarios(
     strategy: PaymentStrategy;
     customPaymentOrder?: string[];
   }[]
-): ScenarioComparison[] {
+) {
   // Calculate minimum payment sum
   const minimumPaymentSum = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
   
