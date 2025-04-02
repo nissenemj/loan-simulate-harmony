@@ -1,16 +1,17 @@
 
 import { useTranslation } from '@/contexts/LanguageContext';
-import { useMemo } from 'react';
 
+/**
+ * Currency formatting options
+ */
 export interface CurrencyFormatOptions {
   currency?: string;
   minimumFractionDigits?: number;
   maximumFractionDigits?: number;
-  displayCurrencySymbol?: boolean;
 }
 
 /**
- * Hook to create a currency formatter based on the current locale
+ * Hook to get a currency formatter function based on the current locale
  */
 export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
   const { locale } = useTranslation();
@@ -19,54 +20,48 @@ export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
     currency: 'EUR',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-    displayCurrencySymbol: true,
     ...options
   };
   
-  return useMemo(() => {
-    const formatter = new Intl.NumberFormat(locale, {
-      style: defaultOptions.displayCurrencySymbol ? 'currency' : 'decimal',
+  const format = (value: number): string => {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
       currency: defaultOptions.currency,
       minimumFractionDigits: defaultOptions.minimumFractionDigits,
       maximumFractionDigits: defaultOptions.maximumFractionDigits
-    });
+    }).format(value);
+  };
+  
+  const formatWithoutSymbol = (value: number): string => {
+    const formatted = new Intl.NumberFormat(locale, {
+      style: 'decimal',
+      minimumFractionDigits: defaultOptions.minimumFractionDigits,
+      maximumFractionDigits: defaultOptions.maximumFractionDigits
+    }).format(value);
     
-    return {
-      format: (value: number) => formatter.format(value),
-      formatWithoutSymbol: (value: number) => formatter.format(value).replace(/[^\d.,]/g, '')
-    };
-  }, [locale, defaultOptions]);
-}
-
-/**
- * Format a date based on the current locale
- */
-export function formatDate(date: Date | string, options: Intl.DateTimeFormatOptions = {}) {
-  const { locale } = useTranslation();
-  
-  const dateToFormat = typeof date === 'string' ? new Date(date) : date;
-  
-  const defaultOptions: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    ...options
+    return formatted;
   };
   
-  return new Intl.DateTimeFormat(locale, defaultOptions).format(dateToFormat);
+  return { format, formatWithoutSymbol };
 }
 
 /**
- * Format number as percentage
+ * Hook to get a percentage formatter function based on the current locale
  */
-export function formatPercent(value: number, options: Intl.NumberFormatOptions = {}) {
+export function usePercentFormatter(options: Omit<CurrencyFormatOptions, 'currency'> = {}) {
   const { locale } = useTranslation();
   
-  const defaultOptions: Intl.NumberFormatOptions = {
-    style: 'percent',
+  const defaultOptions = {
     minimumFractionDigits: 1,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 1,
     ...options
   };
   
-  return new Intl.NumberFormat(locale, defaultOptions).format(value / 100);
+  return (value: number): string => {
+    return new Intl.NumberFormat(locale, {
+      style: 'percent',
+      minimumFractionDigits: defaultOptions.minimumFractionDigits,
+      maximumFractionDigits: defaultOptions.maximumFractionDigits
+    }).format(value / 100); // Convert from percentage value to decimal
+  };
 }
