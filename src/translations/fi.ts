@@ -1,3 +1,4 @@
+
 export const fi = {
   app: {
     title: "Velkavapaus",
@@ -554,4 +555,6 @@ export const fi = {
     customPayment: "Mukautettu maksu",
     addLoan: "Lisää laina",
     addCreditCard: "Lisää luottokortti",
-    monthly
+    monthly: "Kuukausittain"
+  }
+};
