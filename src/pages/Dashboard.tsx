@@ -25,6 +25,7 @@ import FinancialTips from '@/components/dashboard/FinancialTips';
 import DebtFreeTimeline from '@/components/dashboard/DebtFreeTimeline';
 import LoanSummary from '@/components/LoanSummary';
 import ScenarioComparisonTool from '@/components/dashboard/ScenarioComparisonTool';
+import UnderConstructionBanner from '@/components/UnderConstructionBanner';
 
 const Dashboard = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -179,6 +180,8 @@ const Dashboard = () => {
       </Helmet>
       
       <div className="flex flex-col gap-8">
+        <UnderConstructionBanner />
+        
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{t('dashboard.welcome')}, {username}</h1>

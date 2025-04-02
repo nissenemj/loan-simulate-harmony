@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Calculator, PieChart, LineChart, TrendingDown, Coins } from 'lucide-react';
+import UnderConstructionBanner from '@/components/UnderConstructionBanner';
 
 const DebtStrategies = () => {
   const { t } = useTranslation();
@@ -67,6 +68,8 @@ const DebtStrategies = () => {
       </Helmet>
       
       <div className="space-y-6">
+        <UnderConstructionBanner />
+        
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('debtStrategies.pageTitle')}</h1>
           <p className="text-muted-foreground mt-2">

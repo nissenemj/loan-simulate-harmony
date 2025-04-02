@@ -6,13 +6,15 @@ import { useTranslation } from '@/contexts/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { compareScenarios } from '@/utils/calculator/debtCalculator';
+import { useCurrencyFormatter } from '@/utils/formatting';
 
 interface StrategyComparisonChartProps {
   debts: Debt[];
 }
 
 export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps) {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
+  const currencyFormatter = useCurrencyFormatter();
   
   // Use actual calculation utilities for accurate comparisons
   const { timeData, interestData } = useMemo(() => {
@@ -69,11 +71,6 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
       return { timeData: [], interestData: [] };
     }
   }, [debts, t]);
-  
-  // Memoize the formatter for better performance
-  const formatter = useMemo(() => {
-    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
-  }, [locale]);
   
   return (
     <Card>
@@ -140,10 +137,10 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                     />
                     <YAxis
                       label={{ value: t('visualization.totalInterestPaid'), angle: -90, position: 'insideLeft' }}
-                      tickFormatter={(value) => formatter.format(value).replace(/[^\d.]/g, '')}
+                      tickFormatter={(value) => currencyFormatter.formatWithoutSymbol(value)}
                     />
                     <Tooltip 
-                      formatter={(value) => [formatter.format(Number(value)), t('visualization.totalInterestPaid')]}
+                      formatter={(value) => [currencyFormatter.format(Number(value)), t('visualization.totalInterestPaid')]}
                     />
                     <Legend />
                     <Bar dataKey="interest" name={t('visualization.totalInterestPaid')} fill="#FF8042" />

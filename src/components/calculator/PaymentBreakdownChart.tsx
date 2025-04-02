@@ -5,13 +5,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useTranslation } from '@/contexts/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCurrencyFormatter } from '@/utils/formatting';
 
 interface PaymentBreakdownChartProps {
   paymentPlan: PaymentPlan;
 }
 
 export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProps) {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
+  const currencyFormatter = useCurrencyFormatter();
   
   // Memoize the data calculations for better performance
   const { monthlyData, cumulativeData } = useMemo(() => {
@@ -47,11 +49,6 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
     
     return { monthlyData, cumulativeData };
   }, [paymentPlan, t]);
-
-  // Memoize the formatter for better performance
-  const formatter = useMemo(() => {
-    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
-  }, [locale]);
   
   return (
     <Card>
@@ -77,10 +74,10 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis 
-                      tickFormatter={(value) => formatter.format(value).replace(/[^\d.]/g, '')}
+                      tickFormatter={(value) => currencyFormatter.formatWithoutSymbol(value)}
                     />
                     <Tooltip
-                      formatter={(value) => formatter.format(Number(value))}
+                      formatter={(value) => currencyFormatter.format(Number(value))}
                     />
                     <Legend />
                     <Bar dataKey="principal" name={t('visualization.principalPayment')} fill="#4CAF50" />
@@ -106,10 +103,10 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis 
-                      tickFormatter={(value) => formatter.format(value).replace(/[^\d.]/g, '')}
+                      tickFormatter={(value) => currencyFormatter.formatWithoutSymbol(value)}
                     />
                     <Tooltip
-                      formatter={(value) => formatter.format(Number(value))}
+                      formatter={(value) => currencyFormatter.format(Number(value))}
                     />
                     <Legend />
                     <Bar dataKey="principal" name={t('visualization.cumulativePrincipal')} fill="#4CAF50" />
