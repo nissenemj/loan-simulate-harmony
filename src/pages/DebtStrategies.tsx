@@ -20,7 +20,7 @@ import {
   TabsTrigger 
 } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Info, Calculator, PieChart, LineChart, TrendingDown, Coins } from 'lucide-react';
+import { Info, Calculator, LineChart, TrendingDown, Coins } from 'lucide-react';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
 
 const DebtStrategies = () => {

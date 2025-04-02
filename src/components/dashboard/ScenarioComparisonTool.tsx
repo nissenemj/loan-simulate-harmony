@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
@@ -16,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loan, formatCurrency } from '@/utils/loanCalculations';
+import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
 import { 
   LineChart, 
@@ -51,6 +50,7 @@ import {
 } from '@/components/ui/tooltip';
 import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
+import { useCurrencyFormatter } from '@/utils/formatting';
 
 interface ScenarioComparisonToolProps {
   activeLoans: Loan[];
@@ -59,7 +59,6 @@ interface ScenarioComparisonToolProps {
   onClose: () => void;
 }
 
-// Define a type for scenarios
 interface Scenario {
   id: string;
   name: string;
@@ -76,13 +75,12 @@ const ScenarioComparisonTool = ({
   onClose 
 }: ScenarioComparisonToolProps) => {
   const { t } = useLanguage();
+  const currencyFormatter = useCurrencyFormatter();
   
-  // Calculate total debt
   const totalDebt = 
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
   
-  // Calculate total minimum payments
   const calculateTotalMinPayments = () => {
     const loanMinPayments = activeLoans.reduce((sum, loan) => {
       if (loan.minPayment) {
@@ -118,7 +116,6 @@ const ScenarioComparisonTool = ({
   
   const totalMinPayments = calculateTotalMinPayments();
   
-  // Predefined scenarios
   const defaultScenarios: Scenario[] = [
     {
       id: 'current',
@@ -146,7 +143,6 @@ const ScenarioComparisonTool = ({
     }
   ];
   
-  // State for scenarios
   const [scenarios, setScenarios] = useState<Scenario[]>(defaultScenarios);
   const [activeScenarioId, setActiveScenarioId] = useState<string>('current');
   const [editingScenarioId, setEditingScenarioId] = useState<string | null>(null);
@@ -158,10 +154,8 @@ const ScenarioComparisonTool = ({
     strategy: 'avalanche'
   });
   
-  // Tabs for different comparisons
   const [activeTab, setActiveTab] = useState('repayment');
   
-  // Validate value to ensure it's within a realistic range
   const validateValue = (value: number, min: number, max: number, defaultVal: number): number => {
     if (isNaN(value) || value < min || value > max) {
       return defaultVal;
@@ -169,15 +163,12 @@ const ScenarioComparisonTool = ({
     return value;
   };
   
-  // Function to adjust loans and cards based on scenario
   const adjustDebtsForScenario = (scenario: Scenario) => {
-    // Apply interest rate adjustment to loans
     const adjustedLoans = activeLoans.map(loan => ({
       ...loan,
       interestRate: Math.max(0, loan.interestRate + scenario.interestRateAdjustment)
     }));
     
-    // Apply interest rate adjustment to credit cards
     const adjustedCards = activeCards.map(card => ({
       ...card,
       apr: Math.max(0, card.apr + scenario.interestRateAdjustment)
@@ -186,16 +177,13 @@ const ScenarioComparisonTool = ({
     return { adjustedLoans, adjustedCards };
   };
   
-  // Get active scenario
   const activeScenario = scenarios.find(scenario => scenario.id === activeScenarioId) || scenarios[0];
   
-  // Calculate repayment plan for each scenario
   const scenarioResults = useMemo(() => {
     return scenarios.map(scenario => {
       const { adjustedLoans, adjustedCards } = adjustDebtsForScenario(scenario);
       const combinedDebts = combineDebts(adjustedLoans, adjustedCards);
       
-      // Calculate monthly payment including the monthly portion of the annual extra payment
       const effectiveMonthlyPayment = scenario.monthlyPayment + (scenario.extraPayment / 12);
       
       const plan = generateRepaymentPlan(combinedDebts, effectiveMonthlyPayment, scenario.strategy);
@@ -211,12 +199,9 @@ const ScenarioComparisonTool = ({
     });
   }, [scenarios, activeLoans, activeCards]);
   
-  // Get results for active scenario
   const activeScenarioResults = scenarioResults.find(result => result.id === activeScenarioId);
   
-  // Generate comparison data for chart
   const comparisonChartData = useMemo(() => {
-    // Find longest timeline
     const maxMonths = Math.max(...scenarioResults.map(result => 
       result.timeline.length > 0 ? result.timeline.length : 0
     ));
@@ -225,7 +210,7 @@ const ScenarioComparisonTool = ({
     
     const data = [];
     
-    for (let month = 0; month < maxMonths; month += 3) { // Sample every 3 months for clarity
+    for (let month = 0; month < maxMonths; month += 3) {
       const point: any = { month: month + 1 };
       
       scenarioResults.forEach(result => {
@@ -241,7 +226,6 @@ const ScenarioComparisonTool = ({
     return data;
   }, [scenarioResults]);
   
-  // Handle editing a scenario
   const handleEditScenario = (scenarioId: string) => {
     const scenario = scenarios.find(s => s.id === scenarioId);
     if (!scenario) return;
@@ -257,11 +241,9 @@ const ScenarioComparisonTool = ({
     setEditingScenarioId(scenarioId);
   };
   
-  // Handle saving edited scenario
   const handleSaveScenario = () => {
     if (!editingScenarioId) return;
     
-    // Validate inputs
     const validatedData = {
       ...editFormData,
       interestRateAdjustment: validateValue(editFormData.interestRateAdjustment, -10, 10, 0),
@@ -280,7 +262,6 @@ const ScenarioComparisonTool = ({
     setEditingScenarioId(null);
   };
   
-  // Handle input change in edit form
   const handleEditFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
@@ -297,7 +278,6 @@ const ScenarioComparisonTool = ({
     }
   };
   
-  // Handle strategy change
   const handleStrategyChange = (strategy: 'avalanche' | 'snowball' | 'equal') => {
     setEditFormData({
       ...editFormData,
@@ -305,14 +285,12 @@ const ScenarioComparisonTool = ({
     });
   };
   
-  // Reset scenarios to default
   const handleResetScenarios = () => {
     setScenarios(defaultScenarios);
     setActiveScenarioId('current');
     setEditingScenarioId(null);
   };
   
-  // Custom tooltip for charts
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -329,7 +307,7 @@ const ScenarioComparisonTool = ({
                 style={{ color: entry.color }}
                 className="text-sm"
               >
-                {scenario?.name || scenarioId} - {dataType === 'balance' ? t('dashboard.remainingDebt') : t('dashboard.totalInterestPaid')}: {formatCurrency(entry.value)}
+                {scenario?.name || scenarioId} - {dataType === 'balance' ? t('dashboard.remainingDebt') : t('repayment.totalInterestPaid')}: {currencyFormatter.format(entry.value)}
               </p>
             );
           })}
@@ -357,18 +335,16 @@ const ScenarioComparisonTool = ({
       
       <CardContent>
         <div className="space-y-6">
-          {/* Minimum payment alert */}
           {totalMinPayments > 0 && (
             <Alert className="bg-muted">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                {t('scenarios.minimumPaymentAlert', { payment: formatCurrency(totalMinPayments) }) || 
-                  `Total minimum payments required: ${formatCurrency(totalMinPayments)}. Any scenario with lower monthly payment will not be viable.`}
+                {t('scenarios.minimumPaymentAlert', { payment: currencyFormatter.format(totalMinPayments) }) || 
+                  `Total minimum payments required: ${currencyFormatter.format(totalMinPayments)}. Any scenario with lower monthly payment will not be viable.`}
               </AlertDescription>
             </Alert>
           )}
           
-          {/* Scenario selector and editor */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {scenarios.map(scenario => (
               <Card 
@@ -567,7 +543,6 @@ const ScenarioComparisonTool = ({
                         }</div>
                       </div>
                       
-                      {/* Scenario results */}
                       {scenarioResults.find(result => result.id === scenario.id) && (
                         <>
                           <Separator className="my-2" />
@@ -591,7 +566,6 @@ const ScenarioComparisonTool = ({
             ))}
           </div>
           
-          {/* Tabs for different comparisons */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="repayment">{t('scenarios.debtOverTime') || 'Debt Over Time'}</TabsTrigger>
@@ -605,16 +579,15 @@ const ScenarioComparisonTool = ({
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="month" 
-                      label={{ value: t('dashboard.months'), position: 'insideBottomRight', offset: -5 }} 
+                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
                     />
                     <YAxis 
                       tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('dashboard.debt'), angle: -90, position: 'insideLeft' }}
+                      label={{ value: t('repayment.balance') || 'Balance', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     
-                    {/* Render lines for each scenario */}
                     {scenarios.map((scenario, index) => (
                       <Area
                         key={`${scenario.id}_balance`}
@@ -637,22 +610,21 @@ const ScenarioComparisonTool = ({
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="month" 
-                      label={{ value: t('dashboard.months'), position: 'insideBottomRight', offset: -5 }} 
+                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
                     />
                     <YAxis 
                       tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('dashboard.interest'), angle: -90, position: 'insideLeft' }}
+                      label={{ value: t('repayment.totalInterestPaid') || 'Total Interest', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
                     
-                    {/* Render lines for each scenario */}
                     {scenarios.map((scenario, index) => (
                       <Line
                         key={`${scenario.id}_interest`}
                         type="monotone"
                         dataKey={`${scenario.id}_interest`}
-                        name={`${scenario.name} - ${t('dashboard.totalInterestPaid') || 'Total Interest Paid'}`}
+                        name={`${scenario.name} - ${t('repayment.totalInterestPaid') || 'Total Interest Paid'}`}
                         stroke={`hsl(${index * 90 + 180}, 70%, 50%)`}
                         strokeWidth={2}
                         dot={false}
