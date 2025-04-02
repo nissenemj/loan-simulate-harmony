@@ -1,3 +1,4 @@
+
 export const fi = {
   app: {
     title: "Velkavapaus",
@@ -201,7 +202,6 @@ export const fi = {
     consolidationConsiderations: "Huomioitavia asioita yhdistämisessä",
     considerationFees: "Ota huomioon mahdolliset lainan avausmaksut ja muut kulut.",
     considerationCredit: "Velkojen yhdistäminen voi vaikuttaa luottopisteidesi.",
-    considerationCollateral: "Jotkut yhdistämisvaihtoehdot voivat vaatia vakuutta.",
     considerationBehavior: "Ole tietoinen kulutustottumuksistasi, jotta et kerää uutta velkaa.",
     personalLoan: "Henkilökohtainen laina",
     balanceTransfer: "Saldonsiirto-kortti",

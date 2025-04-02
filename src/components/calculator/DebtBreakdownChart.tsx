@@ -41,7 +41,7 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={({ viewBox }) => Math.min(viewBox.width, viewBox.height) / 3}
+                outerRadius="80%"
                 fill="#8884d8"
                 dataKey="value"
                 nameKey="name"
