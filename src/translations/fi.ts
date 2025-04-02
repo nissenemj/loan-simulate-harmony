@@ -177,7 +177,7 @@ export const fi = {
     monthlyBreakdown: "Kuukausittainen erittely",
     month: "Kuukausi",
     payment: "Maksu",
-    principal: "Pääoma",
+    principalPayment: "Pääomamaksu", // Renamed from 'principal' to fix duplicate
     interest: "Korko",
     remainingBalance: "Jäljellä oleva saldo",
     debtsCompleted: "Maksetut velat",
@@ -367,9 +367,9 @@ export const fi = {
     maximum: "Maksimi",
     recommendedStrategy: "Suositeltu strategia",
     recommendation: "Suositus",
-    equalStrategy: "Tasainen jako",
-    snowballStrategy: "Lumipallo",
-    avalancheStrategy: "Laviini",
+    equalStrategyRec: "Tasainen jako", // Renamed from equalStrategy to fix duplicate
+    snowballStrategyRec: "Lumipallo", // Renamed from snowballStrategy to fix duplicate
+    avalancheStrategyRec: "Laviini", // Renamed from avalancheStrategy to fix duplicate
     equalDistribution: "Tasaisen jaon strategia",
     estimatedInterestCost: "Arvioitu korkokustannus",
     estimatedDebtFreeDate: "Arvioitu velaton päivä",
@@ -408,12 +408,12 @@ export const fi = {
     month: "Kuukausi",
     payment: "Maksu",
     totalPayment: "Kokonaismaksu",
-    principal: "Pääoma",
+    principalAmount: "Pääoma", // Renamed from principal to fix duplicate
     interest: "Korko",
     remainingBalance: "Jäljellä oleva saldo",
     completedDebts: "Maksetut velat",
     comparingStrategies: "Strategioiden vertailu",
-    strategyComparison: "Strategiavertailu",
+    strategyComparisonView: "Strategiavertailu", // Renamed from strategyComparison to fix duplicate
     with: "kanssa",
     extraMonthly: "lisää kuukaudessa",
     youllSave: "säästät",
@@ -453,7 +453,7 @@ export const fi = {
     debtName: "Velan nimi",
     minPayment: "Vähimmäismaksu",
     extraPayment: "Lisämaksu",
-    total: "Yhteensä",
+    totalAmount: "Yhteensä", // Renamed from total to fix duplicate
     balanceTimeline: "Velkasaldon aikajana",
     balanceTimelineDescription: "Miten kokonaisvelkasi pienenee ajan myötä",
     debtPayoffSchedule: "Velanmaksuaikataulu",
@@ -465,7 +465,7 @@ export const fi = {
     calculateNow: "Laske nyt",
     summaryTab: "Velkakatsaus",
     planTab: "Takaisinmaksusuunnitelma",
-    strategyComparison: "Takaisinmaksustrategiavertailu",
+    strategyComparisonTab: "Takaisinmaksustrategiavertailu", // Renamed from strategyComparison to fix duplicate
     strategyComparisonDesc: "Vertaile eri takaisinmaksustrategioita ja niiden vaikutusta velkojesi maksuun",
     payoffTimeline: "Takaisinmaksuaikataulu",
     debtDetails: "Velkatiedot",
@@ -474,10 +474,10 @@ export const fi = {
     paymentFlowDescription: "Näe miten maksut siirtyvät velasta toiseen, kun ne maksetaan pois",
     paymentFlowExplanation: "Kun velka on maksettu pois, sen budjetti siirretään seuraavaan priorisoituun velkaan",
     minimumPayments: "Vähimmäismaksut",
-    snowball: "Lumipallostrategia",
-    avalanche: "Laviinistrategia",
-    totalMonths: "Kuukaudet yhteensä",
-    totalInterest: "Korko yhteensä",
+    snowballPlan: "Lumipallostrategia", // Renamed from snowball to fix duplicate
+    avalanchePlan: "Laviinistrategia", // Renamed from avalanche to fix duplicate
+    totalMonthsCount: "Kuukaudet yhteensä", // Renamed from totalMonths to fix duplicate
+    totalInterestAmount: "Korko yhteensä", // Renamed from totalInterest to fix duplicate
     strategySummary: "Strategian yhteenveto",
     savingsVsMinimum: "Säästöt vs. minimi",
     bestStrategy: "Paras strategia",
@@ -485,15 +485,15 @@ export const fi = {
     title: "Takaisinmaksusuunnitelma",
     budget: "Budjetti",
     budgetPlaceholder: "Syötä kuukausibudjetti",
-    strategy: "Strategia",
+    strategyType: "Strategia", // Renamed from strategy to fix duplicate
     highestInterestDesc: "Maksa korkeimman koron velat ensin",
     lowestBalanceDesc: "Maksa pienimmät velat ensin",
     debtFreeIn: "Velaton",
     monthsFaster: "{{months}} kuukautta nopeammin",
     monthsSlower: "{{months}} kuukautta hitaammin",
-    creditCardsFree: "Luottokortit maksettu",
+    creditCardsFreeIn: "Luottokortit maksettu", // Renamed from creditCardsFree to fix duplicate
     monthsUntilCreditCardFree: "{{months}} kuukautta kunnes kaikki luottokortit on maksettu",
-    interestSaved: "Säästetty korko",
+    interestSavedAmount: "Säästetty korko", // Renamed from interestSaved to fix duplicate
     avalancheDesc: "Korkein korko ensin",
     snowballDesc: "Pienin saldo ensin"
   },
