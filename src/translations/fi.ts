@@ -77,8 +77,7 @@ export const fi = {
     loanDetails: "Lainan tiedot",
     payoffCalculation: "Takaisinmaksulaskelma",
     minPayment: "Vähimmäismaksu",
-    loanSummary: "Lainayhteenveto",
-    principal: "Pääoma"
+    loanSummary: "Lainayhteenveto"
   },
   creditCards: {
     addCreditCard: "Lisää luottokortti",
@@ -348,5 +347,9 @@ export const fi = {
     settings: "Asetukset",
     help: "Ohje",
     logout: "Kirjaudu ulos"
+  },
+  language: {
+    en: "English",
+    fi: "Suomi"
   }
 };
