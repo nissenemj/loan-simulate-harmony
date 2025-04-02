@@ -556,5 +556,31 @@ export const fi = {
     addLoan: "Lisää laina",
     addCreditCard: "Lisää luottokortti",
     monthly: "Kuukausittain"
+  },
+  theme: {
+    light: "Vaalea teema",
+    dark: "Tumma teema",
+    system: "Järjestelmän teema"
+  },
+  landing: {
+    footer: {
+      about: {
+        title: "Tietoa meistä",
+        description: "Velkavapaus auttaa suomalaisia saamaan selkeyttä velka- ja lainatilanteeseensa. Tarjoamme työkaluja velkojen hallintaan ja takaisinmaksuun."
+      },
+      links: {
+        title: "Hyödylliset linkit",
+        item1: "Koti",
+        item2: "Käyttöehdot",
+        item3: "Velkakatsaus"
+      },
+      legal: {
+        title: "Lakiasiat",
+        privacy: "Tietosuojakäytäntö",
+        terms: "Käyttöehdot",
+        cookies: "Evästekäytäntö"
+      },
+      copyright: "Kaikki oikeudet pidätetään."
+    }
   }
 };
