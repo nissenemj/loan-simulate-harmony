@@ -1,4 +1,3 @@
-
 export const fi = {
   app: {
     title: "Velkavapaus",
@@ -177,7 +176,7 @@ export const fi = {
     monthlyBreakdown: "Kuukausittainen erittely",
     month: "Kuukausi",
     payment: "Maksu",
-    principalPayment: "Pääomamaksu", // Renamed from 'principal' to fix duplicate
+    principalPayment: "Pääomamaksu",
     interest: "Korko",
     remainingBalance: "Jäljellä oleva saldo",
     debtsCompleted: "Maksetut velat",
@@ -240,7 +239,7 @@ export const fi = {
     selectDebtPlaceholder: "Valitse velka",
     impactResults: "Vaikutustulokset",
     extraPaymentTip: "Vinkki: Kohdista korkean koron velkoihin",
-    extraPaymentTipDescription: "Saadaksesi suurimman vaikutuksen, tee lisämaksuja korkeimman koron velkaan.",
+    extraPaymentTipDescription: "Saadaksesi suurimman vaikutuksen, tee lisämaksuja korkeimman koron velkoihin.",
     timelineDescription: "Näe kuinka velkasi maksetaan pois kuukausi kuukaudelta.",
     consolidationDescription: "Tutki mahdollisuuksia yhdistää velkasi yhdeksi lainaksi.",
     extraPaymentDescription: "Näe miten lisämaksun tekeminen vaikuttaa velan takaisinmaksuun."
@@ -280,7 +279,7 @@ export const fi = {
     interestVsPrincipal: "Korko vs. Pääoma",
     interestVsPrincipalDescription: "Korkomaksut voivat muodostaa merkittävän osan kokonaismaksuistasi. Lisämaksut voivat vähentää koron määrää huomattavasti.",
     strategyInsights: "Strategianäkemykset",
-    strategyInsightsDescription: "Korkeampikorkoisiin velkoihin keskittyminen (laviinitaktiikka) säästää yleensä enemmän korkoa, kun taas pienempiiin saldoihin keskittyminen (lumipallotaktiikka) voi antaa psykologisia voittoja.",
+    strategyInsightsDescription: "Korkeampikorkoisiin velkoihin keskittyminen (laviinistrategiak) säästää yleensä enemmän korkoa, kun taas pienempiiin saldoihin keskittyminen (lumipallotaktiikka) voi antaa psykologisia voittoja.",
     minimumAvalanche: "Vähimmäismaksut, Laviini",
     minimumSnowball: "Vähimmäismaksut, Lumipallo",
     extra100Avalanche: "+100€/kk, Laviini",
@@ -367,9 +366,9 @@ export const fi = {
     maximum: "Maksimi",
     recommendedStrategy: "Suositeltu strategia",
     recommendation: "Suositus",
-    equalStrategyRec: "Tasainen jako", // Renamed from equalStrategy to fix duplicate
-    snowballStrategyRec: "Lumipallo", // Renamed from snowballStrategy to fix duplicate
-    avalancheStrategyRec: "Laviini", // Renamed from avalancheStrategy to fix duplicate
+    equalStrategyRec: "Tasainen jako",
+    snowballStrategyRec: "Lumipallo",
+    avalancheStrategyRec: "Laviini",
     equalDistribution: "Tasaisen jaon strategia",
     estimatedInterestCost: "Arvioitu korkokustannus",
     estimatedDebtFreeDate: "Arvioitu velaton päivä",
@@ -408,12 +407,12 @@ export const fi = {
     month: "Kuukausi",
     payment: "Maksu",
     totalPayment: "Kokonaismaksu",
-    principalAmount: "Pääoma", // Renamed from principal to fix duplicate
+    principalAmount: "Pääoma",
     interest: "Korko",
     remainingBalance: "Jäljellä oleva saldo",
     completedDebts: "Maksetut velat",
     comparingStrategies: "Strategioiden vertailu",
-    strategyComparisonView: "Strategiavertailu", // Renamed from strategyComparison to fix duplicate
+    strategyComparisonView: "Strategiavertailu",
     with: "kanssa",
     extraMonthly: "lisää kuukaudessa",
     youllSave: "säästät",
@@ -453,7 +452,7 @@ export const fi = {
     debtName: "Velan nimi",
     minPayment: "Vähimmäismaksu",
     extraPayment: "Lisämaksu",
-    totalAmount: "Yhteensä", // Renamed from total to fix duplicate
+    totalAmount: "Yhteensä",
     balanceTimeline: "Velkasaldon aikajana",
     balanceTimelineDescription: "Miten kokonaisvelkasi pienenee ajan myötä",
     debtPayoffSchedule: "Velanmaksuaikataulu",
@@ -465,7 +464,7 @@ export const fi = {
     calculateNow: "Laske nyt",
     summaryTab: "Velkakatsaus",
     planTab: "Takaisinmaksusuunnitelma",
-    strategyComparisonTab: "Takaisinmaksustrategiavertailu", // Renamed from strategyComparison to fix duplicate
+    strategyComparisonTab: "Takaisinmaksustrategiavertailu",
     strategyComparisonDesc: "Vertaile eri takaisinmaksustrategioita ja niiden vaikutusta velkojesi maksuun",
     payoffTimeline: "Takaisinmaksuaikataulu",
     debtDetails: "Velkatiedot",
@@ -474,10 +473,10 @@ export const fi = {
     paymentFlowDescription: "Näe miten maksut siirtyvät velasta toiseen, kun ne maksetaan pois",
     paymentFlowExplanation: "Kun velka on maksettu pois, sen budjetti siirretään seuraavaan priorisoituun velkaan",
     minimumPayments: "Vähimmäismaksut",
-    snowballPlan: "Lumipallostrategia", // Renamed from snowball to fix duplicate
-    avalanchePlan: "Laviinistrategia", // Renamed from avalanche to fix duplicate
-    totalMonthsCount: "Kuukaudet yhteensä", // Renamed from totalMonths to fix duplicate
-    totalInterestAmount: "Korko yhteensä", // Renamed from totalInterest to fix duplicate
+    snowballPlan: "Lumipallostrategia",
+    avalanchePlan: "Laviinistrategia",
+    totalMonthsCount: "Kuukaudet yhteensä",
+    totalInterestAmount: "Korko yhteensä",
     strategySummary: "Strategian yhteenveto",
     savingsVsMinimum: "Säästöt vs. minimi",
     bestStrategy: "Paras strategia",
@@ -485,15 +484,15 @@ export const fi = {
     title: "Takaisinmaksusuunnitelma",
     budget: "Budjetti",
     budgetPlaceholder: "Syötä kuukausibudjetti",
-    strategyType: "Strategia", // Renamed from strategy to fix duplicate
+    strategyType: "Strategia",
     highestInterestDesc: "Maksa korkeimman koron velat ensin",
     lowestBalanceDesc: "Maksa pienimmät velat ensin",
     debtFreeIn: "Velaton",
     monthsFaster: "{{months}} kuukautta nopeammin",
     monthsSlower: "{{months}} kuukautta hitaammin",
-    creditCardsFreeIn: "Luottokortit maksettu", // Renamed from creditCardsFree to fix duplicate
+    creditCardsFreeIn: "Luottokortit maksettu",
     monthsUntilCreditCardFree: "{{months}} kuukautta kunnes kaikki luottokortit on maksettu",
-    interestSavedAmount: "Säästetty korko", // Renamed from interestSaved to fix duplicate
+    interestSavedAmount: "Säästetty korko",
     avalancheDesc: "Korkein korko ensin",
     snowballDesc: "Pienin saldo ensin"
   },
@@ -517,7 +516,7 @@ export const fi = {
     disclaimer: "Vastuuvapauslauseke: Tuotteistamme jotkin sisältävät kumppanilinkkejä. Jos päätät hakea lainaa tai luottokorttia kumppanimme kautta, saatamme saada korvauksen. Tämä ei vaikuta arvosteluihimme tai suosituksiimme, jotka perustuvat huolelliseen tutkimukseen ja tuotevertailuun.",
     advertisement: "Mainos",
     title: "Tarvitsetko lisäapua velkojen hallintaan?",
-    subtitle: "Nämä luotetut kumppanit tarjoavat palveluita, jotka voivat täydentää velkamatkaasi.",
+    subtitle: "Nämä luotetut kumppanit tarjoavat palveluita, jotka voivat täydentää velanmaksumatkaasi.",
     compareLoans: "Vertaile lainoja",
     refinanceTitle: "Harkitse jälleenrahoitusta",
     refinanceText: "Löydä parempi korkoprosentti ja säästä rahaa.",

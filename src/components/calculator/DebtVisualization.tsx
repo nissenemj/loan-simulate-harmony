@@ -4,7 +4,6 @@ import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DebtBreakdownChart } from './DebtBreakdownChart'; 
 import { PaymentBreakdownChart } from './PaymentBreakdownChart';
 import { StrategyComparisonChart } from './StrategyComparisonChart';
