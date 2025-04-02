@@ -4,9 +4,9 @@ import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { DebtBreakdownChart } from './DebtBreakdownChart'; 
-import { PaymentBreakdownChart } from './PaymentBreakdownChart';
-import { StrategyComparisonChart } from './StrategyComparisonChart';
+import { DebtBreakdownChart } from '@/components/calculator/DebtBreakdownChart'; 
+import { PaymentBreakdownChart } from '@/components/calculator/PaymentBreakdownChart';
+import { StrategyComparisonChart } from '@/components/calculator/StrategyComparisonChart';
 
 interface DebtVisualizationProps {
   debts: Debt[];
@@ -37,14 +37,20 @@ export function DebtVisualization({ debts, paymentPlan }: DebtVisualizationProps
   }
   
   return (
-    <div className="space-y-6">
-      <DebtBreakdownChart debts={debts} paymentPlan={paymentPlan} />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="lg:col-span-2">
+        <DebtBreakdownChart debts={debts} paymentPlan={paymentPlan} />
+      </div>
       
       {paymentPlan && (
-        <PaymentBreakdownChart paymentPlan={paymentPlan} />
+        <div className="w-full">
+          <PaymentBreakdownChart paymentPlan={paymentPlan} />
+        </div>
       )}
       
-      <StrategyComparisonChart debts={debts} />
+      <div className="w-full">
+        <StrategyComparisonChart debts={debts} />
+      </div>
     </div>
   );
 }

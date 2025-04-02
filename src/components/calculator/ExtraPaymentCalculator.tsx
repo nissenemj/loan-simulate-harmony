@@ -171,7 +171,7 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
           <div className="mt-6">
             <h4 className="font-semibold text-lg mb-4">{t('calculator.impactResults')}</h4>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <Card className="bg-muted/30">
                 <CardContent className="p-4">
                   <div className="flex items-start">
@@ -200,7 +200,7 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
                 </CardContent>
               </Card>
               
-              <Card className="bg-muted/30">
+              <Card className="bg-muted/30 sm:col-span-2 md:col-span-1">
                 <CardContent className="p-4">
                   <div className="flex items-start">
                     <Calendar className="h-8 w-8 mr-3 mt-1 text-purple-500" />
@@ -215,7 +215,7 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
               </Card>
             </div>
             
-            <div className="h-[300px] mb-6">
+            <div className="h-[250px] md:h-[300px] mb-6">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={chartData}

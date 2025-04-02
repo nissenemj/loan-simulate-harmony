@@ -25,25 +25,29 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
   const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' });
   
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
-        <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
+    <Card className="w-full">
+      <CardHeader className="md:flex-row md:items-center md:justify-between">
+        <div>
+          <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
+          <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="h-80">
+        <div className="h-64 md:h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                labelLine={true}
-                outerRadius={80}
+                labelLine={false}
+                outerRadius={({ viewBox }) => Math.min(viewBox.width, viewBox.height) / 3}
                 fill="#8884d8"
                 dataKey="value"
                 nameKey="name"
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                label={({ name, percent }) => 
+                  percent > 0.05 ? `${name}: ${(percent * 100).toFixed(0)}%` : ''
+                }
               >
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -52,7 +56,7 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
               <Tooltip 
                 formatter={(value) => formatter.format(Number(value))}
               />
-              <Legend />
+              <Legend layout="horizontal" verticalAlign="bottom" align="center" />
             </PieChart>
           </ResponsiveContainer>
         </div>

@@ -695,7 +695,7 @@ export const fi = {
   },
   recommendations: {
     title: "Takaisinmaksusuositukset",
-    topPriority: "Ykkössijainen",
+    topPriority: "Ensisijainen",
     highInterest: "Korkea korkoprosentti",
     highTotalInterest: "Korkea kokonaiskorko",
     topPriorityText: "Maksa tämä laina pois ensimmäisenä säästääksesi eniten.",
