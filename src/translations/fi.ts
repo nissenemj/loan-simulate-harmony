@@ -588,5 +588,8 @@ export const fi: typeof en = {
     totalCreditCards: "Luottokorttien kokonaissaldo",
     monthlyPayment: "Kuukausittainen maksu yhteensä",
     savingsImpact: "Säästövaikutus"
+  },
+  navigation: {
+    debtStrategies: "Velkastrategiat"
   }
 };
