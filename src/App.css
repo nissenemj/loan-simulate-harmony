@@ -62,7 +62,12 @@
 
 /* Chart and visualization styles for dark mode */
 .dark .recharts-text {
-  fill: #E0E0E0;
+  fill: #E0E0E0 !important;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(224, 224, 224, 0.2) !important;
 }
 
 .dark .recharts-default-tooltip {
@@ -82,6 +87,15 @@
 
 .dark .recharts-legend-item-text {
   color: #E0E0E0 !important;
+}
+
+.dark .recharts-cartesian-axis-line {
+  stroke: rgba(224, 224, 224, 0.3) !important;
+}
+
+.dark .recharts-polar-angle-axis-tick-value,
+.dark .recharts-radial-bar-background-sector {
+  fill: #E0E0E0 !important;
 }
 
 /* Position legend outside of pie charts */
@@ -112,4 +126,28 @@
   height: 12px;
   margin-right: 4px;
   border-radius: 2px;
+}
+
+/* Custom CSS variables for our new dark theme */
+:root {
+  /* Dark Mode */
+  --bg-primary: #121212;
+  --bg-secondary: #1E1E1E;
+  --bg-elevated: #282828;
+  --bg-highlight: #333333;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-tertiary: #AAAAAA;
+  --text-disabled: #777777;
+
+  --brand-primary: #6E64FB;
+  --brand-primary-light: #8F87FF;
+  --brand-primary-dark: #4A3FCC;
+  --brand-secondary: #2EBFAA;
+
+  --state-success: #1EB26F;
+  --state-warning: #F6C046;
+  --state-error: #E64553;
+  --state-info: #39A0ED;
 }

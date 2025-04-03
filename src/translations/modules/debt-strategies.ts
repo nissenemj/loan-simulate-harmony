@@ -19,7 +19,7 @@ export const debtStrategies = {
       noDebtAlert: "Lisää lainoja tai luottokortteja aloittaaksesi.",
       calculateFirst: "Laske ensin velanmaksuaika.",
       addYourDebts: "Lisää velkasi",
-      errorMaxMonths: "Maksulaskenta ylitti maksimikuukausimäärän"
+      errorMaxMonths: "Maksulaskenta ylitti maksimikuukausimäärän (40 vuotta)"
     }
   }
 };

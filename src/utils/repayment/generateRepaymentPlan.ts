@@ -91,26 +91,50 @@ export const generateRepaymentPlan = (
     }
   }
 
-  // Step 6: Simulate repayment with the allocation
-  const equalDistributionFlag = method === 'equal' || equalDistribution;
-  const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistributionFlag);
+  try {
+    // Step 6: Simulate repayment with the allocation
+    const equalDistributionFlag = method === 'equal' || equalDistribution;
+    const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistributionFlag);
 
-  // Step 7: Calculate total months and interest paid
-  const totalMonths = timeline.length;
-  const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);
+    // Step 7: Calculate total months and interest paid
+    const totalMonths = timeline.length;
+    const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);
 
-  // Step 8: Find when all credit cards are paid off
-  const creditCardFreeMonth = findCreditCardFreeMonth(activeDebts, timeline);
+    // Step 8: Find when all credit cards are paid off
+    const creditCardFreeMonth = findCreditCardFreeMonth(activeDebts, timeline);
 
-  // Return the complete repayment plan
-  return {
-    isViable: true,
-    totalMonths,
-    totalInterestPaid,
-    timeline,
-    monthlyAllocation: initialAllocation,
-    creditCardFreeMonth
-  };
+    // Return the complete repayment plan
+    return {
+      isViable: true,
+      totalMonths,
+      totalInterestPaid,
+      timeline,
+      monthlyAllocation: initialAllocation,
+      creditCardFreeMonth
+    };
+  } catch (error) {
+    // If simulation exceeded maximum months or had other errors
+    if (error instanceof Error && error.message.includes('maximum number of months')) {
+      return {
+        isViable: false,
+        insufficientBudgetMessage: `Payment calculation exceeded maximum number of months (40 years)`,
+        totalMonths: 480, // 40 years
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: initialAllocation
+      };
+    }
+    
+    // For other errors
+    return {
+      isViable: false,
+      insufficientBudgetMessage: error instanceof Error ? error.message : 'Unknown calculation error',
+      totalMonths: 0,
+      totalInterestPaid: 0,
+      timeline: [],
+      monthlyAllocation: initialAllocation
+    };
+  }
 };
 
 /**

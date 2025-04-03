@@ -29,6 +29,8 @@ const DebtFreeTimeline = ({
   
   const hasDebts = totalDebt > 0 || activeCards.length > 0 || activeLoans.length > 0;
   
+  const hasValidDate = formattedDebtFreeDate && formattedDebtFreeDate !== "Invalid Date";
+  
   return (
     <Card>
       <CardHeader>
@@ -57,7 +59,7 @@ const DebtFreeTimeline = ({
                 <div className="ml-[calc(50%+1.5rem)] pl-4 -mt-1">
                   <h4 className="font-medium">{t('dashboard.creditCardsFree')}</h4>
                   <p className="text-sm text-muted-foreground">
-                    {t('dashboard.projectDate')}: {formattedDebtFreeDate}
+                    {t('dashboard.projectDate')}: {hasValidDate ? formattedDebtFreeDate : t('debtStrategies.errorMaxMonths')}
                   </p>
                 </div>
               </div>
@@ -68,7 +70,7 @@ const DebtFreeTimeline = ({
               <div className="ml-[calc(50%+1.5rem)] pl-4 -mt-1">
                 <h4 className="font-medium">{t('dashboard.debtFree')}</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('dashboard.projectDate')}: {formattedDebtFreeDate}
+                  {t('dashboard.projectDate')}: {hasValidDate ? formattedDebtFreeDate : t('debtStrategies.errorMaxMonths')}
                 </p>
               </div>
             </div>
