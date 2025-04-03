@@ -72,7 +72,7 @@ export const en = {
       termYearsPlaceholder: "Term in years",
       monthlyFeePlaceholder: "Monthly fee",
       namePlaceholder: "e.g. Home Loan",
-      interestRatePlaceholder: "e.g. 5.0",
+
     },
     loanTypes: {
       personalLoan: "Personal Loan",
