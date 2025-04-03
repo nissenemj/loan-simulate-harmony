@@ -1,5 +1,5 @@
 
-// Form-related translations
+// Forms-related translations
 
 export const forms = {
   en: {
@@ -20,17 +20,17 @@ export const forms = {
         creditCardBalance: "Credit Card Balance",
         creditCardAPR: "Credit Card APR",
         creditCardMinPayment: "Credit Card Min Payment",
-        minPayment: "Minimum Payment",
+        minPayment: "Min Payment",
         balance: "Balance",
         apr: "APR",
         name: "Name",
         amount: "Amount",
-        termYears: "Term in Years",
+        termYears: "Term in years",
         interestType: "Interest Type",
         repaymentType: "Repayment Type",
         monthlyFee: "Monthly Fee",
         variableEuribor: "Variable + Margin",
-        fixedInterestRate: "Fixed Rate",
+        fixedInterestRate: "Fixed Interest Rate",
       },
       placeholders: {
         loanNamePlaceholder: "Enter loan name",
@@ -48,7 +48,7 @@ export const forms = {
         amountPlaceholder: "Amount",
         termYearsPlaceholder: "Term in years",
         monthlyFeePlaceholder: "Monthly fee",
-        namePlaceholder: "e.g. Home Loan",
+        namePlaceholder: "e.g. Mortgage",
       },
       loanTypes: {
         personalLoan: "Personal Loan",
@@ -73,20 +73,20 @@ export const forms = {
         cancel: "Cancel",
         save: "Save",
         payoff: "Pay Off",
-        submit: "Add",
+        submit: "Submit",
       },
       tooltips: {
         interestRate: "Interest rate of the loan",
-        loanTerm: "Term of the loan",
-        monthlyPayment: "Monthly payment amount",
-        additionalPayment: "Additional payment amount",
+        loanTerm: "Duration of the loan",
+        monthlyPayment: "Amount paid monthly",
+        additionalPayment: "Extra amount to pay",
       },
       validation: {
         required: "Required field",
-        number: "Please enter a number",
-        min: "Please enter at least {min}",
-        max: "Please enter at most {max}",
-        email: "Please enter a valid email",
+        number: "Enter a number",
+        min: "Enter at least {min}",
+        max: "Enter at most {max}",
+        email: "Enter a valid email",
       },
       interestTypes: {
         fixed: "Fixed",
@@ -99,54 +99,12 @@ export const forms = {
         customPayment: "Custom Payment",
       },
       months: {
-        month: "Month",
-        months: "Months",
+        month: "month",
+        months: "months",
       },
       title: "New Loan",
       editTitle: "Edit Loan",
-      monthlyFeeDescription: "Optional monthly service fee for the loan",
-      loanFormAriaLabel: "Loan addition form",
-      loanNameAriaLabel: "Loan name",
-      loanAmountAriaLabel: "Loan amount in euros",
-      interestRateAriaLabel: "Interest rate as percentage",
-      termYearsAriaLabel: "Loan term in years",
-      repaymentTypeAriaLabel: "Repayment type",
-      interestTypeAriaLabel: "Interest type",
-      customPaymentAriaLabel: "Custom monthly payment",
-      monthlyFeeAriaLabel: "Monthly fee",
-      cancelAriaLabel: "Cancel editing",
-      updateAriaLabel: "Update loan",
-      submitAriaLabel: "Add loan",
-      selectRepaymentType: "Select repayment type",
-      selectInterestType: "Select interest type",
-      estimatedTerm: "Estimated term",
-      years: "years",
-      loanUpdatedDesc: "Your loan has been updated successfully",
-      loanAddedDesc: "Your loan has been added successfully"
-    },
-    creditCard: {
-      title: "New Credit Card",
-      form: {
-        name: "Card Name",
-        balance: "Balance",
-        limit: "Credit Limit",
-        apr: "APR (%)",
-        minPayment: "Minimum Payment",
-        minPaymentPercent: "Minimum Payment (%)",
-        fullPayment: "Pay in full each month",
-        submit: "Add Credit Card",
-        placeholderName: "Enter card name",
-        placeholderBalance: "Enter current balance",
-        placeholderCreditLimit: "Enter credit limit",
-        placeholderApr: "Enter APR",
-        placeholderMinPayment: "Enter minimum payment",
-        autoCalculated: "Automatically calculated from percentage"
-      },
-      validation: {
-        nameRequired: "Card name is required",
-        invalidAmount: "Please enter a valid amount",
-        invalidRate: "Please enter a valid rate"
-      }
+      monthlyFeeDescription: "Optional monthly fee for the loan"
     }
   },
   fi: {
@@ -251,49 +209,7 @@ export const forms = {
       },
       title: "Uusi laina",
       editTitle: "Muokkaa lainaa",
-      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu",
-      loanFormAriaLabel: "Velan lisäyslomake",
-      loanNameAriaLabel: "Velan nimi",
-      loanAmountAriaLabel: "Velan määrä euroina",
-      interestRateAriaLabel: "Korko prosentteina",
-      termYearsAriaLabel: "Laina-aika vuosina",
-      repaymentTypeAriaLabel: "Lyhennystapa",
-      interestTypeAriaLabel: "Korkotyyppi",
-      customPaymentAriaLabel: "Mukautettu kuukausimaksu",
-      monthlyFeeAriaLabel: "Kuukausimaksu",
-      cancelAriaLabel: "Peruuta muokkaus",
-      updateAriaLabel: "Päivitä velka",
-      submitAriaLabel: "Lisää velka",
-      selectRepaymentType: "Valitse lyhennystapa",
-      selectInterestType: "Valitse korkotyyppi",
-      estimatedTerm: "Arvioitu laina-aika",
-      years: "vuotta",
-      loanUpdatedDesc: "Lainasi on päivitetty onnistuneesti",
-      loanAddedDesc: "Lainasi on lisätty onnistuneesti"
-    },
-    creditCard: {
-      title: "Uusi Luottokortti",
-      form: {
-        name: "Kortin nimi",
-        balance: "Saldo",
-        limit: "Luottoraja",
-        apr: "Vuosikorko (%)",
-        minPayment: "Minimimaksu",
-        minPaymentPercent: "Minimimaksu (%)",
-        fullPayment: "Maksa kokonaan joka kuukausi",
-        submit: "Lisää luottokortti",
-        placeholderName: "Syötä kortin nimi",
-        placeholderBalance: "Syötä nykyinen saldo",
-        placeholderCreditLimit: "Syötä luottoraja",
-        placeholderApr: "Syötä vuosikorko",
-        placeholderMinPayment: "Syötä minimimaksu",
-        autoCalculated: "Lasketaan automaattisesti prosentista"
-      },
-      validation: {
-        nameRequired: "Kortin nimi vaaditaan",
-        invalidAmount: "Syötä kelvollinen summa",
-        invalidRate: "Syötä kelvollinen korkoprosentti"
-      }
+      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu"
     }
   }
 };
