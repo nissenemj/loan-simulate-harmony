@@ -1,10 +1,8 @@
-
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import NavigationHeader from "@/components/NavigationHeader";
 import {
   HandCoins,
   LineChart,
@@ -15,13 +13,14 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import UserGuidanceSection from "@/components/UserGuidanceSection";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateBanners } from "@/utils/affiliateData";
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import { ModeToggle } from "@/components/ModeToggle";
+import NavigationHeader from "@/components/NavigationHeader";
+import Footer from "@/components/Footer";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();

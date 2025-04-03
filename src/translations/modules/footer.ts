@@ -1,5 +1,5 @@
 
-// Footer-related translations
+// Footer translations
 
 export const footer = {
   en: {
@@ -27,17 +27,17 @@ export const footer = {
     footer: {
       about: {
         title: "Tietoa Velkavapaus.fi:stä",
-        description: "Velkavapaus.fi on ilmainen työkalu, joka auttaa sinua luomaan ja seuraamaan räätälöityä velkojen takaisinmaksusuunnitelmaa."
+        description: "Velkavapaus.fi on ilmainen työkalu, joka auttaa sinua luomaan ja seuraamaan yksilöllistä velanmaksusuunnitelmaa."
       },
       links: {
-        title: "Pikalinkit",
+        title: "Pikavalinnat",
         item1: "Kojelauta",
         item2: "Lainaehdot",
         item3: "Velkakatsaus"
       },
       legal: {
-        title: "Lakiasiaa",
-        privacy: "Tietosuojaseloste",
+        title: "Lakiasiat",
+        privacy: "Tietosuojakäytäntö",
         terms: "Käyttöehdot",
         cookies: "Evästekäytäntö"
       },

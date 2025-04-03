@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from "@/components/ui/toaster";
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from 'next-themes';
 
 // Pages
 import Index from '@/pages/Index';
@@ -33,17 +34,16 @@ import "./App.css";
 const App = () => {
   return (
     <HelmetProvider>
-      <LanguageProvider>
-        <Router>
-          <AuthProvider>
-            <Routes>
-              {/* Landing page with its own layout */}
-              <Route path="/" element={<LandingPage />} />
-              
-              {/* Routes with shared layout (header and footer) */}
-              <Route
-                path="*"
-                element={
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <LanguageProvider>
+          <Router>
+            <AuthProvider>
+              <Routes>
+                {/* Landing page route (completely standalone) */}
+                <Route path="/" element={<LandingPage />} />
+                
+                {/* All other routes with shared layout */}
+                <Route element={
                   <>
                     <NavigationHeader />
                     <main className="min-h-screen mb-8">
@@ -72,14 +72,29 @@ const App = () => {
                     </main>
                     <Footer />
                   </>
-                }
-              />
-            </Routes>
-            <CookieConsentBanner />
-            <Toaster />
-          </AuthProvider>
-        </Router>
-      </LanguageProvider>
+                }>
+                  {/* These paths match the Routes above, needed for proper routing */}
+                  <Route path="/app" element={null} />
+                  <Route path="/dashboard" element={null} />
+                  <Route path="/debt-summary" element={null} />
+                  <Route path="/debt-strategies" element={null} />
+                  <Route path="/privacy-policy" element={null} />
+                  <Route path="/cookie-policy" element={null} />
+                  <Route path="/terms-of-service" element={null} />
+                  <Route path="/loan-terms" element={null} />
+                  <Route path="/blog" element={null} />
+                  <Route path="/blog/:slug" element={null} />
+                  <Route path="/auth" element={null} />
+                  <Route path="/blog-admin" element={null} />
+                  <Route path="*" element={null} />
+                </Route>
+              </Routes>
+              <CookieConsentBanner />
+              <Toaster />
+            </AuthProvider>
+          </Router>
+        </LanguageProvider>
+      </ThemeProvider>
     </HelmetProvider>
   );
 };

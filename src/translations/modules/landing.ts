@@ -72,6 +72,25 @@ export const landing = {
       testimonial1: "This app helped me pay off $5,000 in debt in just one year! The visualization kept me motivated.",
       testimonial2: "I've tried many budgeting apps, but this is the only one that truly helped me create a realistic debt repayment plan.",
       testimonial3: "The debt snowball method changed my life. I've already paid off three credit cards and I'm on track to be debt-free by next year!"
+    },
+    footer: {
+      about: {
+        title: "About Loan Simulate Harmony",
+        description: "Loan Simulate Harmony is a free tool to help you create and track a customized debt repayment plan."
+      },
+      links: {
+        title: "Quick Links",
+        item1: "Dashboard",
+        item2: "Loan Terms",
+        item3: "Debt Summary"
+      },
+      legal: {
+        title: "Legal",
+        privacy: "Privacy Policy",
+        terms: "Terms of Service",
+        cookies: "Cookie Policy"
+      },
+      copyright: "All Rights Reserved."
     }
   },
   fi: {
@@ -144,6 +163,25 @@ export const landing = {
       testimonial1: "Tämä sovellus auttoi minua maksamaan 5 000 € velkaa vain vuodessa! Visualisointi piti minut motivoituneena.",
       testimonial2: "Olen kokeillut monia budjetointisovelluksia, mutta tämä on ainoa, joka todella auttoi luomaan realistisen velanmaksusuunnitelman.",
       testimonial3: "Velkalumipallostrategia muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuoteen mennessä!"
+    },
+    footer: {
+      about: {
+        title: "Tietoa Velkavapaus.fi:stä",
+        description: "Velkavapaus.fi on ilmainen työkalu, joka auttaa sinua luomaan ja seuraamaan yksilöllistä velanmaksusuunnitelmaa."
+      },
+      links: {
+        title: "Pikavalinnat",
+        item1: "Kojelauta",
+        item2: "Lainaehdot",
+        item3: "Velkakatsaus"
+      },
+      legal: {
+        title: "Lakiasiat",
+        privacy: "Tietosuojakäytäntö",
+        terms: "Käyttöehdot",
+        cookies: "Evästekäytäntö"
+      },
+      copyright: "Kaikki oikeudet pidätetään."
     }
   }
 };
