@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { compareScenarios } from '@/utils/calculator/debtCalculator';
 import { useCurrencyFormatter } from '@/utils/formatting';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface StrategyComparisonChartProps {
   debts: Debt[];
@@ -15,6 +16,7 @@ interface StrategyComparisonChartProps {
 export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps) {
   const { t } = useTranslation();
   const currencyFormatter = useCurrencyFormatter();
+  const isMobile = useIsMobile();
   
   // Use actual calculation utilities for accurate comparisons
   const { timeData, interestData } = useMemo(() => {
@@ -80,7 +82,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="time">
-          <TabsList>
+          <TabsList className="w-full justify-start mb-4">
             <TabsTrigger value="time">{t('visualization.timeComparison')}</TabsTrigger>
             <TabsTrigger value="interest">{t('visualization.interestComparison')}</TabsTrigger>
           </TabsList>
@@ -91,24 +93,39 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                 {timeData.length > 0 ? (
                   <BarChart
                     data={timeData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    margin={{ 
+                      top: 20, 
+                      right: isMobile ? 10 : 30, 
+                      left: isMobile ? 10 : 20, 
+                      bottom: isMobile ? 80 : 60 
+                    }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="name" 
-                      angle={-20} 
+                      angle={isMobile ? -45 : -20} 
                       textAnchor="end" 
-                      height={60}
-                      tick={{ fontSize: 12 }}
+                      height={isMobile ? 80 : 60}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                     />
                     <YAxis
-                      label={{ value: t('visualization.monthsToPayoff'), angle: -90, position: 'insideLeft' }}
+                      label={{ 
+                        value: t('visualization.monthsToPayoff'), 
+                        angle: -90, 
+                        position: 'insideLeft',
+                        style: { textAnchor: 'middle' }
+                      }}
                     />
                     <Tooltip 
                       formatter={(value) => [`${value} ${t('visualization.months')}`, t('visualization.timeToPayoff')]}
                     />
-                    <Legend />
-                    <Bar dataKey="months" name={t('visualization.monthsToPayoff')} fill="#8884d8" />
+                    <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                    <Bar 
+                      dataKey="months" 
+                      name={t('visualization.monthsToPayoff')} 
+                      fill="#8884d8"
+                      aria-label={t('visualization.monthsToPayoff')}
+                    />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -125,25 +142,40 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                 {interestData.length > 0 ? (
                   <BarChart
                     data={interestData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    margin={{ 
+                      top: 20, 
+                      right: isMobile ? 10 : 30, 
+                      left: isMobile ? 10 : 20, 
+                      bottom: isMobile ? 80 : 60 
+                    }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="name"
-                      angle={-20} 
+                      angle={isMobile ? -45 : -20} 
                       textAnchor="end" 
-                      height={60}
-                      tick={{ fontSize: 12 }}
+                      height={isMobile ? 80 : 60}
+                      tick={{ fontSize: isMobile ? 10 : 12 }}
                     />
                     <YAxis
-                      label={{ value: t('visualization.totalInterestPaid'), angle: -90, position: 'insideLeft' }}
+                      label={{ 
+                        value: t('visualization.totalInterestPaid'), 
+                        angle: -90, 
+                        position: 'insideLeft',
+                        style: { textAnchor: 'middle' }
+                      }}
                       tickFormatter={(value) => currencyFormatter.formatWithoutSymbol(value)}
                     />
                     <Tooltip 
                       formatter={(value) => [currencyFormatter.format(Number(value)), t('visualization.totalInterestPaid')]}
                     />
-                    <Legend />
-                    <Bar dataKey="interest" name={t('visualization.totalInterestPaid')} fill="#FF8042" />
+                    <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                    <Bar 
+                      dataKey="interest" 
+                      name={t('visualization.totalInterestPaid')} 
+                      fill="#FF8042"
+                      aria-label={t('visualization.totalInterestPaid')}
+                    />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">

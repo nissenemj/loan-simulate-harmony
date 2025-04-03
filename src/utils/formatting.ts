@@ -1,18 +1,13 @@
 
 import { useTranslation } from '@/contexts/LanguageContext';
 
-/**
- * Currency formatting options
- */
 export interface CurrencyFormatOptions {
   currency?: string;
   minimumFractionDigits?: number;
   maximumFractionDigits?: number;
+  showSymbol?: boolean;
 }
 
-/**
- * Hook to get a currency formatter function based on the current locale
- */
 export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
   const { locale } = useTranslation();
   
@@ -20,48 +15,62 @@ export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
     currency: 'EUR',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    showSymbol: true,
     ...options
   };
   
-  const format = (value: number): string => {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: defaultOptions.currency,
-      minimumFractionDigits: defaultOptions.minimumFractionDigits,
-      maximumFractionDigits: defaultOptions.maximumFractionDigits
-    }).format(value);
+  return {
+    format: (value: number) => {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: defaultOptions.currency,
+        minimumFractionDigits: defaultOptions.minimumFractionDigits,
+        maximumFractionDigits: defaultOptions.maximumFractionDigits
+      }).format(value);
+    },
+    formatWithoutSymbol: (value: number) => {
+      return new Intl.NumberFormat(locale, {
+        style: 'decimal',
+        minimumFractionDigits: defaultOptions.minimumFractionDigits,
+        maximumFractionDigits: defaultOptions.maximumFractionDigits
+      }).format(value);
+    }
   };
-  
-  const formatWithoutSymbol = (value: number): string => {
-    const formatted = new Intl.NumberFormat(locale, {
-      style: 'decimal',
-      minimumFractionDigits: defaultOptions.minimumFractionDigits,
-      maximumFractionDigits: defaultOptions.maximumFractionDigits
-    }).format(value);
-    
-    return formatted;
-  };
-  
-  return { format, formatWithoutSymbol };
 }
 
-/**
- * Hook to get a percentage formatter function based on the current locale
- */
-export function usePercentFormatter(options: Omit<CurrencyFormatOptions, 'currency'> = {}) {
+export function usePercentageFormatter(options: { 
+  minimumFractionDigits?: number; 
+  maximumFractionDigits?: number;
+} = {}) {
   const { locale } = useTranslation();
   
   const defaultOptions = {
     minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
+    maximumFractionDigits: 2,
     ...options
   };
   
-  return (value: number): string => {
+  return (value: number) => {
     return new Intl.NumberFormat(locale, {
       style: 'percent',
       minimumFractionDigits: defaultOptions.minimumFractionDigits,
       maximumFractionDigits: defaultOptions.maximumFractionDigits
-    }).format(value / 100); // Convert from percentage value to decimal
+    }).format(value / 100); // Convert from percentage to decimal
+  };
+}
+
+export function useDateFormatter(options: Intl.DateTimeFormatOptions = {}) {
+  const { locale } = useTranslation();
+  
+  const defaultOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    ...options
+  };
+  
+  return (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return new Intl.DateTimeFormat(locale, defaultOptions).format(dateObj);
   };
 }

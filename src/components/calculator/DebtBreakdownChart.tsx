@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useTranslation } from '@/contexts/LanguageContext';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, Sector } from 'recharts';
 import { useCurrencyFormatter } from '@/utils/formatting';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DebtBreakdownChartProps {
   debts: Debt[];
@@ -14,6 +15,7 @@ interface DebtBreakdownChartProps {
 export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartProps) {
   const { t } = useTranslation();
   const currencyFormatter = useCurrencyFormatter();
+  const isMobile = useIsMobile();
   
   // An array of colors for the pie chart segments
   const COLORS = [
@@ -96,14 +98,14 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
           <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
         </div>
         {totalBalance > 0 && (
-          <div className="text-right">
+          <div className="text-right mt-2 md:mt-0">
             <div className="text-sm text-muted-foreground">{t('visualization.totalDebt')}</div>
             <div className="text-xl font-bold">{currencyFormatter.format(totalBalance)}</div>
           </div>
         )}
       </CardHeader>
       <CardContent>
-        <div className="h-64 md:h-80">
+        <div className="h-64 md:h-80" aria-label={t('visualization.debtBreakdown')} role="img">
           <ResponsiveContainer width="100%" height="100%">
             {pieData.length > 0 ? (
               <PieChart>
@@ -113,32 +115,43 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius="50%"
-                  outerRadius="70%"
+                  innerRadius={isMobile ? "35%" : "50%"}
+                  outerRadius={isMobile ? "60%" : "70%"}
                   fill="#8884d8"
                   dataKey="value"
                   nameKey="name"
                   label={({ name, percent }) => 
-                    percent > 0.05 ? `${name}: ${(percent * 100).toFixed(0)}%` : ''
+                    percent > (isMobile ? 0.08 : 0.05) ? `${name}: ${(percent * 100).toFixed(0)}%` : ''
                   }
                   onMouseEnter={onPieEnter}
                   onMouseLeave={onPieLeave}
+                  paddingAngle={2}
                 >
                   {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.color} 
+                      aria-label={`${entry.name}: ${currencyFormatter.format(entry.value)} (${entry.percentage.toFixed(1)}%)`}
+                    />
                   ))}
                 </Pie>
                 <Tooltip 
                   formatter={(value) => currencyFormatter.format(Number(value))}
+                  contentStyle={{ 
+                    borderRadius: '8px', 
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                    fontSize: isMobile ? '12px' : '14px'
+                  }}
                 />
                 <Legend 
-                  layout="horizontal" 
+                  layout={isMobile ? "vertical" : "horizontal"} 
                   verticalAlign="bottom" 
                   align="center"
+                  wrapperStyle={{ paddingTop: '10px', fontSize: isMobile ? '10px' : '12px' }}
                   formatter={(value, entry: any) => {
                     const item = pieData.find(d => d.name === value);
                     return (
-                      <span style={{ color: entry.color }}>
+                      <span className="text-xs md:text-sm" style={{ color: entry.color }}>
                         {value} - {item ? currencyFormatter.format(item.value) : ''}
                       </span>
                     );

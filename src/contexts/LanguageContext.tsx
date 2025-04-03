@@ -1,7 +1,6 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { en } from '@/translations/en';
-import { fi } from '@/translations/fi';
+import { en, fi } from '@/translations';
 
 type Translations = {
   [key: string]: string | any;
