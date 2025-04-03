@@ -62,7 +62,7 @@ export function usePercentageFormatter(options: {
 export function useDateFormatter(options: Intl.DateTimeFormatOptions = {}) {
   const { locale } = useTranslation();
   
-  const defaultOptions = {
+  const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

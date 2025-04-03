@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Debt, PaymentStrategy, PaymentPlan } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
@@ -14,13 +13,14 @@ import { X } from 'lucide-react';
 interface DebtPayoffCalculatorProps {
   initialDebts?: Debt[];
   onSaveResults?: (plan: PaymentPlan) => void;
+  onError?: (error: any) => void;
 }
 
 /**
  * Debt Payoff Calculator component
  * Allows users to calculate debt payoff plans using different strategies
  */
-export function DebtPayoffCalculator({ initialDebts = [], onSaveResults }: DebtPayoffCalculatorProps) {
+export function DebtPayoffCalculator({ initialDebts = [], onSaveResults, onError }: DebtPayoffCalculatorProps) {
   const { t } = useTranslation();
   const [debts, setDebts] = useState<Debt[]>(initialDebts);
   const [newDebt, setNewDebt] = useState<Partial<Debt>>({
@@ -59,8 +59,13 @@ export function DebtPayoffCalculator({ initialDebts = [], onSaveResults }: DebtP
     } catch (err: any) {
       setError(err.message || 'Error calculating payment plan');
       setPaymentPlan(null);
+      
+      // Call onError if provided
+      if (onError) {
+        onError(err);
+      }
     }
-  }, [debts, totalMonthlyPayment, strategy, onSaveResults]);
+  }, [debts, totalMonthlyPayment, strategy, onSaveResults, onError]);
   
   // Handle adding a new debt
   const handleAddDebt = () => {
