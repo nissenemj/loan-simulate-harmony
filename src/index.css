@@ -76,6 +76,15 @@
     --border: 240 33% 18%;
     --input: 240 33% 18%;
     --ring: 213 27% 84%;
+
+    --sidebar-background: 240 33% 15%;
+    --sidebar-foreground: 240 10% 80%;
+    --sidebar-primary: 240 70% 60%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 25% 20%;
+    --sidebar-accent-foreground: 240 10% 90%;
+    --sidebar-border: 240 13% 25%;
+    --sidebar-ring: 240 70% 70%;
   }
 }
 
@@ -155,7 +164,27 @@
 
   /* Custom card styles */
   .velkavapaus-card {
-    @apply rounded-lg border bg-gradient-to-b from-white to-secondary/30 shadow-md;
+    @apply rounded-lg border bg-gradient-to-b from-white to-secondary/30 dark:from-secondary/10 dark:to-secondary/5 shadow-md;
+  }
+  
+  /* Dark mode card styles */
+  .dark .velkavapaus-card {
+    @apply border-border/30 bg-gradient-to-b from-accent/20 to-background shadow-lg;
+  }
+  
+  /* Glass morphism */
+  .glassmorphism {
+    @apply backdrop-blur-xl bg-white/5 dark:bg-black/30 border border-white/10 dark:border-white/5 shadow-glass;
+  }
+  
+  /* Dark mode specific utility classes */
+  .dark-card-gradient {
+    @apply bg-gradient-to-br from-secondary/30 to-background;
+  }
+  
+  /* Hero gradient */
+  .hero-gradient {
+    @apply bg-gradient-to-b from-background via-background to-accent/50 dark:from-background dark:via-background/95 dark:to-accent/20;
   }
 }
 

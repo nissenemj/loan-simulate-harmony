@@ -36,33 +36,45 @@ const App = () => {
       <LanguageProvider>
         <Router>
           <AuthProvider>
-            <NavigationHeader />
-            <main className="min-h-screen mb-8">
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/app" element={<Index />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/debt-summary" element={<DebtSummaryPage />} />
-                <Route path="/debt-strategies" element={<DebtStrategies />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/cookie-policy" element={<CookiePolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/loan-terms" element={<LoanTerms />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route 
-                  path="/blog-admin" 
-                  element={
-                    <ProtectedRoute>
-                      <BlogAdmin />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
+            <Routes>
+              {/* Landing page with its own layout */}
+              <Route path="/" element={<LandingPage />} />
+              
+              {/* Routes with shared layout (header and footer) */}
+              <Route
+                path="*"
+                element={
+                  <>
+                    <NavigationHeader />
+                    <main className="min-h-screen mb-8">
+                      <Routes>
+                        <Route path="/app" element={<Index />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/debt-summary" element={<DebtSummaryPage />} />
+                        <Route path="/debt-strategies" element={<DebtStrategies />} />
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/cookie-policy" element={<CookiePolicy />} />
+                        <Route path="/terms-of-service" element={<TermsOfService />} />
+                        <Route path="/loan-terms" element={<LoanTerms />} />
+                        <Route path="/blog" element={<Blog />} />
+                        <Route path="/blog/:slug" element={<BlogPost />} />
+                        <Route path="/auth" element={<Auth />} />
+                        <Route 
+                          path="/blog-admin" 
+                          element={
+                            <ProtectedRoute>
+                              <BlogAdmin />
+                            </ProtectedRoute>
+                          } 
+                        />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </main>
+                    <Footer />
+                  </>
+                }
+              />
+            </Routes>
             <CookieConsentBanner />
             <Toaster />
           </AuthProvider>
