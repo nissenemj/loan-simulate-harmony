@@ -16,6 +16,17 @@ export const auth = {
       success: "Login successful",
       registerSuccess: "Registration successful",
       resetSuccess: "Password reset successful",
+      welcome: "Welcome back",
+      description: "Sign in to your account to continue",
+      signUp: "Sign Up",
+      welcomeBack: "Welcome back to the application",
+      loginSuccess: "Login successful",
+      loginError: "Login failed",
+      signupSuccess: "Registration successful",
+      signupError: "Registration failed",
+      checkEmail: "Please check your email to verify your account",
+      loggingIn: "Logging in...",
+      signingUp: "Signing up..."
     }
   },
   fi: {
@@ -32,6 +43,17 @@ export const auth = {
       success: "Kirjautuminen onnistui",
       registerSuccess: "Rekisteröityminen onnistui",
       resetSuccess: "Salasanan nollaus onnistui",
+      welcome: "Tervetuloa takaisin",
+      description: "Kirjaudu sisään jatkaaksesi",
+      signUp: "Rekisteröidy",
+      welcomeBack: "Tervetuloa takaisin sovellukseen",
+      loginSuccess: "Kirjautuminen onnistui",
+      loginError: "Kirjautuminen epäonnistui",
+      signupSuccess: "Rekisteröityminen onnistui",
+      signupError: "Rekisteröityminen epäonnistui",
+      checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi",
+      loggingIn: "Kirjaudutaan...",
+      signingUp: "Rekisteröidytään..."
     }
   }
 };

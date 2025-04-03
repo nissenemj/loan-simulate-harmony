@@ -123,6 +123,30 @@ export const forms = {
       years: "years",
       loanUpdatedDesc: "Your loan has been updated successfully",
       loanAddedDesc: "Your loan has been added successfully"
+    },
+    creditCard: {
+      title: "New Credit Card",
+      form: {
+        name: "Card Name",
+        balance: "Balance",
+        limit: "Credit Limit",
+        apr: "APR (%)",
+        minPayment: "Minimum Payment",
+        minPaymentPercent: "Minimum Payment (%)",
+        fullPayment: "Pay in full each month",
+        submit: "Add Credit Card",
+        placeholderName: "Enter card name",
+        placeholderBalance: "Enter current balance",
+        placeholderCreditLimit: "Enter credit limit",
+        placeholderApr: "Enter APR",
+        placeholderMinPayment: "Enter minimum payment",
+        autoCalculated: "Automatically calculated from percentage"
+      },
+      validation: {
+        nameRequired: "Card name is required",
+        invalidAmount: "Please enter a valid amount",
+        invalidRate: "Please enter a valid rate"
+      }
     }
   },
   fi: {
@@ -246,6 +270,30 @@ export const forms = {
       years: "vuotta",
       loanUpdatedDesc: "Lainasi on päivitetty onnistuneesti",
       loanAddedDesc: "Lainasi on lisätty onnistuneesti"
+    },
+    creditCard: {
+      title: "Uusi Luottokortti",
+      form: {
+        name: "Kortin nimi",
+        balance: "Saldo",
+        limit: "Luottoraja",
+        apr: "Vuosikorko (%)",
+        minPayment: "Minimimaksu",
+        minPaymentPercent: "Minimimaksu (%)",
+        fullPayment: "Maksa kokonaan joka kuukausi",
+        submit: "Lisää luottokortti",
+        placeholderName: "Syötä kortin nimi",
+        placeholderBalance: "Syötä nykyinen saldo",
+        placeholderCreditLimit: "Syötä luottoraja",
+        placeholderApr: "Syötä vuosikorko",
+        placeholderMinPayment: "Syötä minimimaksu",
+        autoCalculated: "Lasketaan automaattisesti prosentista"
+      },
+      validation: {
+        nameRequired: "Kortin nimi vaaditaan",
+        invalidAmount: "Syötä kelvollinen summa",
+        invalidRate: "Syötä kelvollinen korkoprosentti"
+      }
     }
   }
 };

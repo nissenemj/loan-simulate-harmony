@@ -32,22 +32,22 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
   // Define the validation schema
   const formSchema = z.object({
     name: z.string().min(1, {
-      message: t("validation.nameRequired"),
+      message: t("form.creditCard.validation.nameRequired"),
     }),
     balance: z.coerce.number().positive({
-      message: t("validation.invalidAmount"),
+      message: t("form.creditCard.validation.invalidAmount"),
     }),
     limit: z.coerce.number().positive({
-      message: t("validation.invalidAmount"),
+      message: t("form.creditCard.validation.invalidAmount"),
     }),
     apr: z.coerce.number().positive({
-      message: t("validation.invalidRate"),
+      message: t("form.creditCard.validation.invalidRate"),
     }),
     minPayment: z.coerce.number().min(0, {
-      message: t("validation.invalidAmount"),
+      message: t("form.creditCard.validation.invalidAmount"),
     }),
     minPaymentPercent: z.coerce.number().min(0, {
-      message: t("validation.invalidRate"),
+      message: t("form.creditCard.validation.invalidRate"),
     }),
     fullPayment: z.boolean().default(false),
   });
@@ -114,7 +114,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
   return (
     <Card className="bg-card dark:bg-secondary dark:border-bg-highlight">
       <CardHeader>
-        <CardTitle className="text-xl text-left">{t("creditCard.title")}</CardTitle>
+        <CardTitle className="text-xl text-left">{t("form.creditCard.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -126,14 +126,14 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.name")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.name")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                           <CreditCardIcon className="h-4 w-4" />
                         </div>
                         <Input 
-                          placeholder={t("creditCard.form.placeholderName")} 
+                          placeholder={t("form.creditCard.form.placeholderName")} 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           {...field} 
                         />
@@ -150,7 +150,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="balance"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.balance")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.balance")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -158,7 +158,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.form.placeholderBalance")} 
+                          placeholder={t("form.creditCard.form.placeholderBalance")} 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
@@ -176,7 +176,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="limit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.limit")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.limit")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -184,7 +184,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.form.placeholderCreditLimit")} 
+                          placeholder={t("form.creditCard.form.placeholderCreditLimit")} 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
@@ -202,7 +202,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="apr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.apr")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.apr")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -210,7 +210,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.form.placeholderApr")} 
+                          placeholder={t("form.creditCard.form.placeholderApr")} 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight"
                           step="0.01" 
                           {...field} 
@@ -228,7 +228,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPaymentPercent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.minPaymentPercent")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.minPaymentPercent")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -255,7 +255,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPayment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("creditCard.form.minPayment")}</FormLabel>
+                    <FormLabel>{t("form.creditCard.form.minPayment")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -263,7 +263,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("creditCard.form.placeholderMinPayment")} 
+                          placeholder={t("form.creditCard.form.placeholderMinPayment")} 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight bg-gray-50" 
                           step="0.01"
                           disabled={true}
@@ -273,7 +273,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                       </div>
                     </FormControl>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {t("creditCard.form.autoCalculated")}
+                      {t("form.creditCard.form.autoCalculated")}
                     </p>
                     <FormMessage />
                   </FormItem>
@@ -295,7 +295,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    {t("creditCard.form.fullPayment")}
+                    {t("form.creditCard.form.fullPayment")}
                   </FormLabel>
                 </FormItem>
               )}
@@ -305,7 +305,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
               type="submit" 
               className="w-full bg-brand-primary hover:bg-brand-primary-light text-white dark:bg-brand-primary dark:hover:bg-brand-primary-light"
             >
-              {t("creditCard.form.submit")}
+              {t("form.creditCard.form.submit")}
             </Button>
           </form>
         </Form>
