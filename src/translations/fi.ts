@@ -72,7 +72,6 @@ export const fi = {
       termYearsPlaceholder: "Laina-aika vuosina",
       monthlyFeePlaceholder: "Kuukausimaksu",
       namePlaceholder: "esim. Asuntolaina",
-      interestRatePlaceholder: "esim. 5.0",
     },
     loanTypes: {
       personalLoan: "Henkilökohtainen laina",
