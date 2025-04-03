@@ -72,7 +72,6 @@ export const en = {
       termYearsPlaceholder: "Term in years",
       monthlyFeePlaceholder: "Monthly fee",
       namePlaceholder: "e.g. Home Loan",
-
     },
     loanTypes: {
       personalLoan: "Personal Loan",
@@ -363,13 +362,33 @@ export const en = {
     debtBreakdown: "Debt Breakdown",
     distributionDescription: "Distribution of your debts",
     paymentBreakdown: "Payment Breakdown",
+    paymentBreakdownDescription: "Monthly breakdown of your payments",
     paymentDistribution: "Distribution of your payments",
     interestVsPrincipal: "Interest vs. Principal",
     paymentTimeline: "Payment Timeline",
     strategyComparison: "Strategy Comparison",
+    strategyComparisonDescription: "Compare different debt repayment strategies",
+    timeComparison: "Time Comparison",
+    interestComparison: "Interest Comparison",
     timeToPayoff: "Time to Payoff",
     interestSaved: "Interest Saved",
-    monthsSaved: "Months Saved"
+    monthsSaved: "Months Saved",
+    monthsToPayoff: "Months to Payoff",
+    totalInterestPaid: "Total Interest Paid",
+    principalPayment: "Principal Payment",
+    interestPayment: "Interest Payment",
+    cumulativePrincipal: "Cumulative Principal",
+    cumulativeInterest: "Cumulative Interest",
+    months: "months",
+    totalDebt: "Total Debt",
+    monthlyBreakdown: "Monthly Breakdown",
+    cumulativeBreakdown: "Cumulative Breakdown",
+    noDataAvailable: "No data available",
+    noDebtsToVisualize: "No debts to visualize",
+    minimumAvalanche: "Minimum Payments (Avalanche)",
+    minimumSnowball: "Minimum Payments (Snowball)",
+    extra100Avalanche: "Extra $100/mo (Avalanche)",
+    extra100Snowball: "Extra $100/mo (Snowball)"
   },
   language: {
     en: "English",
@@ -494,7 +513,11 @@ export const en = {
       keywords: "debt repayment, loan management, financial tools, debt snowball, debt avalanche, financial freedom, debt free"
     }
   },
-  noDebtToDisplay: "No debts to display"
+  noDebtToDisplay: "No debts to display",
+  pagination: {
+    previous: "Previous",
+    next: "Next"
+  }
 };
 
 // Also export as default for backward compatibility
