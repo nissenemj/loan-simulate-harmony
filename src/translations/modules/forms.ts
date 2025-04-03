@@ -104,7 +104,25 @@ export const forms = {
       },
       title: "New Loan",
       editTitle: "Edit Loan",
-      monthlyFeeDescription: "Optional monthly service fee for the loan"
+      monthlyFeeDescription: "Optional monthly service fee for the loan",
+      loanFormAriaLabel: "Loan addition form",
+      loanNameAriaLabel: "Loan name",
+      loanAmountAriaLabel: "Loan amount in euros",
+      interestRateAriaLabel: "Interest rate as percentage",
+      termYearsAriaLabel: "Loan term in years",
+      repaymentTypeAriaLabel: "Repayment type",
+      interestTypeAriaLabel: "Interest type",
+      customPaymentAriaLabel: "Custom monthly payment",
+      monthlyFeeAriaLabel: "Monthly fee",
+      cancelAriaLabel: "Cancel editing",
+      updateAriaLabel: "Update loan",
+      submitAriaLabel: "Add loan",
+      selectRepaymentType: "Select repayment type",
+      selectInterestType: "Select interest type",
+      estimatedTerm: "Estimated term",
+      years: "years",
+      loanUpdatedDesc: "Your loan has been updated successfully",
+      loanAddedDesc: "Your loan has been added successfully"
     }
   },
   fi: {
@@ -209,7 +227,25 @@ export const forms = {
       },
       title: "Uusi laina",
       editTitle: "Muokkaa lainaa",
-      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu"
+      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu",
+      loanFormAriaLabel: "Velan lisäyslomake",
+      loanNameAriaLabel: "Velan nimi",
+      loanAmountAriaLabel: "Velan määrä euroina",
+      interestRateAriaLabel: "Korko prosentteina",
+      termYearsAriaLabel: "Laina-aika vuosina",
+      repaymentTypeAriaLabel: "Lyhennystapa",
+      interestTypeAriaLabel: "Korkotyyppi",
+      customPaymentAriaLabel: "Mukautettu kuukausimaksu",
+      monthlyFeeAriaLabel: "Kuukausimaksu",
+      cancelAriaLabel: "Peruuta muokkaus",
+      updateAriaLabel: "Päivitä velka",
+      submitAriaLabel: "Lisää velka",
+      selectRepaymentType: "Valitse lyhennystapa",
+      selectInterestType: "Valitse korkotyyppi",
+      estimatedTerm: "Arvioitu laina-aika",
+      years: "vuotta",
+      loanUpdatedDesc: "Lainasi on päivitetty onnistuneesti",
+      loanAddedDesc: "Lainasi on lisätty onnistuneesti"
     }
   }
 };

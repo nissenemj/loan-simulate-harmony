@@ -151,3 +151,52 @@
   --state-error: #E64553;
   --state-info: #39A0ED;
 }
+
+/* Add these utility classes for dark mode elements */
+.dark .bg-dark-primary {
+  background-color: var(--bg-primary);
+}
+
+.dark .bg-dark-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.dark .bg-dark-elevated {
+  background-color: var(--bg-elevated);
+}
+
+.dark .bg-dark-highlight {
+  background-color: var(--bg-highlight);
+}
+
+.dark .text-dark-primary {
+  color: var(--text-primary);
+}
+
+.dark .text-dark-secondary {
+  color: var(--text-secondary);
+}
+
+.dark .text-dark-tertiary {
+  color: var(--text-tertiary);
+}
+
+.dark .text-dark-disabled {
+  color: var(--text-disabled);
+}
+
+.dark .border-dark-highlight {
+  border-color: var(--bg-highlight);
+}
+
+.dark .shadow-dark-subtle {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark .shadow-dark-medium {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .shadow-dark-strong {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+}

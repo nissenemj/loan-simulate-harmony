@@ -97,7 +97,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
     onAddCreditCard(newCreditCard);
     
     // Fix toast error: update to use a single parameter with formatted string
-    toast(t("toast.loanAdded") + ": " + values.name);
+    toast(t("toast.cardAdded"));
     
     // Reset the form
     form.reset({
@@ -112,7 +112,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
   };
 
   return (
-    <Card className="bg-card">
+    <Card className="bg-card dark:bg-secondary dark:border-bg-highlight">
       <CardHeader>
         <CardTitle className="text-xl text-left">{t("creditCard.title")}</CardTitle>
       </CardHeader>
@@ -134,7 +134,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           placeholder={t("creditCard.form.placeholderName")} 
-                          className="pl-10" 
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           {...field} 
                         />
                       </div>
@@ -159,7 +159,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         <Input 
                           type="number" 
                           placeholder={t("creditCard.form.placeholderBalance")} 
-                          className="pl-10" 
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
                         />
@@ -185,7 +185,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         <Input 
                           type="number" 
                           placeholder={t("creditCard.form.placeholderCreditLimit")} 
-                          className="pl-10" 
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
                         />
@@ -211,7 +211,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         <Input 
                           type="number" 
                           placeholder={t("creditCard.form.placeholderApr")} 
-                          className="pl-10"
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight"
                           step="0.01" 
                           {...field} 
                         />
@@ -237,7 +237,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         <Input 
                           type="number" 
                           placeholder="3.0" 
-                          className="pl-10" 
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           disabled={fullPaymentValue}
                           {...field} 
@@ -264,7 +264,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         <Input 
                           type="number" 
                           placeholder={t("creditCard.form.placeholderMinPayment")} 
-                          className="pl-10 bg-gray-50" 
+                          className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight bg-gray-50" 
                           step="0.01"
                           disabled={true}
                           readOnly
@@ -286,11 +286,12 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
               control={form.control}
               name="fullPayment"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 dark:border-bg-highlight dark:bg-bg-elevated">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      className="dark:border-brand-primary-light dark:data-[state=checked]:bg-brand-primary"
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
@@ -300,7 +301,12 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
               )}
             />
 
-            <Button type="submit" className="w-full">{t("creditCard.form.submit")}</Button>
+            <Button 
+              type="submit" 
+              className="w-full bg-brand-primary hover:bg-brand-primary-light text-white dark:bg-brand-primary dark:hover:bg-brand-primary-light"
+            >
+              {t("creditCard.form.submit")}
+            </Button>
           </form>
         </Form>
       </CardContent>
