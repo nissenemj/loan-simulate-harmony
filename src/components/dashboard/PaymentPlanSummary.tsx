@@ -64,7 +64,7 @@ const PaymentPlanSummary = ({
             </p>
             {extraBudget > 0 && (
               <p className="text-sm mt-2">
-                {t('dashboard.allocatingExtra').replace('{{amount}}', formatCurrency(extraBudget))}
+                {t('dashboard.allocatingExtra', { amount: formatCurrency(extraBudget) })}
               </p>
             )}
           </div>

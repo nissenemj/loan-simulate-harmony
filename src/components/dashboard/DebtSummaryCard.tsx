@@ -42,7 +42,7 @@ const DebtSummaryCard = ({
               <DollarSign className="h-5 w-5 text-primary" />
               <span className="text-muted-foreground font-medium">{t('dashboard.totalDebt')}</span>
               <CalculationTooltip 
-                content={t('tooltips.totalDebt') || 'Sum of all active loan amounts and credit card balances.'}
+                content={t('tooltips.totalDebt')}
               />
             </div>
             <span className="text-3xl font-bold mt-2">{formattedTotalDebt}</span>
@@ -50,7 +50,7 @@ const DebtSummaryCard = ({
               <span className="text-sm text-muted-foreground">{t('dashboard.estimatedInterestCost')}:</span>
               <span className="text-sm font-medium">{formattedInterestCost}</span>
               <CalculationTooltip 
-                content={t('tooltips.interestCost') || 'Total estimated interest you will pay over the life of all your debts at current rates and payments.'}
+                content={t('tooltips.interestCost')}
               />
             </div>
           </div>
@@ -60,7 +60,7 @@ const DebtSummaryCard = ({
               <Calendar className="h-5 w-5 text-primary" />
               <span className="text-muted-foreground font-medium">{t('dashboard.estimatedDebtFreeDate')}</span>
               <CalculationTooltip 
-                content={t('tooltips.debtFreeDate') || 'Estimated date when all your debts will be paid off based on current payment amounts.'}
+                content={t('tooltips.debtFreeDate')}
               />
             </div>
             <span className="text-3xl font-bold mt-2">{debtFreeDate}</span>
@@ -68,7 +68,7 @@ const DebtSummaryCard = ({
               <span className="text-sm text-muted-foreground">{t('dashboard.totalToPayOff')}:</span>
               <span className="text-sm font-medium">{formattedTotalPay}</span>
               <CalculationTooltip 
-                content={t('tooltips.totalToPayOff') || 'Total amount including principal and interest that you will pay over the life of all your debts.'}
+                content={t('tooltips.totalToPayOff')}
               />
             </div>
           </div>
@@ -78,7 +78,7 @@ const DebtSummaryCard = ({
               <CreditCard className="h-5 w-5 text-primary" />
               <span className="text-muted-foreground font-medium">{t('dashboard.minimumMonthlyPayments')}</span>
               <CalculationTooltip 
-                content={t('tooltips.minimumPayments') || 'Combined minimum payments required for all your loans and credit cards.'}
+                content={t('tooltips.minimumPayments')}
               />
             </div>
             <span className="text-3xl font-bold mt-2">{formattedMinPayments}</span>

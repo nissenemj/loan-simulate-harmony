@@ -1,3 +1,4 @@
+
 export const en = {
   app: {
     title: 'Loan Simulate Harmony',
@@ -214,7 +215,54 @@ export const en = {
     placeholderCustomPayment: "200",
     monthlyFee: "Monthly Fee",
     placeholderMonthlyFee: "5.0",
-    monthlyFeeDescription: "Optional monthly service fee for the loan"
+    monthlyFeeDescription: "Optional monthly service fee for the loan",
+    labels: {
+      loanName: "Loan Name",
+      loanAmount: "Loan Amount",
+      interestRate: "Interest Rate",
+      loanTerm: "Loan Term",
+      monthlyPayment: "Monthly Payment",
+      startDate: "Start Date",
+      endDate: "End Date",
+      additionalPayment: "Additional Payment",
+      paymentFrequency: "Payment Frequency",
+      selectLoanType: "Select Loan Type",
+      enterCreditCardDetails: "Enter Credit Card Details",
+      creditCardName: "Credit Card Name",
+      creditCardBalance: "Credit Card Balance",
+      creditCardAPR: "Credit Card APR",
+      creditCardMinPayment: "Credit Card Minimum Payment",
+      minPayment: "Minimum Payment",
+      balance: "Balance",
+      apr: "APR",
+      name: "Name",
+      amount: "Amount",
+      termYears: "Term (Years)",
+      interestType: "Interest Type",
+      repaymentType: "Repayment Type",
+      monthlyFee: "Monthly Fee",
+      variableEuribor: "Variable (EURIBOR)",
+      fixedInterestRate: "Fixed Interest Rate"
+    },
+    placeholders: {
+      loanNamePlaceholder: "Enter loan name",
+      loanAmountPlaceholder: "Enter loan amount",
+      interestRatePlaceholder: "Enter interest rate",
+      loanTermPlaceholder: "Enter loan term",
+      monthlyPaymentPlaceholder: "Enter monthly payment",
+      startDatePlaceholder: "Select start date",
+      endDatePlaceholder: "Select end date",
+      additionalPaymentPlaceholder: "Enter additional payment",
+      creditCardNamePlaceholder: "Enter credit card name",
+      creditCardBalancePlaceholder: "Enter credit card balance",
+      creditCardAPRPlaceholder: "Enter credit card APR",
+      creditCardMinPaymentPlaceholder: "Enter credit card minimum payment",
+      amountPlaceholder: "Amount",
+      termYearsPlaceholder: "Term in years",
+      monthlyFeePlaceholder: "Monthly fee",
+      namePlaceholder: "e.g. Home Loan",
+      interestRatePlaceholder: "e.g. 5.0"
+    }
   },
   repayment: {
     annuity: "Annuity",
@@ -296,7 +344,7 @@ export const en = {
     monthsUntilCreditCardFree: "{{months}} months until all credit cards are paid off",
     interestSaved: "Interest saved",
     avalancheDesc: "Highest interest first",
-    snowballDesc: "Smallest balance first",
+    snowballDesc: "Smallest balance first"
   },
   interest: {
     fixed: "Fixed",
@@ -498,7 +546,6 @@ export const en = {
   dashboard: {
     title: 'Dashboard',
     welcome: 'Welcome',
-    user: 'User',
     welcomeSubtitle: 'Here\'s your debt management overview',
     viewDebtSummary: 'View Debt Summary',
     viewDetailedBreakdown: 'View Detailed Breakdown',
@@ -552,6 +599,32 @@ export const en = {
     totalToPayOff: 'Total Amount to Pay Off',
     minimumMonthlyPayments: 'Minimum Monthly Payments',
     perMonth: 'per month',
+    compareScenarios: 'Compare Scenarios',
+    compareScenariosTooltip: 'Compare different repayment scenarios',
+    exportData: 'Export debt data as CSV',
+    dataExported: 'Data exported successfully',
+    guest: 'Guest',
+    timelineExplanation: 'This chart shows how quickly each debt is paid off with the selected strategy',
+    paymentFlowExplanation: 'When a debt is paid off, its allocated budget is shifted to the next priority debt'
+  },
+  footer: {
+    about: {
+      title: 'About Loan Simulate Harmony',
+      description: 'Loan Simulate Harmony is a free tool designed to help you create and follow a personalized debt repayment plan.',
+    },
+    links: {
+      title: 'Quick Links',
+      item1: 'Dashboard',
+      item2: 'Loan Terms',
+      item3: 'Debt Summary',
+    },
+    legal: {
+      title: 'Legal',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service',
+      cookies: 'Cookie Policy',
+    },
+    copyright: 'All rights reserved.',
   },
   blog: {
     pageTitle: "Blog | Loan Simulate Harmony",
@@ -684,7 +757,8 @@ export const en = {
     light: "Light",
     dark: "Dark",
     system: "System"
-  }
+  },
+  noDebtToDisplay: "No debt to display"
 };
 
 export const enTranslations = en;

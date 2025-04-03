@@ -1,3 +1,4 @@
+
 // fi.ts
 
 export const fi = {
@@ -70,6 +71,8 @@ export const fi = {
       amountPlaceholder: "Määrä",
       termYearsPlaceholder: "Laina-aika vuosina",
       monthlyFeePlaceholder: "Kuukausimaksu",
+      namePlaceholder: "esim. Asuntolaina",
+      interestRatePlaceholder: "esim. 5.0",
     },
     loanTypes: {
       personalLoan: "Henkilökohtainen laina",
@@ -94,6 +97,7 @@ export const fi = {
       cancel: "Peruuta",
       save: "Tallenna",
       payoff: "Maksa pois",
+      submit: "Lisää",
     },
     tooltips: {
       interestRate: "Lainan korko",
@@ -122,6 +126,9 @@ export const fi = {
       month: "Kuukausi",
       months: "Kuukaudet",
     },
+    title: "Uusi laina",
+    editTitle: "Muokkaa lainaa",
+    monthlyFeeDescription: "Valinnainen kuukausittainen palvelumaksu lainalle"
   },
   table: {
     headers: {
@@ -134,6 +141,22 @@ export const fi = {
       endDate: "Eräpäivä",
       additionalPayment: "ylimääräinen maksu",
     },
+    name: "Nimi",
+    amount: "Määrä",
+    interestRate: "Korko",
+    term: "Laina-aika",
+    monthlyPayment: "Kuukausierä",
+    balance: "Saldo",
+    apr: "Vuosikorko",
+    minPayment: "Minimimaksu",
+    actions: "Toiminnot",
+    edit: "Muokkaa",
+    toggleActive: "Vaihda aktiivisuutta",
+    payoff: "Maksa pois",
+    year: "vuosi",
+    years: "vuotta",
+    totalInterest: "Korko yhteensä",
+    totalPayment: "Maksu yhteensä"
   },
   results: {
     summary: "Yhteenveto",
@@ -189,7 +212,8 @@ export const fi = {
     totalBalance: "Kokonaissaldo",
     tableSummary: "Velkasuhteen yhteenveto",
     totalAmountPaid: "Kokonaismaksettu summa",
-    metaDescription: "Tarkastele velkojesi kokonaistilannetta, mukaan lukien lainat ja luottokortit."
+    metaDescription: "Tarkastele velkojesi kokonaistilannetta, mukaan lukien lainat ja luottokortit.",
+    includingInterestAndFees: "Sisältäen pääoma, korko ja kulut"
   },
   auth: {
     login: "Kirjaudu sisään",
@@ -329,7 +353,11 @@ export const fi = {
     planTab: "Lyhennyssuunnitelma",
     noPlanYet: "Ei vielä lyhennyssuunnitelmaa",
     enterBudgetPrompt: "Syötä kuukausittainen budjetti ja laske lyhennyssuunnitelma",
-    calculateNow: "Laske nyt"
+    calculateNow: "Laske nyt",
+    avalancheStrategy: "Lumivyörystrategia",
+    snowballStrategy: "Lumipallostrategia",
+    avalancheDesc: "Korkein korko ensin",
+    snowballDesc: "Pienin saldo ensin"
   },
   visualization: {
     debtBreakdown: "Velkasuhde",
@@ -349,7 +377,13 @@ export const fi = {
   },
   toast: {
     loanPaidOff: "Laina maksettu pois",
-    cardPaidOff: "Luottokortti maksettu pois"
+    cardPaidOff: "Luottokortti maksettu pois",
+    loanAdded: "Laina lisätty onnistuneesti",
+    loanUpdated: "Laina päivitetty onnistuneesti",
+    loanDeleted: "Laina poistettu onnistuneesti",
+    cardAdded: "Luottokortti lisätty onnistuneesti",
+    cardUpdated: "Luottokortti päivitetty onnistuneesti",
+    cardDeleted: "Luottokortti poistettu onnistuneesti"
   },
   recommendations: {
     title: "Suositukset",
@@ -374,7 +408,93 @@ export const fi = {
     light: "Vaalea",
     dark: "Tumma",
     system: "Järjestelmä"
-  }
+  },
+  dashboard: {
+    title: "Dashboard",
+    welcome: "Tervetuloa",
+    welcomeSubtitle: "Tässä on velkojesi hallintakatsaus",
+    viewDebtSummary: "Katso velkasumma",
+    viewDetailedBreakdown: "Katso tarkempi erittely",
+    totalDebt: "Velka yhteensä",
+    estimatedInterestCost: "Arvioitu korkokustannus",
+    estimatedDebtFreeDate: "Arvioitu velattomaksi päivä",
+    minimumMonthlyPayments: "Kuukausittaiset vähimmäismaksut",
+    perMonth: "kuukaudessa",
+    totalToPayOff: "Maksettava kokonaissumma",
+    paymentPlanSummary: "Maksusuunnitelman yhteenveto",
+    paymentPlanDescription: "Velanlyhennysstrategiasi yhdellä silmäyksellä",
+    monthlyBudget: "Kuukausibudjetti",
+    minimumPayments: "Vähimmäismaksut",
+    extraBudget: "Ylimääräinen budjetti",
+    prioritizedDebt: "Priorisoitu velka",
+    interestRate: "korkoprosentti",
+    allocatingExtra: "Kohdistetaan ylimääräiset {{amount}} tälle velalle",
+    viewFullPlan: "Katso koko suunnitelma",
+    debtBreakdown: "Velkaerittely",
+    allDebts: "Kaikki velat",
+    loans: "Lainat",
+    creditCards: "Luottokortit",
+    financialTips: "Taloudelliset vinkit",
+    tip1: "Maksa ensin korkean koron velat säästääksesi rahaa pitkällä aikavälillä (lumivyörymenetelmä).",
+    tip2: "Luo vähintään 3 kuukauden menojen hätärahasto välttääksesi uutta velkaa.",
+    tip3: "Harkitse velkojen yhdistämistä, jos sinulla on useita korkean koron velkoja.",
+    viewGlossary: "Katso taloudellinen sanasto",
+    debtFreeTimeline: "Velaton aikajana",
+    timelineDescription: "Arvioitu matka taloudelliseen vapauteen",
+    timelineExplanation: "Tämä kaavio näyttää, kuinka nopeasti kukin velka maksetaan valitulla strategialla",
+    paymentFlowExplanation: "Kun velka on maksettu, sen määrätty budjetti siirtyy seuraavaan prioriteettivelkaan",
+    now: "Nyt",
+    currentDebt: "Nykyinen velka",
+    creditCardsFree: "Luottokortit maksettu",
+    projectDate: "Ennustettu päivämäärä",
+    debtFree: "Velaton",
+    viewDetailedTimeline: "Katso yksityiskohtainen aikajana",
+    helpWithDebt: "Tarvitsetko apua velkasi kanssa?",
+    year: "vuosi",
+    goToRepaymentPlan: "Siirry maksusuunnitelmaan",
+    currentPaymentAmount: "Nykyinen maksusumma",
+    monthlyPaymentAmount: "Kuukausittainen maksusumma",
+    minimum: "Minimi",
+    maximum: "Maksimi",
+    recommendedStrategy: "Suositeltu strategia",
+    recommendation: "Suositus",
+    equalStrategy: "Tasajako",
+    snowballStrategy: "Lumipallo",
+    avalancheStrategy: "Lumivyöry",
+    equalDistribution: "Tasajakostrategia",
+    compareScenarios: "Vertaile skenaarioita",
+    compareScenariosTooltip: "Vertaile erilaisia ​​takaisinmaksuskenaarioita",
+    exportData: "Vie velkadata CSV-tiedostona",
+    dataExported: "Tiedot viety onnistuneesti",
+    guest: "Vieras"
+  },
+  footer: {
+    about: {
+      title: "Tietoa Loan Simulate Harmony",
+      description: "Loan Simulate Harmony on ilmainen työkalu, jonka avulla voit luoda ja seurata räätälöityä velanmaksusuunnitelmaa."
+    },
+    links: {
+      title: "Pikalinkit",
+      item1: "Dashboard",
+      item2: "Lainaehdot",
+      item3: "Velkasumma"
+    },
+    legal: {
+      title: "Laillisuus",
+      privacy: "Tietosuojakäytäntö",
+      terms: "Käyttöehdot",
+      cookies: "Evästekäytäntö"
+    },
+    copyright: "Kaikki oikeudet pidätetään."
+  },
+  landing: {
+    seo: {
+      title: "Velan takaisinmaksu helpoksi - Ilmainen rahoitustyökalu | Loan Simulate Harmony",
+      description: "Luo ilmainen velan takaisinmaksusuunnitelma ja ota hallintaan taloutesi Loan Simulate Harmony avulla. Aloita velkavapaa matkasi tänään!",
+      keywords: "velan takaisinmaksu, lainan hallinta, rahoitustyökalut, velkalumipallon, velkavyöry, taloudellinen vapaus, velaton"
+    }
+  },
+  noDebtToDisplay: "Ei velkoja näytettäväksi"
 };
 
 // Also export as default for backward compatibility
