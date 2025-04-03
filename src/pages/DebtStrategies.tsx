@@ -55,10 +55,21 @@ const DebtStrategies = () => {
   });
   
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
+  const [calculationError, setCalculationError] = useState<string | null>(null);
   
   // Handle saving payment plan
   const handleSaveResults = (plan: PaymentPlan) => {
+    setCalculationError(null);
     setPaymentPlan(plan);
+  };
+  
+  // Handle calculation errors
+  const handleCalculationError = (error: any) => {
+    if (error.message && error.message.includes("maximum number of months")) {
+      setCalculationError(t('debtStrategies.errorMaxMonths'));
+    } else {
+      setCalculationError(error.message || "An error occurred");
+    }
   };
   
   return (
@@ -88,6 +99,15 @@ const DebtStrategies = () => {
           <>
             <DebtVisualization debts={debts} paymentPlan={paymentPlan} />
             
+            {calculationError && (
+              <Alert variant="destructive" className="my-4">
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  {calculationError}
+                </AlertDescription>
+              </Alert>
+            )}
+            
             <Tabs defaultValue="calculator" className="w-full mt-8">
               <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
                 <TabsTrigger value="calculator" className="flex items-center gap-2">
@@ -112,6 +132,7 @@ const DebtStrategies = () => {
                 <DebtPayoffCalculator 
                   initialDebts={debts}
                   onSaveResults={handleSaveResults}
+                  onError={handleCalculationError}
                 />
               </TabsContent>
               

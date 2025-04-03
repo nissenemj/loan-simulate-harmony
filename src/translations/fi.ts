@@ -426,7 +426,8 @@ export const fi = {
   theme: {
     light: "Vaalea",
     dark: "Tumma",
-    system: "Järjestelmä"
+    system: "Järjestelmä",
+    toggle: "Vaihda teemaa"
   },
   dashboard: {
     title: "Kojelauta",
