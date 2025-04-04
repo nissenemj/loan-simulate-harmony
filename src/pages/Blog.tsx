@@ -4,14 +4,12 @@ import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Clock, User, Tag } from "lucide-react";
-import { Link } from "react-router-dom";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateRecommendations } from "@/utils/affiliateData";
 import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CategoryTabs from "@/components/blog/CategoryTabs";
+import BlogPostList from "@/components/blog/BlogPostList";
 
 interface BlogPost {
   id: string;
@@ -109,22 +107,11 @@ const Blog = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="md:col-span-3">
-            <Tabs defaultValue="all" className="mb-6">
-              <TabsList className={`mb-6 flex ${isMobile ? 'flex-col gap-2' : 'flex-wrap'}`}>
-                <TabsTrigger value="all" onClick={() => setSelectedCategory("all")}>
-                  {t("blog.allPosts")}
-                </TabsTrigger>
-                {categories.map((category) => (
-                  <TabsTrigger 
-                    key={category} 
-                    value={category}
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {category}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+            <CategoryTabs 
+              categories={categories} 
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
           </div>
           
           {/* Storytel recommendation in sidebar */}
@@ -138,57 +125,7 @@ const Blog = () => {
           </div>
         </div>
 
-        {filteredPosts.length === 0 ? (
-          <p className="text-center py-8 text-muted-foreground">
-            {t("blog.noPosts")}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {filteredPosts.map((post) => (
-              <Card key={post.id} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                {post.image_url && (
-                  <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={post.image_url} 
-                      alt={post.title} 
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                )}
-                <CardHeader>
-                  <div className="flex justify-between items-center mb-2 text-sm text-muted-foreground">
-                    <div className="flex items-center">
-                      <Tag className="h-4 w-4 mr-1" />
-                      <span>{post.category}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>{formatDate(post.created_at)}</span>
-                    </div>
-                  </div>
-                  <CardTitle className="text-xl hover:text-primary transition-colors">
-                    <Link to={`/blog/${post.id}`}>{post.title}</Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4 line-clamp-3">
-                    {post.content.substring(0, 150)}...
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <User className="h-4 w-4 mr-1" />
-                      <span>{post.author}</span>
-                    </div>
-                    <Link to={`/blog/${post.id}`} className="text-sm font-medium text-primary hover:underline">
-                      {t("blog.readMore")} →
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+        <BlogPostList posts={filteredPosts} formatDate={formatDate} />
         
         {/* Newsletter Signup */}
         <div className="mb-12">
