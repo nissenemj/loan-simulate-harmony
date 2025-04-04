@@ -100,7 +100,7 @@ const BlogPost = () => {
       .catch(() => toast.error(t("blog.copyFailed")));
   };
   
-  // Format content with proper paragraphs
+  // Format content with proper paragraphs - improved version that handles bullet lists better
   const formatContent = (content: string) => {
     if (!content) return '';
     
@@ -115,18 +115,18 @@ const BlogPost = () => {
         return <h4 key={index} className="text-lg font-bold mt-5 mb-2">{paragraph.substring(4)}</h4>;
       }
       
-      // Lists
-      if (paragraph.indexOf('\n- ') >= 0) {
+      // Lists - we want to improve this as bullet points are causing issues
+      if (paragraph.includes('\n- ')) {
         const listTitle = paragraph.split('\n- ')[0];
         const listItems = paragraph.split('\n- ').slice(1);
+        
+        // Instead of creating a bullet list, convert these to paragraphs
         return (
           <div key={index} className="my-4">
             {listTitle && <p className="mb-2">{listTitle}</p>}
-            <ul className="list-disc pl-6 space-y-2">
-              {listItems.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
+            {listItems.map((item, i) => (
+              <p key={i} className="my-2">{item}</p>
+            ))}
           </div>
         );
       }

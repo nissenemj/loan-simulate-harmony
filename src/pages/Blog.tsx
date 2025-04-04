@@ -133,7 +133,19 @@ const Blog = () => {
             </CardContent>
           </Card>
         ) : (
-          <BlogPostList posts={filteredPosts} formatDate={formatDate} />
+          <>
+            {filteredPosts.length > 0 ? (
+              <BlogPostList posts={filteredPosts} formatDate={formatDate} />
+            ) : (
+              <Card className="w-full p-8">
+                <CardContent className="pt-6 text-center">
+                  <p className="text-muted-foreground">
+                    {language === 'fi' ? 'Ei artikkeleita tässä kategoriassa.' : 'No posts in this category.'}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
         
         {/* Newsletter Signup */}

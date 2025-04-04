@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Calendar, Clock, User, Tag } from "lucide-react";
+import { Calendar, User, Tag } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,10 +29,16 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
   const getExcerpt = (content: string, maxLength: number = 200) => {
     // Get first paragraph or part of it
     const firstParagraph = content.split('\n\n')[0];
-    if (firstParagraph.length <= maxLength) return firstParagraph;
+    
+    // Clean up any markdown formatting
+    let cleanText = firstParagraph
+      .replace(/^#+ /, '') // Remove heading markers
+      .replace(/\n- /g, ' '); // Remove list markers
+    
+    if (cleanText.length <= maxLength) return cleanText;
     
     // Cut to max length and add ellipsis
-    return firstParagraph.substring(0, maxLength) + '...';
+    return cleanText.substring(0, maxLength) + '...';
   };
   
   return (

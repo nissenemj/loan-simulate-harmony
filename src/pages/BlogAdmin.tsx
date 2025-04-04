@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import NavigationHeader from "@/components/NavigationHeader";
-import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +18,7 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { PenSquare, Trash2, Eye, Clock, ImageIcon, ExternalLink } from "lucide-react";
+import { PenSquare, Trash2, Eye, Clock, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface BlogPost {
@@ -95,6 +93,7 @@ const BlogAdmin = () => {
         console.error('Error fetching posts:', error);
         toast.error('Artikkeleiden haku epäonnistui');
       } else {
+        console.log('Admin fetched posts:', data);
         setPosts(data || []);
       }
     } catch (err) {
@@ -261,23 +260,18 @@ const BlogAdmin = () => {
     toast.error('Kuvan lataus epäonnistui. Tarkista URL-osoite.');
   };
   
-  // Testing an image URL to see if it's valid
-  const testImageUrl = (url: string, callback: (success: boolean) => void) => {
-    const img = new Image();
-    img.onload = () => callback(true);
-    img.onerror = () => callback(false);
-    img.src = url;
-  };
-  
   // Show loading state while checking authentication
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-        <NavigationHeader />
-        <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-          <p className="text-center py-12">Sisäänkirjautuminen vaaditaan...</p>
-        </div>
-        <Footer />
+      <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center pt-6 py-8">
+            <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+            <p className="mt-4 text-center">
+              Sisäänkirjautuminen vaaditaan...
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -285,24 +279,20 @@ const BlogAdmin = () => {
   // Show unauthorized message if user is logged in but not authorized
   if (user && !isAuthorized) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-        <NavigationHeader />
-        <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center text-destructive">Pääsy evätty</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center py-4">
-                Sinulla ei ole oikeuksia blogin hallintaan. Vain käyttäjä nissenemj@gmail.com voi hallita blogia.
-              </p>
-              <div className="flex justify-center mt-4">
-                <Button onClick={() => navigate("/")}>Takaisin etusivulle</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <Footer />
+      <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-center text-destructive">Pääsy evätty</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center py-4">
+              Sinulla ei ole oikeuksia blogin hallintaan. Vain käyttäjä nissenemj@gmail.com voi hallita blogia.
+            </p>
+            <div className="flex justify-center mt-4">
+              <Button onClick={() => navigate("/")}>Takaisin etusivulle</Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -314,263 +304,152 @@ const BlogAdmin = () => {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-        <NavigationHeader />
+      <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            Blogin hallinta
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Hallitse, lisää ja muokkaa blogiartikkeleita
+          </p>
+        </div>
         
-        <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Blogin hallinta
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              Hallitse, lisää ja muokkaa blogiartikkeleita
-            </p>
-          </div>
+        <Tabs defaultValue="list" className="mb-8">
+          <TabsList className="mb-6">
+            <TabsTrigger value="list">Artikkelit</TabsTrigger>
+            <TabsTrigger value="new">Lisää uusi</TabsTrigger>
+          </TabsList>
           
-          <Tabs defaultValue="list" className="mb-8">
-            <TabsList className="mb-6">
-              <TabsTrigger value="list">Artikkelit</TabsTrigger>
-              <TabsTrigger value="new">Lisää uusi</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="list">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Kaikki artikkelit</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {loading ? (
-                    <p className="text-center py-4">Ladataan artikkeleita...</p>
-                  ) : posts.length === 0 ? (
-                    <p className="text-center py-4">Ei artikkeleita.</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Otsikko</TableHead>
-                            <TableHead>Kategoria</TableHead>
-                            <TableHead>Kirjoittaja</TableHead>
-                            <TableHead>Luotu</TableHead>
-                            <TableHead className="text-right">Toiminnot</TableHead>
+          <TabsContent value="list">
+            <Card>
+              <CardHeader>
+                <CardTitle>Kaikki artikkelit</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
+                    <p>Ladataan artikkeleita...</p>
+                  </div>
+                ) : posts.length === 0 ? (
+                  <p className="text-center py-4">Ei artikkeleita.</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Otsikko</TableHead>
+                          <TableHead>Kategoria</TableHead>
+                          <TableHead>Kirjoittaja</TableHead>
+                          <TableHead>Luotu</TableHead>
+                          <TableHead className="text-right">Toiminnot</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {posts.map((post) => (
+                          <TableRow key={post.id}>
+                            <TableCell className="font-medium">
+                              <div className="flex items-center">
+                                {post.image_url && (
+                                  <div className="h-8 w-8 mr-2 overflow-hidden rounded bg-muted flex items-center justify-center">
+                                    <img 
+                                      src={post.image_url} 
+                                      alt="" 
+                                      className="h-full w-full object-cover"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                {post.title}
+                              </div>
+                            </TableCell>
+                            <TableCell>{post.category}</TableCell>
+                            <TableCell>{post.author}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
+                                <span className="text-sm">{formatDate(post.created_at)}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => navigate(`/blog/${post.id}`)}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                  <span className="sr-only">Näytä</span>
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleEdit(post)}
+                                >
+                                  <PenSquare className="h-4 w-4" />
+                                  <span className="sr-only">Muokkaa</span>
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => handleDeletePost(post.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                  <span className="sr-only">Poista</span>
+                                </Button>
+                              </div>
+                            </TableCell>
                           </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {posts.map((post) => (
-                            <TableRow key={post.id}>
-                              <TableCell className="font-medium">
-                                <div className="flex items-center">
-                                  {post.image_url && (
-                                    <div className="h-8 w-8 mr-2 overflow-hidden rounded bg-muted flex items-center justify-center">
-                                      <img 
-                                        src={post.image_url} 
-                                        alt="" 
-                                        className="h-full w-full object-cover"
-                                        onError={(e) => {
-                                          (e.target as HTMLImageElement).src = '/placeholder.svg';
-                                        }}
-                                      />
-                                    </div>
-                                  )}
-                                  {post.title}
-                                </div>
-                              </TableCell>
-                              <TableCell>{post.category}</TableCell>
-                              <TableCell>{post.author}</TableCell>
-                              <TableCell>
-                                <div className="flex items-center">
-                                  <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
-                                  <span className="text-sm">{formatDate(post.created_at)}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <div className="flex justify-end gap-2">
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => navigate(`/blog/${post.id}`)}
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                    <span className="sr-only">Näytä</span>
-                                  </Button>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => handleEdit(post)}
-                                  >
-                                    <PenSquare className="h-4 w-4" />
-                                    <span className="sr-only">Muokkaa</span>
-                                  </Button>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={() => handleDeletePost(post.id)}
-                                  >
-                                    <Trash2 className="h-4 w-4 text-destructive" />
-                                    <span className="sr-only">Poista</span>
-                                  </Button>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-              
-              {editingPost && (
-                <Card className="mt-8">
-                  <CardHeader>
-                    <CardTitle>Muokkaa artikkelia</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleUpdatePost} className="space-y-4">
-                      <div>
-                        <label className="block mb-1 font-medium">Otsikko</label>
-                        <Input 
-                          value={editTitle} 
-                          onChange={(e) => setEditTitle(e.target.value)} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-1 font-medium">Sisältö (Markdown)</label>
-                        <Textarea 
-                          value={editContent} 
-                          onChange={(e) => setEditContent(e.target.value)} 
-                          rows={15} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-1 font-medium">Kirjoittaja</label>
-                        <Input 
-                          value={editAuthor} 
-                          onChange={(e) => setEditAuthor(e.target.value)} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-1 font-medium">Kategoria</label>
-                        <Input 
-                          value={editCategory} 
-                          onChange={(e) => setEditCategory(e.target.value)} 
-                          required 
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
-                        <div className="flex gap-2">
-                          <Input 
-                            value={editImageUrl} 
-                            onChange={(e) => {
-                              setEditImageUrl(e.target.value);
-                              setShowEditImagePreview(false);
-                              setEditImagePreviewError(false);
-                            }} 
-                            placeholder="https://esimerkki.com/kuva.jpg"
-                          />
-                          <Button 
-                            type="button" 
-                            variant="outline"
-                            onClick={handleEditImagePreview}
-                            disabled={!editImageUrl}
-                          >
-                            <Eye className="h-4 w-4 mr-2" />
-                            Esikatsele
-                          </Button>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Voit käyttää esim. Unsplash-kuvia: https://unsplash.com/
-                        </p>
-                        
-                        {showEditImagePreview && editImageUrl && (
-                          <div className="mt-4 border rounded-md p-4">
-                            <h4 className="font-medium mb-2">Kuvan esikatselu:</h4>
-                            <div className="relative max-w-md mx-auto">
-                              <img 
-                                src={editImageUrl} 
-                                alt="Esikatselu" 
-                                className="max-h-48 object-contain mx-auto"
-                                onError={handleEditImageError}
-                                onLoad={() => setEditImagePreviewError(false)}
-                              />
-                              {editImagePreviewError && (
-                                <div className="mt-2 text-center text-destructive">
-                                  <p>Kuvan lataus epäonnistui. Tarkista URL-osoite.</p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          type="submit" 
-                          disabled={submitting}
-                        >
-                          {submitting ? "Tallennetaan..." : "Tallenna muutokset"}
-                        </Button>
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={() => setEditingPost(null)}
-                        >
-                          Peruuta
-                        </Button>
-                      </div>
-                    </form>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
             
-            <TabsContent value="new">
-              <Card>
+            {editingPost && (
+              <Card className="mt-8">
                 <CardHeader>
-                  <CardTitle>Lisää uusi artikkeli</CardTitle>
+                  <CardTitle>Muokkaa artikkelia</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleUpdatePost} className="space-y-4">
                     <div>
                       <label className="block mb-1 font-medium">Otsikko</label>
                       <Input 
-                        value={title} 
-                        onChange={(e) => setTitle(e.target.value)} 
-                        placeholder="Artikkelin otsikko" 
+                        value={editTitle} 
+                        onChange={(e) => setEditTitle(e.target.value)} 
                         required 
                       />
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Sisältö (Markdown)</label>
                       <Textarea 
-                        value={content} 
-                        onChange={(e) => setContent(e.target.value)} 
-                        placeholder="Artikkelin sisältö..." 
+                        value={editContent} 
+                        onChange={(e) => setEditContent(e.target.value)} 
                         rows={15} 
                         required 
                       />
                       <p className="text-sm text-muted-foreground mt-1">
-                        Voit käyttää Markdown-muotoilua. Linkit: [Teksti](https://osoite.fi), lihavointi: **teksti**, luettelot: - kohta
+                        Voit käyttää Markdown-muotoilua. Lihavointi: **teksti**, otsikot: # Otsikko, ## Alaotsikko
                       </p>
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Kirjoittaja</label>
                       <Input 
-                        value={author} 
-                        onChange={(e) => setAuthor(e.target.value)} 
-                        placeholder="Kirjoittajan nimi" 
+                        value={editAuthor} 
+                        onChange={(e) => setEditAuthor(e.target.value)} 
                         required 
                       />
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Kategoria</label>
                       <Input 
-                        value={category} 
-                        onChange={(e) => setCategory(e.target.value)} 
-                        placeholder="Esim. Velanhoito, Budjetointi" 
+                        value={editCategory} 
+                        onChange={(e) => setEditCategory(e.target.value)} 
                         required 
                       />
                     </div>
@@ -578,43 +457,40 @@ const BlogAdmin = () => {
                       <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
                       <div className="flex gap-2">
                         <Input 
-                          value={imageUrl} 
+                          value={editImageUrl} 
                           onChange={(e) => {
-                            setImageUrl(e.target.value);
-                            setShowImagePreview(false);
-                            setImagePreviewError(false);
+                            setEditImageUrl(e.target.value);
+                            setShowEditImagePreview(false);
+                            setEditImagePreviewError(false);
                           }} 
-                          placeholder="https://esimerkki.com/kuva.jpg" 
+                          placeholder="https://esimerkki.com/kuva.jpg"
                         />
                         <Button 
                           type="button" 
                           variant="outline"
-                          onClick={handleImagePreview}
-                          disabled={!imageUrl}
+                          onClick={handleEditImagePreview}
+                          disabled={!editImageUrl}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Esikatsele
                         </Button>
                       </div>
-                      <div className="flex items-center mt-1 space-x-1">
-                        <ExternalLink className="h-3 w-3 text-muted-foreground" />
-                        <p className="text-sm text-muted-foreground">
-                          Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a>
-                        </p>
-                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Voit käyttää esim. Unsplash-kuvia: https://unsplash.com/
+                      </p>
                       
-                      {showImagePreview && imageUrl && (
+                      {showEditImagePreview && editImageUrl && (
                         <div className="mt-4 border rounded-md p-4">
                           <h4 className="font-medium mb-2">Kuvan esikatselu:</h4>
                           <div className="relative max-w-md mx-auto">
                             <img 
-                              src={imageUrl} 
+                              src={editImageUrl} 
                               alt="Esikatselu" 
                               className="max-h-48 object-contain mx-auto"
-                              onError={handleImageError}
-                              onLoad={() => setImagePreviewError(false)}
+                              onError={handleEditImageError}
+                              onLoad={() => setEditImagePreviewError(false)}
                             />
-                            {imagePreviewError && (
+                            {editImagePreviewError && (
                               <div className="mt-2 text-center text-destructive">
                                 <p>Kuvan lataus epäonnistui. Tarkista URL-osoite.</p>
                               </div>
@@ -623,20 +499,135 @@ const BlogAdmin = () => {
                         </div>
                       )}
                     </div>
-                    <Button 
-                      type="submit" 
-                      disabled={submitting || (imageUrl !== "" && imagePreviewError)}
-                    >
-                      {submitting ? "Lisätään..." : "Lisää artikkeli"}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button 
+                        type="submit" 
+                        disabled={submitting}
+                      >
+                        {submitting ? "Tallennetaan..." : "Tallenna muutokset"}
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => setEditingPost(null)}
+                      >
+                        Peruuta
+                      </Button>
+                    </div>
                   </form>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
-        </main>
-        <Footer />
-      </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="new">
+            <Card>
+              <CardHeader>
+                <CardTitle>Lisää uusi artikkeli</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block mb-1 font-medium">Otsikko</label>
+                    <Input 
+                      value={title} 
+                      onChange={(e) => setTitle(e.target.value)} 
+                      placeholder="Artikkelin otsikko" 
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-medium">Sisältö (Markdown)</label>
+                    <Textarea 
+                      value={content} 
+                      onChange={(e) => setContent(e.target.value)} 
+                      placeholder="Artikkelin sisältö..." 
+                      rows={15} 
+                      required 
+                    />
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Voit käyttää Markdown-muotoilua. Lihavointi: **teksti**, otsikot: # Otsikko, ## Alaotsikko
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-medium">Kirjoittaja</label>
+                    <Input 
+                      value={author} 
+                      onChange={(e) => setAuthor(e.target.value)} 
+                      placeholder="Kirjoittajan nimi" 
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-medium">Kategoria</label>
+                    <Input 
+                      value={category} 
+                      onChange={(e) => setCategory(e.target.value)} 
+                      placeholder="Esim. Velanhoito, Budjetointi" 
+                      required 
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
+                    <div className="flex gap-2">
+                      <Input 
+                        value={imageUrl} 
+                        onChange={(e) => {
+                          setImageUrl(e.target.value);
+                          setShowImagePreview(false);
+                          setImagePreviewError(false);
+                        }} 
+                        placeholder="https://esimerkki.com/kuva.jpg" 
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={handleImagePreview}
+                        disabled={!imageUrl}
+                      >
+                        <Eye className="h-4 w-4 mr-2" />
+                        Esikatsele
+                      </Button>
+                    </div>
+                    <div className="flex items-center mt-1 space-x-1">
+                      <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">
+                        Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a>
+                      </p>
+                    </div>
+                    
+                    {showImagePreview && imageUrl && (
+                      <div className="mt-4 border rounded-md p-4">
+                        <h4 className="font-medium mb-2">Kuvan esikatselu:</h4>
+                        <div className="relative max-w-md mx-auto">
+                          <img 
+                            src={imageUrl} 
+                            alt="Esikatselu" 
+                            className="max-h-48 object-contain mx-auto"
+                            onError={handleImageError}
+                            onLoad={() => setImagePreviewError(false)}
+                          />
+                          {imagePreviewError && (
+                            <div className="mt-2 text-center text-destructive">
+                              <p>Kuvan lataus epäonnistui. Tarkista URL-osoite.</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={submitting || (imageUrl !== "" && imagePreviewError)}
+                  >
+                    {submitting ? "Lisätään..." : "Lisää artikkeli"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </main>
     </>
   );
 };
