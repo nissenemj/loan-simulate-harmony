@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -10,6 +9,7 @@ import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendat
 import { useIsMobile } from "@/hooks/use-mobile";
 import CategoryTabs from "@/components/blog/CategoryTabs";
 import BlogPostList from "@/components/blog/BlogPostList";
+import AdminLink from "@/components/blog/AdminLink";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
@@ -31,7 +31,6 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
 
-  // Get affiliate recommendations for education and books
   const educationRecommendations = affiliateRecommendations.filter(rec => 
     rec.category === 'education'
   );
@@ -50,10 +49,8 @@ const Blog = () => {
           console.error('Error fetching posts:', error);
           setPosts([]);
         } else {
-          // Debug: Log the posts that were fetched
           console.log('Fetched posts:', data);
           setPosts(data || []);
-          // Extract unique categories
           const uniqueCategories = Array.from(new Set(data?.map((post: BlogPost) => post.category) || []));
           setCategories(uniqueCategories);
         }
@@ -102,6 +99,8 @@ const Blog = () => {
             {t("blog.subtitle")}
           </p>
         </div>
+        
+        <AdminLink />
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="md:col-span-3">
@@ -112,7 +111,6 @@ const Blog = () => {
             />
           </div>
           
-          {/* Storytel recommendation in sidebar */}
           <div className="hidden md:block">
             {educationRecommendations.map(recommendation => (
               <AffiliateRecommendation 
@@ -148,12 +146,10 @@ const Blog = () => {
           </>
         )}
         
-        {/* Newsletter Signup */}
         <div className="mb-12">
           <NewsletterSignup />
         </div>
         
-        {/* Mobile Storytel recommendation */}
         <div className="md:hidden mb-8">
           {educationRecommendations.map(recommendation => (
             <AffiliateRecommendation 
@@ -163,7 +159,6 @@ const Blog = () => {
           ))}
         </div>
         
-        {/* Storytel Banner - Added at the bottom of the page */}
         <div className="my-8 flex justify-center">
           <div dangerouslySetInnerHTML={{ __html: '<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>' }} />
         </div>

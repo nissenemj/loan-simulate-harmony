@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -12,6 +11,7 @@ import { Calendar, Share2, ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import AdSenseBanner from "@/components/AdSenseBanner";
+import AdminLink from "@/components/blog/AdminLink";
 import { Badge } from "@/components/ui/badge";
 
 interface BlogPost {
@@ -43,7 +43,6 @@ const BlogPost = () => {
           return;
         }
         
-        // Fetch the current post
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -58,13 +57,12 @@ const BlogPost = () => {
           console.log('Fetched post:', data);
           setPost(data);
           
-          // After fetching the post, get related posts from the same category
           if (data.category) {
             const { data: relatedData, error: relatedError } = await supabase
               .from('blog_posts')
               .select('*')
               .eq('category', data.category)
-              .neq('id', postId) // Exclude current post
+              .neq('id', postId)
               .limit(3)
               .order('created_at', { ascending: false });
               
@@ -100,13 +98,10 @@ const BlogPost = () => {
       .catch(() => toast.error(t("blog.copyFailed")));
   };
   
-  // Format content with proper paragraphs - improved version that handles bullet lists better
   const formatContent = (content: string) => {
     if (!content) return '';
     
-    // Split by double newlines to make paragraphs
     return content.split('\n\n').map((paragraph, index) => {
-      // Check if paragraph starts with a heading marker (#)
       if (paragraph.startsWith('# ')) {
         return <h2 key={index} className="text-2xl font-bold mt-8 mb-4">{paragraph.substring(2)}</h2>;
       } else if (paragraph.startsWith('## ')) {
@@ -115,12 +110,10 @@ const BlogPost = () => {
         return <h4 key={index} className="text-lg font-bold mt-5 mb-2">{paragraph.substring(4)}</h4>;
       }
       
-      // Lists - we want to improve this as bullet points are causing issues
       if (paragraph.includes('\n- ')) {
         const listTitle = paragraph.split('\n- ')[0];
         const listItems = paragraph.split('\n- ').slice(1);
         
-        // Instead of creating a bullet list, convert these to paragraphs
         return (
           <div key={index} className="my-4">
             {listTitle && <p className="mb-2">{listTitle}</p>}
@@ -131,12 +124,10 @@ const BlogPost = () => {
         );
       }
       
-      // Regular paragraph
       return <p key={index} className="my-4">{paragraph}</p>;
     });
   };
   
-  // Loading state
   if (loading) {
     return (
       <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
@@ -152,7 +143,6 @@ const BlogPost = () => {
     );
   }
   
-  // Not found state
   if (notFound) {
     return (
       <>
@@ -200,6 +190,8 @@ const BlogPost = () => {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("blog.backToBlog")}
           </Link>
+          
+          <AdminLink />
           
           {post.image_url && (
             <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden mb-8">
