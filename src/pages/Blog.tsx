@@ -36,7 +36,9 @@ const Blog = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
+        console.log("Fetching blog posts...");
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -49,7 +51,7 @@ const Blog = () => {
           console.log('Fetched posts:', data);
           setPosts(data || []);
           // Extract unique categories
-          const uniqueCategories = Array.from(new Set(data.map((post: BlogPost) => post.category)));
+          const uniqueCategories = Array.from(new Set(data?.map((post: BlogPost) => post.category) || []));
           setCategories(uniqueCategories);
         }
       } catch (err) {

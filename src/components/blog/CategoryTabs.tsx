@@ -19,11 +19,12 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <Tabs defaultValue="all" className="mb-6">
+    <Tabs value={selectedCategory} defaultValue="all" className="mb-6">
       <TabsList className={`mb-6 flex ${isMobile ? 'flex-col gap-2' : 'flex-wrap'}`}>
         <TabsTrigger 
           value="all" 
           onClick={() => setSelectedCategory("all")}
+          className={selectedCategory === "all" ? "bg-primary text-primary-foreground" : ""}
         >
           {t("blog.allPosts")}
         </TabsTrigger>
@@ -32,6 +33,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
             key={category} 
             value={category}
             onClick={() => setSelectedCategory(category)}
+            className={selectedCategory === category ? "bg-primary text-primary-foreground" : ""}
           >
             {category}
           </TabsTrigger>

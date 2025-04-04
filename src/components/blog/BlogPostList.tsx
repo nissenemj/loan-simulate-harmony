@@ -20,7 +20,9 @@ interface BlogPostListProps {
 
 const BlogPostList: React.FC<BlogPostListProps> = ({ posts, formatDate }) => {
   const { t } = useLanguage();
-
+  
+  console.log("BlogPostList rendered with", posts.length, "posts");
+  
   if (posts.length === 0) {
     return (
       <p className="text-center py-8 text-muted-foreground">
