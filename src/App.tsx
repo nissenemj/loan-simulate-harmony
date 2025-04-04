@@ -67,6 +67,15 @@ const App = () => {
                             </ProtectedRoute>
                           } 
                         />
+                        {/* Add new route for /admin/blog that also points to BlogAdmin */}
+                        <Route 
+                          path="/admin/blog" 
+                          element={
+                            <ProtectedRoute>
+                              <BlogAdmin />
+                            </ProtectedRoute>
+                          } 
+                        />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </main>
@@ -86,6 +95,7 @@ const App = () => {
                   <Route path="/blog/:postId" element={null} />
                   <Route path="/auth" element={null} />
                   <Route path="/blog-admin" element={null} />
+                  <Route path="/admin/blog" element={null} /> {/* Add matching path here */}
                   <Route path="*" element={null} />
                 </Route>
               </Routes>
