@@ -1,4 +1,3 @@
-
 // fi.ts
 
 export const fi = {
@@ -110,32 +109,6 @@ export const fi = {
       min: "Syötä vähintään {min}",
       max: "Syötä enintään {max}",
       email: "Syötä kelvollinen sähköpostiosoite",
-    },
-      fi: {
-    title: "Blogi",
-    subtitle: "Uusimmat artikkelit ja oppaat taloudenhallintaan",
-    pageTitle: "Blogi | Velkavapaus.fi",
-    pageDescription: "Lue uusimmat artikkelit ja oppaat taloudenhallintaan, velanhoitoon ja budjetointiin Velkavapaus.fi-blogista.",
-    allPosts: "Kaikki artikkelit",
-    noPosts: "Ei artikkeleita tässä kategoriassa.",
-    readMore: "Lue lisää",
-    author: "Kirjoittaja",
-    category: "Kategoria",
-    date: "Päivämäärä",
-    relatedPosts: "Aiheeseen liittyvää",
-    share: "Jaa artikkeli",
-    tags: "Avainsanat",
-    comments: "Kommentit"
-  },
-    interestTypes: {
-      fixed: "Kiinteä",
-      variable: "Vaihtuva",
-    },
-    repaymentTypes: {
-      annuity: "Annuiteetti",
-      equalPrincipal: "Tasalyhennys",
-      fixedInstallment: "Kiinteä maksuerä",
-      customPayment: "Mukautettu maksu",
     },
     months: {
       month: "Kuukausi",
