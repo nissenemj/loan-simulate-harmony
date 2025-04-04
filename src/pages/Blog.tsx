@@ -46,6 +46,7 @@ const Blog = () => {
 
         if (error) {
           console.error('Error fetching posts:', error);
+          setPosts([]);
         } else {
           // Debug: Log the posts that were fetched
           console.log('Fetched posts:', data);
@@ -56,6 +57,7 @@ const Blog = () => {
         }
       } catch (err) {
         console.error('Unexpected error:', err);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
@@ -76,14 +78,6 @@ const Blog = () => {
       day: 'numeric'
     }).format(date);
   };
-
-  if (loading) {
-    return (
-      <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-        <p className="text-center py-12">{language === 'fi' ? 'Ladataan...' : 'Loading...'}</p>
-      </div>
-    );
-  }
 
   return (
     <>
