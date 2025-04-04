@@ -47,6 +47,8 @@ const Blog = () => {
         if (error) {
           console.error('Error fetching posts:', error);
         } else {
+          // Debug: Log the posts that were fetched
+          console.log('Fetched posts:', data);
           setPosts(data || []);
           // Extract unique categories
           const uniqueCategories = Array.from(new Set(data.map((post: BlogPost) => post.category)));
