@@ -10,6 +10,8 @@ import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendat
 import { useIsMobile } from "@/hooks/use-mobile";
 import CategoryTabs from "@/components/blog/CategoryTabs";
 import BlogPostList from "@/components/blog/BlogPostList";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 interface BlogPost {
   id: string;
@@ -121,7 +123,18 @@ const Blog = () => {
           </div>
         </div>
 
-        <BlogPostList posts={filteredPosts} formatDate={formatDate} />
+        {loading ? (
+          <Card className="w-full p-8">
+            <CardContent className="flex flex-col items-center justify-center pt-6">
+              <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+              <p className="mt-4 text-center text-muted-foreground">
+                {language === 'fi' ? 'Ladataan blogiartikkeleita...' : 'Loading blog posts...'}
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <BlogPostList posts={filteredPosts} formatDate={formatDate} />
+        )}
         
         {/* Newsletter Signup */}
         <div className="mb-12">
