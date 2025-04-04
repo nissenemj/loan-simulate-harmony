@@ -5,3 +5,6 @@ project_id = "jwzzkqelqsqsirfowevs"
 
 [functions.financial-advisor]
 verify_jwt = false
+
+[functions.new-blog-post]
+verify_jwt = false

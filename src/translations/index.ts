@@ -18,6 +18,7 @@ import { tooltips } from './modules/tooltips';
 import { footer } from './modules/footer';
 import { landing } from './modules/landing';
 import { auth } from './modules/auth';
+import { newsletter } from './modules/newsletter';
 
 // Merge all translation modules for English
 export const en = {
@@ -39,7 +40,8 @@ export const en = {
   ...tooltips.en,
   ...footer.en,
   ...landing.en,
-  ...auth.en
+  ...auth.en,
+  ...newsletter.en
 };
 
 // Merge all translation modules for Finnish
@@ -62,7 +64,8 @@ export const fi = {
   ...tooltips.fi,
   ...footer.fi,
   ...landing.fi,
-  ...auth.fi
+  ...auth.fi,
+  ...newsletter.fi
 };
 
 // Also export as default for backward compatibility

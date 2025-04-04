@@ -1,4 +1,3 @@
-
 // Common translations shared across the application
 
 export const common = {
@@ -32,6 +31,13 @@ export const common = {
     pagination: {
       previous: "Previous",
       next: "Next"
+    },
+    common: {
+      email: "Email",
+      name: "Name",
+      optional: "optional",
+      submitting: "Submitting...",
+      error: "An error occurred. Please try again."
     }
   },
   fi: {
@@ -64,6 +70,13 @@ export const common = {
     pagination: {
       previous: "Edellinen",
       next: "Seuraava"
+    },
+    common: {
+      email: "Sähköposti",
+      name: "Nimi",
+      optional: "valinnainen",
+      submitting: "Lähetetään...",
+      error: "Virhe tapahtui. Yritä uudelleen."
     }
   }
 };

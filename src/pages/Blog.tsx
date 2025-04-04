@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NavigationHeader from "@/components/NavigationHeader";
 import Footer from "@/components/Footer";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -201,6 +202,11 @@ const Blog = () => {
               ))}
             </div>
           )}
+          
+          {/* Newsletter Signup */}
+          <div className="mb-12">
+            <NewsletterSignup />
+          </div>
           
           {/* Mobile Storytel recommendation */}
           <div className="md:hidden mb-8">

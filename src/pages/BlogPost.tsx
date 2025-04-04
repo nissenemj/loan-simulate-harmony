@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NavigationHeader from "@/components/NavigationHeader";
 import Footer from "@/components/Footer";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Calendar, User, Tag, Share2, Facebook, Twitter, Linkedin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -291,6 +293,11 @@ const BlogPost = () => {
                   </DropdownMenu>
                 </div>
               </div>
+            </div>
+            
+            {/* Newsletter Signup Component */}
+            <div className="mt-12">
+              <NewsletterSignup />
             </div>
             
             <div className="mt-12 flex justify-center" onClick={handleStorytellClick}>
