@@ -126,7 +126,7 @@ export const fi = {
     share: "Jaa artikkeli",
     tags: "Avainsanat",
     comments: "Kommentit"
-  }
+  },
     interestTypes: {
       fixed: "Kiinteä",
       variable: "Vaihtuva",
