@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,7 +17,7 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { PenSquare, Trash2, Eye, Clock, ExternalLink } from "lucide-react";
+import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface BlogPost {
@@ -31,7 +30,6 @@ interface BlogPost {
   image_url?: string;
 }
 
-// The only email allowed to access blog admin
 const AUTHORIZED_EMAIL = "nissenemj@gmail.com";
 
 const BlogAdmin = () => {
@@ -39,21 +37,18 @@ const BlogAdmin = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
-  // State for existing posts
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // State for new post form
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("Talousvelhot"); // Default
+  const [author, setAuthor] = useState("Talousvelhot");
   const [category, setCategory] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [imagePreviewError, setImagePreviewError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
-  // State for edit form
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
@@ -63,10 +58,8 @@ const BlogAdmin = () => {
   const [showEditImagePreview, setShowEditImagePreview] = useState(false);
   const [editImagePreviewError, setEditImagePreviewError] = useState(false);
 
-  // Check if the current user is authorized
   const isAuthorized = user?.email === AUTHORIZED_EMAIL;
 
-  // Redirect unauthorized users back to the homepage
   useEffect(() => {
     if (user && !isAuthorized) {
       toast.error("Sinulla ei ole oikeuksia tähän sivuun");
@@ -74,7 +67,6 @@ const BlogAdmin = () => {
     }
   }, [user, isAuthorized, navigate]);
 
-  // Fetch posts when component mounts
   useEffect(() => {
     if (isAuthorized) {
       fetchPosts();
@@ -108,7 +100,6 @@ const BlogAdmin = () => {
     setSubmitting(true);
     
     try {
-      // Validate the image URL if provided
       if (imageUrl && imagePreviewError) {
         toast.error('Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi.');
         setSubmitting(false);
@@ -131,14 +122,12 @@ const BlogAdmin = () => {
         console.error('Error adding post:', error);
       } else {
         toast.success('Artikkeli lisätty onnistuneesti!');
-        // Reset form
         setTitle("");
         setContent("");
         setCategory("");
         setImageUrl("");
         setShowImagePreview(false);
         setImagePreviewError(false);
-        // Refresh posts list
         fetchPosts();
       }
     } catch (err) {
@@ -168,7 +157,6 @@ const BlogAdmin = () => {
     setSubmitting(true);
     
     try {
-      // Validate the image URL if provided
       if (editImageUrl && editImagePreviewError) {
         toast.error('Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi.');
         setSubmitting(false);
@@ -259,8 +247,7 @@ const BlogAdmin = () => {
     setEditImagePreviewError(true);
     toast.error('Kuvan lataus epäonnistui. Tarkista URL-osoite.');
   };
-  
-  // Show loading state while checking authentication
+
   if (!user) {
     return (
       <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
@@ -276,7 +263,6 @@ const BlogAdmin = () => {
     );
   }
 
-  // Show unauthorized message if user is logged in but not authorized
   if (user && !isAuthorized) {
     return (
       <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
