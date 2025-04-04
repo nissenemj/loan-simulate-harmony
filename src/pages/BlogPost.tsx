@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -46,6 +45,7 @@ const BlogPost = () => {
           return;
         }
 
+        console.log("Fetching blog post with ID:", postId);
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -56,6 +56,7 @@ const BlogPost = () => {
           console.error('Error fetching post:', error);
           setPost(null);
         } else {
+          console.log("Found post:", data);
           setPost(data);
         }
       } catch (err) {

@@ -16,7 +16,14 @@ export const blog = {
     relatedPosts: "Related posts",
     share: "Share this article",
     tags: "Tags",
-    comments: "Comments"
+    comments: "Comments",
+    postNotFound: "Article not found",
+    postNotFoundDesc: "Sorry, the article you're looking for cannot be found.",
+    backToBlog: "Back to blog",
+    copiedToClipboard: "Link copied to clipboard",
+    copyFailed: "Failed to copy link",
+    copyLink: "Copy link",
+    shareArticle: "Share article"
   },
   fi: {
     title: "Blogi",
@@ -32,6 +39,13 @@ export const blog = {
     relatedPosts: "Aiheeseen liittyvää",
     share: "Jaa artikkeli",
     tags: "Avainsanat",
-    comments: "Kommentit"
+    comments: "Kommentit",
+    postNotFound: "Artikkelia ei löytynyt",
+    postNotFoundDesc: "Valitettavasti etsimääsi artikkelia ei löytynyt.",
+    backToBlog: "Takaisin blogiin",
+    copiedToClipboard: "Linkki kopioitu leikepöydälle",
+    copyFailed: "Linkin kopiointi epäonnistui",
+    copyLink: "Kopioi linkki",
+    shareArticle: "Jaa artikkeli"
   }
 };

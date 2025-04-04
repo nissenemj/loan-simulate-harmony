@@ -57,7 +57,7 @@ const App = () => {
                         <Route path="/terms-of-service" element={<TermsOfService />} />
                         <Route path="/loan-terms" element={<LoanTerms />} />
                         <Route path="/blog" element={<Blog />} />
-                        <Route path="/blog/:slug" element={<BlogPost />} />
+                        <Route path="/blog/:postId" element={<BlogPost />} />
                         <Route path="/auth" element={<Auth />} />
                         <Route 
                           path="/blog-admin" 
@@ -83,7 +83,7 @@ const App = () => {
                   <Route path="/terms-of-service" element={null} />
                   <Route path="/loan-terms" element={null} />
                   <Route path="/blog" element={null} />
-                  <Route path="/blog/:slug" element={null} />
+                  <Route path="/blog/:postId" element={null} />
                   <Route path="/auth" element={null} />
                   <Route path="/blog-admin" element={null} />
                   <Route path="*" element={null} />
