@@ -31,6 +31,7 @@ export const forms = {
         monthlyFee: "Monthly Fee",
         variableEuribor: "Variable + Margin",
         fixedInterestRate: "Fixed Interest Rate",
+        isActive: "Active",
       },
       placeholders: {
         loanNamePlaceholder: "Enter loan name",
@@ -104,7 +105,32 @@ export const forms = {
       },
       title: "New Loan",
       editTitle: "Edit Loan",
-      monthlyFeeDescription: "Optional monthly fee for the loan"
+      monthlyFeeDescription: "Optional monthly fee for the loan",
+      creditCard: {
+        title: "New Credit Card",
+        editTitle: "Edit Credit Card",
+        form: {
+          name: "Card Name",
+          balance: "Current Balance",
+          limit: "Credit Limit",
+          apr: "APR",
+          minPayment: "Minimum Payment",
+          minPaymentPercent: "Minimum Payment (%)",
+          fullPayment: "I pay the full balance each month",
+          placeholderName: "e.g. Visa Card",
+          placeholderBalance: "Current balance",
+          placeholderCreditLimit: "Credit limit",
+          placeholderApr: "Annual Percentage Rate",
+          placeholderMinPayment: "Minimum payment",
+          autoCalculated: "Auto-calculated from % above",
+          submit: "Add Credit Card"
+        },
+        validation: {
+          nameRequired: "Card name is required",
+          invalidAmount: "Enter a valid amount",
+          invalidRate: "Enter a valid rate"
+        }
+      }
     }
   },
   fi: {
@@ -136,6 +162,7 @@ export const forms = {
         monthlyFee: "Kuukausimaksu",
         variableEuribor: "Vaihtuva + Marginaali",
         fixedInterestRate: "Kiinteä korko",
+        isActive: "Aktiivinen",
       },
       placeholders: {
         loanNamePlaceholder: "Syötä lainan nimi",
@@ -209,7 +236,32 @@ export const forms = {
       },
       title: "Uusi laina",
       editTitle: "Muokkaa lainaa",
-      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu"
+      monthlyFeeDescription: "Lainan vapaaehtoinen kuukausimaksu",
+      creditCard: {
+        title: "Uusi luottokortti",
+        editTitle: "Muokkaa luottokorttia",
+        form: {
+          name: "Kortin nimi",
+          balance: "Nykyinen saldo",
+          limit: "Luottoraja",
+          apr: "Korko",
+          minPayment: "Minimimaksu",
+          minPaymentPercent: "Minimimaksu (%)",
+          fullPayment: "Maksan koko saldon joka kuukausi",
+          placeholderName: "esim. Visa-kortti",
+          placeholderBalance: "Nykyinen saldo",
+          placeholderCreditLimit: "Luottoraja",
+          placeholderApr: "Vuosikorko",
+          placeholderMinPayment: "Minimimaksu",
+          autoCalculated: "Lasketaan automaattisesti yllä olevasta prosentista",
+          submit: "Lisää luottokortti"
+        },
+        validation: {
+          nameRequired: "Kortin nimi vaaditaan",
+          invalidAmount: "Syötä kelvollinen summa",
+          invalidRate: "Syötä kelvollinen korko"
+        }
+      }
     }
   }
 };

@@ -55,14 +55,14 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
             <TableHead>{t("creditCard.table.monthlyInterest")}</TableHead>
             <TableHead>{t("creditCard.table.payoffTime")}</TableHead>
             <TableHead>{t("creditCard.table.utilizationRate")}</TableHead>
-            <TableHead className="text-right">{t("form.isActive")}</TableHead>
+            <TableHead className="text-right">{t("form.labels.isActive")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {creditCards.length === 0 ? (
             <TableRow>
               <TableCell colSpan={8} className="text-center py-8">
-                {t("creditCard.noCardsAdded")}
+                {t("creditCard.table.noCardsAdded")}
               </TableCell>
             </TableRow>
           ) : (
@@ -108,7 +108,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                   <TableCell>
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                        1 {t("form.months")}
+                        1 {t("form.months.month")}
                       </span>
                     ) : calculation.payoffMonths === null ? (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
