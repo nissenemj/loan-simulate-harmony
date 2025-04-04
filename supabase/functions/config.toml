@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.new-blog-post]
 verify_jwt = false
+
+[functions.newsletter-signup]
+verify_jwt = false

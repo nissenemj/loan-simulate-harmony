@@ -44,8 +44,9 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
+      // Direct SQL query for tables not in generated types
       const { error } = await supabase
-        .from("newsletter_subscribers")
+        .from('newsletter_subscribers')
         .insert([{ email: data.email, name: data.name || null }]);
 
       if (error) {
