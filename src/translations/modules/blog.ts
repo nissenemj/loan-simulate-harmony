@@ -3,6 +3,7 @@
 
 export const blog = {
   en: {
+    blog: {
     title: "Blog",
     subtitle: "Latest articles and guides for financial management",
     pageTitle: "Blog | Debt Advisor",
@@ -24,8 +25,9 @@ export const blog = {
     copyFailed: "Failed to copy link",
     copyLink: "Copy link",
     shareArticle: "Share article"
-  },
+  } },
   fi: {
+    blog: {
     title: "Blogi",
     subtitle: "Uusimmat artikkelit ja oppaat taloudenhallintaan",
     pageTitle: "Blogi | Velkavapaus.fi",
@@ -47,5 +49,5 @@ export const blog = {
     copyFailed: "Linkin kopiointi epäonnistui",
     copyLink: "Kopioi linkki",
     shareArticle: "Jaa artikkeli"
-  }
+  }}
 };
