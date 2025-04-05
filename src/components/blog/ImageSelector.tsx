@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Loader2, ExternalLink } from "lucide-react";
+import { Loader2, ExternalLink, Image as ImageIcon, UploadCloud, FileImage } from "lucide-react";
+import { storage } from "@/utils/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 // List of demo images from the assets folder
 const demoImages = [
@@ -53,7 +57,9 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
   const [selectedImage, setSelectedImage] = useState("");
   const [customUrl, setCustomUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const handleSelectImage = () => {
     if (selectedTab === "url" && customUrl) {
       onSelectImage(customUrl);
@@ -62,7 +68,55 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
     }
     onClose();
   };
-
+  
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+    
+    const file = files[0];
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Vain kuvatiedostot sallittu (.jpg, .png, .gif)');
+      return;
+    }
+    
+    // Maximum file size (5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error('Kuvan maksimikoko on 5MB');
+      return;
+    }
+    
+    setIsUploading(true);
+    
+    try {
+      // Generate a unique filename to avoid conflicts
+      const fileExtension = file.name.split('.').pop();
+      const filename = `${uuidv4()}.${fileExtension}`;
+      const storageRef = ref(storage, `blog/${filename}`);
+      
+      // Upload the file
+      await uploadBytes(storageRef, file);
+      
+      // Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+      
+      // Set as selected image
+      setSelectedImage(downloadURL);
+      toast.success('Kuva ladattu onnistuneesti!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Kuvan lataus epäonnistui');
+    } finally {
+      setIsUploading(false);
+      // Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+  
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
@@ -71,9 +125,10 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
         </DialogHeader>
         
         <Tabs defaultValue="project" value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid grid-cols-3 mb-4">
+          <TabsList className="grid grid-cols-4 mb-4">
             <TabsTrigger value="project">Projektin kuvat</TabsTrigger>
             <TabsTrigger value="stock">Vapaita kuvia</TabsTrigger>
+            <TabsTrigger value="upload">Lataa kuva</TabsTrigger>
             <TabsTrigger value="url">URL-osoite</TabsTrigger>
           </TabsList>
           
@@ -155,6 +210,62 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
             </ScrollArea>
           </TabsContent>
           
+          <TabsContent value="upload">
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-md p-6">
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <UploadCloud className="h-8 w-8 text-muted-foreground" />
+                  <div className="text-sm text-center">
+                    <Label 
+                      htmlFor="file-upload" 
+                      className="font-medium text-primary hover:text-primary/80 cursor-pointer"
+                    >
+                      Valitse kuvatiedosto
+                    </Label>
+                    <p className="text-muted-foreground">tai raahaa tiedosto tähän</p>
+                  </div>
+                  <Input
+                    ref={fileInputRef}
+                    id="file-upload"
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleFileUpload}
+                    disabled={isUploading}
+                  />
+                </div>
+              </div>
+              
+              {isUploading && (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <p>Ladataan kuvaa...</p>
+                </div>
+              )}
+              
+              {selectedImage && selectedTab === "upload" && (
+                <div className="border rounded-md p-4">
+                  <h4 className="font-medium mb-2">Esikatselu:</h4>
+                  <div className="relative h-40 flex items-center justify-center bg-muted rounded">
+                    <img 
+                      src={selectedImage} 
+                      alt="Upload preview" 
+                      className="max-h-40 max-w-full object-contain"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {selectedImage.split('/').pop()}
+                  </p>
+                </div>
+              )}
+              
+              <div className="text-sm text-muted-foreground">
+                <p>Tuetut tiedostomuodot: JPG, PNG, GIF</p>
+                <p>Maksimikoko: 5MB</p>
+              </div>
+            </div>
+          </TabsContent>
+          
           <TabsContent value="url">
             <div className="space-y-4">
               <div>
@@ -202,9 +313,11 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
           </Button>
           <Button 
             onClick={handleSelectImage}
-            disabled={(selectedTab !== "url" && !selectedImage) || (selectedTab === "url" && !customUrl)}
+            disabled={(selectedTab === "url" && !customUrl) || 
+                     (selectedTab !== "url" && !selectedImage) || 
+                     isUploading}
           >
-            Valitse kuva
+            {isUploading ? "Ladataan..." : "Valitse kuva"}
           </Button>
         </div>
       </DialogContent>

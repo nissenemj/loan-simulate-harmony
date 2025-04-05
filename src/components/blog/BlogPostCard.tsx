@@ -41,9 +41,14 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
     return cleanText.substring(0, maxLength) + '...';
   };
 
-  // Handle image loading with fallbacks for local paths
+  // Handle image loading with fallbacks for all image types
   const getImageUrl = (url?: string) => {
     if (!url) return '/placeholder.svg';
+    
+    // If it's a Firebase Storage URL (contains firebasestorage.googleapis.com)
+    if (url.includes('firebasestorage.googleapis.com')) {
+      return url;
+    }
     
     // If it's a local path (starts with / or src/)
     if (url.startsWith('/') || url.startsWith('src/')) {
