@@ -82,6 +82,16 @@ const BlogPost = () => {
     fetchPost();
   }, [postId]);
   
+  const getImageUrl = (url?: string) => {
+    if (!url) return '/placeholder.svg';
+    
+    if (url.startsWith('/') || url.startsWith('src/')) {
+      return url;
+    }
+    
+    return url;
+  };
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat(language === 'fi' ? 'fi-FI' : 'en-US', {
@@ -196,7 +206,7 @@ const BlogPost = () => {
           {post.image_url && (
             <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden mb-8">
               <img
-                src={post.image_url}
+                src={getImageUrl(post.image_url)}
                 alt={post.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -251,7 +261,7 @@ const BlogPost = () => {
                   {relatedPost.image_url && (
                     <div className="h-36 overflow-hidden">
                       <img
-                        src={relatedPost.image_url}
+                        src={getImageUrl(relatedPost.image_url)}
                         alt={relatedPost.title}
                         className="h-full w-full object-cover"
                         onError={(e) => {

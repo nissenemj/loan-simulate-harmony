@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Calendar, User, Tag } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,13 +40,26 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
     // Cut to max length and add ellipsis
     return cleanText.substring(0, maxLength) + '...';
   };
+
+  // Handle image loading with fallbacks for local paths
+  const getImageUrl = (url?: string) => {
+    if (!url) return '/placeholder.svg';
+    
+    // If it's a local path (starts with / or src/)
+    if (url.startsWith('/') || url.startsWith('src/')) {
+      return url;
+    }
+    
+    // External URL
+    return url;
+  };
   
   return (
     <Card className="h-full flex flex-col overflow-hidden">
       {post.image_url && (
         <div className="relative h-48 overflow-hidden">
           <img
-            src={post.image_url}
+            src={getImageUrl(post.image_url)}
             alt={post.title}
             className="h-full w-full object-cover transition-transform hover:scale-105 duration-500"
             onError={(e) => {

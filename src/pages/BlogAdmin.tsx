@@ -17,8 +17,9 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink } from "lucide-react";
+import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink, Image } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ImageSelector from "@/components/blog/ImageSelector";
 
 interface BlogPost {
   id: string;
@@ -57,6 +58,9 @@ const BlogAdmin = () => {
   const [editImageUrl, setEditImageUrl] = useState("");
   const [showEditImagePreview, setShowEditImagePreview] = useState(false);
   const [editImagePreviewError, setEditImagePreviewError] = useState(false);
+  
+  const [showImageSelector, setShowImageSelector] = useState(false);
+  const [showEditImageSelector, setShowEditImageSelector] = useState(false);
 
   const isAuthorized = user?.email === AUTHORIZED_EMAIL;
 
@@ -93,6 +97,20 @@ const BlogAdmin = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectImage = (url: string) => {
+    setImageUrl(url);
+    setShowImagePreview(true);
+    setImagePreviewError(false);
+    setShowImageSelector(false);
+  };
+
+  const handleSelectEditImage = (url: string) => {
+    setEditImageUrl(url);
+    setShowEditImagePreview(true);
+    setEditImagePreviewError(false);
+    setShowEditImageSelector(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -440,7 +458,7 @@ const BlogAdmin = () => {
                       />
                     </div>
                     <div>
-                      <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
+                      <label className="block mb-1 font-medium">Kuva</label>
                       <div className="flex gap-2">
                         <Input 
                           value={editImageUrl} 
@@ -460,10 +478,15 @@ const BlogAdmin = () => {
                           <Eye className="h-4 w-4 mr-2" />
                           Esikatsele
                         </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setShowEditImageSelector(true)}
+                        >
+                          <Image className="h-4 w-4 mr-2" />
+                          Selaa kuvia
+                        </Button>
                       </div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Voit käyttää esim. Unsplash-kuvia: https://unsplash.com/
-                      </p>
                       
                       {showEditImagePreview && editImageUrl && (
                         <div className="mt-4 border rounded-md p-4">
@@ -554,7 +577,7 @@ const BlogAdmin = () => {
                     />
                   </div>
                   <div>
-                    <label className="block mb-1 font-medium">Kuva-URL (valinnainen)</label>
+                    <label className="block mb-1 font-medium">Kuva</label>
                     <div className="flex gap-2">
                       <Input 
                         value={imageUrl} 
@@ -574,11 +597,19 @@ const BlogAdmin = () => {
                         <Eye className="h-4 w-4 mr-2" />
                         Esikatsele
                       </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setShowImageSelector(true)}
+                      >
+                        <Image className="h-4 w-4 mr-2" />
+                        Selaa kuvia
+                      </Button>
                     </div>
                     <div className="flex items-center mt-1 space-x-1">
                       <ExternalLink className="h-3 w-3 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground">
-                        Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a>
+                        Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a> tai projektin kuvia (src/assets/images/blog)
                       </p>
                     </div>
                     
@@ -613,6 +644,18 @@ const BlogAdmin = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        
+        <ImageSelector 
+          open={showImageSelector} 
+          onClose={() => setShowImageSelector(false)} 
+          onSelectImage={handleSelectImage}
+        />
+        
+        <ImageSelector 
+          open={showEditImageSelector} 
+          onClose={() => setShowEditImageSelector(false)} 
+          onSelectImage={handleSelectEditImage}
+        />
       </main>
     </>
   );
