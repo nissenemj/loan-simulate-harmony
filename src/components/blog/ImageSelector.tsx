@@ -9,10 +9,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Loader2, ExternalLink, Image as ImageIcon, UploadCloud, FileImage } from "lucide-react";
-import { storage } from "@/utils/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage, uploadImage } from "@/utils/firebase";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // List of demo images from the assets folder
 const demoImages = [
@@ -58,7 +57,10 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
   const [customUrl, setCustomUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
   
   const handleSelectImage = () => {
     if (selectedTab === "url" && customUrl) {
@@ -74,7 +76,10 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
     if (!files || files.length === 0) return;
     
     const file = files[0];
-    
+    await processFileUpload(file);
+  };
+  
+  const processFileUpload = async (file: File) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Vain kuvatiedostot sallittu (.jpg, .png, .gif)');
@@ -89,31 +94,37 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
     }
     
     setIsUploading(true);
+    setUploadProgress(10);
     
     try {
-      console.log("Uploading image:", file.name);
+      console.log("Processing file upload:", file.name);
       
-      // Generate a unique filename to avoid conflicts
-      const fileExtension = file.name.split('.').pop();
-      const filename = `${uuidv4()}.${fileExtension}`;
-      const storageRef = ref(storage, `blog/${filename}`);
+      // Simulate progress (Firebase doesn't provide progress natively)
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          const nextProgress = prev + Math.floor(Math.random() * 15);
+          return nextProgress > 90 ? 90 : nextProgress;
+        });
+      }, 400);
       
-      // Upload the file
-      const snapshot = await uploadBytes(storageRef, file);
-      console.log("Upload successful:", snapshot);
+      // Upload the file using our helper function
+      const downloadURL = await uploadImage(file);
       
-      // Get the download URL
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log("Download URL:", downloadURL);
+      clearInterval(progressInterval);
+      setUploadProgress(100);
       
       // Set as selected image
       setSelectedImage(downloadURL);
       toast.success('Kuva ladattu onnistuneesti!');
     } catch (error) {
-      console.error('Error uploading image:', error);
-      toast.error('Kuvan lataus epäonnistui. Tarkista, että Firebase on määritetty oikein.');
+      console.error('Error in file upload process:', error);
+      toast.error('Kuvan lataus epäonnistui. Yritä myöhemmin uudelleen.');
     } finally {
-      setIsUploading(false);
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500);
+      
       // Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -125,43 +136,49 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    setDragActive(false);
     
     if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
       const file = event.dataTransfer.files[0];
-      
-      // Create a synthetic change event to reuse our upload logic
-      const syntheticEvent = {
-        target: {
-          files: event.dataTransfer.files
-        }
-      } as unknown as React.ChangeEvent<HTMLInputElement>;
-      
-      handleFileUpload(syntheticEvent);
+      processFileUpload(file);
     }
   };
   
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    setDragActive(true);
+  };
+  
+  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragActive(true);
+  };
+  
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragActive(false);
   };
   
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-w-[95vw] max-h-[85vh] overflow-auto">
         <DialogHeader>
           <DialogTitle>Valitse kuva</DialogTitle>
         </DialogHeader>
         
         <Tabs defaultValue="project" value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid grid-cols-4 mb-4">
-            <TabsTrigger value="project">Projektin kuvat</TabsTrigger>
-            <TabsTrigger value="stock">Vapaita kuvia</TabsTrigger>
-            <TabsTrigger value="upload">Lataa kuva</TabsTrigger>
-            <TabsTrigger value="url">URL-osoite</TabsTrigger>
+          <TabsList className={`grid ${isMobile ? 'grid-cols-2 gap-1 mb-4' : 'grid-cols-4 mb-4'}`}>
+            <TabsTrigger value="project">{isMobile ? 'Projekti' : 'Projektin kuvat'}</TabsTrigger>
+            <TabsTrigger value="stock">{isMobile ? 'Vapaat' : 'Vapaita kuvia'}</TabsTrigger>
+            <TabsTrigger value="upload">{isMobile ? 'Lataa' : 'Lataa kuva'}</TabsTrigger>
+            <TabsTrigger value="url">URL</TabsTrigger>
           </TabsList>
           
           <TabsContent value="project">
-            <ScrollArea className="h-[300px] p-2 border rounded-md">
+            <ScrollArea className="h-[250px] md:h-[300px] p-2 border rounded-md">
               <RadioGroup value={selectedImage} onValueChange={setSelectedImage}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-2">
                   {demoImages.map((image) => (
@@ -204,7 +221,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
           </TabsContent>
           
           <TabsContent value="stock">
-            <ScrollArea className="h-[300px] p-2 border rounded-md">
+            <ScrollArea className="h-[250px] md:h-[300px] p-2 border rounded-md">
               <RadioGroup value={selectedImage} onValueChange={setSelectedImage}>
                 <div className="grid grid-cols-2 gap-4 p-2">
                   {stockImages.map((image) => (
@@ -241,12 +258,14 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
           <TabsContent value="upload">
             <div className="space-y-4">
               <div 
-                className="border-2 border-dashed border-gray-300 rounded-md p-6"
+                className={`border-2 border-dashed rounded-md p-6 transition-colors ${dragActive ? 'border-primary bg-primary/5' : 'border-gray-300'}`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
               >
                 <div className="flex flex-col items-center justify-center space-y-2">
-                  <UploadCloud className="h-8 w-8 text-muted-foreground" />
+                  <UploadCloud className={`h-8 w-8 ${dragActive ? 'text-primary' : 'text-muted-foreground'}`} />
                   <div className="text-sm text-center">
                     <Label 
                       htmlFor="file-upload" 
@@ -269,13 +288,18 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
               </div>
               
               {isUploading && (
-                <div className="flex items-center justify-center py-4">
-                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
-                  <p>Ladataan kuvaa...</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                    <p>Ladataan kuvaa... ({uploadProgress}%)</p>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div className="bg-primary h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div>
+                  </div>
                 </div>
               )}
               
-              {selectedImage && selectedTab === "upload" && (
+              {selectedImage && selectedTab === "upload" && !isUploading && (
                 <div className="border rounded-md p-4">
                   <h4 className="font-medium mb-2">Esikatselu:</h4>
                   <div className="relative h-40 flex items-center justify-center bg-muted rounded">
@@ -285,7 +309,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
                       className="max-h-40 max-w-full object-contain"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">
+                  <p className="text-xs text-muted-foreground mt-2 break-all">
                     {selectedImage.split('/').pop()}
                   </p>
                 </div>

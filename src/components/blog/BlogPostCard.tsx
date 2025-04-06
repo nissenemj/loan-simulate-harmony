@@ -6,6 +6,7 @@ import { Calendar, User } from "lucide-react";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BlogPost {
   id: string;
@@ -24,6 +25,7 @@ interface BlogPostCardProps {
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   
   // Calculate excerpt from content (first paragraph with character limit)
   const getExcerpt = (content: string, maxLength: number = 200) => {
@@ -72,12 +74,13 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
   return (
     <Card className="h-full flex flex-col overflow-hidden">
       {post.image_url && (
-        <div className="relative h-48 overflow-hidden">
+        <div className={`relative ${isMobile ? 'h-32' : 'h-48'} overflow-hidden`}>
           <img
             src={getImageUrl(post.image_url)}
             alt={post.title}
             className="h-full w-full object-cover transition-transform hover:scale-105 duration-500"
             onError={handleImageError}
+            loading="lazy"
           />
           <div className="absolute top-0 right-0 p-2">
             <Badge variant="secondary" className="text-xs font-normal">
@@ -87,7 +90,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
         </div>
       )}
       
-      <CardHeader className="pb-2">
+      <CardHeader className={`pb-2 ${isMobile ? 'p-3' : ''}`}>
         <div className="flex items-center text-xs text-muted-foreground space-x-3 mb-2">
           <div className="flex items-center">
             <User className="h-3 w-3 mr-1" />
@@ -99,19 +102,19 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
           </div>
         </div>
         <Link to={`/blog/${post.id}`} className="hover:underline">
-          <h3 className="font-bold text-lg leading-tight">{post.title}</h3>
+          <h3 className={`font-bold ${isMobile ? 'text-base' : 'text-lg'} leading-tight`}>{post.title}</h3>
         </Link>
       </CardHeader>
       
-      <CardContent className="pb-4 flex-grow">
+      <CardContent className={`pb-4 flex-grow ${isMobile ? 'p-3 pt-0' : ''}`}>
         <p className="text-muted-foreground text-sm">
-          {getExcerpt(post.content)}
+          {getExcerpt(post.content, isMobile ? 100 : 200)}
         </p>
       </CardContent>
       
-      <CardFooter className="pt-0">
+      <CardFooter className={`pt-0 ${isMobile ? 'p-3' : ''}`}>
         <Link to={`/blog/${post.id}`}>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size={isMobile ? "sm" : "default"}>
             {t("blog.readMore")}
           </Button>
         </Link>

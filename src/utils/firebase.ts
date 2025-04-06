@@ -1,9 +1,9 @@
 
 import { initializeApp } from 'firebase/app';
-import { getStorage } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAxxjC5LJq-GGKFCn4hQN4HyMaIZeIVGzE",
   authDomain: "velkavapaus.firebaseapp.com",
@@ -22,5 +22,32 @@ const app = initializeApp(firebaseConfig);
 console.log("Initializing Firebase Storage...");
 export const storage = getStorage(app);
 console.log("Firebase Storage initialized");
+
+// Helper function for uploading images
+export const uploadImage = async (file: File): Promise<string> => {
+  try {
+    console.log("Starting image upload process...");
+    
+    // Generate a unique filename
+    const fileExtension = file.name.split('.').pop();
+    const filename = `${uuidv4()}.${fileExtension}`;
+    const imageRef = storageRef(storage, `blog/${filename}`);
+    
+    console.log(`Uploading file: ${file.name} as ${filename}`);
+    
+    // Upload the file
+    const snapshot = await uploadBytes(imageRef, file);
+    console.log("Upload successful:", snapshot);
+    
+    // Get the download URL
+    const downloadURL = await getDownloadURL(imageRef);
+    console.log("Download URL generated:", downloadURL);
+    
+    return downloadURL;
+  } catch (error) {
+    console.error('Error in uploadImage function:', error);
+    throw error;
+  }
+}
 
 export default app;

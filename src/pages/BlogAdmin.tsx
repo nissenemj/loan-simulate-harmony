@@ -20,6 +20,7 @@ import {
 import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink, Image } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ImageSelector from "@/components/blog/ImageSelector";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BlogPost {
   id: string;
@@ -37,6 +38,7 @@ const BlogAdmin = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -306,30 +308,31 @@ const BlogAdmin = () => {
       <Helmet>
         <title>Blogin hallinta | Velkavapaus.fi</title>
         <meta name="robots" content="noindex, nofollow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
       </Helmet>
 
-      <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+      <main className="container max-w-5xl mx-auto py-4 md:py-8 px-3 md:px-6">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
             Blogin hallinta
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-base md:text-lg">
             Hallitse, lisää ja muokkaa blogiartikkeleita
           </p>
         </div>
         
-        <Tabs defaultValue="list" className="mb-8">
-          <TabsList className="mb-6">
-            <TabsTrigger value="list">Artikkelit</TabsTrigger>
-            <TabsTrigger value="new">Lisää uusi</TabsTrigger>
+        <Tabs defaultValue="list" className="mb-6 md:mb-8">
+          <TabsList className="mb-4 md:mb-6 w-full md:w-auto">
+            <TabsTrigger value="list" className="flex-1 md:flex-none">Artikkelit</TabsTrigger>
+            <TabsTrigger value="new" className="flex-1 md:flex-none">Lisää uusi</TabsTrigger>
           </TabsList>
           
           <TabsContent value="list">
             <Card>
-              <CardHeader>
+              <CardHeader className={isMobile ? "p-4" : ""}>
                 <CardTitle>Kaikki artikkelit</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className={isMobile ? "p-4 pt-0" : ""}>
                 {loading ? (
                   <div className="flex flex-col items-center justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
@@ -338,24 +341,16 @@ const BlogAdmin = () => {
                 ) : posts.length === 0 ? (
                   <p className="text-center py-4">Ei artikkeleita.</p>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Otsikko</TableHead>
-                          <TableHead>Kategoria</TableHead>
-                          <TableHead>Kirjoittaja</TableHead>
-                          <TableHead>Luotu</TableHead>
-                          <TableHead className="text-right">Toiminnot</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
+                  <div className="overflow-x-auto -mx-4 md:mx-0">
+                    {isMobile ? (
+                      <div className="space-y-4 px-4">
                         {posts.map((post) => (
-                          <TableRow key={post.id}>
-                            <TableCell className="font-medium">
-                              <div className="flex items-center">
+                          <Card key={post.id} className="overflow-hidden">
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="font-medium">{post.title}</div>
                                 {post.image_url && (
-                                  <div className="h-8 w-8 mr-2 overflow-hidden rounded bg-muted flex items-center justify-center">
+                                  <div className="h-10 w-10 ml-2 overflow-hidden rounded bg-muted flex items-center justify-center flex-shrink-0">
                                     <img 
                                       src={post.image_url} 
                                       alt="" 
@@ -363,63 +358,136 @@ const BlogAdmin = () => {
                                       onError={(e) => {
                                         (e.target as HTMLImageElement).src = '/placeholder.svg';
                                       }}
+                                      loading="lazy"
                                     />
                                   </div>
                                 )}
-                                {post.title}
                               </div>
-                            </TableCell>
-                            <TableCell>{post.category}</TableCell>
-                            <TableCell>{post.author}</TableCell>
-                            <TableCell>
-                              <div className="flex items-center">
-                                <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
-                                <span className="text-sm">{formatDate(post.created_at)}</span>
+                              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mb-3">
+                                <Badge variant="outline">{post.category}</Badge>
+                                <div className="flex items-center">
+                                  <User className="h-3 w-3 mr-1" />
+                                  <span>{post.author}</span>
+                                </div>
+                                <div className="flex items-center">
+                                  <Clock className="h-3 w-3 mr-1" />
+                                  <span>{formatDate(post.created_at)}</span>
+                                </div>
                               </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
+                              <div className="flex flex-wrap gap-2">
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => navigate(`/blog/${post.id}`)}
                                 >
-                                  <Eye className="h-4 w-4" />
-                                  <span className="sr-only">Näytä</span>
+                                  <Eye className="h-4 w-4 mr-1" />
+                                  Näytä
                                 </Button>
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => handleEdit(post)}
                                 >
-                                  <PenSquare className="h-4 w-4" />
-                                  <span className="sr-only">Muokkaa</span>
+                                  <PenSquare className="h-4 w-4 mr-1" />
+                                  Muokkaa
                                 </Button>
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => handleDeletePost(post.id)}
                                 >
-                                  <Trash2 className="h-4 w-4 text-destructive" />
-                                  <span className="sr-only">Poista</span>
+                                  <Trash2 className="h-4 w-4 mr-1 text-destructive" />
+                                  Poista
                                 </Button>
                               </div>
-                            </TableCell>
-                          </TableRow>
+                            </CardContent>
+                          </Card>
                         ))}
-                      </TableBody>
-                    </Table>
+                      </div>
+                    ) : (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Otsikko</TableHead>
+                            <TableHead>Kategoria</TableHead>
+                            <TableHead>Kirjoittaja</TableHead>
+                            <TableHead>Luotu</TableHead>
+                            <TableHead className="text-right">Toiminnot</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {posts.map((post) => (
+                            <TableRow key={post.id}>
+                              <TableCell className="font-medium">
+                                <div className="flex items-center">
+                                  {post.image_url && (
+                                    <div className="h-8 w-8 mr-2 overflow-hidden rounded bg-muted flex items-center justify-center">
+                                      <img 
+                                        src={post.image_url} 
+                                        alt="" 
+                                        className="h-full w-full object-cover"
+                                        onError={(e) => {
+                                          (e.target as HTMLImageElement).src = '/placeholder.svg';
+                                        }}
+                                        loading="lazy"
+                                      />
+                                    </div>
+                                  )}
+                                  {post.title}
+                                </div>
+                              </TableCell>
+                              <TableCell>{post.category}</TableCell>
+                              <TableCell>{post.author}</TableCell>
+                              <TableCell>
+                                <div className="flex items-center">
+                                  <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
+                                  <span className="text-sm">{formatDate(post.created_at)}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex justify-end gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => navigate(`/blog/${post.id}`)}
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                    <span className="sr-only">Näytä</span>
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => handleEdit(post)}
+                                  >
+                                    <PenSquare className="h-4 w-4" />
+                                    <span className="sr-only">Muokkaa</span>
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => handleDeletePost(post.id)}
+                                  >
+                                    <Trash2 className="h-4 w-4 text-destructive" />
+                                    <span className="sr-only">Poista</span>
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
                   </div>
                 )}
               </CardContent>
             </Card>
             
             {editingPost && (
-              <Card className="mt-8">
-                <CardHeader>
+              <Card className="mt-6 md:mt-8">
+                <CardHeader className={isMobile ? "p-4" : ""}>
                   <CardTitle>Muokkaa artikkelia</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className={isMobile ? "p-4 pt-0" : ""}>
                   <form onSubmit={handleUpdatePost} className="space-y-4">
                     <div>
                       <label className="block mb-1 font-medium">Otsikko</label>
@@ -434,7 +502,7 @@ const BlogAdmin = () => {
                       <Textarea 
                         value={editContent} 
                         onChange={(e) => setEditContent(e.target.value)} 
-                        rows={15} 
+                        rows={isMobile ? 10 : 15} 
                         required 
                       />
                       <p className="text-sm text-muted-foreground mt-1">
@@ -459,7 +527,7 @@ const BlogAdmin = () => {
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Kuva</label>
-                      <div className="flex gap-2">
+                      <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2`}>
                         <Input 
                           value={editImageUrl} 
                           onChange={(e) => {
@@ -468,24 +536,29 @@ const BlogAdmin = () => {
                             setEditImagePreviewError(false);
                           }} 
                           placeholder="https://esimerkki.com/kuva.jpg"
+                          className={isMobile ? 'mb-2' : ''}
                         />
-                        <Button 
-                          type="button" 
-                          variant="outline"
-                          onClick={handleEditImagePreview}
-                          disabled={!editImageUrl}
-                        >
-                          <Eye className="h-4 w-4 mr-2" />
-                          Esikatsele
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => setShowEditImageSelector(true)}
-                        >
-                          <Image className="h-4 w-4 mr-2" />
-                          Selaa kuvia
-                        </Button>
+                        <div className={`flex gap-2 ${isMobile ? 'w-full' : ''}`}>
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            onClick={handleEditImagePreview}
+                            disabled={!editImageUrl}
+                            className={isMobile ? 'flex-1' : ''}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            Esikatsele
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setShowEditImageSelector(true)}
+                            className={isMobile ? 'flex-1' : ''}
+                          >
+                            <Image className="h-4 w-4 mr-2" />
+                            Selaa kuvia
+                          </Button>
+                        </div>
                       </div>
                       
                       {showEditImagePreview && editImageUrl && (
@@ -531,10 +604,10 @@ const BlogAdmin = () => {
           
           <TabsContent value="new">
             <Card>
-              <CardHeader>
+              <CardHeader className={isMobile ? "p-4" : ""}>
                 <CardTitle>Lisää uusi artikkeli</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className={isMobile ? "p-4 pt-0" : ""}>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block mb-1 font-medium">Otsikko</label>
@@ -551,7 +624,7 @@ const BlogAdmin = () => {
                       value={content} 
                       onChange={(e) => setContent(e.target.value)} 
                       placeholder="Artikkelin sisältö..." 
-                      rows={15} 
+                      rows={isMobile ? 10 : 15} 
                       required 
                     />
                     <p className="text-sm text-muted-foreground mt-1">
@@ -578,7 +651,7 @@ const BlogAdmin = () => {
                   </div>
                   <div>
                     <label className="block mb-1 font-medium">Kuva</label>
-                    <div className="flex gap-2">
+                    <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-2`}>
                       <Input 
                         value={imageUrl} 
                         onChange={(e) => {
@@ -587,29 +660,34 @@ const BlogAdmin = () => {
                           setImagePreviewError(false);
                         }} 
                         placeholder="https://esimerkki.com/kuva.jpg" 
+                        className={isMobile ? 'mb-2' : ''}
                       />
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        onClick={handleImagePreview}
-                        disabled={!imageUrl}
-                      >
-                        <Eye className="h-4 w-4 mr-2" />
-                        Esikatsele
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setShowImageSelector(true)}
-                      >
-                        <Image className="h-4 w-4 mr-2" />
-                        Selaa kuvia
-                      </Button>
+                      <div className={`flex gap-2 ${isMobile ? 'w-full' : ''}`}>
+                        <Button 
+                          type="button" 
+                          variant="outline"
+                          onClick={handleImagePreview}
+                          disabled={!imageUrl}
+                          className={isMobile ? 'flex-1' : ''}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          Esikatsele
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setShowImageSelector(true)}
+                          className={isMobile ? 'flex-1' : ''}
+                        >
+                          <Image className="h-4 w-4 mr-2" />
+                          Selaa kuvia
+                        </Button>
+                      </div>
                     </div>
                     <div className="flex items-center mt-1 space-x-1">
                       <ExternalLink className="h-3 w-3 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground">
-                        Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a> tai projektin kuvia (src/assets/images/blog)
+                        Voit käyttää esim. <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer" className="underline">Unsplash-kuvia</a> tai projektin kuvia
                       </p>
                     </div>
                     
@@ -636,6 +714,7 @@ const BlogAdmin = () => {
                   <Button 
                     type="submit" 
                     disabled={submitting || (imageUrl !== "" && imagePreviewError)}
+                    className={isMobile ? 'w-full' : ''}
                   >
                     {submitting ? "Lisätään..." : "Lisää artikkeli"}
                   </Button>
