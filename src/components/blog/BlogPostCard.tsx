@@ -41,22 +41,32 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
     return cleanText.substring(0, maxLength) + '...';
   };
 
-  // Handle image loading with fallbacks for all image types
+  // Handle image loading with improved fallbacks
   const getImageUrl = (url?: string) => {
     if (!url) return '/placeholder.svg';
     
+    console.log("Processing image URL:", url);
+    
     // If it's a Firebase Storage URL (contains firebasestorage.googleapis.com)
     if (url.includes('firebasestorage.googleapis.com')) {
+      console.log("Firebase Storage image detected:", url);
       return url;
     }
     
     // If it's a local path (starts with / or src/)
     if (url.startsWith('/') || url.startsWith('src/')) {
+      console.log("Local image path detected:", url);
       return url;
     }
     
     // External URL
+    console.log("External image URL detected:", url);
     return url;
+  };
+  
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    console.error("Image failed to load:", post.image_url);
+    (e.target as HTMLImageElement).src = '/placeholder.svg';
   };
   
   return (
@@ -67,9 +77,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
             src={getImageUrl(post.image_url)}
             alt={post.title}
             className="h-full w-full object-cover transition-transform hover:scale-105 duration-500"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder.svg';
-            }}
+            onError={handleImageError}
           />
           <div className="absolute top-0 right-0 p-2">
             <Badge variant="secondary" className="text-xs font-normal">

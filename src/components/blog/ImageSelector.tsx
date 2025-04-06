@@ -91,23 +91,27 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
     setIsUploading(true);
     
     try {
+      console.log("Uploading image:", file.name);
+      
       // Generate a unique filename to avoid conflicts
       const fileExtension = file.name.split('.').pop();
       const filename = `${uuidv4()}.${fileExtension}`;
       const storageRef = ref(storage, `blog/${filename}`);
       
       // Upload the file
-      await uploadBytes(storageRef, file);
+      const snapshot = await uploadBytes(storageRef, file);
+      console.log("Upload successful:", snapshot);
       
       // Get the download URL
       const downloadURL = await getDownloadURL(storageRef);
+      console.log("Download URL:", downloadURL);
       
       // Set as selected image
       setSelectedImage(downloadURL);
       toast.success('Kuva ladattu onnistuneesti!');
     } catch (error) {
       console.error('Error uploading image:', error);
-      toast.error('Kuvan lataus epäonnistui');
+      toast.error('Kuvan lataus epäonnistui. Tarkista, että Firebase on määritetty oikein.');
     } finally {
       setIsUploading(false);
       // Reset the file input
@@ -115,6 +119,30 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
         fileInputRef.current.value = '';
       }
     }
+  };
+  
+  // Add a drop zone handler for better UX
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      
+      // Create a synthetic change event to reuse our upload logic
+      const syntheticEvent = {
+        target: {
+          files: event.dataTransfer.files
+        }
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+      
+      handleFileUpload(syntheticEvent);
+    }
+  };
+  
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
   };
   
   return (
@@ -212,7 +240,11 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ open, onClose, onSelectIm
           
           <TabsContent value="upload">
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-md p-6">
+              <div 
+                className="border-2 border-dashed border-gray-300 rounded-md p-6"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
                 <div className="flex flex-col items-center justify-center space-y-2">
                   <UploadCloud className="h-8 w-8 text-muted-foreground" />
                   <div className="text-sm text-center">

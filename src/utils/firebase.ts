@@ -1,33 +1,26 @@
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-// Firebase configuration
-// In a real application, these values would be stored in environment variables
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "velkavapaus-app.firebaseapp.com",
-  projectId: "velkavapaus-app",
-  storageBucket: "velkavapaus-app.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890abcdef",
-  measurementId: "G-ABCDEFGHIJ"
+  apiKey: "AIzaSyAxxjC5LJq-GGKFCn4hQN4HyMaIZeIVGzE",
+  authDomain: "velkavapaus.firebaseapp.com",
+  projectId: "velkavapaus",
+  storageBucket: "velkavapaus.appspot.com",
+  messagingSenderId: "1076577688427",
+  appId: "1:1076577688427:web:7dd5335f8ad767c3768899",
+  measurementId: "G-CHLB8SE40Z"
 };
 
 // Initialize Firebase
-export const firebaseApp = initializeApp(firebaseConfig);
+console.log("Initializing Firebase...");
+const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore
-export const db = getFirestore(firebaseApp);
+// Initialize Cloud Storage and get a reference to the service
+console.log("Initializing Firebase Storage...");
+export const storage = getStorage(app);
+console.log("Firebase Storage initialized");
 
-// Initialize Storage
-export const storage = getStorage(firebaseApp);
-
-/**
- * IMPORTANT: In a production environment, you should:
- * 1. Store Firebase config in environment variables
- * 2. Implement proper security rules in Firebase console
- * 3. Set up Firebase Authentication providers in Firebase console
- * 4. Configure proper CORS settings for storage
- */
+export default app;
