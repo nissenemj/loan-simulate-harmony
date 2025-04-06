@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,7 +18,8 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink, Image } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink, Image, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ImageSelector from "@/components/blog/ImageSelector";
 import { useIsMobile } from "@/hooks/use-mobile";
