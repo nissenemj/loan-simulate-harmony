@@ -25,7 +25,7 @@ const BlogPostList: React.FC<BlogPostListProps> = ({ posts, formatDate }) => {
   
   if (posts.length === 0) {
     return (
-      <p className="text-center py-8 text-muted-foreground">
+      <p className="text-left py-8 text-muted-foreground">
         {t("blog.noPosts")}
       </p>
     );

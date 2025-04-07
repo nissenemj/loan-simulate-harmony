@@ -90,7 +90,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
         </div>
       )}
       
-      <CardHeader className={`pb-2 ${isMobile ? 'p-3' : ''}`}>
+      <CardHeader className={`pb-2 ${isMobile ? 'p-3' : ''} text-left`}>
         <div className="flex items-center text-xs text-muted-foreground space-x-3 mb-2">
           <div className="flex items-center">
             <User className="h-3 w-3 mr-1" />
@@ -106,13 +106,13 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
         </Link>
       </CardHeader>
       
-      <CardContent className={`pb-4 flex-grow ${isMobile ? 'p-3 pt-0' : ''}`}>
+      <CardContent className={`pb-4 flex-grow ${isMobile ? 'p-3 pt-0' : ''} text-left`}>
         <p className="text-muted-foreground text-sm">
           {getExcerpt(post.content, isMobile ? 100 : 200)}
         </p>
       </CardContent>
       
-      <CardFooter className={`pt-0 ${isMobile ? 'p-3' : ''}`}>
+      <CardFooter className={`pt-0 ${isMobile ? 'p-3' : ''} justify-start`}>
         <Link to={`/blog/${post.id}`}>
           <Button variant="outline" size={isMobile ? "sm" : "default"}>
             {t("blog.readMore")}

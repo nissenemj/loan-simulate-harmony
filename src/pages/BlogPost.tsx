@@ -161,12 +161,12 @@ const BlogPost = () => {
         </Helmet>
         
         <main className="container max-w-4xl mx-auto py-8 px-4 md:px-6">
-          <Card className="w-full p-8 text-center">
+          <Card className="w-full p-8 text-left">
             <CardContent className="pt-6 space-y-6">
-              <h1 className="text-3xl font-bold text-center">
+              <h1 className="text-3xl font-bold">
                 {t("blog.postNotFound")}
               </h1>
-              <p className="text-center text-muted-foreground">
+              <p className="text-muted-foreground">
                 {t("blog.postNotFoundDesc")}
               </p>
               <Button onClick={() => navigate("/blog")}>
@@ -195,7 +195,7 @@ const BlogPost = () => {
       </Helmet>
       
       <main className="container max-w-4xl mx-auto py-8 px-4 md:px-6">
-        <div className="mb-8">
+        <div className="mb-8 text-left">
           <Link to="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t("blog.backToBlog")}
@@ -245,12 +245,12 @@ const BlogPost = () => {
           </div>
         </div>
         
-        <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+        <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-left">
           {formatContent(post.content)}
         </div>
         
         {relatedPosts.length > 0 && (
-          <div className="mt-12">
+          <div className="mt-12 text-left">
             <Separator className="my-8" />
             
             <h2 className="text-2xl font-bold mb-6">{t("blog.relatedPosts")}</h2>
@@ -271,7 +271,7 @@ const BlogPost = () => {
                     </div>
                   )}
                   
-                  <CardContent className="pt-4">
+                  <CardContent className="pt-4 text-left">
                     <h3 className="font-bold mb-2">
                       <Link to={`/blog/${relatedPost.id}`} className="hover:underline">
                         {relatedPost.title}
@@ -287,7 +287,7 @@ const BlogPost = () => {
           </div>
         )}
         
-        <div className="mt-12">
+        <div className="mt-12 text-left">
           <NewsletterSignup />
         </div>
         
