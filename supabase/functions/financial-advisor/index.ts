@@ -9,60 +9,87 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Site usage guide knowledge base
-const siteUsageGuide = {
-  dashboard: {
-    main: "The Dashboard shows an overview of your current debt situation, including visualizations of your debt breakdown and a timeline to becoming debt-free.",
-    debtFreeTimeline: "The Debt-Free Timeline shows when you'll be free from all debt and credit cards based on your current payment strategy.",
-    paymentPlanSummary: "The Payment Plan section shows how your monthly budget is allocated between minimum payments and extra payments.",
-    strategySelection: "You can save and select different repayment strategies using the 'Save Strategy' button and the strategy dropdown menu.",
-    debtBreakdown: "The Debt Breakdown tabs show details about your loans and credit cards, helping you understand your current debt situation."
+// Financial books knowledge base - this would ideally come from a database
+const financialBooksKnowledge = [
+  {
+    title: "Rich Dad Poor Dad",
+    author: "Robert Kiyosaki",
+    key_concepts: "Assets vs liabilities, cash flow, financial education, building wealth through investments"
   },
-  debtSummary: {
-    main: "The Debt Summary page provides detailed information about all your debts, including loans and credit cards.",
-    repaymentPlan: "The Repayment Plan tab shows a detailed month-by-month breakdown of your debt repayment journey.",
-    addingDebts: "You can add new loans and credit cards using the respective forms. Fill in details like balance, interest rate, and minimum payment."
+  {
+    title: "The Intelligent Investor",
+    author: "Benjamin Graham",
+    key_concepts: "Value investing, margin of safety, market fluctuations, investment vs speculation"
   },
-  calculators: {
-    debtPayoff: "The Debt Payoff Calculator lets you compare different repayment strategies (Avalanche, Snowball, Equal) and see how they affect your payoff timeline.",
-    extraPayment: "The Extra Payment Calculator shows how adding extra payments can reduce your debt payoff time and save interest.",
-    consolidation: "The Debt Consolidation Calculator helps you understand if consolidating your debts into a single loan would be beneficial."
+  {
+    title: "Think and Grow Rich",
+    author: "Napoleon Hill",
+    key_concepts: "Mindset for wealth, desire, persistence, planning, specialized knowledge"
   },
-  visualization: {
-    charts: "The charts visualize your debt situation from different angles. Hover over elements to see detailed information.",
-    breakdown: "The Debt Breakdown chart shows the proportion of each debt relative to your total debt.",
-    timeline: "The Timeline visualization shows how your debt decreases over time with your chosen repayment strategy."
+  {
+    title: "The Total Money Makeover",
+    author: "Dave Ramsey",
+    key_concepts: "Debt snowball, emergency fund, budgeting, seven baby steps to financial freedom"
+  },
+  {
+    title: "The Psychology of Money",
+    author: "Morgan Housel",
+    key_concepts: "Behavior with money, financial decision making, wealth building as behavior not knowledge"
+  },
+  {
+    title: "Your Money or Your Life",
+    author: "Vicki Robin & Joe Dominguez",
+    key_concepts: "Financial independence, relationship with money, conscious spending, fulfillment curve"
+  },
+  {
+    title: "The Millionaire Next Door",
+    author: "Thomas J. Stanley & William D. Danko",
+    key_concepts: "Wealth accumulation, frugality, living below means, financial independence"
+  },
+  {
+    title: "A Random Walk Down Wall Street",
+    author: "Burton Malkiel",
+    key_concepts: "Efficient market hypothesis, index investing, random movements of stocks, portfolio theory"
+  },
+  {
+    title: "The Little Book of Common Sense Investing",
+    author: "John C. Bogle",
+    key_concepts: "Index investing, long-term investment, minimizing costs, diversification"
+  },
+  {
+    title: "I Will Teach You to Be Rich",
+    author: "Ramit Sethi",
+    key_concepts: "Automation, conscious spending, personal finance system, focus on big wins"
   }
-};
+];
 
 const systemPrompt = `
-You are a helpful assistant named VelkaAI that guides users on how to use the debt management website. Your job is to help users navigate the site and understand how to use its various features effectively.
+You are a helpful financial advisor named VelkaAI. You have knowledge about personal finance and debt management based on these 10 influential financial books:
 
-Below is detailed information about the site's features that you should use to help users:
+${financialBooksKnowledge.map(book => 
+  `- "${book.title}" by ${book.author}: ${book.key_concepts}`
+).join('\n')}
 
-DASHBOARD:
-${Object.entries(siteUsageGuide.dashboard).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
-
-DEBT SUMMARY:
-${Object.entries(siteUsageGuide.debtSummary).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
-
-CALCULATORS:
-${Object.entries(siteUsageGuide.calculators).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
-
-VISUALIZATIONS:
-${Object.entries(siteUsageGuide.visualization).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
+IMPORTANT RESTRICTIONS:
+- DO NOT provide any specific stock investment advice or recommendations
+- DO NOT suggest specific investment products, stocks, or securities
+- DO NOT give asset allocation advice for investment portfolios
+- Comply with Finnish financial regulations which prohibit non-licensed entities from providing investment advice
+- If asked about stock investments, politely explain you cannot provide specific investment advice due to Finnish legal restrictions
+- Redirect discussions to general financial education or debt management principles instead
 
 When responding to questions:
-- Provide specific guidance on how to use features
-- Explain what calculations are happening behind the scenes if asked
-- Help users understand how to interpret visualizations
-- If a user seems confused about a specific feature, explain it step by step
-- Keep responses friendly and helpful
-- Be concise but thorough in your explanations
-- Focus on practical usage rather than theoretical knowledge
+- Keep your responses very short and direct (maximum 3-4 sentences)
+- Give practical, actionable advice on debt management and budgeting only
+- Reference concepts from these books when relevant but avoid investment specifics
+- Be precise and to the point
+- Be friendly and supportive
+- Focus on helping people manage debt or understand general financial concepts
+- Use simple language, not complex financial jargon
+- If a question is outside your financial knowledge or restricted areas, politely redirect to appropriate topics
 
 For Finnish users, you should respond in Finnish when they ask in Finnish, otherwise respond in English.
-Remember, your goal is to help users navigate and use the site effectively.
+Remember, your goal is to provide helpful general financial guidance based on these well-established financial books, but keep your answers concise and legally compliant.
 `;
 
 serve(async (req) => {
@@ -119,7 +146,7 @@ serve(async (req) => {
         model: "gpt-4o-mini",
         messages: messages,
         temperature: 0.7,
-        max_tokens: 300
+        max_tokens: 300  // Reduced from 800 to encourage shorter responses
       })
     });
     
@@ -151,4 +178,3 @@ serve(async (req) => {
     );
   }
 });
-
