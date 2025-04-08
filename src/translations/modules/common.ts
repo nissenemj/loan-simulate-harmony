@@ -16,7 +16,8 @@ export const common = {
     theme: {
       light: "Light",
       dark: "Dark",
-      system: "System"
+      system: "System",
+      toggle: "Toggle theme"
     },
     toast: {
       loanPaidOff: "Loan paid off",
@@ -38,13 +39,18 @@ export const common = {
       name: "Name",
       optional: "optional",
       submitting: "Submitting...",
-      error: "An error occurred. Please try again."
+      error: "An error occurred. Please try again.",
+      cancel: "Cancel"
     },
     savings: {
       title: "Savings Impact",
       payingOffNow: "By paying off now you save",
       payOff: "Pay Off",
       description: "These calculations show how much interest you can save by paying off loans early."
+    },
+    errors: {
+      nameRequired: "Name is required",
+      saveFailed: "Failed to save. Please try again."
     }
   },
   fi: {
@@ -61,7 +67,8 @@ export const common = {
     theme: {
       light: "Vaalea",
       dark: "Tumma",
-      system: "Järjestelmä"
+      system: "Järjestelmä",
+      toggle: "Vaihda teemaa"
     },
     toast: {
       loanPaidOff: "Laina maksettu pois",
@@ -83,13 +90,18 @@ export const common = {
       name: "Nimi",
       optional: "valinnainen",
       submitting: "Lähetetään...",
-      error: "Virhe tapahtui. Yritä uudelleen."
+      error: "Virhe tapahtui. Yritä uudelleen.",
+      cancel: "Peruuta"
     },
     savings: {
       title: "Säästövaikutus",
       payingOffNow: "Maksamalla pois nyt säästät",
       payOff: "Maksa pois",
       description: "Nämä laskelmat näyttävät, kuinka paljon korkoa voit säästää maksamalla lainat pois aikaisemmin."
+    },
+    errors: {
+      nameRequired: "Nimi vaaditaan",
+      saveFailed: "Tallennus epäonnistui. Yritä uudelleen."
     }
   }
 };

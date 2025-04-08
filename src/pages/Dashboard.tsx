@@ -1,12 +1,12 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, HelpCircle, Download, Calculator } from 'lucide-react';
+import { ArrowRight, HelpCircle, Download, Calculator, Save } from 'lucide-react';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard as CreditCardType } from '@/utils/creditCardCalculations';
 import { 
@@ -16,6 +16,18 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PrioritizationMethod, convertCreditCardToDebtItem, convertLoanToDebtItem, generateRepaymentPlan, saveRepaymentStrategy } from '@/utils/repayment';
 
 // Newly created components
 import DebtSummaryCard from '@/components/dashboard/DebtSummaryCard';
@@ -36,6 +48,9 @@ const Dashboard = () => {
   
   // State for selected scenario (default is current reality)
   const [showScenarioComparison, setShowScenarioComparison] = useState(false);
+  const [showStrategySaveDialog, setShowStrategySaveDialog] = useState(false);
+  const [strategyName, setStrategyName] = useState('');
+  const [selectedMethod, setSelectedMethod] = useState<PrioritizationMethod>('avalanche');
   
   // Make sure we're only using active loans and credit cards
   const activeLoans = loans.filter(loan => loan.isActive);
@@ -45,11 +60,6 @@ const Dashboard = () => {
   const totalDebt = 
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
-  
-  // Calculate the estimated debt-free date
-  const now = new Date();
-  const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 3));
-  const formattedDebtFreeDate = debtFreeDate.toLocaleDateString('fi-FI');
   
   // Monthly budget for debt repayment (should ideally come from user settings)
   const monthlyBudget = 1500;
@@ -173,6 +183,36 @@ const Dashboard = () => {
     toast.success(t('dashboard.dataExported') || 'Data exported successfully');
   };
   
+  // Handle saving strategy
+  const handleSaveStrategy = () => {
+    if (!strategyName.trim()) {
+      toast.error(t('errors.nameRequired'));
+      return;
+    }
+    
+    try {
+      // Convert loans and credit cards to debt items
+      const debtItems = [
+        ...activeLoans.map(convertLoanToDebtItem),
+        ...activeCards.map(convertCreditCardToDebtItem)
+      ];
+      
+      // Generate repayment plan
+      const repaymentPlan = generateRepaymentPlan(debtItems, monthlyBudget, selectedMethod);
+      
+      // Save strategy
+      saveRepaymentStrategy(strategyName, selectedMethod, monthlyBudget, repaymentPlan);
+      
+      // Close dialog and show success message
+      setShowStrategySaveDialog(false);
+      setStrategyName('');
+      toast.success(t('dashboard.strategySaved'));
+    } catch (error) {
+      console.error('Error saving strategy:', error);
+      toast.error(t('errors.saveFailed'));
+    }
+  };
+  
   return (
     <div className="container max-w-7xl mx-auto py-6 px-4 md:px-6">
       <Helmet>
@@ -201,6 +241,26 @@ const Dashboard = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            
+            {hasDebts && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setShowStrategySaveDialog(true)}
+                    >
+                      <Save className="mr-2 h-4 w-4" />
+                      {t('dashboard.saveStrategy')}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t('dashboard.saveStrategyTooltip') || 'Save current repayment strategy'}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
             
             <TooltipProvider>
               <Tooltip>
@@ -263,12 +323,75 @@ const Dashboard = () => {
         
         <DebtFreeTimeline 
           totalDebt={totalDebt}
-          formattedDebtFreeDate={formattedDebtFreeDate}
+          formattedDebtFreeDate="2030-12-01"
           activeCards={activeCards}
           activeLoans={activeLoans}
           monthlyBudget={monthlyBudget}
         />
       </div>
+      
+      {/* Save Strategy Dialog */}
+      <Dialog open={showStrategySaveDialog} onOpenChange={setShowStrategySaveDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('dashboard.saveStrategy')}</DialogTitle>
+            <DialogDescription>{t('dashboard.saveStrategyDescription')}</DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="strategy-name" className="text-right">
+                {t('dashboard.strategyName')}
+              </Label>
+              <Input
+                id="strategy-name"
+                value={strategyName}
+                onChange={(e) => setStrategyName(e.target.value)}
+                className="col-span-3"
+                placeholder={t('dashboard.strategyNamePlaceholder')}
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="strategy-method" className="text-right">
+                {t('dashboard.method')}
+              </Label>
+              <div className="col-span-3 flex gap-4">
+                <Button 
+                  type="button" 
+                  variant={selectedMethod === 'avalanche' ? 'default' : 'outline'} 
+                  onClick={() => setSelectedMethod('avalanche')}
+                >
+                  {t('dashboard.avalancheStrategy')}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant={selectedMethod === 'snowball' ? 'default' : 'outline'} 
+                  onClick={() => setSelectedMethod('snowball')}
+                >
+                  {t('dashboard.snowballStrategy')}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant={selectedMethod === 'equal' ? 'default' : 'outline'} 
+                  onClick={() => setSelectedMethod('equal')}
+                >
+                  {t('dashboard.equalStrategy')}
+                </Button>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setShowStrategySaveDialog(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button type="button" onClick={handleSaveStrategy}>
+              {t('dashboard.save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
