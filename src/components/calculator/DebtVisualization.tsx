@@ -29,7 +29,7 @@ export function DebtVisualization({ debts, paymentPlan }: DebtVisualizationProps
       <Card>
         <CardHeader>
           <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
-          <CardDescription>{t('visualization.breakdownDescription')}</CardDescription>
+          <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert>
