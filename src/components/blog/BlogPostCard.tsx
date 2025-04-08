@@ -7,6 +7,7 @@ import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ReactMarkdown from "react-markdown";
 
 interface BlogPost {
   id: string;
@@ -26,51 +27,22 @@ interface BlogPostCardProps {
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
-  
-  // Calculate excerpt from content (first paragraph with character limit)
+
   const getExcerpt = (content: string, maxLength: number = 200) => {
-    // Get first paragraph or part of it
     const firstParagraph = content.split('\n\n')[0];
-    
-    // Clean up any markdown formatting
-    let cleanText = firstParagraph
-      .replace(/^#+ /, '') // Remove heading markers
-      .replace(/\n- /g, ' '); // Remove list markers
-    
-    if (cleanText.length <= maxLength) return cleanText;
-    
-    // Cut to max length and add ellipsis
-    return cleanText.substring(0, maxLength) + '...';
+    if (firstParagraph.length <= maxLength) return firstParagraph;
+    return firstParagraph.substring(0, maxLength) + '...';
   };
 
-  // Handle image loading with improved fallbacks
   const getImageUrl = (url?: string) => {
     if (!url) return '/placeholder.svg';
-    
-    console.log("Processing image URL:", url);
-    
-    // If it's a Firebase Storage URL (contains firebasestorage.googleapis.com)
-    if (url.includes('firebasestorage.googleapis.com')) {
-      console.log("Firebase Storage image detected:", url);
-      return url;
-    }
-    
-    // If it's a local path (starts with / or src/)
-    if (url.startsWith('/') || url.startsWith('src/')) {
-      console.log("Local image path detected:", url);
-      return url;
-    }
-    
-    // External URL
-    console.log("External image URL detected:", url);
     return url;
   };
-  
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    console.error("Image failed to load:", post.image_url);
     (e.target as HTMLImageElement).src = '/placeholder.svg';
   };
-  
+
   return (
     <Card className="h-full flex flex-col overflow-hidden">
       {post.image_url && (
@@ -89,7 +61,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
           </div>
         </div>
       )}
-      
+
       <CardHeader className={`pb-2 ${isMobile ? 'p-3' : ''} text-left`}>
         <div className="flex items-center text-xs text-muted-foreground space-x-3 mb-2">
           <div className="flex items-center">
@@ -105,13 +77,13 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
           <h3 className={`font-bold ${isMobile ? 'text-base' : 'text-lg'} leading-tight`}>{post.title}</h3>
         </Link>
       </CardHeader>
-      
+
       <CardContent className={`pb-4 flex-grow ${isMobile ? 'p-3 pt-0' : ''} text-left`}>
-        <p className="text-muted-foreground text-sm">
-          {getExcerpt(post.content, isMobile ? 100 : 200)}
-        </p>
+        <div className="text-muted-foreground text-sm markdown">
+          <ReactMarkdown>{getExcerpt(post.content, isMobile ? 100 : 200)}</ReactMarkdown>
+        </div>
       </CardContent>
-      
+
       <CardFooter className={`pt-0 ${isMobile ? 'p-3' : ''} justify-start`}>
         <Link to={`/blog/${post.id}`}>
           <Button variant="outline" size={isMobile ? "sm" : "default"}>
