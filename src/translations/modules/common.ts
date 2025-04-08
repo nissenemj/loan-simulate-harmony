@@ -1,107 +1,103 @@
 
-// Common translations shared across the application
+// Common translations used throughout the app
 
 export const common = {
   en: {
-    app: {
-      title: "Debt Advisor",
-      description: "Simulate and plan your debt repayment.",
-      language: "Language",
-      footer: "Made with ❤️ by Finance Wizards"
-    },
-    language: {
-      en: "English",
-      fi: "Suomi"
-    },
-    theme: {
-      light: "Light",
-      dark: "Dark",
-      system: "System",
-      toggle: "Toggle theme"
-    },
-    toast: {
-      loanPaidOff: "Loan paid off",
-      cardPaidOff: "Credit card paid off",
-      loanAdded: "Loan added successfully",
-      loanUpdated: "Loan updated successfully",
-      loanDeleted: "Loan deleted successfully",
-      cardAdded: "Credit card added successfully",
-      cardUpdated: "Credit card updated successfully",
-      cardDeleted: "Credit card deleted successfully"
-    },
-    noDebtToDisplay: "No debts to display",
-    pagination: {
-      previous: "Previous",
-      next: "Next"
-    },
     common: {
-      email: "Email",
-      name: "Name",
-      optional: "optional",
-      submitting: "Submitting...",
-      error: "An error occurred. Please try again.",
-      cancel: "Cancel"
-    },
-    savings: {
-      title: "Savings Impact",
-      payingOffNow: "By paying off now you save",
-      payOff: "Pay Off",
-      description: "These calculations show how much interest you can save by paying off loans early."
-    },
-    errors: {
-      nameRequired: "Name is required",
-      saveFailed: "Failed to save. Please try again."
+      save: "Save",
+      cancel: "Cancel",
+      close: "Close",
+      add: "Add",
+      edit: "Edit",
+      delete: "Delete",
+      submit: "Submit",
+      reset: "Reset",
+      month: "Month",
+      months: "Months",
+      year: "Year",
+      years: "Years",
+      day: "Day",
+      days: "Days",
+      yes: "Yes",
+      no: "No",
+      loading: "Loading...",
+      noData: "No data available",
+      error: "Error",
+      success: "Success",
+      warning: "Warning",
+      info: "Info",
+      required: "Required",
+      optional: "Optional",
+      search: "Search",
+      filter: "Filter",
+      sort: "Sort",
+      asc: "Ascending",
+      desc: "Descending",
+      currency: "€",
+      currencyFormat: "€{0}",
+      percentFormat: "{0}%",
+      dateFormat: "DD.MM.YYYY",
+      timeFormat: "HH:mm",
+      dateTimeFormat: "DD.MM.YYYY HH:mm",
+      language: "Language",
+      theme: "Theme",
+      dark: "Dark",
+      light: "Light",
+      back: "Back",
+      next: "Next",
+      previous: "Previous",
+      continue: "Continue",
+      finish: "Finish",
+      logout: "Logout"
     }
   },
   fi: {
-    app: {
-      title: "Velkaneuvojasi",
-      description: "Simuloi ja suunnittele lainanmaksuasi.",
-      language: "Kieli",
-      footer: "Tehty ❤️ Velkavapaus.fi:n toimesta"
-    },
-    language: {
-      en: "English",
-      fi: "Suomi"
-    },
-    theme: {
-      light: "Vaalea",
-      dark: "Tumma",
-      system: "Järjestelmä",
-      toggle: "Vaihda teemaa"
-    },
-    toast: {
-      loanPaidOff: "Laina maksettu pois",
-      cardPaidOff: "Luottokortti maksettu pois",
-      loanAdded: "Laina lisätty onnistuneesti",
-      loanUpdated: "Laina päivitetty onnistuneesti",
-      loanDeleted: "Laina poistettu onnistuneesti",
-      cardAdded: "Luottokortti lisätty onnistuneesti",
-      cardUpdated: "Luottokortti päivitetty onnistuneesti",
-      cardDeleted: "Luottokortti poistettu onnistuneesti"
-    },
-    noDebtToDisplay: "Ei näytettäviä velkoja",
-    pagination: {
-      previous: "Edellinen",
-      next: "Seuraava"
-    },
     common: {
-      email: "Sähköposti",
-      name: "Nimi",
-      optional: "valinnainen",
-      submitting: "Lähetetään...",
-      error: "Virhe tapahtui. Yritä uudelleen.",
-      cancel: "Peruuta"
-    },
-    savings: {
-      title: "Säästövaikutus",
-      payingOffNow: "Maksamalla pois nyt säästät",
-      payOff: "Maksa pois",
-      description: "Nämä laskelmat näyttävät, kuinka paljon korkoa voit säästää maksamalla lainat pois aikaisemmin."
-    },
-    errors: {
-      nameRequired: "Nimi vaaditaan",
-      saveFailed: "Tallennus epäonnistui. Yritä uudelleen."
+      save: "Tallenna",
+      cancel: "Peruuta",
+      close: "Sulje",
+      add: "Lisää",
+      edit: "Muokkaa",
+      delete: "Poista",
+      submit: "Lähetä",
+      reset: "Nollaa",
+      month: "Kuukausi",
+      months: "Kuukautta",
+      year: "Vuosi",
+      years: "Vuotta",
+      day: "Päivä",
+      days: "Päivää",
+      yes: "Kyllä",
+      no: "Ei",
+      loading: "Ladataan...",
+      noData: "Tietoja ei saatavilla",
+      error: "Virhe",
+      success: "Onnistui",
+      warning: "Varoitus",
+      info: "Info",
+      required: "Pakollinen",
+      optional: "Valinnainen",
+      search: "Haku",
+      filter: "Suodata",
+      sort: "Järjestä",
+      asc: "Nouseva",
+      desc: "Laskeva",
+      currency: "€",
+      currencyFormat: "{0} €",
+      percentFormat: "{0}%",
+      dateFormat: "DD.MM.YYYY",
+      timeFormat: "HH:mm",
+      dateTimeFormat: "DD.MM.YYYY HH:mm",
+      language: "Kieli",
+      theme: "Teema",
+      dark: "Tumma",
+      light: "Vaalea",
+      back: "Takaisin",
+      next: "Seuraava",
+      previous: "Edellinen",
+      continue: "Jatka",
+      finish: "Valmis",
+      logout: "Kirjaudu ulos"
     }
   }
 };

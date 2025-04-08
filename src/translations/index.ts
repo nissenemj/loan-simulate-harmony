@@ -20,6 +20,8 @@ import { landing } from './modules/landing';
 import { auth } from './modules/auth';
 import { newsletter } from './modules/newsletter';
 import { blog } from './modules/blog';
+import { affiliate } from './modules/affiliate';
+import { scenarios } from './modules/scenarios';
 
 // Merge all translation modules for English
 export const en = {
@@ -43,7 +45,9 @@ export const en = {
   ...landing.en,
   ...auth.en,
   ...newsletter.en,
-  ...blog.en
+  ...blog.en,
+  ...affiliate.en,
+  ...scenarios.en
 };
 
 // Merge all translation modules for Finnish
@@ -68,7 +72,9 @@ export const fi = {
   ...landing.fi,
   ...auth.fi,
   ...newsletter.fi,
-  ...blog.fi
+  ...blog.fi,
+  ...affiliate.fi,
+  ...scenarios.fi
 };
 
 // Also export as default for backward compatibility
