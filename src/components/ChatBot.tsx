@@ -13,6 +13,7 @@ import { BookOpen, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useLocation } from 'react-router-dom';
 
 interface Message {
   role: 'user' | 'assistant' | 'system';
@@ -22,7 +23,7 @@ interface Message {
 const MAX_QUESTIONS = 5;
 
 const ChatBot: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // Start opened by default
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,12 +34,36 @@ const ChatBot: React.FC = () => {
   const { toast } = useToast();
   const { language } = useLanguage();
   const isMobile = useIsMobile();
+  const location = useLocation();
+
+  // Get current page context to provide relevant help
+  const getCurrentPageContext = () => {
+    const path = location.pathname;
+    
+    if (path === '/dashboard') {
+      return language === 'fi' 
+        ? 'Olet nyt Kojelaudalla. Täällä näet yhteenvedon veloistasi ja maksusuunnitelmasi. Miten voin auttaa sinua käyttämään tätä näkymää?'
+        : 'You are now on the Dashboard. Here you can see a summary of your debts and payment plan. How can I help you use this view?';
+    } else if (path === '/debt-summary') {
+      return language === 'fi'
+        ? 'Olet nyt Velkasummaus-sivulla. Täällä voit tarkastella velkojasi yksityiskohtaisesti ja luoda maksusuunnitelmia. Miten voin auttaa?'
+        : 'You are now on the Debt Summary page. Here you can view your debts in detail and create payment plans. How can I help?';
+    } else if (path === '/debt-strategies') {
+      return language === 'fi'
+        ? 'Olet nyt Velkastrategiat-sivulla. Täällä voit vertailla eri velanmaksustrategioita. Miten voin auttaa sinua työkalujen käytössä?'
+        : 'You are now on the Debt Strategies page. Here you can compare different debt repayment strategies. How can I help you use these tools?';
+    }
+    
+    return language === 'fi'
+      ? 'Tervetuloa Velaton-sovellukseen! Voin auttaa sinua käyttämään sovelluksen eri ominaisuuksia.'
+      : 'Welcome to the Velaton app! I can help you use the various features of the application.';
+  };
 
   // Initial welcome message
   useEffect(() => {
     const welcomeMessage = language === 'fi' 
-      ? "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa."
-      : "Hello! I'm VelkaAI, your financial assistant. I can help with personal finance and debt management questions. Please note that I cannot provide investment advice according to Finnish legislation.";
+      ? `Hei! Olen VelkaAI, apurisi. ${getCurrentPageContext()} Voit kysyä minulta miten käyttää sivuston laskureita ja visualisointeja.`
+      : `Hello! I'm VelkaAI, your assistant. ${getCurrentPageContext()} You can ask me how to use the site's calculators and visualizations.`;
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
     
@@ -46,7 +71,7 @@ const ChatBot: React.FC = () => {
     if (questionCount >= MAX_QUESTIONS) {
       setLimitReached(true);
     }
-  }, [language, questionCount]);
+  }, [language, location.pathname, questionCount]);
 
   // Auto-scroll to the bottom when new messages arrive
   useEffect(() => {
@@ -61,6 +86,14 @@ const ChatBot: React.FC = () => {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  // Listen for route changes to update context message
+  useEffect(() => {
+    if (isOpen && messages.length > 0) {
+      const contextMessage = { role: 'assistant' as const, content: getCurrentPageContext() };
+      setMessages(prev => [...prev, contextMessage]);
+    }
+  }, [location.pathname]);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
@@ -79,9 +112,12 @@ const ChatBot: React.FC = () => {
         .filter(msg => msg.role === 'user' || msg.role === 'assistant')
         .slice(-4); // Keep conversation context manageable
       
+      // Add current path context to help the AI provide relevant guidance
+      const contextEnhancedMessage = `[Current page: ${location.pathname}] ${inputValue}`;
+      
       const { data, error } = await supabase.functions.invoke('financial-advisor', {
         body: {
-          message: inputValue,
+          message: contextEnhancedMessage,
           chatHistory,
           questionCount
         }
@@ -190,7 +226,7 @@ const ChatBot: React.FC = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
+              placeholder={language === 'fi' ? 'Kysy käyttöohjeita...' : 'Ask for usage help...'}
               className="flex-1"
               disabled={isLoading}
             />
@@ -235,7 +271,7 @@ const ChatBot: React.FC = () => {
             <div className="flex items-center space-x-2">
               <BookOpen size={20} />
               <CardTitle className="text-lg font-medium">
-                {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+                {language === 'fi' ? 'Käyttöapuri' : 'Usage Guide'}
               </CardTitle>
             </div>
             <Button 
@@ -262,7 +298,7 @@ const ChatBot: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <BookOpen size={20} />
                   <DrawerTitle className="text-lg font-medium">
-                    {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+                    {language === 'fi' ? 'Käyttöapuri' : 'Usage Guide'}
                   </DrawerTitle>
                 </div>
                 <Button 
@@ -287,3 +323,4 @@ const ChatBot: React.FC = () => {
 };
 
 export default ChatBot;
+
