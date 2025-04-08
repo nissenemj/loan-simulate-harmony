@@ -1,3 +1,4 @@
+
 // Common translations shared across the application
 
 export const common = {
@@ -38,6 +39,12 @@ export const common = {
       optional: "optional",
       submitting: "Submitting...",
       error: "An error occurred. Please try again."
+    },
+    savings: {
+      title: "Savings Impact",
+      payingOffNow: "By paying off now you save",
+      payOff: "Pay Off",
+      description: "These calculations show how much interest you can save by paying off loans early."
     }
   },
   fi: {
@@ -77,6 +84,12 @@ export const common = {
       optional: "valinnainen",
       submitting: "Lähetetään...",
       error: "Virhe tapahtui. Yritä uudelleen."
+    },
+    savings: {
+      title: "Säästövaikutus",
+      payingOffNow: "Maksamalla pois nyt säästät",
+      payOff: "Maksa pois",
+      description: "Nämä laskelmat näyttävät, kuinka paljon korkoa voit säästää maksamalla lainat pois aikaisemmin."
     }
   }
 };
