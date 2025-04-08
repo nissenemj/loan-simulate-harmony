@@ -61,9 +61,19 @@ export const dashboard = {
       exportData: "Export Debt Data as CSV",
       dataExported: "Data exported successfully",
       guest: "Guest",
-      scenarioComparison: "Scenario Comparison",
-      scenarioDescription: "Compare different debt repayment scenarios and their outcomes",
-      remainingDebt: "Remaining Debt"
+      saveStrategy: "Save Strategy",
+      saveStrategyDescription: "Save your current repayment strategy for future reference",
+      saveStrategyTooltip: "Save current repayment strategy",
+      strategySaved: "Strategy saved successfully",
+      strategyName: "Name",
+      strategyNamePlaceholder: "My repayment strategy",
+      method: "Method",
+      save: "Save",
+      savedStrategies: "Saved Strategies",
+      selectStrategy: "Select Strategy",
+      strategySelected: "{name} strategy selected",
+      strategyCleared: "Strategy cleared",
+      clearStrategy: "Clear Selected Strategy"
     }
   },
   fi: {
@@ -125,9 +135,19 @@ export const dashboard = {
       exportData: "Vie velkatiedot CSV-muodossa",
       dataExported: "Tiedot viety onnistuneesti",
       guest: "Vieras",
-      scenarioComparison: "Skenaariovertailu",
-      scenarioDescription: "Vertaile erilaisia velanmaksuskenaarioita ja niiden tuloksia",
-      remainingDebt: "Jäljellä oleva velka"
+      saveStrategy: "Tallenna strategia",
+      saveStrategyDescription: "Tallenna nykyinen takaisinmaksustrategia myöhempää käyttöä varten",
+      saveStrategyTooltip: "Tallenna nykyinen takaisinmaksustrategia",
+      strategySaved: "Strategia tallennettu onnistuneesti",
+      strategyName: "Nimi",
+      strategyNamePlaceholder: "Oma takaisinmaksustrategia",
+      method: "Menetelmä",
+      save: "Tallenna",
+      savedStrategies: "Tallennetut strategiat",
+      selectStrategy: "Valitse strategia",
+      strategySelected: "{name} strategia valittu",
+      strategyCleared: "Strategia tyhjennetty",
+      clearStrategy: "Tyhjennä valittu strategia"
     }
   }
 };

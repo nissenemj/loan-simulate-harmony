@@ -119,7 +119,7 @@ const ScenarioComparisonTool = ({
   const defaultScenarios: Scenario[] = [
     {
       id: 'current',
-      name: t('scenarios.current'),
+      name: t('scenarios.current') || 'Current Situation',
       interestRateAdjustment: 0,
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments),
       extraPayment: 0,
@@ -127,7 +127,7 @@ const ScenarioComparisonTool = ({
     },
     {
       id: 'optimistic',
-      name: t('scenarios.optimistic'),
+      name: t('scenarios.optimistic') || 'Optimistic',
       interestRateAdjustment: -1, // Interest rates go down by 1%
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments) * 1.2, // 20% more payment
       extraPayment: 1000, // Extra annual payment
@@ -135,7 +135,7 @@ const ScenarioComparisonTool = ({
     },
     {
       id: 'pessimistic',
-      name: t('scenarios.pessimistic'),
+      name: t('scenarios.pessimistic') || 'Pessimistic',
       interestRateAdjustment: 2, // Interest rates go up by 2%
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments),
       extraPayment: 0,
@@ -322,9 +322,9 @@ const ScenarioComparisonTool = ({
       <CardHeader className="pb-3">
         <div className="flex justify-between items-center">
           <div>
-            <CardTitle>{t('dashboard.scenarioComparison')}</CardTitle>
+            <CardTitle>{t('dashboard.scenarioComparison') || 'Scenario Comparison'}</CardTitle>
             <CardDescription>
-              {t('dashboard.scenarioDescription')}
+              {t('dashboard.scenarioDescription') || 'Compare different debt repayment scenarios and their outcomes'}
             </CardDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -339,7 +339,8 @@ const ScenarioComparisonTool = ({
             <Alert className="bg-muted">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                {t('scenarios.minimumPaymentAlert', { payment: currencyFormatter.format(totalMinPayments) })}
+                {t('scenarios.minimumPaymentAlert', { payment: currencyFormatter.format(totalMinPayments) }) || 
+                  `Total minimum payments required: ${currencyFormatter.format(totalMinPayments)}. Any scenario with lower monthly payment will not be viable.`}
               </AlertDescription>
             </Alert>
           )}
@@ -371,7 +372,7 @@ const ScenarioComparisonTool = ({
                   <CardContent className="pt-0 pb-4">
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name">{t('scenarios.name')}</Label>
+                        <Label htmlFor="name">{t('scenarios.name') || 'Scenario Name'}</Label>
                         <Input 
                           id="name" 
                           name="name" 
@@ -382,7 +383,7 @@ const ScenarioComparisonTool = ({
                       
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <Label htmlFor="interestRateAdjustment">{t('scenarios.interestRateChange')}</Label>
+                          <Label htmlFor="interestRateAdjustment">{t('scenarios.interestRateChange') || 'Interest Rate Change (%)'}</Label>
                           <span className="text-sm">{editFormData.interestRateAdjustment > 0 ? '+' : ''}{editFormData.interestRateAdjustment}%</span>
                         </div>
                         <Slider
@@ -406,7 +407,7 @@ const ScenarioComparisonTool = ({
                       
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <Label htmlFor="monthlyPayment">{t('scenarios.monthlyPayment')}</Label>
+                          <Label htmlFor="monthlyPayment">{t('scenarios.monthlyPayment') || 'Monthly Payment'}</Label>
                           <span className="text-sm">{currencyFormatter.format(editFormData.monthlyPayment)}</span>
                         </div>
                         <Slider
@@ -431,7 +432,7 @@ const ScenarioComparisonTool = ({
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <Label htmlFor="extraPayment">
-                            {t('scenarios.annualExtraPayment')}
+                            {t('scenarios.annualExtraPayment') || 'Annual Extra Payment'}
                             <TooltipProvider>
                               <UITooltip>
                                 <TooltipTrigger asChild>
@@ -439,7 +440,8 @@ const ScenarioComparisonTool = ({
                                 </TooltipTrigger>
                                 <TooltipContent>
                                   <p className="max-w-xs">
-                                    {t('scenarios.extraPaymentExplanation')}
+                                    {t('scenarios.extraPaymentExplanation') || 
+                                      'Additional payment made once per year, e.g., tax returns or bonuses'}
                                   </p>
                                 </TooltipContent>
                               </UITooltip>
@@ -467,7 +469,7 @@ const ScenarioComparisonTool = ({
                       </div>
                       
                       <div className="space-y-2">
-                        <Label>{t('repayment.strategy')}</Label>
+                        <Label>{t('repayment.strategy') || 'Repayment Strategy'}</Label>
                         <div className="grid grid-cols-3 gap-2">
                           <Button
                             type="button"
@@ -476,7 +478,7 @@ const ScenarioComparisonTool = ({
                             onClick={() => handleStrategyChange('avalanche')}
                           >
                             <TrendingDown className="mr-1 h-3 w-3" />
-                            {t('dashboard.avalancheStrategy')}
+                            {t('repayment.avalancheStrategy') || 'Avalanche'}
                           </Button>
                           <Button
                             type="button"
@@ -485,7 +487,7 @@ const ScenarioComparisonTool = ({
                             onClick={() => handleStrategyChange('snowball')}
                           >
                             <TrendingUp className="mr-1 h-3 w-3" />
-                            {t('dashboard.snowballStrategy')}
+                            {t('repayment.snowballStrategy') || 'Snowball'}
                           </Button>
                           <Button
                             type="button"
@@ -494,7 +496,7 @@ const ScenarioComparisonTool = ({
                             onClick={() => handleStrategyChange('equal')}
                           >
                             <ArrowRight className="mr-1 h-3 w-3" />
-                            {t('dashboard.equalStrategy')}
+                            {t('dashboard.equalDistribution') || 'Equal'}
                           </Button>
                         </div>
                       </div>
@@ -505,13 +507,13 @@ const ScenarioComparisonTool = ({
                           size="sm" 
                           onClick={() => setEditingScenarioId(null)}
                         >
-                          {t('common.cancel')}
+                          {t('common.cancel') || 'Cancel'}
                         </Button>
                         <Button 
                           size="sm" 
                           onClick={handleSaveScenario}
                         >
-                          {t('common.save')}
+                          {t('common.save') || 'Save'}
                         </Button>
                       </div>
                     </div>
@@ -520,24 +522,24 @@ const ScenarioComparisonTool = ({
                   <CardContent className="pt-0 pb-4">
                     <div className="space-y-2">
                       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                        <div className="text-muted-foreground">{t('scenarios.interestRateChange')}:</div>
+                        <div className="text-muted-foreground">{t('scenarios.interestRateChange') || 'Interest Rate Change'}:</div>
                         <div className={`font-medium ${scenario.interestRateAdjustment > 0 ? 'text-destructive' : scenario.interestRateAdjustment < 0 ? 'text-green-600' : ''}`}>
                           {scenario.interestRateAdjustment > 0 ? '+' : ''}{scenario.interestRateAdjustment}%
                         </div>
                         
-                        <div className="text-muted-foreground">{t('scenarios.monthlyPayment')}:</div>
+                        <div className="text-muted-foreground">{t('scenarios.monthlyPayment') || 'Monthly Payment'}:</div>
                         <div className="font-medium">{currencyFormatter.format(scenario.monthlyPayment)}</div>
                         
-                        <div className="text-muted-foreground">{t('scenarios.annualExtraPayment')}:</div>
+                        <div className="text-muted-foreground">{t('scenarios.annualExtraPayment') || 'Annual Extra Payment'}:</div>
                         <div className="font-medium">{currencyFormatter.format(scenario.extraPayment)}</div>
                         
-                        <div className="text-muted-foreground">{t('repayment.strategy')}:</div>
+                        <div className="text-muted-foreground">{t('repayment.strategy') || 'Strategy'}:</div>
                         <div className="font-medium">{
                           scenario.strategy === 'avalanche' 
-                            ? t('dashboard.avalancheStrategy')
+                            ? t('repayment.avalancheStrategy') || 'Avalanche'
                             : scenario.strategy === 'snowball'
-                              ? t('dashboard.snowballStrategy')
-                              : t('dashboard.equalStrategy')
+                              ? t('repayment.snowballStrategy') || 'Snowball'
+                              : t('dashboard.equalDistribution') || 'Equal'
                         }</div>
                       </div>
                       
@@ -545,12 +547,12 @@ const ScenarioComparisonTool = ({
                         <>
                           <Separator className="my-2" />
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                            <div className="text-muted-foreground">{t('repayment.debtFreeIn')}:</div>
+                            <div className="text-muted-foreground">{t('repayment.debtFreeIn') || 'Debt Free In'}:</div>
                             <div className="font-medium">
-                              {scenarioResults.find(result => result.id === scenario.id)?.totalMonths || 0} {t('repayment.months')}
+                              {scenarioResults.find(result => result.id === scenario.id)?.totalMonths || 0} {t('repayment.months') || 'months'}
                             </div>
                             
-                            <div className="text-muted-foreground">{t('repayment.totalInterestPaid')}:</div>
+                            <div className="text-muted-foreground">{t('repayment.totalInterestPaid') || 'Total Interest Paid'}:</div>
                             <div className="font-medium">
                               {currencyFormatter.format(scenarioResults.find(result => result.id === scenario.id)?.totalInterestPaid || 0)}
                             </div>
@@ -566,8 +568,8 @@ const ScenarioComparisonTool = ({
           
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="repayment">{t('scenarios.debtOverTime')}</TabsTrigger>
-              <TabsTrigger value="comparison">{t('scenarios.scenarioComparison')}</TabsTrigger>
+              <TabsTrigger value="repayment">{t('scenarios.debtOverTime') || 'Debt Over Time'}</TabsTrigger>
+              <TabsTrigger value="comparison">{t('scenarios.scenarioComparison') || 'Scenario Comparison'}</TabsTrigger>
             </TabsList>
             
             <TabsContent value="repayment" className="space-y-4">
@@ -577,11 +579,11 @@ const ScenarioComparisonTool = ({
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="month" 
-                      label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
+                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
                     />
                     <YAxis 
                       tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('repayment.balance'), angle: -90, position: 'insideLeft' }}
+                      label={{ value: t('repayment.balance') || 'Balance', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
@@ -591,7 +593,7 @@ const ScenarioComparisonTool = ({
                         key={`${scenario.id}_balance`}
                         type="monotone"
                         dataKey={`${scenario.id}_balance`}
-                        name={`${scenario.name} - ${t('dashboard.remainingDebt')}`}
+                        name={`${scenario.name} - ${t('dashboard.remainingDebt') || 'Remaining Debt'}`}
                         fill={`hsl(${index * 60}, 70%, 60%)`}
                         stroke={`hsl(${index * 60}, 70%, 50%)`}
                         fillOpacity={0.2}
@@ -608,11 +610,11 @@ const ScenarioComparisonTool = ({
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis 
                       dataKey="month" 
-                      label={{ value: t('repayment.months'), position: 'insideBottomRight', offset: -5 }} 
+                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
                     />
                     <YAxis 
                       tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('repayment.totalInterestPaid'), angle: -90, position: 'insideLeft' }}
+                      label={{ value: t('repayment.totalInterestPaid') || 'Total Interest', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
@@ -622,7 +624,7 @@ const ScenarioComparisonTool = ({
                         key={`${scenario.id}_interest`}
                         type="monotone"
                         dataKey={`${scenario.id}_interest`}
-                        name={`${scenario.name} - ${t('repayment.totalInterestPaid')}`}
+                        name={`${scenario.name} - ${t('repayment.totalInterestPaid') || 'Total Interest Paid'}`}
                         stroke={`hsl(${index * 90 + 180}, 70%, 50%)`}
                         strokeWidth={2}
                         dot={false}
@@ -656,9 +658,9 @@ const ScenarioComparisonTool = ({
                     />
                     <Tooltip formatter={(value, name) => {
                       if (name === 'months') {
-                        return [`${value} ${t('repayment.months')}`, t('repayment.debtFreeIn')];
+                        return [`${value} ${t('repayment.months') || 'months'}`, t('repayment.debtFreeIn') || 'Debt Free In'];
                       } else if (name === 'interest') {
-                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid')];
+                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
                       }
                       return [value, name];
                     }} />
@@ -666,7 +668,7 @@ const ScenarioComparisonTool = ({
                     <Bar 
                       dataKey="months" 
                       fill="#8884d8" 
-                      name={t('repayment.debtFreeIn')}
+                      name={t('repayment.debtFreeIn') || 'Debt Free In (months)'}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -693,9 +695,9 @@ const ScenarioComparisonTool = ({
                     />
                     <Tooltip formatter={(value, name) => {
                       if (name === 'interest') {
-                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid')];
+                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
                       } else if (name === 'averageMonthlyInterest') {
-                        return [currencyFormatter.format(value as number), t('scenarios.avgMonthlyInterest')];
+                        return [currencyFormatter.format(value as number), t('scenarios.avgMonthlyInterest') || 'Avg Monthly Interest'];
                       }
                       return [value, name];
                     }} />
@@ -703,7 +705,7 @@ const ScenarioComparisonTool = ({
                     <Bar 
                       dataKey="interest" 
                       fill="#82ca9d" 
-                      name={t('repayment.totalInterestPaid')}
+                      name={t('repayment.totalInterestPaid') || 'Total Interest Paid'}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -716,10 +718,10 @@ const ScenarioComparisonTool = ({
       <CardFooter className="flex justify-between">
         <Button variant="outline" size="sm" onClick={handleResetScenarios}>
           <RefreshCw className="mr-2 h-3 w-3" />
-          {t('scenarios.resetToDefault')}
+          {t('scenarios.resetToDefault') || 'Reset to Default'}
         </Button>
         <Button variant="ghost" size="sm" onClick={onClose}>
-          {t('common.close')}
+          {t('common.close') || 'Close'}
         </Button>
       </CardFooter>
     </Card>

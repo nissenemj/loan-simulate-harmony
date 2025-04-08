@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { affiliateLinks, affiliateBanners, affiliateRecommendations } from '@/utils/affiliateData';
@@ -81,7 +80,7 @@ const AffiliateSection = () => {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
                 <BadgeDollarSign className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.competitiveLoansTitle")}
+                {t("affiliate.competitiveLoansTitle") || "Kilpailuta lainasi ja säästä"}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -114,7 +113,7 @@ const AffiliateSection = () => {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center text-lg font-semibold">
                 <BookOpen className="mr-2 h-5 w-5 text-primary" />
-                {t("affiliate.wantToLearnMore")}
+                {t("affiliate.wantToLearnMore") || "Haluatko oppia lisää?"}
               </CardTitle>
             </CardHeader>
             <CardContent>
