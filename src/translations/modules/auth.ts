@@ -26,7 +26,8 @@ export const auth = {
       signupError: "Registration failed",
       checkEmail: "Please check your email to verify your account",
       loggingIn: "Logging in...",
-      signingUp: "Signing up..."
+      signingUp: "Signing up...",
+      dashboard: "Dashboard"
     }
   },
   fi: {
@@ -53,7 +54,8 @@ export const auth = {
       signupError: "Rekisteröityminen epäonnistui",
       checkEmail: "Tarkista sähköpostisi vahvistaaksesi tilisi",
       loggingIn: "Kirjaudutaan...",
-      signingUp: "Rekisteröidytään..."
+      signingUp: "Rekisteröidytään...",
+      dashboard: "Kojelauta"
     }
   }
 };
