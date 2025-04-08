@@ -50,16 +50,21 @@ const DebtFreeTimeline = ({
   const [debtFreeDate, setDebtFreeDate] = useState<Date | null>(null);
   const [creditCardFreeDate, setCreditCardFreeDate] = useState<Date | null>(null);
   
+  // Check if there are any debts - define locally in this component
   const hasDebts = totalDebt > 0 || activeCards.length > 0 || activeLoans.length > 0;
   
   // Load saved strategies on mount
   useEffect(() => {
-    const strategies = getRepaymentStrategies();
-    setSavedStrategies(strategies);
-    
-    const active = getActiveStrategy();
-    if (active) {
-      setActiveStrategy(active);
+    try {
+      const strategies = getRepaymentStrategies();
+      setSavedStrategies(strategies);
+      
+      const active = getActiveStrategy();
+      if (active) {
+        setActiveStrategy(active);
+      }
+    } catch (error) {
+      console.error("Error loading strategies:", error);
     }
   }, []);
   

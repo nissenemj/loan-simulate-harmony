@@ -34,8 +34,13 @@ export const saveRepaymentStrategy = (
 
 // Get all saved repayment strategies
 export const getRepaymentStrategies = (): SavedRepaymentStrategy[] => {
-  const strategiesJson = localStorage.getItem(STRATEGIES_STORAGE_KEY);
-  return strategiesJson ? JSON.parse(strategiesJson) : [];
+  try {
+    const strategiesJson = localStorage.getItem(STRATEGIES_STORAGE_KEY);
+    return strategiesJson ? JSON.parse(strategiesJson) : [];
+  } catch (error) {
+    console.error('Error reading strategies from local storage:', error);
+    return [];
+  }
 };
 
 // Get a specific repayment strategy by ID
