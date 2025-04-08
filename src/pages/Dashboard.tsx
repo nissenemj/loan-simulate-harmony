@@ -61,6 +61,20 @@ const Dashboard = () => {
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
     activeCards.reduce((sum, card) => sum + card.balance, 0);
   
+  // Check if there are any debts
+  const hasDebts = totalDebt > 0 || activeLoans.length > 0 || activeCards.length > 0;
+  
+  // Calculate a simple debt-free date (just for demonstration)
+  const calculateDebtFreeDate = () => {
+    const now = new Date();
+    // Adding 5 years as a placeholder - this would be replaced by actual calculation
+    const debtFreeDate = new Date(now.setFullYear(now.getFullYear() + 5));
+    return debtFreeDate.toLocaleDateString('fi-FI');
+  };
+  
+  // Format the debt free date for display
+  const formattedDebtFreeDate = calculateDebtFreeDate();
+  
   // Monthly budget for debt repayment (should ideally come from user settings)
   const monthlyBudget = 1500;
   
@@ -323,7 +337,7 @@ const Dashboard = () => {
         
         <DebtFreeTimeline 
           totalDebt={totalDebt}
-          formattedDebtFreeDate="2030-12-01"
+          formattedDebtFreeDate={formattedDebtFreeDate}
           activeCards={activeCards}
           activeLoans={activeLoans}
           monthlyBudget={monthlyBudget}
