@@ -27,6 +27,7 @@ import NavigationHeader from "@/components/NavigationHeader";
 import Footer from "@/components/Footer";
 import ProtectedRoute from '@/components/ProtectedRoute';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
+import ChatBot from '@/components/ChatBot';
 
 // Styles
 import "./App.css";
@@ -40,7 +41,7 @@ const App = () => {
             <AuthProvider>
               <Routes>
                 {/* Landing page route (completely standalone) */}
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<><LandingPage /><ChatBot /></>} />
                 
                 {/* All other routes with shared layout */}
                 <Route element={
@@ -80,6 +81,7 @@ const App = () => {
                       </Routes>
                     </main>
                     <Footer />
+                    <ChatBot />
                   </>
                 }>
                   {/* These paths match the Routes above, needed for proper routing */}

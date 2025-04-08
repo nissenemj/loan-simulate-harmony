@@ -184,7 +184,7 @@ const ChatBot: React.FC = () => {
   const renderChatContent = () => (
     <>
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full pb-4">
+        <ScrollArea className="h-full pb-4" ref={scrollAreaRef as React.RefObject<HTMLDivElement>}>
           <div className="space-y-4 p-4">
             {messages.map((message, index) => (
               <div
@@ -264,7 +264,7 @@ const ChatBot: React.FC = () => {
         {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageSquare size={isMobile ? 20 : 24} />}
       </Button>
 
-      {/* Use Sheet for desktop */}
+      {/* Use Card for desktop */}
       {isOpen && !isMobile && (
         <Card className="fixed bottom-24 right-6 w-96 h-[480px] shadow-xl z-50 flex flex-col animate-fade-in">
           <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground rounded-t-lg p-4">
@@ -323,4 +323,3 @@ const ChatBot: React.FC = () => {
 };
 
 export default ChatBot;
-
