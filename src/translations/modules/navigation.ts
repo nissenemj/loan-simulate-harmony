@@ -18,6 +18,7 @@ export const navigation = {
       debtStrategies: "Debt Repayment Strategies",
       blog: "Blog",
       courses: "Courses",
+      courseAdmin: "Course Admin",
       account: "Account",
       menu: "Menu",
       language: "Language"
@@ -39,6 +40,7 @@ export const navigation = {
       debtStrategies: "Velanmaksustrategiat",
       blog: "Blogi",
       courses: "Kurssit",
+      courseAdmin: "Kurssien hallinta",
       account: "Tili",
       menu: "Valikko",
       language: "Kieli"

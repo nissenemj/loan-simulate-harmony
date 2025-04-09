@@ -1,5 +1,4 @@
 
-
 // Course-related translations
 
 export const course = {
@@ -29,7 +28,19 @@ export const course = {
     },
     admin: {
       title: "Course Administration",
-      saveSuccess: "Course data saved successfully"
+      saveSuccess: "Course data saved successfully",
+      editCourseContent: "Edit Course Content",
+      moduleSettings: "Module Settings",
+      h5pSettings: "H5P Settings",
+      contentId: "Content ID",
+      embedUrl: "Embed URL",
+      height: "Height",
+      save: "Save",
+      cancel: "Cancel",
+      updateModule: "Update Module",
+      contentIdDescription: "H5P content ID number (leave empty if using embed URL)",
+      embedUrlDescription: "Alternative embed URL for H5P content",
+      heightDescription: "Content height (e.g. '500px')"
     }
   },
   fi: {

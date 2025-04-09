@@ -53,7 +53,7 @@ const H5PContent: React.FC<H5PContentProps> = ({
         width="100%"
         height={height}
         id={`h5p-iframe-${contentId || 'embed'}`}
-        className="h5p-iframe"
+        className="h5p-iframe rounded-md border border-gray-200 p-2"
         display="block"
         position="relative"
         allowFullScreen
