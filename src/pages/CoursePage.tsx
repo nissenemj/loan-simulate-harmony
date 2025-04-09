@@ -7,9 +7,61 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
+import { useLocalStorage } from '@/hooks/use-local-storage';
+
+// Default module data structure
+interface ModuleData {
+  title: string;
+  description: string;
+  intro: string;
+  contentId?: string;
+  embedUrl?: string;
+  height?: string;
+}
+
+interface CourseData {
+  modules: {
+    module1: ModuleData;
+    module2: ModuleData;
+    module3: ModuleData;
+  }
+}
 
 const CoursePage: React.FC = () => {
   const { t } = useLanguage();
+  
+  // Default data from translations
+  const defaultData: CourseData = {
+    modules: {
+      module1: {
+        title: t(`course.modules.module1.title`),
+        description: t(`course.modules.module1.description`),
+        intro: t(`course.modules.module1.intro`),
+        contentId: '',
+        embedUrl: 'https://velkavapausfi.h5p.com/content/1292556501856760507/embed',
+        height: '637px'
+      },
+      module2: {
+        title: t(`course.modules.module2.title`),
+        description: t(`course.modules.module2.description`),
+        intro: t(`course.modules.module2.intro`),
+        contentId: '43',
+        embedUrl: '',
+        height: '500px'
+      },
+      module3: {
+        title: t(`course.modules.module3.title`),
+        description: t(`course.modules.module3.description`),
+        intro: t(`course.modules.module3.intro`),
+        contentId: '44',
+        embedUrl: '',
+        height: '500px'
+      }
+    }
+  };
+
+  // Get stored course data or use defaults
+  const [courseData] = useLocalStorage<CourseData>('course-data', defaultData);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -31,26 +83,26 @@ const CoursePage: React.FC = () => {
 
       <Tabs defaultValue="module1" className="mb-8">
         <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
-          <TabsTrigger value="module1">{t('course.modules.module1.title')}</TabsTrigger>
-          <TabsTrigger value="module2">{t('course.modules.module2.title')}</TabsTrigger>
-          <TabsTrigger value="module3">{t('course.modules.module3.title')}</TabsTrigger>
+          <TabsTrigger value="module1">{courseData.modules.module1.title}</TabsTrigger>
+          <TabsTrigger value="module2">{courseData.modules.module2.title}</TabsTrigger>
+          <TabsTrigger value="module3">{courseData.modules.module3.title}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="module1" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>{t('course.modules.module1.title')}</CardTitle>
-              <CardDescription>{t('course.modules.module1.description')}</CardDescription>
+              <CardTitle>{courseData.modules.module1.title}</CardTitle>
+              <CardDescription>{courseData.modules.module1.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="mb-4">{t('course.modules.module1.intro')}</p>
+              <p className="mb-4">{courseData.modules.module1.intro}</p>
               
-              {/* Using the specific H5P content for Module 1 with added padding */}
               <H5PContent 
-                embedUrl="https://velkavapausfi.h5p.com/content/1292556501856760507/embed"
-                height="637px" 
-                title="Moduuli 1: Henkilökohtaisen talouden hallinta"
-                className="p-4 bg-gray-50 dark:bg-gray-800"
+                embedUrl={courseData.modules.module1.embedUrl}
+                contentId={courseData.modules.module1.contentId}
+                height={courseData.modules.module1.height} 
+                title={courseData.modules.module1.title}
+                className="p-6 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>
@@ -59,18 +111,18 @@ const CoursePage: React.FC = () => {
         <TabsContent value="module2" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>{t('course.modules.module2.title')}</CardTitle>
-              <CardDescription>{t('course.modules.module2.description')}</CardDescription>
+              <CardTitle>{courseData.modules.module2.title}</CardTitle>
+              <CardDescription>{courseData.modules.module2.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="mb-4">{t('course.modules.module2.intro')}</p>
+              <p className="mb-4">{courseData.modules.module2.intro}</p>
               
-              {/* Example H5P content - replace with actual content when available */}
               <H5PContent 
-                contentId="43" 
-                height="500px" 
-                title={t('course.modules.module2.title')}
-                className="p-4 bg-gray-50 dark:bg-gray-800"
+                contentId={courseData.modules.module2.contentId} 
+                embedUrl={courseData.modules.module2.embedUrl}
+                height={courseData.modules.module2.height}
+                title={courseData.modules.module2.title}
+                className="p-6 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>
@@ -79,18 +131,18 @@ const CoursePage: React.FC = () => {
         <TabsContent value="module3" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>{t('course.modules.module3.title')}</CardTitle>
-              <CardDescription>{t('course.modules.module3.description')}</CardDescription>
+              <CardTitle>{courseData.modules.module3.title}</CardTitle>
+              <CardDescription>{courseData.modules.module3.description}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="mb-4">{t('course.modules.module3.intro')}</p>
+              <p className="mb-4">{courseData.modules.module3.intro}</p>
               
-              {/* Example H5P content - replace with actual content when available */}
               <H5PContent 
-                contentId="44" 
-                height="500px" 
-                title={t('course.modules.module3.title')}
-                className="p-4 bg-gray-50 dark:bg-gray-800"
+                contentId={courseData.modules.module3.contentId}
+                embedUrl={courseData.modules.module3.embedUrl} 
+                height={courseData.modules.module3.height}
+                title={courseData.modules.module3.title}
+                className="p-6 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>

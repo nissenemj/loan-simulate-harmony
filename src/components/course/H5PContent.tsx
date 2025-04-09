@@ -47,7 +47,7 @@ const H5PContent: React.FC<H5PContentProps> = ({
   }
   
   return (
-    <div className={`h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-4 ${className}`}>
+    <div className={`h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-6 ${className}`}>
       <Iframe
         url={h5pUrl}
         width="100%"

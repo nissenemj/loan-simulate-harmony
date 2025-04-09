@@ -1,4 +1,5 @@
 
+
 // Course-related translations
 
 export const course = {
@@ -57,7 +58,20 @@ export const course = {
     },
     admin: {
       title: "Kurssien hallinta",
-      saveSuccess: "Kurssin tiedot tallennettu onnistuneesti"
+      saveSuccess: "Kurssin tiedot tallennettu onnistuneesti",
+      editCourseContent: "Muokkaa kurssin sisältöä",
+      moduleSettings: "Moduulin asetukset",
+      h5pSettings: "H5P asetukset",
+      contentId: "Sisältö ID",
+      embedUrl: "Upotus URL",
+      height: "Korkeus",
+      save: "Tallenna",
+      cancel: "Peruuta",
+      updateModule: "Päivitä moduuli",
+      contentIdDescription: "H5P sisällön ID numero (jätä tyhjäksi jos käytät upotus URL:ia)",
+      embedUrlDescription: "Vaihtoehtoinen upotus URL H5P sisällölle",
+      heightDescription: "Sisällön korkeus (esim. '500px')"
     }
   }
 };
+
