@@ -21,6 +21,7 @@ import Auth from '@/pages/Auth';
 import DebtStrategies from '@/pages/DebtStrategies';
 import LandingPage from '@/pages/LandingPage';
 import NotFound from '@/pages/NotFound';
+import CoursePage from '@/pages/CoursePage';
 
 // Components
 import NavigationHeader from "@/components/NavigationHeader";
@@ -52,6 +53,7 @@ const App = () => {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/debt-summary" element={<DebtSummaryPage />} />
                         <Route path="/debt-strategies" element={<DebtStrategies />} />
+                        <Route path="/courses" element={<CoursePage />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                         <Route path="/cookie-policy" element={<CookiePolicy />} />
                         <Route path="/terms-of-service" element={<TermsOfService />} />
@@ -87,6 +89,7 @@ const App = () => {
                   <Route path="/dashboard" element={null} />
                   <Route path="/debt-summary" element={null} />
                   <Route path="/debt-strategies" element={null} />
+                  <Route path="/courses" element={null} />
                   <Route path="/privacy-policy" element={null} />
                   <Route path="/cookie-policy" element={null} />
                   <Route path="/terms-of-service" element={null} />

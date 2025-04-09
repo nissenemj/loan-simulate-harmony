@@ -43,11 +43,13 @@ const NavigationHeader = () => {
         { href: "/dashboard", label: t("navigation.dashboard") },
         { href: "/app", label: t("navigation.calculator") },
         { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/courses", label: t("navigation.courses") },
         { href: "/blog", label: t("navigation.blog") }
       ]
     : [
         { href: "/app", label: t("navigation.calculator") },
         { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/courses", label: t("navigation.courses") },
         { href: "/blog", label: t("navigation.blog") }
       ];
 

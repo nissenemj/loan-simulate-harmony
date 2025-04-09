@@ -17,6 +17,7 @@ export const navigation = {
       calculator: "Loan Simulator",
       debtStrategies: "Debt Repayment Strategies",
       blog: "Blog",
+      courses: "Courses",
       account: "Account",
       menu: "Menu",
       language: "Language"
@@ -37,6 +38,7 @@ export const navigation = {
       calculator: "Lainasimulaattori",
       debtStrategies: "Velanmaksustrategiat",
       blog: "Blogi",
+      courses: "Kurssit",
       account: "Tili",
       menu: "Valikko",
       language: "Kieli"
