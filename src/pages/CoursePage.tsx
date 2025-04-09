@@ -45,11 +45,11 @@ const CoursePage: React.FC = () => {
             <CardContent>
               <p className="mb-4">{t('course.modules.module1.intro')}</p>
               
-              {/* Example H5P content - replace 42 with your actual H5P content ID */}
+              {/* Using the specific H5P content for Module 1 */}
               <H5PContent 
-                contentId="42" 
-                height="500px" 
-                title={t('course.modules.module1.title')}
+                embedUrl="https://velkavapausfi.h5p.com/content/1292556501856760507/embed"
+                height="637px" 
+                title="Moduuli 1: Henkilökohtaisen talouden hallinta"
               />
             </CardContent>
           </Card>
@@ -64,7 +64,7 @@ const CoursePage: React.FC = () => {
             <CardContent>
               <p className="mb-4">{t('course.modules.module2.intro')}</p>
               
-              {/* Example H5P content - replace 43 with your actual H5P content ID */}
+              {/* Example H5P content - replace with actual content when available */}
               <H5PContent 
                 contentId="43" 
                 height="500px" 
@@ -83,7 +83,7 @@ const CoursePage: React.FC = () => {
             <CardContent>
               <p className="mb-4">{t('course.modules.module3.intro')}</p>
               
-              {/* Example H5P content - replace 44 with your actual H5P content ID */}
+              {/* Example H5P content - replace with actual content when available */}
               <H5PContent 
                 contentId="44" 
                 height="500px" 
