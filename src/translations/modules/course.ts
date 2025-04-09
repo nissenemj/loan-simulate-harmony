@@ -25,6 +25,10 @@ export const course = {
         description: "Building wealth through saving and smart investments",
         intro: "Learn how to start building wealth through saving habits and basic investment strategies suitable for beginners."
       }
+    },
+    admin: {
+      title: "Course Administration",
+      saveSuccess: "Course data saved successfully"
     }
   },
   fi: {
@@ -50,6 +54,10 @@ export const course = {
         description: "Varallisuuden kartuttaminen säästämisen ja älykkäiden sijoitusten avulla",
         intro: "Opi aloittamaan varallisuuden kasvattaminen säästämistottumuksien ja aloittelijoille sopivien sijoitusstrategioiden avulla."
       }
+    },
+    admin: {
+      title: "Kurssien hallinta",
+      saveSuccess: "Kurssin tiedot tallennettu onnistuneesti"
     }
   }
 };

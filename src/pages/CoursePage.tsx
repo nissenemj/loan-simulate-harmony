@@ -45,11 +45,12 @@ const CoursePage: React.FC = () => {
             <CardContent>
               <p className="mb-4">{t('course.modules.module1.intro')}</p>
               
-              {/* Using the specific H5P content for Module 1 */}
+              {/* Using the specific H5P content for Module 1 with added padding */}
               <H5PContent 
                 embedUrl="https://velkavapausfi.h5p.com/content/1292556501856760507/embed"
                 height="637px" 
                 title="Moduuli 1: Henkilökohtaisen talouden hallinta"
+                className="p-4 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>
@@ -69,6 +70,7 @@ const CoursePage: React.FC = () => {
                 contentId="43" 
                 height="500px" 
                 title={t('course.modules.module2.title')}
+                className="p-4 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>
@@ -88,6 +90,7 @@ const CoursePage: React.FC = () => {
                 contentId="44" 
                 height="500px" 
                 title={t('course.modules.module3.title')}
+                className="p-4 bg-gray-50 dark:bg-gray-800"
               />
             </CardContent>
           </Card>

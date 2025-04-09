@@ -7,13 +7,15 @@ interface H5PContentProps {
   embedUrl?: string;
   height?: string;
   title?: string;
+  className?: string;
 }
 
 const H5PContent: React.FC<H5PContentProps> = ({ 
   contentId, 
   embedUrl,
   height = '400px',
-  title = 'H5P Content'
+  title = 'H5P Content',
+  className = ''
 }) => {
   // Use the provided embedUrl or construct one from contentId
   const h5pUrl = embedUrl || (contentId ? `https://h5p.org/h5p/embed/${contentId}` : '');
@@ -45,7 +47,7 @@ const H5PContent: React.FC<H5PContentProps> = ({
   }
   
   return (
-    <div className="h5p-container w-full rounded-lg overflow-hidden shadow-md my-6">
+    <div className={`h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-4 ${className}`}>
       <Iframe
         url={h5pUrl}
         width="100%"
