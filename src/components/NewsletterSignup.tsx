@@ -29,6 +29,10 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
+// Constants for Supabase URL and key - using the ones from the client file
+const SUPABASE_URL = "https://jwzzkqelqsqsirfowevs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enprcWVscXNxc2lyZm93ZXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTE2OTMsImV4cCI6MjA1Nzk2NzY5M30.o7TJCcPktro0nhTCNdVnT3mTno2uqfE1Zy31giCb9TE";
+
 const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -46,11 +50,11 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
     try {
       // First try to use the newsletter-signup edge function
       try {
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/newsletter-signup`, {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-signup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({
             email: data.email,
