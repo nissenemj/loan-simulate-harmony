@@ -157,13 +157,15 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
-        <title>{post.title} | {t("blog.pageTitle")}</title>
+        <title>{post?.title || t("blog.postNotFound")} | {t("blog.pageTitle")}</title>
         <meta 
           name="description" 
-          content={post.content.substring(0, 160) + '...'} 
+          content={post?.content.substring(0, 160) + '...' || t("blog.postNotFoundDesc")} 
         />
-        <meta name="keywords" content={`${post.category}, velanhoito, budjetointi, taloudenhallinta, velkavapaus`} />
-        <link rel="canonical" href={`https://velkavapaus.fi/blog/${post.id}`} />
+        {post?.category && (
+          <meta name="keywords" content={`${post.category}, velanhoito, budjetointi, taloudenhallinta, velkavapaus`} />
+        )}
+        <link rel="canonical" href={`https://velkavapaus.fi/blog/${postId}`} />
       </Helmet>
       
       <main className="container max-w-4xl mx-auto py-8 px-4 md:px-6">
@@ -236,7 +238,7 @@ const BlogPost = () => {
               em: ({ node, ...props }) => <em className="italic" {...props} />
             }}
           >
-            {post.content}
+            {post?.content || ''}
           </ReactMarkdown>
         </div>
         

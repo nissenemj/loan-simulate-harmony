@@ -70,12 +70,18 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         cursorOffset = 3;
         break;
       case 'list':
-        // Split by new line and add bullet points
-        formattedText = selectedText
-          .split('\n')
-          .map(line => line.trim() ? `- ${line}` : line)
-          .join('\n');
-        cursorOffset = 0;
+        // Fixed bullet list formatting
+        if (selectedText.trim() === "") {
+          // If no text is selected, just insert a bullet point
+          formattedText = "- ";
+          cursorOffset = 2;
+        } else {
+          // Split by new line and properly format each line
+          const lines = selectedText.split('\n');
+          formattedText = lines
+            .map(line => line.trim() ? `- ${line}` : line)
+            .join('\n');
+        }
         break;
       case 'align-left':
         formattedText = `<div style="text-align: left">${selectedText}</div>`;

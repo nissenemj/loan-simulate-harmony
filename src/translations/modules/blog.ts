@@ -37,7 +37,7 @@ export const blog = {
       alignCenter: "Center",
       alignRight: "Align Right",
       link: "Insert Link",
-      formatting: "Markdown formatting: bold, italic, headings"
+      formatting: "Markdown formatting: bold (**text**), italic (*text*), headings (# text), lists (- item)"
     }
   } },
   fi: {
@@ -75,7 +75,7 @@ export const blog = {
       alignCenter: "Keskitä",
       alignRight: "Tasaa oikealle",
       link: "Lisää linkki",
-      formatting: "Markdown-muotoilu: lihavointi, kursivointi, otsikot"
+      formatting: "Markdown-muotoilu: lihavointi (**teksti**), kursivointi (*teksti*), otsikot (# teksti), listat (- kohde)"
     }
   }}
 };
