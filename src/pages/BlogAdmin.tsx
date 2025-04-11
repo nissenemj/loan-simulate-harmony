@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -6,7 +5,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +21,7 @@ import { Loader2, PenSquare, Trash2, Eye, Clock, ExternalLink, Image, User } fro
 import { useNavigate } from "react-router-dom";
 import ImageSelector from "@/components/blog/ImageSelector";
 import { useIsMobile } from "@/hooks/use-mobile";
+import MarkdownEditor from "@/components/blog/MarkdownEditor";
 
 interface BlogPost {
   id: string;
@@ -501,15 +500,11 @@ const BlogAdmin = () => {
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Sisältö (Markdown)</label>
-                      <Textarea 
-                        value={editContent} 
-                        onChange={(e) => setEditContent(e.target.value)} 
-                        rows={isMobile ? 10 : 15} 
-                        required 
+                      <MarkdownEditor
+                        value={editContent}
+                        onChange={setEditContent}
+                        rows={isMobile ? 10 : 15}
                       />
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Voit käyttää Markdown-muotoilua. Lihavointi: **teksti**, otsikot: # Otsikko, ## Alaotsikko
-                      </p>
                     </div>
                     <div>
                       <label className="block mb-1 font-medium">Kirjoittaja</label>
@@ -622,16 +617,12 @@ const BlogAdmin = () => {
                   </div>
                   <div>
                     <label className="block mb-1 font-medium">Sisältö (Markdown)</label>
-                    <Textarea 
-                      value={content} 
-                      onChange={(e) => setContent(e.target.value)} 
-                      placeholder="Artikkelin sisältö..." 
-                      rows={isMobile ? 10 : 15} 
-                      required 
+                    <MarkdownEditor
+                      value={content}
+                      onChange={setContent}
+                      rows={isMobile ? 10 : 15}
+                      placeholder="Artikkelin sisältö..."
                     />
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Voit käyttää Markdown-muotoilua. Lihavointi: **teksti**, otsikot: # Otsikko, ## Alaotsikko
-                    </p>
                   </div>
                   <div>
                     <label className="block mb-1 font-medium">Kirjoittaja</label>

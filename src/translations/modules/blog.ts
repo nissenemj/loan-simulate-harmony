@@ -24,7 +24,20 @@ export const blog = {
     copiedToClipboard: "Link copied to clipboard",
     copyFailed: "Failed to copy link",
     copyLink: "Copy link",
-    shareArticle: "Share article"
+    shareArticle: "Share article",
+    editor: {
+      bold: "Bold (Ctrl+B)",
+      italic: "Italic (Ctrl+I)",
+      underline: "Underline",
+      list: "Bullet List",
+      heading1: "Heading 1",
+      heading2: "Heading 2",
+      alignLeft: "Align Left",
+      alignCenter: "Center",
+      alignRight: "Align Right",
+      link: "Insert Link",
+      formatting: "Markdown formatting: bold, italic, headings"
+    }
   } },
   fi: {
     blog: {
@@ -48,6 +61,19 @@ export const blog = {
     copiedToClipboard: "Linkki kopioitu leikepöydälle",
     copyFailed: "Linkin kopiointi epäonnistui",
     copyLink: "Kopioi linkki",
-    shareArticle: "Jaa artikkeli"
+    shareArticle: "Jaa artikkeli",
+    editor: {
+      bold: "Lihavoi (Ctrl+B)",
+      italic: "Kursivoi (Ctrl+I)",
+      underline: "Alleviivaa",
+      list: "Luettelolista",
+      heading1: "Pääotsikko",
+      heading2: "Alaotsikko",
+      alignLeft: "Tasaa vasemmalle",
+      alignCenter: "Keskitä",
+      alignRight: "Tasaa oikealle",
+      link: "Lisää linkki",
+      formatting: "Markdown-muotoilu: lihavointi, kursivointi, otsikot"
+    }
   }}
 };
