@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from './contexts/LanguageContext';
+import { HelmetProvider } from 'react-helmet-async';
 import BlogPost from './pages/BlogPost';
 import BlogAdmin from './pages/BlogAdmin';
 import CoursePage from './pages/CoursePage';
@@ -40,27 +41,29 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <LanguageProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:postId" element={<BlogPost />} />
-            <Route path="/blog-admin" element={<BlogAdmin />} />
-            <Route path="/courses" element={<CoursePage />} />
-            <Route path="/courses/admin" element={<CourseAdmin />} />
-            <Route path="/files" element={<FileStoragePage />} />
-          </Routes>
-        </Router>
-      </LanguageProvider>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <LanguageProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:postId" element={<BlogPost />} />
+              <Route path="/blog-admin" element={<BlogAdmin />} />
+              <Route path="/courses" element={<CoursePage />} />
+              <Route path="/courses/admin" element={<CourseAdmin />} />
+              <Route path="/files" element={<FileStoragePage />} />
+            </Routes>
+          </Router>
+        </LanguageProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 
