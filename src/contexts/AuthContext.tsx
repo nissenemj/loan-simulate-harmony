@@ -21,17 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-      setIsLoading(false);
-    };
-
-    getInitialSession();
-
-    // Listen for auth changes
+    // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -45,14 +35,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
+    // Then check for existing session
+    const getInitialSession = async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        setSession(data.session);
+        setUser(data.session?.user ?? null);
+      } catch (error) {
+        console.error("Error getting session:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getInitialSession();
+
     return () => {
       subscription.unsubscribe();
     };
   }, [navigate]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
+    try {
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
   
   // Adding the logout method as an alias to signOut for compatibility

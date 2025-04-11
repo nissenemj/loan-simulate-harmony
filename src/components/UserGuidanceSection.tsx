@@ -79,6 +79,10 @@ const UserGuidanceSection: React.FC = () => {
     },
   ];
 
+  if (!user) {
+    return null; // Don't render if no user is logged in
+  }
+
   return (
     <div className="py-8 px-4 md:py-16">
       <div className="container max-w-5xl mx-auto">
