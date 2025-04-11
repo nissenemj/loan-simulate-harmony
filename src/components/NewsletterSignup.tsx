@@ -44,7 +44,35 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      // Direct SQL query for tables not in generated types
+      // First try to use the newsletter-signup edge function
+      try {
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/newsletter-signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`
+          },
+          body: JSON.stringify({
+            email: data.email,
+            name: data.name || null
+          })
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Error subscribing to newsletter');
+        }
+        
+        toast.success(t("newsletter.subscribeSuccess") || "Kiitos tilauksestasi! Olet nyt uutiskirjeemme tilaaja.");
+        form.reset();
+        return;
+      } catch (edgeFunctionError) {
+        console.error("Edge function error:", edgeFunctionError);
+        // Fall back to direct database query if edge function fails
+      }
+
+      // Fallback: Direct SQL query if edge function fails
       const { error } = await supabase
         .from('newsletter_subscribers')
         .insert([{ email: data.email, name: data.name || null }]);
