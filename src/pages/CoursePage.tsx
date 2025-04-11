@@ -100,10 +100,10 @@ const CoursePage: React.FC = () => {
               
               <div className="h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-6 bg-gray-50 dark:bg-gray-800">
                 <iframe 
-                  src="https://velkavapausfi.h5p.com/content/1292556501858479547/embed" 
-                  aria-label="Moduuli 1: Henkilökohtaisen talouden hallinta" 
+                  src={courseData.modules.module1.embedUrl} 
+                  aria-label={courseData.modules.module1.title} 
                   width="100%" 
-                  height="637" 
+                  height={courseData.modules.module1.height.replace('px', '')} 
                   frameBorder="0" 
                   allowFullScreen 
                   allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
