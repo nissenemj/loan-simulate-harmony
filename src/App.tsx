@@ -1,15 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from './contexts/LanguageContext';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import BlogPage from './pages/BlogPage';
 import BlogPost from './pages/BlogPost';
 import BlogAdmin from './pages/BlogAdmin';
 import CoursePage from './pages/CoursePage';
 import CourseAdmin from './pages/CourseAdmin';
 import FileStoragePage from './pages/FileStoragePage';
+import Blog from './pages/Blog';
+import LandingPage from './pages/LandingPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -48,9 +49,9 @@ function App() {
       <LanguageProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:postId" element={<BlogPost />} />
             <Route path="/blog-admin" element={<BlogAdmin />} />
             <Route path="/courses" element={<CoursePage />} />

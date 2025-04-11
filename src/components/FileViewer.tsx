@@ -162,27 +162,23 @@ const FileViewer: React.FC<FileViewerProps> = ({
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          size="icon" 
-                          variant="ghost" 
-                          as="a" 
-                          href={file.url} 
-                          target="_blank" 
+                        <a 
+                          href={file.url}
+                          target="_blank"
                           rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center size-10 rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-transparent hover:bg-accent"
                           title="Open in new tab"
                         >
                           <ExternalLink className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          size="icon" 
-                          variant="ghost" 
-                          as="a" 
-                          href={file.url} 
+                        </a>
+                        <a 
+                          href={file.url}
                           download={file.name}
+                          className="inline-flex items-center justify-center size-10 rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-transparent hover:bg-accent"
                           title="Download"
                         >
                           <Download className="h-4 w-4" />
-                        </Button>
+                        </a>
                       </div>
                     </TableCell>
                   </TableRow>
