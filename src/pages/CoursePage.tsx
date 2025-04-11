@@ -1,14 +1,15 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Helmet } from "react-helmet-async";
 import H5PContent from '@/components/course/H5PContent';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import FileViewer from '@/components/FileViewer';
+import { supabase } from "@/integrations/supabase/client";
 
 // Default module data structure
 interface ModuleData {
@@ -30,6 +31,7 @@ interface CourseData {
 
 const CoursePage: React.FC = () => {
   const { t } = useLanguage();
+  const [isLoading, setIsLoading] = useState(false);
   
   // Default data from translations
   const defaultData: CourseData = {
@@ -158,7 +160,7 @@ const CoursePage: React.FC = () => {
       
       <div className="mb-8">
         <FileViewer 
-          folder="course-materials" 
+          folder="jaettavat" 
           title="Course Materials" 
           description="Download supplementary materials for the course"
         />
