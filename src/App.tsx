@@ -18,6 +18,8 @@ import AboutPage from './pages/AboutPage';
 import Dashboard from './pages/Dashboard';
 import Auth from './pages/Auth';
 import { Toaster } from "@/components/ui/toaster";
+import ProtectedRoute from './components/ProtectedRoute';
+import DebtStrategies from './pages/DebtStrategies';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -65,12 +67,31 @@ function App() {
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:postId" element={<BlogPost />} />
-                    <Route path="/blog-admin" element={<BlogAdmin />} />
+                    <Route path="/blog-admin" element={
+                      <ProtectedRoute>
+                        <BlogAdmin />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin/blog" element={<Navigate to="/blog-admin" replace />} />
                     <Route path="/courses" element={<CoursePage />} />
-                    <Route path="/courses/admin" element={<CourseAdmin />} />
-                    <Route path="/files" element={<FileStoragePage />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/courses/admin" element={
+                      <ProtectedRoute>
+                        <CourseAdmin />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/files" element={
+                      <ProtectedRoute>
+                        <FileStoragePage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/dashboard" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
                     <Route path="/auth" element={<Auth />} />
+                    <Route path="/app" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/debt-strategies" element={<DebtStrategies />} />
                   </Routes>
                 </main>
                 <Footer />
