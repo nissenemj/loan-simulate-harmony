@@ -13,6 +13,7 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import AdminLink from "@/components/blog/AdminLink";
 import { Badge } from "@/components/ui/badge";
+import ReactMarkdown from "react-markdown";
 
 interface BlogPost {
   id: string;
@@ -106,36 +107,6 @@ const BlogPost = () => {
     navigator.clipboard.writeText(url)
       .then(() => toast.success(t("blog.copiedToClipboard")))
       .catch(() => toast.error(t("blog.copyFailed")));
-  };
-  
-  const formatContent = (content: string) => {
-    if (!content) return '';
-    
-    return content.split('\n\n').map((paragraph, index) => {
-      if (paragraph.startsWith('# ')) {
-        return <h2 key={index} className="text-2xl font-bold mt-8 mb-4">{paragraph.substring(2)}</h2>;
-      } else if (paragraph.startsWith('## ')) {
-        return <h3 key={index} className="text-xl font-bold mt-6 mb-3">{paragraph.substring(3)}</h3>;
-      } else if (paragraph.startsWith('### ')) {
-        return <h4 key={index} className="text-lg font-bold mt-5 mb-2">{paragraph.substring(4)}</h4>;
-      }
-      
-      if (paragraph.includes('\n- ')) {
-        const listTitle = paragraph.split('\n- ')[0];
-        const listItems = paragraph.split('\n- ').slice(1);
-        
-        return (
-          <div key={index} className="my-4">
-            {listTitle && <p className="mb-2">{listTitle}</p>}
-            {listItems.map((item, i) => (
-              <p key={i} className="my-2">{item}</p>
-            ))}
-          </div>
-        );
-      }
-      
-      return <p key={index} className="my-4">{paragraph}</p>;
-    });
   };
   
   if (loading) {
@@ -246,7 +217,9 @@ const BlogPost = () => {
         </div>
         
         <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-left">
-          {formatContent(post.content)}
+          <ReactMarkdown>
+            {post.content}
+          </ReactMarkdown>
         </div>
         
         {relatedPosts.length > 0 && (
