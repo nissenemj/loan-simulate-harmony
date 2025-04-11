@@ -39,7 +39,7 @@ const CoursePage: React.FC = () => {
         description: t(`course.modules.module1.description`),
         intro: t(`course.modules.module1.intro`),
         contentId: '',
-        embedUrl: 'https://velkavapausfi.h5p.com/content/1292556501856760507/embed',
+        embedUrl: 'https://velkavapausfi.h5p.com/content/1292556501858479547/embed',
         height: '637px'
       },
       module2: {
@@ -98,13 +98,19 @@ const CoursePage: React.FC = () => {
             <CardContent>
               <p className="mb-4">{courseData.modules.module1.intro}</p>
               
-              <H5PContent 
-                embedUrl={courseData.modules.module1.embedUrl}
-                contentId={courseData.modules.module1.contentId}
-                height={courseData.modules.module1.height} 
-                title={courseData.modules.module1.title}
-                className="p-6 bg-gray-50 dark:bg-gray-800"
-              />
+              <div className="h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-6 bg-gray-50 dark:bg-gray-800">
+                <iframe 
+                  src="https://velkavapausfi.h5p.com/content/1292556501858479547/embed" 
+                  aria-label="Moduuli 1: Henkilökohtaisen talouden hallinta" 
+                  width="100%" 
+                  height="637" 
+                  frameBorder="0" 
+                  allowFullScreen 
+                  allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
+                  title={courseData.modules.module1.title}
+                  className="rounded-md border border-gray-200 p-2"
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
