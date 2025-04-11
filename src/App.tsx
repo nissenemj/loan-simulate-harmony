@@ -14,6 +14,7 @@ import Blog from './pages/Blog';
 import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
 import Dashboard from './pages/Dashboard';
+import { Toaster } from "@/components/ui/toaster";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/files" element={<FileStoragePage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
               </Routes>
+              <Toaster />
             </LanguageProvider>
           </AuthProvider>
         </Router>

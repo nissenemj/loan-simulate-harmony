@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -25,16 +25,45 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { toast } from "@/components/ui/use-toast";
 
 const NavigationHeader = () => {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
   const { t } = useLanguage();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
-    setOpen(false);
+    try {
+      await logout();
+      setOpen(false);
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Logout failed",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleNavigation = (path: string) => {
+    try {
+      navigate(path);
+      if (open) setOpen(false);
+    } catch (error) {
+      console.error("Navigation error:", error);
+      toast({
+        title: "Navigation error",
+        description: "There was a problem navigating to the page. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Define navigation links based on authentication status
@@ -77,10 +106,12 @@ const NavigationHeader = () => {
               </SheetHeader>
               <div className="grid gap-4 py-4">
                 {links.map((link) => (
-                  <Button key={link.href} variant="ghost" asChild onClick={() => setOpen(false)}>
-                    <Link to={link.href}>
-                      {link.label}
-                    </Link>
+                  <Button 
+                    key={link.href} 
+                    variant="ghost" 
+                    onClick={() => handleNavigation(link.href)}
+                  >
+                    {link.label}
                   </Button>
                 ))}
                 
@@ -97,8 +128,12 @@ const NavigationHeader = () => {
                     {t("auth.logout")}
                   </Button>
                 ) : (
-                  <Button variant="secondary" asChild onClick={() => setOpen(false)} className="mt-4">
-                    <Link to="/auth">{t("auth.login")}</Link>
+                  <Button 
+                    variant="secondary" 
+                    onClick={() => handleNavigation("/auth")} 
+                    className="mt-4"
+                  >
+                    {t("auth.login")}
                   </Button>
                 )}
               </div>
@@ -111,12 +146,12 @@ const NavigationHeader = () => {
               <NavigationMenuList>
                 {links.map((link) => (
                   <NavigationMenuItem key={link.href}>
-                    <Link
-                      to={link.href}
+                    <button
+                      onClick={() => handleNavigation(link.href)}
                       className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 data-[active]:bg-muted data-[active]:text-foreground hover:bg-muted hover:text-foreground h-9 px-4 py-2"
                     >
                       {link.label}
-                    </Link>
+                    </button>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -134,8 +169,8 @@ const NavigationHeader = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   {!user ? (
-                    <DropdownMenuItem asChild>
-                      <Link to="/auth">{t("auth.login")}</Link>
+                    <DropdownMenuItem onClick={() => handleNavigation("/auth")}>
+                      {t("auth.login")}
                     </DropdownMenuItem>
                   ) : (
                     <>
