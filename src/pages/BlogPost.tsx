@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -217,7 +218,24 @@ const BlogPost = () => {
         </div>
         
         <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-left">
-          <ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              h1: ({ node, ...props }) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
+              h2: ({ node, ...props }) => <h2 className="text-2xl font-bold mt-8 mb-4" {...props} />,
+              h3: ({ node, ...props }) => <h3 className="text-xl font-bold mt-6 mb-3" {...props} />,
+              h4: ({ node, ...props }) => <h4 className="text-lg font-bold mt-5 mb-2" {...props} />,
+              h5: ({ node, ...props }) => <h5 className="text-base font-bold mt-4 mb-2" {...props} />,
+              h6: ({ node, ...props }) => <h6 className="text-sm font-bold mt-4 mb-2" {...props} />,
+              p: ({ node, ...props }) => <p className="my-4" {...props} />,
+              ul: ({ node, ...props }) => <ul className="my-4 ml-6 list-disc" {...props} />,
+              ol: ({ node, ...props }) => <ol className="my-4 ml-6 list-decimal" {...props} />,
+              li: ({ node, ...props }) => <li className="my-1" {...props} />,
+              blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 my-4 italic" {...props} />,
+              a: ({ node, ...props }) => <a className="text-primary hover:underline" {...props} />,
+              strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+              em: ({ node, ...props }) => <em className="italic" {...props} />
+            }}
+          >
             {post.content}
           </ReactMarkdown>
         </div>

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Bold, 
@@ -9,6 +10,7 @@ import {
   AlignRight,
   Heading1,
   Heading2,
+  Heading3,
   Link as LinkIcon
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -20,6 +22,7 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface MarkdownEditorProps {
   value: string;
@@ -34,6 +37,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   rows = 15,
   placeholder = "Artikkelin sisältö..." 
 }) => {
+  const { t } = useLanguage();
   const [selection, setSelection] = useState<{start: number, end: number} | null>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
@@ -93,6 +97,10 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         formattedText = `## ${selectedText}`;
         cursorOffset = 3;
         break;
+      case 'h3':
+        formattedText = `### ${selectedText}`;
+        cursorOffset = 4;
+        break;
       case 'link':
         formattedText = `[${selectedText}](url)`;
         cursorOffset = 1;
@@ -138,11 +146,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('bold')}
                 >
                   <Bold className="h-4 w-4" />
-                  <span className="sr-only">Lihavoi</span>
+                  <span className="sr-only">{t("blog.editor.bold")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Lihavoi (Ctrl+B)</p>
+                <p>{t("blog.editor.bold")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -156,11 +164,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('italic')}
                 >
                   <Italic className="h-4 w-4" />
-                  <span className="sr-only">Kursivoi</span>
+                  <span className="sr-only">{t("blog.editor.italic")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Kursivoi (Ctrl+I)</p>
+                <p>{t("blog.editor.italic")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -174,11 +182,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('underline')}
                 >
                   <Underline className="h-4 w-4" />
-                  <span className="sr-only">Alleviivaa</span>
+                  <span className="sr-only">{t("blog.editor.underline")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Alleviivaa</p>
+                <p>{t("blog.editor.underline")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -194,11 +202,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('h1')}
                 >
                   <Heading1 className="h-4 w-4" />
-                  <span className="sr-only">Otsikko 1</span>
+                  <span className="sr-only">{t("blog.editor.heading1")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Pääotsikko</p>
+                <p>{t("blog.editor.heading1")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -212,11 +220,29 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('h2')}
                 >
                   <Heading2 className="h-4 w-4" />
-                  <span className="sr-only">Otsikko 2</span>
+                  <span className="sr-only">{t("blog.editor.heading2")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Alaotsikko</p>
+                <p>{t("blog.editor.heading2")}</p>
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  onClick={() => formatText('h3')}
+                >
+                  <Heading3 className="h-4 w-4" />
+                  <span className="sr-only">{t("blog.editor.heading3")}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t("blog.editor.heading3")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -230,11 +256,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('list')}
                 >
                   <List className="h-4 w-4" />
-                  <span className="sr-only">Lista</span>
+                  <span className="sr-only">{t("blog.editor.list")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Luettelolista</p>
+                <p>{t("blog.editor.list")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -248,11 +274,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('link')}
                 >
                   <LinkIcon className="h-4 w-4" />
-                  <span className="sr-only">Linkki</span>
+                  <span className="sr-only">{t("blog.editor.link")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Lisää linkki</p>
+                <p>{t("blog.editor.link")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -268,11 +294,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('align-left')}
                 >
                   <AlignLeft className="h-4 w-4" />
-                  <span className="sr-only">Tasaa vasemmalle</span>
+                  <span className="sr-only">{t("blog.editor.alignLeft")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Tasaa vasemmalle</p>
+                <p>{t("blog.editor.alignLeft")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -286,11 +312,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('align-center')}
                 >
                   <AlignCenter className="h-4 w-4" />
-                  <span className="sr-only">Keskitä</span>
+                  <span className="sr-only">{t("blog.editor.alignCenter")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Keskitä</p>
+                <p>{t("blog.editor.alignCenter")}</p>
               </TooltipContent>
             </Tooltip>
             
@@ -304,11 +330,11 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                   onClick={() => formatText('align-right')}
                 >
                   <AlignRight className="h-4 w-4" />
-                  <span className="sr-only">Tasaa oikealle</span>
+                  <span className="sr-only">{t("blog.editor.alignRight")}</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Tasaa oikealle</p>
+                <p>{t("blog.editor.alignRight")}</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -326,7 +352,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
       
       <div className="text-xs text-muted-foreground">
         <p>
-          Markdown-muotoilu: <code>**lihavoitu**</code>, <code>*kursivoitu*</code>, <code># Otsikko</code>
+          {t("blog.editor.formatting")}
         </p>
       </div>
     </div>
