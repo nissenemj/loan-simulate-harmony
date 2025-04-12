@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import NavigationHeader from "@/components/NavigationHeader";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,7 +40,6 @@ interface BlogPost {
 	image_url?: string;
 }
 
-// The only email allowed to access blog admin
 const AUTHORIZED_EMAIL = "nissenemj@gmail.com";
 
 const BlogAdmin = () => {
@@ -48,17 +48,14 @@ const BlogAdmin = () => {
 	const navigate = useNavigate();
 	const isMobile = useIsMobile();
 
-	// State for existing posts
 	const [posts, setPosts] = useState<BlogPost[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	// State for active tab
 	const [activeTab, setActiveTab] = useState(() => {
 		const saved = localStorage.getItem("blogAdmin_activeTab");
 		return saved || "list";
 	});
 
-	// State for new post form
 	const [title, setTitle] = useState(() => {
 		const saved = localStorage.getItem("blogAdmin_title");
 		return saved || "";
@@ -83,7 +80,6 @@ const BlogAdmin = () => {
 	const [imagePreviewError, setImagePreviewError] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 
-	// State for edit form
 	const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [editContent, setEditContent] = useState("");
@@ -93,7 +89,6 @@ const BlogAdmin = () => {
 	const [showEditImagePreview, setShowEditImagePreview] = useState(false);
 	const [editImagePreviewError, setEditImagePreviewError] = useState(false);
 
-	// Save form state to localStorage when it changes
 	useEffect(() => {
 		localStorage.setItem("blogAdmin_title", title);
 	}, [title]);
@@ -118,15 +113,12 @@ const BlogAdmin = () => {
 		localStorage.setItem("blogAdmin_activeTab", activeTab);
 	}, [activeTab]);
 
-	// Handle tab change
 	const handleTabChange = (value: string) => {
 		setActiveTab(value);
 	};
 
-	// Save form state when window is about to unload
 	useEffect(() => {
 		const handleBeforeUnload = () => {
-			// Force save the current form state
 			localStorage.setItem("blogAdmin_title", title);
 			localStorage.setItem("blogAdmin_content", content);
 			localStorage.setItem("blogAdmin_author", author);
@@ -142,10 +134,8 @@ const BlogAdmin = () => {
 		};
 	}, [title, content, author, category, imageUrl, activeTab]);
 
-	// Check if the current user is authorized
 	const isAuthorized = user?.email === AUTHORIZED_EMAIL;
 
-	// Redirect unauthorized users back to the homepage
 	useEffect(() => {
 		console.log("Auth check - Current user:", user);
 		console.log("Auth check - Is authorized:", isAuthorized);
@@ -156,7 +146,6 @@ const BlogAdmin = () => {
 		}
 	}, [user, isAuthorized, navigate]);
 
-	// Fetch posts when component mounts
 	useEffect(() => {
 		if (isAuthorized) {
 			fetchPosts();
@@ -196,7 +185,6 @@ const BlogAdmin = () => {
 		});
 
 		try {
-			// Validate the image URL if provided
 			if (imageUrl && !isValidUrl(imageUrl)) {
 				toast.error(
 					"Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi."
@@ -223,23 +211,18 @@ const BlogAdmin = () => {
 				toast.error("Artikkelin lisäys epäonnistui: " + error.message);
 			} else {
 				toast.success("Artikkeli lisätty onnistuneesti!");
-				// Reset form
 				setTitle("");
 				setContent("");
 				setCategory("");
 				setImageUrl("");
 				setShowImagePreview(false);
 				setImagePreviewError(false);
-				// Clear form data from localStorage but keep the active tab
 				localStorage.removeItem("blogAdmin_title");
 				localStorage.removeItem("blogAdmin_content");
 				localStorage.removeItem("blogAdmin_author");
 				localStorage.removeItem("blogAdmin_category");
 				localStorage.removeItem("blogAdmin_imageUrl");
-
-				// Switch to list tab after successful submission
 				setActiveTab("list");
-				// Refresh posts list
 				fetchPosts();
 			}
 		} catch (err) {
@@ -277,7 +260,6 @@ const BlogAdmin = () => {
 		});
 
 		try {
-			// Validate the image URL if provided
 			if (editImageUrl && !isValidUrl(editImageUrl)) {
 				toast.error(
 					"Kuvan URL ei ole kelvollinen. Tarkista osoite tai jätä tyhjäksi."
@@ -369,7 +351,6 @@ const BlogAdmin = () => {
 		toast.error("Kuvan lataus epäonnistui. Tarkista URL-osoite.");
 	};
 
-	// Simple URL validation
 	const isValidUrl = (url: string) => {
 		try {
 			new URL(url);
@@ -379,7 +360,6 @@ const BlogAdmin = () => {
 		}
 	};
 
-	// Testing an image URL to see if it's valid
 	const testImageUrl = (url: string, callback: (success: boolean) => void) => {
 		const img = new Image();
 		img.onload = () => callback(true);
@@ -387,7 +367,6 @@ const BlogAdmin = () => {
 		img.src = url;
 	};
 
-	// Show loading state while checking authentication
 	if (!user) {
 		return (
 			<div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
@@ -400,7 +379,6 @@ const BlogAdmin = () => {
 		);
 	}
 
-	// Show unauthorized message if user is logged in but not authorized
 	if (user && !isAuthorized) {
 		return (
 			<div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
@@ -645,8 +623,7 @@ const BlogAdmin = () => {
 															{editImagePreviewError && (
 																<div className="mt-2 text-center text-destructive">
 																	<p>
-																		Kuvan lataus epäonnistui. Tarkista
-																		URL-osoite.
+																		Kuvan lataus epäonnistui. Tarkista URL-osoite.
 																	</p>
 																</div>
 															)}
