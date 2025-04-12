@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -74,13 +75,13 @@ const NavigationHeader = () => {
 	const links = user
 		? [
 				{ href: "/dashboard", label: t("navigation.dashboard") },
-				{ href: "/dashboard", label: t("navigation.calculator") },
+				{ href: "/calculator", label: t("navigation.calculator") },
 				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
 				{ href: "/courses", label: t("navigation.courses") },
 				{ href: "/blog", label: t("navigation.blog") },
 		  ]
 		: [
-				{ href: "/dashboard", label: t("navigation.calculator") },
+				{ href: "/calculator", label: t("navigation.calculator") },
 				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
 				{ href: "/courses", label: t("navigation.courses") },
 				{ href: "/blog", label: t("navigation.blog") },

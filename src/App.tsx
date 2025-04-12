@@ -16,6 +16,7 @@ import Blog from './pages/Blog';
 import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
 import Dashboard from './pages/Dashboard';
+import Index from './pages/Index';
 import Auth from './pages/Auth';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
@@ -65,6 +66,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/calculator" element={<Index />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:postId" element={<BlogPost />} />
                     <Route path="/blog-admin" element={
