@@ -34,8 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			setUser(session?.user ?? null);
 			setIsLoading(false);
 
-			// Redirect to dashboard on sign in or to intended path if set
-			if (event === "SIGNED_IN") {
+			// Only redirect on initial sign in, not on session refresh
+			if (event === "SIGNED_IN" && !user) {
 				// Check if the user was trying to access a specific page
 				const intendedPath = sessionStorage.getItem("intendedPath");
 				if (intendedPath) {

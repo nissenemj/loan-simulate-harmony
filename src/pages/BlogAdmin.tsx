@@ -52,12 +52,33 @@ const BlogAdmin = () => {
 	const [posts, setPosts] = useState<BlogPost[]>([]);
 	const [loading, setLoading] = useState(true);
 
+	// State for active tab
+	const [activeTab, setActiveTab] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_activeTab");
+		return saved || "list";
+	});
+
 	// State for new post form
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
-	const [author, setAuthor] = useState("Talousvelhot"); // Default
-	const [category, setCategory] = useState("");
-	const [imageUrl, setImageUrl] = useState("");
+	const [title, setTitle] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_title");
+		return saved || "";
+	});
+	const [content, setContent] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_content");
+		return saved || "";
+	});
+	const [author, setAuthor] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_author");
+		return saved || "Talousvelhot"; // Default
+	});
+	const [category, setCategory] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_category");
+		return saved || "";
+	});
+	const [imageUrl, setImageUrl] = useState(() => {
+		const saved = localStorage.getItem("blogAdmin_imageUrl");
+		return saved || "";
+	});
 	const [showImagePreview, setShowImagePreview] = useState(false);
 	const [imagePreviewError, setImagePreviewError] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
@@ -71,6 +92,55 @@ const BlogAdmin = () => {
 	const [editImageUrl, setEditImageUrl] = useState("");
 	const [showEditImagePreview, setShowEditImagePreview] = useState(false);
 	const [editImagePreviewError, setEditImagePreviewError] = useState(false);
+
+	// Save form state to localStorage when it changes
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_title", title);
+	}, [title]);
+
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_content", content);
+	}, [content]);
+
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_author", author);
+	}, [author]);
+
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_category", category);
+	}, [category]);
+
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_imageUrl", imageUrl);
+	}, [imageUrl]);
+
+	useEffect(() => {
+		localStorage.setItem("blogAdmin_activeTab", activeTab);
+	}, [activeTab]);
+
+	// Handle tab change
+	const handleTabChange = (value: string) => {
+		setActiveTab(value);
+	};
+
+	// Save form state when window is about to unload
+	useEffect(() => {
+		const handleBeforeUnload = () => {
+			// Force save the current form state
+			localStorage.setItem("blogAdmin_title", title);
+			localStorage.setItem("blogAdmin_content", content);
+			localStorage.setItem("blogAdmin_author", author);
+			localStorage.setItem("blogAdmin_category", category);
+			localStorage.setItem("blogAdmin_imageUrl", imageUrl);
+			localStorage.setItem("blogAdmin_activeTab", activeTab);
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+		};
+	}, [title, content, author, category, imageUrl, activeTab]);
 
 	// Check if the current user is authorized
 	const isAuthorized = user?.email === AUTHORIZED_EMAIL;
@@ -160,6 +230,15 @@ const BlogAdmin = () => {
 				setImageUrl("");
 				setShowImagePreview(false);
 				setImagePreviewError(false);
+				// Clear form data from localStorage but keep the active tab
+				localStorage.removeItem("blogAdmin_title");
+				localStorage.removeItem("blogAdmin_content");
+				localStorage.removeItem("blogAdmin_author");
+				localStorage.removeItem("blogAdmin_category");
+				localStorage.removeItem("blogAdmin_imageUrl");
+
+				// Switch to list tab after successful submission
+				setActiveTab("list");
 				// Refresh posts list
 				fetchPosts();
 			}
@@ -371,7 +450,11 @@ const BlogAdmin = () => {
 						</p>
 					</div>
 
-					<Tabs defaultValue="list" className="mb-8">
+					<Tabs
+						value={activeTab}
+						onValueChange={handleTabChange}
+						className="mb-8"
+					>
 						<TabsList className="mb-6">
 							<TabsTrigger value="list">Artikkelit</TabsTrigger>
 							<TabsTrigger value="new">Lisää uusi</TabsTrigger>
