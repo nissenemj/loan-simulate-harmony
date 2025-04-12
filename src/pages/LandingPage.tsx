@@ -18,9 +18,6 @@ import UserGuidanceSection from "@/components/UserGuidanceSection";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateBanners } from "@/utils/affiliateData";
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
-import { ModeToggle } from "@/components/ModeToggle";
-import NavigationHeader from "@/components/NavigationHeader";
-import Footer from "@/components/Footer";
 
 const LandingPage = () => {
   const { t, language } = useLanguage();
@@ -84,9 +81,7 @@ const LandingPage = () => {
         </script>
       </Helmet>
 
-      <div className="hero-gradient min-h-screen">
-        <NavigationHeader />
-        
+      <div className="hero-gradient">
         <section className="pt-10 pb-16 px-4 md:pt-16 md:pb-20">
           <div className="container mx-auto max-w-5xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -400,8 +395,6 @@ const LandingPage = () => {
             </Button>
           </div>
         </section>
-
-        <Footer />
       </div>
     </>
   );

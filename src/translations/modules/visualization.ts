@@ -33,7 +33,20 @@ export const visualization = {
       minimumAvalanche: "Minimum Payments (Avalanche)",
       minimumSnowball: "Minimum Payments (Snowball)",
       extra100Avalanche: "Extra $100/mo (Avalanche)",
-      extra100Snowball: "Extra $100/mo (Snowball)"
+      extra100Snowball: "Extra $100/mo (Snowball)",
+      compareScenarios: "Compare Scenarios",
+      scenarioComparisonDescription: "Compare how different strategies affect your debt payoff",
+      scenarioName: "Scenario",
+      timeSaved: "Time Saved",
+      moneySaved: "Money Saved",
+      bestScenario: "Best Scenario",
+      worstScenario: "Worst Scenario",
+      comparisonResult: "Comparison Result",
+      extra100: "Extra €100/mo",
+      extra200: "Extra €200/mo",
+      extra300: "Extra €300/mo",
+      extra400: "Extra €400/mo",
+      extra500: "Extra €500/mo"
     }
   },
   fi: {
@@ -67,7 +80,20 @@ export const visualization = {
       minimumAvalanche: "Minimimaksut (Vyörytys)",
       minimumSnowball: "Minimimaksut (Lumipallo)",
       extra100Avalanche: "Lisää 100€/kk (Vyörytys)",
-      extra100Snowball: "Lisää 100€/kk (Lumipallo)"
+      extra100Snowball: "Lisää 100€/kk (Lumipallo)",
+      compareScenarios: "Vertaile skenaarioita",
+      scenarioComparisonDescription: "Vertaile miten eri strategiat vaikuttavat velkojesi maksuun",
+      scenarioName: "Skenaario",
+      timeSaved: "Säästetty aika",
+      moneySaved: "Säästetty raha",
+      bestScenario: "Paras skenaario",
+      worstScenario: "Huonoin skenaario",
+      comparisonResult: "Vertailun tulos",
+      extra100: "Lisää 100€/kk",
+      extra200: "Lisää 200€/kk",
+      extra300: "Lisää 300€/kk",
+      extra400: "Lisää 400€/kk",
+      extra500: "Lisää 500€/kk"
     }
   }
 };

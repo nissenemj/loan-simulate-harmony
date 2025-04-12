@@ -1,19 +1,17 @@
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
-import NavigationHeader from "@/components/NavigationHeader";
-import Footer from "@/components/Footer";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Clock, User, Tag } from "lucide-react";
-import { Link } from "react-router-dom";
 import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateRecommendations } from "@/utils/affiliateData";
 import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CategoryTabs from "@/components/blog/CategoryTabs";
+import BlogPostList from "@/components/blog/BlogPostList";
+import AdminLink from "@/components/blog/AdminLink";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 interface BlogPost {
   id: string;
@@ -33,14 +31,15 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const isMobile = useIsMobile();
 
-  // Get affiliate recommendations for education and books
   const educationRecommendations = affiliateRecommendations.filter(rec => 
     rec.category === 'education'
   );
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
+        console.log("Fetching blog posts...");
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -48,14 +47,16 @@ const Blog = () => {
 
         if (error) {
           console.error('Error fetching posts:', error);
+          setPosts([]);
         } else {
+          console.log('Fetched posts:', data);
           setPosts(data || []);
-          // Extract unique categories
-          const uniqueCategories = Array.from(new Set(data.map((post: BlogPost) => post.category)));
+          const uniqueCategories = Array.from(new Set(data?.map((post: BlogPost) => post.category) || []));
           setCategories(uniqueCategories);
         }
       } catch (err) {
         console.error('Unexpected error:', err);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
@@ -77,139 +78,40 @@ const Blog = () => {
     }).format(date);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-        <NavigationHeader />
-        <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-          <p className="text-center py-12">Ladataan...</p>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  const blogTitle = t("blog.title") || "Blogi";
-  const blogSubtitle = t("blog.subtitle") || "Uusimmat artikkelit ja oppaat taloudenhallintaan";
-  const allPostsLabel = t("blog.allPosts") || "Kaikki artikkelit";
-  const noPostsLabel = t("blog.noPosts") || "Ei artikkeleita tässä kategoriassa.";
-  const readMoreLabel = t("blog.readMore") || "Lue lisää";
-
   return (
     <>
       <Helmet>
-        <title>{t("blog.pageTitle") || "Blogi | Velkavapaus.fi"}</title>
+        <title>{t("blog.pageTitle")}</title>
         <meta 
           name="description" 
-          content={t("blog.pageDescription") || "Lue uusimmat artikkelit ja oppaat taloudenhallintaan, velanhoitoon ja budjetointiin Velkavapaus.fi-blogista."} 
+          content={t("blog.pageDescription")} 
         />
         <meta name="keywords" content="velanhoito, budjetointi, taloudenhallinta, velkavapaus, blogi" />
         <link rel="canonical" href="https://velkavapaus.fi/blog" />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20">
-        <NavigationHeader />
+      <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+            {t("blog.title")}
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            {t("blog.subtitle")}
+          </p>
+        </div>
         
-        <main className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              {blogTitle}
-            </h1>
-            <p className="text-muted-foreground text-lg">
-              {blogSubtitle}
-            </p>
-          </div>
+        <AdminLink />
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="md:col-span-3">
-              <Tabs defaultValue="all" className="mb-6">
-                <TabsList className={`mb-6 flex ${isMobile ? 'flex-col gap-2' : 'flex-wrap'}`}>
-                  <TabsTrigger value="all" onClick={() => setSelectedCategory("all")}>
-                    {allPostsLabel}
-                  </TabsTrigger>
-                  {categories.map((category) => (
-                    <TabsTrigger 
-                      key={category} 
-                      value={category}
-                      onClick={() => setSelectedCategory(category)}
-                    >
-                      {category}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            </div>
-            
-            {/* Storytel recommendation in sidebar */}
-            <div className="hidden md:block">
-              {educationRecommendations.map(recommendation => (
-                <AffiliateRecommendation 
-                  key={recommendation.id} 
-                  recommendation={recommendation} 
-                />
-              ))}
-            </div>
-          </div>
-
-          {filteredPosts.length === 0 ? (
-            <p className="text-center py-8 text-muted-foreground">
-              {noPostsLabel}
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {filteredPosts.map((post) => (
-                <Card key={post.id} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                  {post.image_url && (
-                    <div className="relative h-48 overflow-hidden">
-                      <img 
-                        src={post.image_url} 
-                        alt={post.title} 
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <div className="flex justify-between items-center mb-2 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <Tag className="h-4 w-4 mr-1" />
-                        <span>{post.category}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{formatDate(post.created_at)}</span>
-                      </div>
-                    </div>
-                    <CardTitle className="text-xl hover:text-primary transition-colors">
-                      <Link to={`/blog/${post.id}`}>{post.title}</Link>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4 line-clamp-3">
-                      {post.content.substring(0, 150)}...
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center text-sm text-muted-foreground">
-                        <User className="h-4 w-4 mr-1" />
-                        <span>{post.author}</span>
-                      </div>
-                      <Link to={`/blog/${post.id}`} className="text-sm font-medium text-primary hover:underline">
-                        {readMoreLabel} →
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-          
-          {/* Newsletter Signup */}
-          <div className="mb-12">
-            <NewsletterSignup />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="md:col-span-3">
+            <CategoryTabs 
+              categories={categories} 
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
           </div>
           
-          {/* Mobile Storytel recommendation */}
-          <div className="md:hidden mb-8">
+          <div className="hidden md:block">
             {educationRecommendations.map(recommendation => (
               <AffiliateRecommendation 
                 key={recommendation.id} 
@@ -217,16 +119,52 @@ const Blog = () => {
               />
             ))}
           </div>
-          
-          {/* Storytel Banner - Added at the bottom of the page */}
-          <div className="my-8 flex justify-center">
-            <div dangerouslySetInnerHTML={{ __html: '<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>' }} />
-          </div>
-          
-          <AdSenseBanner adSlot="1234567890" className="mt-8" />
-        </main>
-        <Footer />
-      </div>
+        </div>
+
+        {loading ? (
+          <Card className="w-full p-8">
+            <CardContent className="flex flex-col items-center justify-center pt-6">
+              <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+              <p className="mt-4 text-center text-muted-foreground">
+                {language === 'fi' ? 'Ladataan blogiartikkeleita...' : 'Loading blog posts...'}
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <>
+            {filteredPosts.length > 0 ? (
+              <BlogPostList posts={filteredPosts} formatDate={formatDate} />
+            ) : (
+              <Card className="w-full p-8">
+                <CardContent className="pt-6 text-center">
+                  <p className="text-muted-foreground">
+                    {language === 'fi' ? 'Ei artikkeleita tässä kategoriassa.' : 'No posts in this category.'}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        )}
+        
+        <div className="mb-12">
+          <NewsletterSignup />
+        </div>
+        
+        <div className="md:hidden mb-8">
+          {educationRecommendations.map(recommendation => (
+            <AffiliateRecommendation 
+              key={recommendation.id} 
+              recommendation={recommendation} 
+            />
+          ))}
+        </div>
+        
+        <div className="my-8 flex justify-center">
+          <div dangerouslySetInnerHTML={{ __html: '<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>' }} />
+        </div>
+        
+        <AdSenseBanner adSlot="1234567890" className="mt-8" />
+      </main>
     </>
   );
 };

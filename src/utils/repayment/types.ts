@@ -17,6 +17,18 @@ export interface DebtItem {
   monthlyFee?: number; // Added monthly fee field
 }
 
+export interface SavedRepaymentStrategy {
+  id: string;
+  name: string;
+  method: PrioritizationMethod;
+  monthlyBudget: number;
+  timeline?: RepaymentPlan['timeline'];
+  totalMonths?: number;
+  totalInterestPaid?: number;
+  creditCardFreeMonth?: number;
+  createdAt: string;
+}
+
 export interface RepaymentPlan {
   monthlyAllocation: {
     id: string;
@@ -38,6 +50,7 @@ export interface RepaymentPlan {
     totalRemaining: number;
     totalPaid: number;
     totalInterestPaid: number;
+    strategy?: PrioritizationMethod;
   }[];
   totalMonths: number;
   totalInterestPaid: number;

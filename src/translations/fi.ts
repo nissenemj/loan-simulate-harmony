@@ -1,4 +1,3 @@
-
 // fi.ts
 
 export const fi = {
@@ -110,16 +109,6 @@ export const fi = {
       min: "Syötä vähintään {min}",
       max: "Syötä enintään {max}",
       email: "Syötä kelvollinen sähköpostiosoite",
-    },
-    interestTypes: {
-      fixed: "Kiinteä",
-      variable: "Vaihtuva",
-    },
-    repaymentTypes: {
-      annuity: "Annuiteetti",
-      equalPrincipal: "Tasalyhennys",
-      fixedInstallment: "Kiinteä maksuerä",
-      customPayment: "Mukautettu maksu",
     },
     months: {
       month: "Kuukausi",

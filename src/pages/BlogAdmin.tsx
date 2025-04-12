@@ -46,6 +46,7 @@ const BlogAdmin = () => {
 	const { t, language } = useLanguage();
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const isMobile = useIsMobile();
 
 	// State for existing posts
 	const [posts, setPosts] = useState<BlogPost[]>([]);

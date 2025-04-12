@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Mail, PenSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from '@/components/ui/use-toast';
 
 const UserGuidanceSection: React.FC = () => {
   const { language } = useLanguage();
@@ -13,9 +14,9 @@ const UserGuidanceSection: React.FC = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   
-  // Extract user email for greeting
+  // Extract user email for greeting, with fallback
   const userEmail = user?.email || '';
-  const userName = userEmail.split('@')[0];
+  const userName = userEmail ? userEmail.split('@')[0] : 'Guest';
   
   // Define the guidance items with fallback text in case translations aren't working
   const guidanceItems = [
@@ -25,7 +26,18 @@ const UserGuidanceSection: React.FC = () => {
         ? 'Tutustu velkavelhon uusimpiin vinkkeihin ja oppaisiin' 
         : 'Explore velkavelho\'s latest tips and guides for financial freedom',
       icon: BookOpen,
-      action: () => navigate('/blog'),
+      action: () => {
+        try {
+          navigate('/blog');
+        } catch (error) {
+          console.error('Navigation error:', error);
+          toast({
+            title: "Navigation error",
+            description: "Couldn't navigate to Blog. Please try again.",
+            variant: "destructive"
+          });
+        }
+      },
     },
     {
       title: language === 'fi' ? 'Hallinnoi blogia' : 'Manage blog',
@@ -33,7 +45,18 @@ const UserGuidanceSection: React.FC = () => {
         ? 'Lisää ja hallinnoi blogiartikkeleita' 
         : 'Add and manage blog articles',
       icon: PenSquare,
-      action: () => navigate('/admin/blog'),
+      action: () => {
+        try {
+          navigate('/blog-admin');
+        } catch (error) {
+          console.error('Navigation error:', error);
+          toast({
+            title: "Navigation error",
+            description: "Couldn't navigate to Blog Admin. Please try again.",
+            variant: "destructive"
+          });
+        }
+      },
     },
     {
       title: language === 'fi' ? 'Tuki' : 'Support',
@@ -41,9 +64,24 @@ const UserGuidanceSection: React.FC = () => {
         ? 'Tarvitsetko apua? Ota yhteyttä tukeen' 
         : 'Need help? Contact our support team',
       icon: Mail,
-      action: () => window.location.href = 'mailto:support@velkavapaus.fi',
+      action: () => {
+        try {
+          window.location.href = 'mailto:support@velkavapaus.fi';
+        } catch (error) {
+          console.error('Email error:', error);
+          toast({
+            title: "Email error",
+            description: "Couldn't open email client. Please try again.",
+            variant: "destructive"
+          });
+        }
+      },
     },
   ];
+
+  if (!user) {
+    return null; // Don't render if no user is logged in
+  }
 
   return (
     <div className="py-8 px-4 md:py-16">

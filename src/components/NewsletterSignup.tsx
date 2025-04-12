@@ -29,6 +29,10 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
+// Constants for Supabase URL and key - using the ones from the client file
+const SUPABASE_URL = "https://jwzzkqelqsqsirfowevs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enprcWVscXNxc2lyZm93ZXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTE2OTMsImV4cCI6MjA1Nzk2NzY5M30.o7TJCcPktro0nhTCNdVnT3mTno2uqfE1Zy31giCb9TE";
+
 const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -44,7 +48,35 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      // Direct SQL query for tables not in generated types
+      // First try to use the newsletter-signup edge function
+      try {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            email: data.email,
+            name: data.name || null
+          })
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Error subscribing to newsletter');
+        }
+        
+        toast.success(t("newsletter.subscribeSuccess") || "Kiitos tilauksestasi! Olet nyt uutiskirjeemme tilaaja.");
+        form.reset();
+        return;
+      } catch (edgeFunctionError) {
+        console.error("Edge function error:", edgeFunctionError);
+        // Fall back to direct database query if edge function fails
+      }
+
+      // Fallback: Direct SQL query if edge function fails
       const { error } = await supabase
         .from('newsletter_subscribers')
         .insert([{ email: data.email, name: data.name || null }]);
