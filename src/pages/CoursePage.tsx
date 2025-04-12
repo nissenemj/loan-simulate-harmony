@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Helmet } from "react-helmet-async";
@@ -13,7 +14,6 @@ import {
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info, Loader2 } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import FileViewer from "@/components/FileViewer";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default module data structure
@@ -193,14 +193,6 @@ const CoursePage: React.FC = () => {
 					</Card>
 				</TabsContent>
 			</Tabs>
-
-			<div className="mb-8">
-				<FileViewer
-					folder="jaettavat"
-					title="Course Materials"
-					description="Download supplementary materials for the course"
-				/>
-			</div>
 
 			<div className="bg-muted p-4 sm:p-6 rounded-lg mt-8">
 				<h2 className="text-xl md:text-2xl font-semibold mb-4">
