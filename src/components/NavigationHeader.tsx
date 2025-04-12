@@ -1,6 +1,6 @@
 
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -30,6 +30,7 @@ import {
 import { Menu, User } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { toast } from "@/components/ui/use-toast";
+import VelkavapausLogo from "./VelkavapausLogo";
 
 const NavigationHeader = () => {
 	const [open, setOpen] = useState(false);
@@ -37,6 +38,7 @@ const NavigationHeader = () => {
 	const { t } = useLanguage();
 	const isMobile = useIsMobile();
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleLogout = async () => {
 		try {
@@ -87,12 +89,15 @@ const NavigationHeader = () => {
 				{ href: "/blog", label: t("navigation.blog") },
 		  ];
 
+	// Check if a link is active
+	const isActive = (path: string) => {
+		return location.pathname === path || location.pathname.startsWith(`${path}/`);
+	};
+
 	return (
 		<header className="bg-background sticky top-0 z-50 w-full border-b">
 			<div className="container flex h-16 items-center justify-between">
-				<Link to="/" className="flex items-center font-semibold">
-					{t("app.title")}
-				</Link>
+				<VelkavapausLogo />
 
 				{isMobile ? (
 					// Mobile navigation with sheet/drawer
@@ -111,7 +116,7 @@ const NavigationHeader = () => {
 								{links.map((link) => (
 									<Button
 										key={link.href}
-										variant="ghost"
+										variant={isActive(link.href) ? "default" : "ghost"}
 										onClick={() => handleNavigation(link.href)}
 										className="h-12 text-base justify-start"
 									>
@@ -156,7 +161,11 @@ const NavigationHeader = () => {
 									<NavigationMenuItem key={link.href}>
 										<button
 											onClick={() => handleNavigation(link.href)}
-											className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 data-[active]:bg-muted data-[active]:text-foreground hover:bg-muted hover:text-foreground h-9 px-4 py-2"
+											className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 hover:bg-muted hover:text-foreground h-9 px-4 py-2 ${
+												isActive(link.href)
+													? "bg-primary text-primary-foreground"
+													: ""
+											}`}
 										>
 											{link.label}
 										</button>

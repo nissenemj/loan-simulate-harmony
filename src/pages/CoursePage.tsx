@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Helmet } from "react-helmet-async";
 import H5PContent from "@/components/course/H5PContent";
@@ -12,9 +12,12 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info, Loader2 } from "lucide-react";
+import { Info } from "lucide-react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { PenSquare } from "lucide-react";
 
 // Default module data structure
 interface ModuleData {
@@ -36,7 +39,8 @@ interface CourseData {
 
 const CoursePage: React.FC = () => {
 	const { t } = useLanguage();
-	const [isLoading, setIsLoading] = useState(false);
+	const { user } = useAuth();
+	const [selectedTab, setSelectedTab] = useState("module1");
 
 	// Default data from translations
 	const defaultData: CourseData = {
@@ -72,6 +76,14 @@ const CoursePage: React.FC = () => {
 	// Get stored course data or use defaults
 	const [courseData] = useLocalStorage<CourseData>("course-data", defaultData);
 
+	const handleTabChange = (value: string) => {
+		setSelectedTab(value);
+	};
+
+	// Check if user is admin
+	const ADMIN_EMAIL = "nissenemj@gmail.com";
+	const isAdmin = user?.email === ADMIN_EMAIL;
+
 	return (
 		<div className="container mx-auto px-4 py-6 md:py-8">
 			<Helmet>
@@ -81,11 +93,24 @@ const CoursePage: React.FC = () => {
 				<meta name="description" content={t("course.description")} />
 			</Helmet>
 
-			<div className="mb-8">
-				<h1 className="text-2xl md:text-3xl font-bold mb-4">
-					{t("course.title")}
-				</h1>
-				<p className="text-lg">{t("course.description")}</p>
+			<div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
+				<div>
+					<h1 className="text-2xl md:text-3xl font-bold mb-4">
+						{t("course.title")}
+					</h1>
+					<p className="text-lg">{t("course.description")}</p>
+				</div>
+				
+				{isAdmin && (
+					<div className="mt-4 md:mt-0">
+						<Link to="/courses/admin">
+							<Button variant="outline" size="sm" className="flex items-center gap-2">
+								<PenSquare className="h-4 w-4" />
+								{t("course.admin.manageButton")}
+							</Button>
+						</Link>
+					</div>
+				)}
 			</div>
 
 			<Alert className="mb-8">
@@ -94,29 +119,29 @@ const CoursePage: React.FC = () => {
 				<AlertDescription>{t("course.howToUseDescription")}</AlertDescription>
 			</Alert>
 
-			<Tabs defaultValue="module1" className="mb-8">
-				<TabsList className="flex flex-col sm:grid sm:grid-cols-3 w-full gap-2 sm:gap-0">
+			<Tabs value={selectedTab} onValueChange={handleTabChange} className="mb-8">
+				<TabsList className="w-full md:w-auto flex flex-col sm:flex-row h-auto p-1 mb-8">
 					<TabsTrigger
 						value="module1"
-						className="h-12 sm:h-10 text-base sm:text-sm"
+						className="h-12 sm:h-10 text-base sm:text-sm px-6 py-2 mb-2 sm:mb-0"
 					>
 						{courseData.modules.module1.title}
 					</TabsTrigger>
 					<TabsTrigger
 						value="module2"
-						className="h-12 sm:h-10 text-base sm:text-sm"
+						className="h-12 sm:h-10 text-base sm:text-sm px-6 py-2 mb-2 sm:mb-0"
 					>
 						{courseData.modules.module2.title}
 					</TabsTrigger>
 					<TabsTrigger
 						value="module3"
-						className="h-12 sm:h-10 text-base sm:text-sm"
+						className="h-12 sm:h-10 text-base sm:text-sm px-6 py-2"
 					>
 						{courseData.modules.module3.title}
 					</TabsTrigger>
 				</TabsList>
 
-				<TabsContent value="module1" className="mt-6">
+				<TabsContent value="module1">
 					<Card>
 						<CardHeader>
 							<CardTitle>{courseData.modules.module1.title}</CardTitle>
@@ -149,7 +174,7 @@ const CoursePage: React.FC = () => {
 					</Card>
 				</TabsContent>
 
-				<TabsContent value="module2" className="mt-6">
+				<TabsContent value="module2">
 					<Card>
 						<CardHeader>
 							<CardTitle>{courseData.modules.module2.title}</CardTitle>
@@ -171,7 +196,7 @@ const CoursePage: React.FC = () => {
 					</Card>
 				</TabsContent>
 
-				<TabsContent value="module3" className="mt-6">
+				<TabsContent value="module3">
 					<Card>
 						<CardHeader>
 							<CardTitle>{courseData.modules.module3.title}</CardTitle>
