@@ -1,180 +1,218 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Helmet } from "react-helmet-async";
-import H5PContent from '@/components/course/H5PContent';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import H5PContent from "@/components/course/H5PContent";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info, Loader2 } from "lucide-react";
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import FileViewer from '@/components/FileViewer';
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import FileViewer from "@/components/FileViewer";
 import { supabase } from "@/integrations/supabase/client";
 
 // Default module data structure
 interface ModuleData {
-  title: string;
-  description: string;
-  intro: string;
-  contentId?: string;
-  embedUrl?: string;
-  height?: string;
+	title: string;
+	description: string;
+	intro: string;
+	contentId?: string;
+	embedUrl?: string;
+	height?: string;
 }
 
 interface CourseData {
-  modules: {
-    module1: ModuleData;
-    module2: ModuleData;
-    module3: ModuleData;
-  }
+	modules: {
+		module1: ModuleData;
+		module2: ModuleData;
+		module3: ModuleData;
+	};
 }
 
 const CoursePage: React.FC = () => {
-  const { t } = useLanguage();
-  const [isLoading, setIsLoading] = useState(false);
-  
-  // Default data from translations
-  const defaultData: CourseData = {
-    modules: {
-      module1: {
-        title: t(`course.modules.module1.title`),
-        description: t(`course.modules.module1.description`),
-        intro: t(`course.modules.module1.intro`),
-        contentId: '',
-        embedUrl: 'https://velkavapausfi.h5p.com/content/1292556501858479547/embed',
-        height: '637px'
-      },
-      module2: {
-        title: t(`course.modules.module2.title`),
-        description: t(`course.modules.module2.description`),
-        intro: t(`course.modules.module2.intro`),
-        contentId: '43',
-        embedUrl: '',
-        height: '500px'
-      },
-      module3: {
-        title: t(`course.modules.module3.title`),
-        description: t(`course.modules.module3.description`),
-        intro: t(`course.modules.module3.intro`),
-        contentId: '44',
-        embedUrl: '',
-        height: '500px'
-      }
-    }
-  };
+	const { t } = useLanguage();
+	const [isLoading, setIsLoading] = useState(false);
 
-  // Get stored course data or use defaults
-  const [courseData] = useLocalStorage<CourseData>('course-data', defaultData);
+	// Default data from translations
+	const defaultData: CourseData = {
+		modules: {
+			module1: {
+				title: t(`course.modules.module1.title`),
+				description: t(`course.modules.module1.description`),
+				intro: t(`course.modules.module1.intro`),
+				contentId: "",
+				embedUrl:
+					"https://velkavapausfi.h5p.com/content/1292556501858479547/embed",
+				height: "637px",
+			},
+			module2: {
+				title: t(`course.modules.module2.title`),
+				description: t(`course.modules.module2.description`),
+				intro: t(`course.modules.module2.intro`),
+				contentId: "43",
+				embedUrl: "",
+				height: "500px",
+			},
+			module3: {
+				title: t(`course.modules.module3.title`),
+				description: t(`course.modules.module3.description`),
+				intro: t(`course.modules.module3.intro`),
+				contentId: "44",
+				embedUrl: "",
+				height: "500px",
+			},
+		},
+	};
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Helmet>
-        <title>{t('course.title')} | {t('app.title')}</title>
-        <meta name="description" content={t('course.description')} />
-      </Helmet>
+	// Get stored course data or use defaults
+	const [courseData] = useLocalStorage<CourseData>("course-data", defaultData);
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">{t('course.title')}</h1>
-        <p className="text-lg">{t('course.description')}</p>
-      </div>
+	return (
+		<div className="container mx-auto px-4 py-6 md:py-8">
+			<Helmet>
+				<title>
+					{t("course.title")} | {t("app.title")}
+				</title>
+				<meta name="description" content={t("course.description")} />
+			</Helmet>
 
-      <Alert className="mb-8">
-        <Info className="h-4 w-4" />
-        <AlertTitle>{t('course.howToUseTitle')}</AlertTitle>
-        <AlertDescription>{t('course.howToUseDescription')}</AlertDescription>
-      </Alert>
+			<div className="mb-8">
+				<h1 className="text-2xl md:text-3xl font-bold mb-4">
+					{t("course.title")}
+				</h1>
+				<p className="text-lg">{t("course.description")}</p>
+			</div>
 
-      <Tabs defaultValue="module1" className="mb-8">
-        <TabsList className="grid w-full grid-cols-1 md:grid-cols-3">
-          <TabsTrigger value="module1">{courseData.modules.module1.title}</TabsTrigger>
-          <TabsTrigger value="module2">{courseData.modules.module2.title}</TabsTrigger>
-          <TabsTrigger value="module3">{courseData.modules.module3.title}</TabsTrigger>
-        </TabsList>
+			<Alert className="mb-8">
+				<Info className="h-4 w-4" />
+				<AlertTitle>{t("course.howToUseTitle")}</AlertTitle>
+				<AlertDescription>{t("course.howToUseDescription")}</AlertDescription>
+			</Alert>
 
-        <TabsContent value="module1" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{courseData.modules.module1.title}</CardTitle>
-              <CardDescription>{courseData.modules.module1.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{courseData.modules.module1.intro}</p>
-              
-              <div className="h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-6 bg-gray-50 dark:bg-gray-800">
-                <iframe 
-                  src={courseData.modules.module1.embedUrl} 
-                  aria-label={courseData.modules.module1.title} 
-                  width="100%" 
-                  height={courseData.modules.module1.height.replace('px', '')} 
-                  frameBorder="0" 
-                  allowFullScreen 
-                  allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
-                  title={courseData.modules.module1.title}
-                  className="rounded-md border border-gray-200 p-2"
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+			<Tabs defaultValue="module1" className="mb-8">
+				<TabsList className="flex flex-col sm:grid sm:grid-cols-3 w-full gap-2 sm:gap-0">
+					<TabsTrigger
+						value="module1"
+						className="h-12 sm:h-10 text-base sm:text-sm"
+					>
+						{courseData.modules.module1.title}
+					</TabsTrigger>
+					<TabsTrigger
+						value="module2"
+						className="h-12 sm:h-10 text-base sm:text-sm"
+					>
+						{courseData.modules.module2.title}
+					</TabsTrigger>
+					<TabsTrigger
+						value="module3"
+						className="h-12 sm:h-10 text-base sm:text-sm"
+					>
+						{courseData.modules.module3.title}
+					</TabsTrigger>
+				</TabsList>
 
-        <TabsContent value="module2" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{courseData.modules.module2.title}</CardTitle>
-              <CardDescription>{courseData.modules.module2.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{courseData.modules.module2.intro}</p>
-              
-              <H5PContent 
-                contentId={courseData.modules.module2.contentId} 
-                embedUrl={courseData.modules.module2.embedUrl}
-                height={courseData.modules.module2.height}
-                title={courseData.modules.module2.title}
-                className="p-6 bg-gray-50 dark:bg-gray-800"
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
+				<TabsContent value="module1" className="mt-6">
+					<Card>
+						<CardHeader>
+							<CardTitle>{courseData.modules.module1.title}</CardTitle>
+							<CardDescription>
+								{courseData.modules.module1.description}
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<p className="mb-4">{courseData.modules.module1.intro}</p>
 
-        <TabsContent value="module3" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{courseData.modules.module3.title}</CardTitle>
-              <CardDescription>{courseData.modules.module3.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{courseData.modules.module3.intro}</p>
-              
-              <H5PContent 
-                contentId={courseData.modules.module3.contentId}
-                embedUrl={courseData.modules.module3.embedUrl} 
-                height={courseData.modules.module3.height}
-                title={courseData.modules.module3.title}
-                className="p-6 bg-gray-50 dark:bg-gray-800"
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-      
-      <div className="mb-8">
-        <FileViewer 
-          folder="jaettavat" 
-          title="Course Materials" 
-          description="Download supplementary materials for the course"
-        />
-      </div>
-      
-      <div className="bg-muted p-6 rounded-lg mt-8">
-        <h2 className="text-2xl font-semibold mb-4">{t('course.furtherLearning')}</h2>
-        <p className="mb-4">{t('course.furtherLearningDescription')}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-          {/* Add some related resources or links here */}
-        </div>
-      </div>
-    </div>
-  );
+							<div className="h5p-container w-full rounded-lg overflow-hidden shadow-md my-6 p-2 sm:p-4 md:p-6 bg-gray-50 dark:bg-gray-800">
+								<div
+									className="relative w-full h-0"
+									style={{ paddingBottom: "56.25%" }}
+								>
+									<iframe
+										src={courseData.modules.module1.embedUrl}
+										aria-label={courseData.modules.module1.title}
+										width="100%"
+										height="100%"
+										frameBorder="0"
+										allowFullScreen
+										allow="autoplay *; geolocation *; microphone *; camera *; midi *; encrypted-media *"
+										title={courseData.modules.module1.title}
+										className="rounded-md border border-gray-200 absolute top-0 left-0 w-full h-full"
+									/>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				<TabsContent value="module2" className="mt-6">
+					<Card>
+						<CardHeader>
+							<CardTitle>{courseData.modules.module2.title}</CardTitle>
+							<CardDescription>
+								{courseData.modules.module2.description}
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<p className="mb-4">{courseData.modules.module2.intro}</p>
+
+							<H5PContent
+								contentId={courseData.modules.module2.contentId}
+								embedUrl={courseData.modules.module2.embedUrl}
+								height={courseData.modules.module2.height}
+								title={courseData.modules.module2.title}
+								className="p-6 bg-gray-50 dark:bg-gray-800"
+							/>
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				<TabsContent value="module3" className="mt-6">
+					<Card>
+						<CardHeader>
+							<CardTitle>{courseData.modules.module3.title}</CardTitle>
+							<CardDescription>
+								{courseData.modules.module3.description}
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<p className="mb-4">{courseData.modules.module3.intro}</p>
+
+							<H5PContent
+								contentId={courseData.modules.module3.contentId}
+								embedUrl={courseData.modules.module3.embedUrl}
+								height={courseData.modules.module3.height}
+								title={courseData.modules.module3.title}
+								className="p-6 bg-gray-50 dark:bg-gray-800"
+							/>
+						</CardContent>
+					</Card>
+				</TabsContent>
+			</Tabs>
+
+			<div className="mb-8">
+				<FileViewer
+					folder="jaettavat"
+					title="Course Materials"
+					description="Download supplementary materials for the course"
+				/>
+			</div>
+
+			<div className="bg-muted p-4 sm:p-6 rounded-lg mt-8">
+				<h2 className="text-xl md:text-2xl font-semibold mb-4">
+					{t("course.furtherLearning")}
+				</h2>
+				<p className="mb-4">{t("course.furtherLearningDescription")}</p>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+					{/* Add some related resources or links here */}
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default CoursePage;
