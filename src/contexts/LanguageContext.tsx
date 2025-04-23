@@ -1,6 +1,7 @@
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { en, fi } from '@/translations';
+import { checkMissingTranslations } from '@/utils/translationValidator';
 
 type Translations = {
   [key: string]: string | any;
@@ -32,6 +33,11 @@ const flattenTranslations = (obj: any, prefix = ''): Translations => {
 // Precompute flattened translations
 const enTranslations = flattenTranslations(en);
 const fiTranslations = flattenTranslations(fi);
+
+// Run translation validation in development
+if (process.env.NODE_ENV === 'development') {
+  checkMissingTranslations();
+}
 
 // For debugging, check translation counts and specific keys
 console.log('Translation keys loaded:', {
@@ -96,16 +102,24 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     let translation = translations[key];
     
     if (translation === undefined) {
-      console.warn(`Translation key missing: ${key}`);
-      // Return only the last part of the key for a more user-friendly fallback
-      const parts = key.split('.');
-      return parts[parts.length - 1];
+      // Fallback to English if Finnish translation is missing
+      if (language === 'fi' && enTranslations[key]) {
+        translation = enTranslations[key];
+        console.warn(`Missing Finnish translation for key: ${key}, using English fallback`);
+      } else {
+        console.warn(`Translation key missing: ${key}`);
+        // Return only the last part of the key for a more user-friendly fallback
+        const parts = key.split('.');
+        return parts[parts.length - 1];
+      }
     }
     
     // If we have parameters, replace them in the translation string
-    if (params) {
+    if (params && typeof translation === 'string') {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
-        translation = translation.replace(`{{${paramKey}}}`, String(paramValue));
+        translation = translation.replace(new RegExp(`\\{\\{${paramKey}\\}\\}`, 'g'), String(paramValue));
+        // Also support the {name} format
+        translation = translation.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), String(paramValue));
       });
     }
     

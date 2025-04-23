@@ -89,15 +89,23 @@ const NavigationHeader = () => {
 				{ href: "/blog", label: t("navigation.blog") },
 		  ];
 
-	// Check if a link is active
+	// Check if a link is active with more precise matching 
 	const isActive = (path: string) => {
-		return location.pathname === path || location.pathname.startsWith(`${path}/`);
+		// Exact match or the current path starts with the navigation path
+		// excluding cases where the nav path is "/" (home) and we're on another page
+		if (path === "/") {
+			return location.pathname === "/";
+		}
+		return location.pathname === path || 
+		       (path !== "/" && location.pathname.startsWith(`${path}/`));
 	};
 
 	return (
 		<header className="bg-background sticky top-0 z-50 w-full border-b">
 			<div className="container flex h-16 items-center justify-between">
-				<VelkavapausLogo />
+				<div className="flex items-center" onClick={() => navigate("/")}>
+					<VelkavapausLogo />
+				</div>
 
 				{isMobile ? (
 					// Mobile navigation with sheet/drawer
@@ -105,6 +113,7 @@ const NavigationHeader = () => {
 						<SheetTrigger asChild>
 							<Button variant="ghost" size="sm">
 								<Menu className="h-5 w-5" />
+								<span className="sr-only">{t("navigation.menu")}</span>
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="left" className="sm:max-w-xs w-[85vw] max-w-xs">
@@ -159,16 +168,13 @@ const NavigationHeader = () => {
 							<NavigationMenuList>
 								{links.map((link) => (
 									<NavigationMenuItem key={link.href}>
-										<button
+										<Button
 											onClick={() => handleNavigation(link.href)}
-											className={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 hover:bg-muted hover:text-foreground h-9 px-4 py-2 ${
-												isActive(link.href)
-													? "bg-primary text-primary-foreground"
-													: ""
-											}`}
+											variant={isActive(link.href) ? "default" : "ghost"}
+											className="h-9 px-4 py-2"
 										>
 											{link.label}
-										</button>
+										</Button>
 									</NavigationMenuItem>
 								))}
 							</NavigationMenuList>
