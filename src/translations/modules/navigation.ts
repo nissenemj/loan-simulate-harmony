@@ -1,4 +1,3 @@
-
 // Navigation-related translations
 
 export const navigation = {
@@ -21,7 +20,12 @@ export const navigation = {
       courseAdmin: "Course Admin",
       account: "Account",
       menu: "Menu",
-      language: "Language"
+      language: "Language",
+      home: "Home",
+      debtSummary: "Debt Summary",
+      calculator: "Loan Calculator",
+      auth: "Login",
+      settings: "Settings",
     }
   },
   fi: {
@@ -43,7 +47,12 @@ export const navigation = {
       courseAdmin: "Kurssien hallinta",
       account: "Tili",
       menu: "Valikko",
-      language: "Kieli"
+      language: "Kieli",
+      home: "Etusivu",
+      debtSummary: "Velkakatsaus",
+      calculator: "Lainalaskuri",
+      auth: "Kirjautuminen",
+      settings: "Asetukset",
     }
   }
 };
