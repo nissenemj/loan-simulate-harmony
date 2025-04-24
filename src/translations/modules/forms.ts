@@ -88,6 +88,12 @@ export const forms = {
         min: "Enter at least {min}",
         max: "Enter at most {max}",
         email: "Enter a valid email",
+        positiveNumber: "Enter a positive number",
+        greaterThanZero: "Value must be greater than zero",
+        invalidDate: "Invalid date",
+        futureDate: "Date must be in the future",
+        passwordMismatch: "Passwords do not match",
+        invalidInput: "Invalid input"
       },
       interestTypes: {
         fixed: "Fixed",
@@ -219,6 +225,12 @@ export const forms = {
         min: "Syötä vähintään {min}",
         max: "Syötä enintään {max}",
         email: "Syötä kelvollinen sähköpostiosoite",
+        positiveNumber: "Syötä positiivinen luku",
+        greaterThanZero: "Arvon on oltava suurempi kuin nolla",
+        invalidDate: "Virheellinen päivämäärä",
+        futureDate: "Päivämäärän on oltava tulevaisuudessa",
+        passwordMismatch: "Salasanat eivät täsmää",
+        invalidInput: "Virheellinen syöte"
       },
       interestTypes: {
         fixed: "Kiinteä",

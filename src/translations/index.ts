@@ -21,6 +21,9 @@ import { auth } from './modules/auth';
 import { newsletter } from './modules/newsletter';
 import { blog } from './modules/blog';
 import { course } from './modules/course';
+import { alerts } from './modules/alerts';
+import { affiliate } from './modules/affiliate';
+import { errors } from './modules/errors';
 
 // Merge all translation modules for English
 export const en = {
@@ -45,7 +48,10 @@ export const en = {
   ...auth.en,
   ...newsletter.en,
   ...blog.en,
-  ...course.en
+  ...course.en,
+  ...alerts.en,
+  ...affiliate.en,
+  ...errors.en
 };
 
 // Merge all translation modules for Finnish
@@ -71,7 +77,10 @@ export const fi = {
   ...auth.fi,
   ...newsletter.fi,
   ...blog.fi,
-  ...course.fi
+  ...course.fi,
+  ...alerts.fi,
+  ...affiliate.fi,
+  ...errors.fi
 };
 
 // Also export as default for backward compatibility
