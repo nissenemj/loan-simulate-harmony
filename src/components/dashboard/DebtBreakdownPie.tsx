@@ -15,14 +15,14 @@ const DebtBreakdownPie = ({ totalDebt, totalMinPayments, totalAmountToPay }: Deb
   const { t } = useLanguage();
   
   const data = [
-    { name: t('results.principalDebt'), value: totalDebt, color: '#0088FE' },
-    { name: t('results.totalInterest'), value: totalAmountToPay - totalDebt, color: '#FF8042' },
+    { name: t('visualization.principalPayment'), value: totalDebt, color: '#0088FE' },
+    { name: t('visualization.totalInterestPaid'), value: totalAmountToPay - totalDebt, color: '#FF8042' },
   ];
 
   return (
     <Card className="w-full h-[300px]">
       <CardHeader>
-        <CardTitle>{t('dashboard.debtBreakdown')}</CardTitle>
+        <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={200}>
@@ -35,7 +35,7 @@ const DebtBreakdownPie = ({ totalDebt, totalMinPayments, totalAmountToPay }: Deb
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
-              label={false} // Remove direct labels on the pie slices to avoid overlapping
+              label={false}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />

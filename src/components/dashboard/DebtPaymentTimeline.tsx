@@ -13,7 +13,7 @@ interface DebtPaymentTimelineProps {
 
 const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: DebtPaymentTimelineProps) => {
   const { t } = useLanguage();
-  
+
   // Generate monthly data points until debt free date
   const generateTimelineData = () => {
     const startDate = new Date();
@@ -21,7 +21,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
     const monthsDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
                       (endDate.getMonth() - startDate.getMonth());
     
-    const monthlyReduction = totalDebt / Math.max(1, monthsDiff); // Ensure we don't divide by zero
+    const monthlyReduction = totalDebt / Math.max(1, monthsDiff);
     const monthlyInterest = (totalAmountToPay - totalDebt) / Math.max(1, monthsDiff);
     
     return Array.from({ length: Math.max(1, monthsDiff) }, (_, index) => ({
@@ -38,10 +38,10 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
     return (
       <Card className="w-full h-[300px]">
         <CardHeader>
-          <CardTitle>{t('dashboard.paymentTimeline')}</CardTitle>
+          <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-[200px]">
-          <p className="text-muted-foreground">{t('dashboard.noDataAvailable')}</p>
+          <p className="text-muted-foreground">{t('visualization.noDataAvailable')}</p>
         </CardContent>
       </Card>
     );
@@ -50,7 +50,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
   return (
     <Card className="w-full h-[300px]">
       <CardHeader>
-        <CardTitle>{t('dashboard.paymentTimeline')}</CardTitle>
+        <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={200}>
@@ -61,7 +61,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="month" 
-              label={{ value: t('repayment.months'), position: 'bottom' }}
+              label={{ value: t('visualization.months'), position: 'bottom' }}
             />
             <YAxis 
               tickFormatter={(value) => formatCurrency(value)}
@@ -75,7 +75,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
               stackId="1"
               stroke="#0088FE" 
               fill="#0088FE" 
-              name={t('results.principalDebt')}
+              name={t('visualization.principalPayment')}
             />
             <Area 
               type="monotone" 
@@ -83,7 +83,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
               stackId="1"
               stroke="#FF8042" 
               fill="#FF8042"
-              name={t('results.totalInterest')}
+              name={t('visualization.interestPayment')}
             />
           </AreaChart>
         </ResponsiveContainer>
