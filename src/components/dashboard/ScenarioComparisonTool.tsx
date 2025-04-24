@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ScenarioGuide from './ScenarioGuide';
 import { 
   Card,
   CardHeader, 
@@ -317,14 +318,23 @@ const ScenarioComparisonTool = ({
     return null;
   };
   
+  const [showGuide, setShowGuide] = useState(false);
+  
   return (
     <Card className="w-full">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-center">
           <div>
-            <CardTitle>{t('dashboard.scenarioComparison') || 'Scenario Comparison'}</CardTitle>
-            <CardDescription>
-              {t('dashboard.scenarioDescription') || 'Compare different debt repayment scenarios and their outcomes'}
+            <CardTitle>{t('dashboard.scenarioComparison')}</CardTitle>
+            <CardDescription className="mt-1">
+              {t('dashboard.scenarioDescriptionEnhanced')}
+              <Button 
+                variant="link" 
+                className="p-0 h-auto text-xs font-normal ml-1" 
+                onClick={() => setShowGuide(true)}
+              >
+                {t('common.learnMore')}
+              </Button>
             </CardDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -724,6 +734,11 @@ const ScenarioComparisonTool = ({
           {t('common.close') || 'Close'}
         </Button>
       </CardFooter>
+      
+      <ScenarioGuide 
+        isOpen={showGuide} 
+        onClose={() => setShowGuide(false)} 
+      />
     </Card>
   );
 };

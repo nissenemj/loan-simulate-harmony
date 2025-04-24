@@ -1,4 +1,3 @@
-
 // Dashboard-related translations
 
 export const dashboard = {
@@ -73,7 +72,17 @@ export const dashboard = {
       selectStrategy: "Select Strategy",
       strategySelected: "{name} strategy selected",
       strategyCleared: "Strategy cleared",
-      clearStrategy: "Clear Selected Strategy"
+      clearStrategy: "Clear Selected Strategy",
+      
+      // New scenario translations
+      scenarioComparison: "Debt Scenario Comparison",
+      scenarioDescription: "Compare different debt repayment scenarios",
+      scenarioDescriptionEnhanced: "See how changes in interest rates, payment amounts, and strategies affect your debt payoff timeline and total interest paid.",
+      scenarioGuideTitle: "Understanding Scenario Comparison",
+      scenarioGuideIntro: "This tool helps you compare different debt repayment scenarios to make informed decisions about your financial future.",
+      currentScenarioExplained: "Current Scenario: Based on your current debt situation and payment amount.",
+      optimisticScenarioExplained: "Optimistic Scenario: Assumes lower interest rates and higher monthly payments.",
+      pessimisticScenarioExplained: "Pessimistic Scenario: Assumes higher interest rates with your current payment amount.",
     }
   },
   fi: {
@@ -147,7 +156,17 @@ export const dashboard = {
       selectStrategy: "Valitse strategia",
       strategySelected: "{name} strategia valittu",
       strategyCleared: "Strategia tyhjennetty",
-      clearStrategy: "Tyhjennä valittu strategia"
+      clearStrategy: "Tyhjennä valittu strategia",
+      
+      // New scenario translations
+      scenarioComparison: "Velkaskenaarioiden vertailu",
+      scenarioDescription: "Vertaile erilaisia velanmaksustrategioita",
+      scenarioDescriptionEnhanced: "Näe miten korkojen, maksumäärien ja strategioiden muutokset vaikuttavat velkojesi maksuaikatauluun ja kokonaiskorkoihin.",
+      scenarioGuideTitle: "Skenaariovertailun ymmärtäminen",
+      scenarioGuideIntro: "Tämä työkalu auttaa sinua vertailemaan erilaisia velanmaksuskenaarioita, jotta voit tehdä tietoon perustuvia päätöksiä taloudellisesta tulevaisuudestasi.",
+      currentScenarioExplained: "Nykyinen skenaario: Perustuu nykyiseen velkatilanteeseesi ja maksumäärääsi.",
+      optimisticScenarioExplained: "Optimistinen skenaario: Olettaa alhaisemmat korot ja korkeammat kuukausimaksut.",
+      pessimisticScenarioExplained: "Pessimistinen skenaario: Olettaa korkeammat korot nykyisellä maksumäärälläsi.",
     }
   }
 };
