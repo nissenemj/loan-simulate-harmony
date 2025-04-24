@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,10 @@ import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
 import { ScenarioEditor } from './ScenarioEditor';
 import { Scenario } from '@/types/scenarios';
+import { Download, Share } from 'lucide-react';
+import { WhatIfAnalysis } from './WhatIfAnalysis';
+import { MilestoneVisualization } from './MilestoneVisualization';
+import { toast } from 'sonner';
 
 interface ScenarioComparisonToolProps {
   activeLoans: Loan[];
@@ -308,7 +312,59 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
     setEstimatedMonths(plan.totalMonths);
     setEstimatedInterest(plan.totalInterestPaid);
   };
-  
+
+  const exportScenarioData = () => {
+    const activeResult = scenarioResults.find(result => result.id === activeScenarioId);
+    if (!activeResult) return;
+    
+    const scenario = scenarios.find(s => s.id === activeScenarioId);
+    
+    const data = {
+      scenarioName: scenario?.name,
+      totalDebt,
+      monthlyPayment: scenario?.monthlyPayment,
+      extraPayment: scenario?.extraPayment,
+      interestRateAdjustment: scenario?.interestRateAdjustment,
+      strategy: scenario?.strategy,
+      results: {
+        monthsToPayoff: activeResult.totalMonths,
+        totalInterestPaid: activeResult.totalInterestPaid,
+        timeline: activeResult.timeline
+      }
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${scenario?.name.replace(/\s+/g, '-').toLowerCase()}-scenario.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success(t('dashboard.scenarioExported'));
+  };
+
+  const handleShare = () => {
+    const shareUrl = `${window.location.origin}/share-scenario?id=${activeScenarioId}`;
+    navigator.clipboard.writeText(shareUrl);
+    toast.success(t('dashboard.scenarioShared'));
+  };
+
+  const handleWhatIfChanges = ({ extraPayment, interestChange }: { extraPayment: number; interestChange: number }) => {
+    const updatedScenario = {
+      ...scenarios.find(s => s.id === activeScenarioId)!,
+      extraPayment,
+      interestRateAdjustment: interestChange
+    };
+    setScenarios(prevScenarios => 
+      prevScenarios.map(s => 
+        s.id === activeScenarioId ? updatedScenario : s
+      )
+    );
+  };
+
   return (
     <Card className="w-full">
       <CardHeader className="pb-3">
@@ -422,6 +478,13 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
                   <Line type="monotone" dataKey="pessimistic_interest" stroke="#ffc658" />
                 </LineChart>
               </ResponsiveContainer>
+              
+              {activeScenarioResults && (
+                <MilestoneVisualization 
+                  timeline={activeScenarioResults.timeline} 
+                  totalDebt={totalDebt} 
+                />
+              )}
             </div>
             <div>
               <ScenarioEditor 
@@ -430,10 +493,34 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
                 estimatedMonths={estimatedMonths}
                 estimatedInterest={estimatedInterest}
               />
+              <WhatIfAnalysis onApply={handleWhatIfChanges} />
             </div>
           </div>
         </div>
       </CardContent>
+      <CardFooter className="pt-6">
+        <div className="flex justify-end gap-4 w-full">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportScenarioData}
+            className="flex items-center"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            {t('dashboard.exportScenario')}
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleShare}
+            className="flex items-center"
+          >
+            <Share className="h-4 w-4 mr-2" />
+            {t('dashboard.shareScenario')}
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
