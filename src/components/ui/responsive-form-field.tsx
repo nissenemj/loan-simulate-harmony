@@ -28,13 +28,25 @@ export function ResponsiveFormField({
           error && "border-destructive focus-visible:ring-destructive",
           className
         )}
+        aria-invalid={error ? "true" : undefined}
+        aria-describedby={error ? `${props.id}-error` : helpText ? `${props.id}-help` : undefined}
         {...props}
       />
       {error && (
-        <p className="text-sm text-destructive">{error}</p>
+        <p 
+          id={`${props.id}-error`} 
+          className="text-sm text-destructive"
+        >
+          {error}
+        </p>
       )}
       {helpText && !error && (
-        <p className="text-sm text-muted-foreground">{helpText}</p>
+        <p 
+          id={`${props.id}-help`} 
+          className="text-sm text-muted-foreground"
+        >
+          {helpText}
+        </p>
       )}
     </div>
   );

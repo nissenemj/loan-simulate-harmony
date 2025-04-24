@@ -22,6 +22,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { X } from "lucide-react";
+import { ResponsiveFormField } from "@/components/ui/form";
 
 interface DebtPayoffCalculatorProps {
 	initialDebts?: Debt[];
@@ -50,6 +51,7 @@ export function DebtPayoffCalculator({
 	const [additionalPayment, setAdditionalPayment] = useState(0);
 	const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [isCalculating, setIsCalculating] = useState(false);
 
 	// Calculate total minimum payment
 	const totalMinimumPayment = debts.reduce(
@@ -133,6 +135,29 @@ export function DebtPayoffCalculator({
 		setStrategy(value as PaymentStrategy);
 	};
 
+	// Handle calculating payment plan
+	const handleCalculate = async () => {
+		try {
+			setIsCalculating(true);
+			const plan = calculatePaymentPlan(debts, totalMonthlyPayment, strategy);
+			setPaymentPlan(plan);
+			setError(null);
+
+			if (onSaveResults) {
+				onSaveResults(plan);
+			}
+		} catch (err: any) {
+			setError(err.message || "Error calculating payment plan");
+			setPaymentPlan(null);
+
+			if (onError) {
+				onError(err);
+			}
+		} finally {
+			setIsCalculating(false);
+		}
+	};
+
 	// Format currency
 	const formatCurrency = (amount: number) => {
 		return new Intl.NumberFormat("fi-FI", {
@@ -155,77 +180,60 @@ export function DebtPayoffCalculator({
 				<h2 className="text-2xl font-bold">{t("calculator.addYourDebts")}</h2>
 
 				{error && (
-					<div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+					<div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded-md">
 						{error}
 					</div>
 				)}
 
-				<div className="grid grid-cols-1 md:grid-cols-5 gap-4 stack-mobile">
-					<div className="space-y-2">
-						<Label htmlFor="debtName">{t("calculator.debtName")}</Label>
-						<Input
-							id="debtName"
-							value={newDebt.name}
-							onChange={(e) => setNewDebt({ ...newDebt, name: e.target.value })}
-							placeholder={t("calculator.debtNamePlaceholder")}
-						/>
-					</div>
+				<div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+					<ResponsiveFormField
+						id="debtName"
+						label={t("calculator.debtName")}
+						value={newDebt.name || ''}
+						onChange={(e) => setNewDebt({ ...newDebt, name: e.target.value })}
+						placeholder={t("calculator.debtNamePlaceholder")}
+					/>
 
-					<div className="space-y-2">
-						<Label htmlFor="balance">{t("calculator.balance")}</Label>
-						<Input
-							id="balance"
-							type="number"
-							min="0"
-							step="0.01"
-							value={newDebt.balance || ""}
-							onChange={(e) =>
-								setNewDebt({ ...newDebt, balance: parseFloat(e.target.value) })
-							}
-							placeholder="0.00"
-						/>
-					</div>
+					<ResponsiveFormField
+						id="balance"
+						type="number"
+						label={t("calculator.balance")}
+						value={newDebt.balance || ''}
+						onChange={(e) => setNewDebt({ ...newDebt, balance: parseFloat(e.target.value) })}
+						placeholder="0.00"
+						min="0"
+						step="0.01"
+					/>
 
-					<div className="space-y-2">
-						<Label htmlFor="interestRate">{t("calculator.interestRate")}</Label>
-						<Input
-							id="interestRate"
-							type="number"
-							min="0"
-							step="0.01"
-							value={newDebt.interestRate || ""}
-							onChange={(e) =>
-								setNewDebt({
-									...newDebt,
-									interestRate: parseFloat(e.target.value),
-								})
-							}
-							placeholder="0.00"
-						/>
-					</div>
+					<ResponsiveFormField
+						id="interestRate"
+						type="number"
+						label={t("calculator.interestRate")}
+						value={newDebt.interestRate || ''}
+						onChange={(e) => setNewDebt({ ...newDebt, interestRate: parseFloat(e.target.value) })}
+						placeholder="0.00"
+						min="0"
+						step="0.01"
+					/>
 
-					<div className="space-y-2">
-						<Label htmlFor="minimumPayment">
-							{t("calculator.minimumPayment")}
-						</Label>
-						<Input
-							id="minimumPayment"
-							type="number"
-							min="0"
-							step="0.01"
-							value={newDebt.minimumPayment || ""}
-							onChange={(e) =>
-								setNewDebt({
-									...newDebt,
-									minimumPayment: parseFloat(e.target.value),
-								})
-							}
-							placeholder="0.00"
-						/>
-					</div>
+					<ResponsiveFormField
+						id="minimumPayment"
+						type="number"
+						label={t("calculator.minimumPayment")}
+						value={newDebt.minimumPayment || ''}
+						onChange={(e) => setNewDebt({ ...newDebt, minimumPayment: parseFloat(e.target.value) })}
+						placeholder="0.00"
+						min="0"
+						step="0.01"
+					/>
 
 					<div className="flex items-end">
-						<Button onClick={handleAddDebt} className="w-full">
+						<Button 
+							onClick={handleAddDebt}
+							className="w-full"
+							disabled={!newDebt.name || !newDebt.balance || !newDebt.interestRate || !newDebt.minimumPayment}
+							aria-label={t("calculator.addDebt")}
+						>
 							{t("calculator.addDebt")}
 						</Button>
 					</div>
@@ -443,6 +451,46 @@ export function DebtPayoffCalculator({
 							{t("calculator.saveResults")}
 						</Button>
 					</div>
+				</div>
+			)}
+
+			{debts.length > 0 && (
+				<div className="mt-4">
+					<Button 
+						onClick={handleCalculate}
+						disabled={isCalculating}
+						className="relative"
+					>
+						{isCalculating ? (
+							<>
+								<span className="opacity-0">{t("calculator.calculate")}</span>
+								<span className="absolute inset-0 flex items-center justify-center">
+									<svg
+										className="animate-spin h-5 w-5 text-current"
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+									>
+										<circle
+											className="opacity-25"
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="currentColor"
+											strokeWidth="4"
+										></circle>
+										<path
+											className="opacity-75"
+											fill="currentColor"
+											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+										></path>
+									</svg>
+								</span>
+							</>
+						) : (
+							t("calculator.calculate")
+						)}
+					</Button>
 				</div>
 			)}
 		</div>
