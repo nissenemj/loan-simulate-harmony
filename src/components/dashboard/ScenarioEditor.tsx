@@ -42,31 +42,31 @@ export function ScenarioEditor({
         <div className="space-y-2">
           <div className="flex justify-between">
             <Label htmlFor="interestRateAdjustment" className="flex items-center">
-              {t('scenarios.interestRateChange')}
+              {t('dashboard.interestRateChange')}
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 inline ml-1 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-xs">
-                    <p>{t('scenarios.interestRateChangeTooltip')}</p>
+                    <p>{t('dashboard.interestRateChangeTooltip')}</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
             </Label>
             <span className={`text-sm ${
-              editFormData.interestRateAdjustment > 0 
+              editFormData.interestRateAdjustment && editFormData.interestRateAdjustment > 0 
                 ? 'text-red-500' 
-                : editFormData.interestRateAdjustment < 0 
+                : editFormData.interestRateAdjustment && editFormData.interestRateAdjustment < 0 
                   ? 'text-green-500' 
                   : ''
             }`}>
-              {editFormData.interestRateAdjustment > 0 ? '+' : ''}{editFormData.interestRateAdjustment}%
+              {editFormData.interestRateAdjustment && editFormData.interestRateAdjustment > 0 ? '+' : ''}{editFormData.interestRateAdjustment}%
             </span>
           </div>
           <Slider
             id="interestRateAdjustment"
-            value={[editFormData.interestRateAdjustment]}
+            value={[editFormData.interestRateAdjustment || 0]}
             min={-5}
             max={5}
             step={0.25}
@@ -86,7 +86,7 @@ export function ScenarioEditor({
 
         {(estimatedMonths !== undefined && estimatedInterest !== undefined) && (
           <div className="mt-4 p-3 bg-muted rounded-md">
-            <h4 className="text-sm font-medium mb-2">{t('scenarios.estimatedImpact')}</h4>
+            <h4 className="text-sm font-medium mb-2">{t('dashboard.estimatedImpact')}</h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>{t('visualization.monthsToPayoff')}</span>
@@ -139,7 +139,7 @@ export function ScenarioEditor({
         )}
 
         <div className="mt-4">
-          <h4 className="text-sm font-medium mb-2">{t('scenarios.presets')}</h4>
+          <h4 className="text-sm font-medium mb-2">{t('dashboard.presets')}</h4>
           <div className="flex flex-wrap gap-2">
             {presetScenarios.map((preset, index) => (
               <Button

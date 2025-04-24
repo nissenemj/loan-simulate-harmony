@@ -1,3 +1,4 @@
+
 // Dashboard-related translations
 
 export const dashboard = {
@@ -79,11 +80,23 @@ export const dashboard = {
       shareScenario: "Share Scenario",
       whatIfAnalysis: "What If Analysis",
       extraMonthlyPayment: "Extra Monthly Payment",
+      interestRateChange: "Interest Rate Change",
       applyChanges: "Apply Changes",
       keyMilestones: "Key Milestones",
       scenarioExported: "Scenario exported successfully",
       scenarioShared: "Scenario link copied to clipboard",
-      shareableLink: "Shareable link"
+      shareableLink: "Shareable link",
+      scenarioComparison: "Debt Scenario Comparison",
+      scenarioDescription: "Compare different debt repayment scenarios and their outcomes",
+      remainingDebt: "Remaining Debt",
+      scenarioGuideTitle: "Understanding Debt Scenarios",
+      scenarioGuideIntro: "Comparing different debt payment strategies can help you make better financial decisions.",
+      currentScenarioExplained: "Shows your current debt situation with existing interest rates and payment amounts.",
+      optimisticScenarioExplained: "Models what happens if interest rates fall or you increase your monthly payments.",
+      pessimisticScenarioExplained: "Models what happens if interest rates rise or your payment ability decreases.",
+      presets: "Scenario Presets",
+      estimatedImpact: "Estimated Impact",
+      interestRateChangeTooltip: "Adjust to see how changes in interest rates affect your repayment timeline."
     }
   },
   fi: {
@@ -164,11 +177,23 @@ export const dashboard = {
       shareScenario: "Jaa skenaario",
       whatIfAnalysis: "Entä jos -analyysi",
       extraMonthlyPayment: "Ylimääräinen kuukausimaksu",
+      interestRateChange: "Koron muutos",
       applyChanges: "Käytä muutoksia",
       keyMilestones: "Tärkeät virstanpylväät",
       scenarioExported: "Skenaario viety onnistuneesti",
       scenarioShared: "Skenaarion linkki kopioitu leikepöydälle",
-      shareableLink: "Jaettava linkki"
+      shareableLink: "Jaettava linkki",
+      scenarioComparison: "Velkaskenaarioiden vertailu",
+      scenarioDescription: "Vertaile erilaisia velanmaksustrategioita ja niiden tuloksia",
+      remainingDebt: "Jäljellä oleva velka",
+      scenarioGuideTitle: "Velkaskenaarioiden ymmärtäminen",
+      scenarioGuideIntro: "Erilaisten velanmaksustrategioiden vertailu auttaa tekemään parempia taloudellisia päätöksiä.",
+      currentScenarioExplained: "Näyttää nykyisen velkatilanteesi nykyisillä koroilla ja maksumäärillä.",
+      optimisticScenarioExplained: "Mallintaa mitä tapahtuu, jos korot laskevat tai lisäät kuukausimaksujasi.",
+      pessimisticScenarioExplained: "Mallintaa mitä tapahtuu, jos korot nousevat tai maksukykysi heikkenee.",
+      presets: "Skenaarioiden esiasetukset",
+      estimatedImpact: "Arvioitu vaikutus",
+      interestRateChangeTooltip: "Säädä nähdäksesi miten korkojen muutokset vaikuttavat takaisinmaksuaikatauluusi."
     }
   }
 };
