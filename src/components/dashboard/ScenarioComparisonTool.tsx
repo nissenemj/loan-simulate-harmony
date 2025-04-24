@@ -1,16 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ScenarioGuide from './ScenarioGuide';
-import { 
-  Card,
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent,
-  CardFooter
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendingDown } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { scenarioColors } from '@/utils/chartColors';
+import { useIsMobile } from '@/hooks/use-mobile';
+import ScenarioGuide from './ScenarioGuide';
+import { useCurrencyFormatter } from '@/utils/formatting';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -18,20 +17,6 @@ import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer,
-  ComposedChart,
-  Area,
-  BarChart,
-  Bar
-} from 'recharts';
 import { 
   ChevronDown, 
   ChevronUp, 
@@ -51,7 +36,6 @@ import {
 } from '@/components/ui/tooltip';
 import { combineDebts } from '@/utils/repayment/debtConverters';
 import { generateRepaymentPlan } from '@/utils/repayment/generateRepaymentPlan';
-import { useCurrencyFormatter } from '@/utils/formatting';
 
 interface ScenarioComparisonToolProps {
   activeLoans: Loan[];
@@ -69,12 +53,7 @@ interface Scenario {
   strategy: 'avalanche' | 'snowball' | 'equal';
 }
 
-const ScenarioComparisonTool = ({ 
-  activeLoans, 
-  activeCards, 
-  monthlyBudget, 
-  onClose 
-}: ScenarioComparisonToolProps) => {
+const ScenarioComparisonTool = ({ activeLoans, activeCards, monthlyBudget, onClose }: ScenarioComparisonToolProps) => {
   const { t } = useLanguage();
   const currencyFormatter = useCurrencyFormatter();
   
@@ -320,6 +299,8 @@ const ScenarioComparisonTool = ({
   
   const [showGuide, setShowGuide] = useState(false);
   
+  const isMobile = useIsMobile();
+  
   return (
     <Card className="w-full">
       <CardHeader className="pb-3">
@@ -355,373 +336,187 @@ const ScenarioComparisonTool = ({
             </Alert>
           )}
           
+          {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {scenarios.map(scenario => (
-              <Card 
-                key={scenario.id}
-                className={`cursor-pointer transition-all ${scenario.id === activeScenarioId ? 'ring-2 ring-primary' : ''}`}
-                onClick={() => setActiveScenarioId(scenario.id)}
-              >
-                <CardHeader className="py-3 px-4">
-                  <div className="flex justify-between items-center">
-                    <CardTitle className="text-base">{scenario.name}</CardTitle>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditScenario(scenario.id);
-                      }}
-                    >
-                      {editingScenarioId === scenario.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </CardHeader>
-                
-                {editingScenarioId === scenario.id ? (
-                  <CardContent className="pt-0 pb-4">
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">{t('scenarios.name') || 'Scenario Name'}</Label>
-                        <Input 
-                          id="name" 
-                          name="name" 
-                          value={editFormData.name} 
-                          onChange={handleEditFormChange}
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <Label htmlFor="interestRateAdjustment">{t('scenarios.interestRateChange') || 'Interest Rate Change (%)'}</Label>
-                          <span className="text-sm">{editFormData.interestRateAdjustment > 0 ? '+' : ''}{editFormData.interestRateAdjustment}%</span>
-                        </div>
-                        <Slider
-                          id="interestRateAdjustment"
-                          value={[editFormData.interestRateAdjustment]}
-                          min={-5}
-                          max={5}
-                          step={0.25}
-                          onValueChange={(values) => {
-                            setEditFormData({
-                              ...editFormData,
-                              interestRateAdjustment: values[0]
-                            });
-                          }}
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>-5%</span>
-                          <span>+5%</span>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <Label htmlFor="monthlyPayment">{t('scenarios.monthlyPayment') || 'Monthly Payment'}</Label>
-                          <span className="text-sm">{currencyFormatter.format(editFormData.monthlyPayment)}</span>
-                        </div>
-                        <Slider
-                          id="monthlyPayment"
-                          value={[editFormData.monthlyPayment]}
-                          min={totalMinPayments}
-                          max={Math.max(totalMinPayments * 2, totalMinPayments + 1000)}
-                          step={50}
-                          onValueChange={(values) => {
-                            setEditFormData({
-                              ...editFormData,
-                              monthlyPayment: values[0]
-                            });
-                          }}
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{currencyFormatter.format(totalMinPayments)}</span>
-                          <span>{currencyFormatter.format(Math.max(totalMinPayments * 2, totalMinPayments + 1000))}</span>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <Label htmlFor="extraPayment">
-                            {t('scenarios.annualExtraPayment') || 'Annual Extra Payment'}
-                            <TooltipProvider>
-                              <UITooltip>
-                                <TooltipTrigger asChild>
-                                  <Info className="h-3 w-3 inline ml-1 cursor-help" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="max-w-xs">
-                                    {t('scenarios.extraPaymentExplanation') || 
-                                      'Additional payment made once per year, e.g., tax returns or bonuses'}
-                                  </p>
-                                </TooltipContent>
-                              </UITooltip>
-                            </TooltipProvider>
-                          </Label>
-                          <span className="text-sm">{currencyFormatter.format(editFormData.extraPayment)}</span>
-                        </div>
-                        <Slider
-                          id="extraPayment"
-                          value={[editFormData.extraPayment]}
-                          min={0}
-                          max={10000}
-                          step={500}
-                          onValueChange={(values) => {
-                            setEditFormData({
-                              ...editFormData,
-                              extraPayment: values[0]
-                            });
-                          }}
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>€0</span>
-                          <span>€10,000</span>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label>{t('repayment.strategy') || 'Repayment Strategy'}</Label>
-                        <div className="grid grid-cols-3 gap-2">
-                          <Button
-                            type="button"
-                            variant={editFormData.strategy === 'avalanche' ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => handleStrategyChange('avalanche')}
-                          >
-                            <TrendingDown className="mr-1 h-3 w-3" />
-                            {t('repayment.avalancheStrategy') || 'Avalanche'}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant={editFormData.strategy === 'snowball' ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => handleStrategyChange('snowball')}
-                          >
-                            <TrendingUp className="mr-1 h-3 w-3" />
-                            {t('repayment.snowballStrategy') || 'Snowball'}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant={editFormData.strategy === 'equal' ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => handleStrategyChange('equal')}
-                          >
-                            <ArrowRight className="mr-1 h-3 w-3" />
-                            {t('dashboard.equalDistribution') || 'Equal'}
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      <div className="flex justify-end space-x-2 mt-4">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => setEditingScenarioId(null)}
-                        >
-                          {t('common.cancel') || 'Cancel'}
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          onClick={handleSaveScenario}
-                        >
-                          {t('common.save') || 'Save'}
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                ) : (
-                  <CardContent className="pt-0 pb-4">
+            {scenarioResults.map(result => {
+              const scenario = scenarios.find(s => s.id === result.id);
+              const currentScenario = scenarioResults.find(r => r.id === 'current');
+              const monthsSaved = currentScenario ? currentScenario.totalMonths - result.totalMonths : 0;
+              
+              return (
+                <Card 
+                  key={result.id}
+                  className={`cursor-pointer transition-all ${result.id === activeScenarioId ? 'ring-2 ring-primary' : ''}`}
+                  onClick={() => setActiveScenarioId(result.id)}
+                >
+                  <CardHeader className="py-3">
+                    <CardTitle className="text-base">{scenario?.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
                     <div className="space-y-2">
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                        <div className="text-muted-foreground">{t('scenarios.interestRateChange') || 'Interest Rate Change'}:</div>
-                        <div className={`font-medium ${scenario.interestRateAdjustment > 0 ? 'text-destructive' : scenario.interestRateAdjustment < 0 ? 'text-green-600' : ''}`}>
-                          {scenario.interestRateAdjustment > 0 ? '+' : ''}{scenario.interestRateAdjustment}%
-                        </div>
-                        
-                        <div className="text-muted-foreground">{t('scenarios.monthlyPayment') || 'Monthly Payment'}:</div>
-                        <div className="font-medium">{currencyFormatter.format(scenario.monthlyPayment)}</div>
-                        
-                        <div className="text-muted-foreground">{t('scenarios.annualExtraPayment') || 'Annual Extra Payment'}:</div>
-                        <div className="font-medium">{currencyFormatter.format(scenario.extraPayment)}</div>
-                        
-                        <div className="text-muted-foreground">{t('repayment.strategy') || 'Strategy'}:</div>
-                        <div className="font-medium">{
-                          scenario.strategy === 'avalanche' 
-                            ? t('repayment.avalancheStrategy') || 'Avalanche'
-                            : scenario.strategy === 'snowball'
-                              ? t('repayment.snowballStrategy') || 'Snowball'
-                              : t('dashboard.equalDistribution') || 'Equal'
-                        }</div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">{t('visualization.monthsToPayoff')}</span>
+                        <span className="font-medium">{result.totalMonths} {t('visualization.months')}</span>
                       </div>
-                      
-                      {scenarioResults.find(result => result.id === scenario.id) && (
-                        <>
-                          <Separator className="my-2" />
-                          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                            <div className="text-muted-foreground">{t('repayment.debtFreeIn') || 'Debt Free In'}:</div>
-                            <div className="font-medium">
-                              {scenarioResults.find(result => result.id === scenario.id)?.totalMonths || 0} {t('repayment.months') || 'months'}
-                            </div>
-                            
-                            <div className="text-muted-foreground">{t('repayment.totalInterestPaid') || 'Total Interest Paid'}:</div>
-                            <div className="font-medium">
-                              {currencyFormatter.format(scenarioResults.find(result => result.id === scenario.id)?.totalInterestPaid || 0)}
-                            </div>
-                          </div>
-                        </>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">{t('visualization.totalInterestPaid')}</span>
+                        <span className="font-medium">{currencyFormatter.format(result.totalInterestPaid)}</span>
+                      </div>
+                      {result.id !== 'current' && monthsSaved > 0 && (
+                        <div className="flex justify-between items-center pt-2 border-t">
+                          <span className="text-sm text-muted-foreground">{t('visualization.comparisonResult')}</span>
+                          <span className="text-green-600 flex items-center text-sm">
+                            <TrendingDown className="h-3 w-3 mr-1" />
+                            {monthsSaved} {t('visualization.months')}
+                          </span>
+                        </div>
                       )}
                     </div>
                   </CardContent>
-                )}
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
           
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="repayment">{t('scenarios.debtOverTime') || 'Debt Over Time'}</TabsTrigger>
-              <TabsTrigger value="comparison">{t('scenarios.scenarioComparison') || 'Scenario Comparison'}</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="repayment" className="space-y-4">
-              <div className="h-[300px] mt-4">
+          {/* Charts Section */}
+          {isMobile ? (
+            <div className="space-y-4">
+              <Select 
+                value={activeScenarioId} 
+                onValueChange={setActiveScenarioId}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t('visualization.selectScenario')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {scenarios.map(scenario => (
+                    <SelectItem key={scenario.id} value={scenario.id}>
+                      {scenario.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <div className="h-[250px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={comparisonChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                  <LineChart data={comparisonChartData.filter((_, i) => i % 3 === 0)}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#888" strokeOpacity={0.2} />
                     <XAxis 
                       dataKey="month" 
-                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
+                      tick={{ fontSize: 12 }}
+                      tickFormatter={(value) => `${value}m`}
                     />
                     <YAxis 
-                      tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('repayment.balance') || 'Balance', angle: -90, position: 'insideLeft' }}
+                      tickFormatter={(value) => currencyFormatter.format(value).split('.')[0]}
+                      width={60}
+                      tick={{ fontSize: 12 }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
-                    
-                    {scenarios.map((scenario, index) => (
-                      <Area
-                        key={`${scenario.id}_balance`}
+                    {scenarios.filter(s => s.id === activeScenarioId).map((scenario, index) => (
+                      <Line
+                        key={scenario.id}
                         type="monotone"
                         dataKey={`${scenario.id}_balance`}
-                        name={`${scenario.name} - ${t('dashboard.remainingDebt') || 'Remaining Debt'}`}
-                        fill={`hsl(${index * 60}, 70%, 60%)`}
-                        stroke={`hsl(${index * 60}, 70%, 50%)`}
-                        fillOpacity={0.2}
-                        isAnimationActive={false}
-                      />
-                    ))}
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-              
-              <div className="h-[300px] mt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={comparisonChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      label={{ value: t('repayment.months') || 'Months', position: 'insideBottomRight', offset: -5 }} 
-                    />
-                    <YAxis 
-                      tickFormatter={(value) => `${Math.round(value / 1000)}k`} 
-                      label={{ value: t('repayment.totalInterestPaid') || 'Total Interest', angle: -90, position: 'insideLeft' }}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                    
-                    {scenarios.map((scenario, index) => (
-                      <Line
-                        key={`${scenario.id}_interest`}
-                        type="monotone"
-                        dataKey={`${scenario.id}_interest`}
-                        name={`${scenario.name} - ${t('repayment.totalInterestPaid') || 'Total Interest Paid'}`}
-                        stroke={`hsl(${index * 90 + 180}, 70%, 50%)`}
+                        name={scenario.name}
+                        stroke={scenarioColors[index]}
                         strokeWidth={2}
                         dot={false}
-                        isAnimationActive={false}
+                        activeDot={{ r: 4 }}
                       />
                     ))}
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="comparison">
-              <div className="h-[400px] mt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={scenarioResults.map(result => ({
-                      name: scenarios.find(s => s.id === result.id)?.name || result.id,
-                      months: result.totalMonths,
-                      interest: result.totalInterestPaid
-                    }))}
-                    layout="vertical"
-                    margin={{ top: 20, right: 30, left: 80, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis 
-                      dataKey="name" 
-                      type="category" 
-                      width={80}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <Tooltip formatter={(value, name) => {
-                      if (name === 'months') {
-                        return [`${value} ${t('repayment.months') || 'months'}`, t('repayment.debtFreeIn') || 'Debt Free In'];
-                      } else if (name === 'interest') {
-                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
-                      }
-                      return [value, name];
-                    }} />
-                    <Legend />
-                    <Bar 
-                      dataKey="months" 
-                      fill="#8884d8" 
-                      name={t('repayment.debtFreeIn') || 'Debt Free In (months)'}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+            </div>
+          ) : (
+            <Tabs defaultValue="balance" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="balance">{t('visualization.totalDebt')}</TabsTrigger>
+                <TabsTrigger value="interest">{t('visualization.totalInterestPaid')}</TabsTrigger>
+              </TabsList>
               
-              <div className="h-[400px] mt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={scenarioResults.map(result => ({
-                      name: scenarios.find(s => s.id === result.id)?.name || result.id,
-                      interest: result.totalInterestPaid,
-                      averageMonthlyInterest: result.totalMonths > 0 ? result.totalInterestPaid / result.totalMonths : 0
-                    }))}
-                    layout="vertical"
-                    margin={{ top: 20, right: 30, left: 80, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis 
-                      dataKey="name" 
-                      type="category" 
-                      width={80}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <Tooltip formatter={(value, name) => {
-                      if (name === 'interest') {
-                        return [currencyFormatter.format(value as number), t('repayment.totalInterestPaid') || 'Total Interest Paid'];
-                      } else if (name === 'averageMonthlyInterest') {
-                        return [currencyFormatter.format(value as number), t('scenarios.avgMonthlyInterest') || 'Avg Monthly Interest'];
-                      }
-                      return [value, name];
-                    }} />
-                    <Legend />
-                    <Bar 
-                      dataKey="interest" 
-                      fill="#82ca9d" 
-                      name={t('repayment.totalInterestPaid') || 'Total Interest Paid'}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="balance" className="pt-4">
+                <div className="h-[300px] sm:h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={comparisonChartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#888" strokeOpacity={0.2} />
+                      <XAxis 
+                        dataKey="month" 
+                        label={{ 
+                          value: t('repayment.month'), 
+                          position: 'insideBottom', 
+                          offset: -5 
+                        }} 
+                      />
+                      <YAxis 
+                        tickFormatter={(value) => currencyFormatter.format(value).split('.')[0]}
+                        width={80}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend />
+                      {scenarios.map((scenario, index) => (
+                        <Line
+                          key={scenario.id}
+                          type="monotone"
+                          dataKey={`${scenario.id}_balance`}
+                          name={scenario.name}
+                          stroke={scenarioColors[index % scenarioColors.length]}
+                          strokeWidth={scenario.id === activeScenarioId ? 3 : 1.5}
+                          dot={false}
+                          activeDot={{ r: 6 }}
+                        />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="text-sm text-center text-muted-foreground mt-2">
+                  {t('visualization.chartHint')}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="interest" className="pt-4">
+                <div className="h-[300px] sm:h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={comparisonChartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#888" strokeOpacity={0.2} />
+                      <XAxis 
+                        dataKey="month" 
+                        label={{ 
+                          value: t('repayment.month'), 
+                          position: 'insideBottom', 
+                          offset: -5 
+                        }} 
+                      />
+                      <YAxis 
+                        tickFormatter={(value) => currencyFormatter.format(value).split('.')[0]}
+                        width={80}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend />
+                      {scenarios.map((scenario, index) => (
+                        <Line
+                          key={scenario.id}
+                          type="monotone"
+                          dataKey={`${scenario.id}_interest`}
+                          name={scenario.name}
+                          stroke={scenarioColors[index % scenarioColors.length]}
+                          strokeWidth={scenario.id === activeScenarioId ? 3 : 1.5}
+                          dot={false}
+                          activeDot={{ r: 6 }}
+                        />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="text-sm text-center text-muted-foreground mt-2">
+                  {t('visualization.chartHint')}
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </CardContent>
       

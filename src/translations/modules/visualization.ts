@@ -1,4 +1,3 @@
-
 // Visualization-related translations
 
 export const visualization = {
@@ -46,7 +45,14 @@ export const visualization = {
       extra200: "Extra €200/mo",
       extra300: "Extra €300/mo",
       extra400: "Extra €400/mo",
-      extra500: "Extra €500/mo"
+      extra500: "Extra €500/mo",
+      chartHint: "Click on scenario cards to highlight them in the chart",
+      comparisonResult: "Compared to Current",
+      timeSaved: "Months Saved",
+      interestSaved: "Interest Saved",
+      bestScenario: "Best Scenario",
+      worstScenario: "Worst Scenario",
+      selectScenario: "Select Scenario"
     }
   },
   fi: {
@@ -93,7 +99,14 @@ export const visualization = {
       extra200: "Lisää 200€/kk",
       extra300: "Lisää 300€/kk",
       extra400: "Lisää 400€/kk",
-      extra500: "Lisää 500€/kk"
+      extra500: "Lisää 500€/kk",
+      chartHint: "Klikkaa skenaariokortteja korostaaksesi ne kaaviossa",
+      comparisonResult: "Verrattuna nykyiseen",
+      timeSaved: "Säästetyt kuukaudet",
+      interestSaved: "Säästetty korko",
+      bestScenario: "Paras skenaario",
+      worstScenario: "Huonoin skenaario",
+      selectScenario: "Valitse skenaario"
     }
   }
 };
