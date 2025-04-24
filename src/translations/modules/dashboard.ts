@@ -1,4 +1,3 @@
-
 // Dashboard-related translations
 
 export const dashboard = {
@@ -97,7 +96,9 @@ export const dashboard = {
       presets: "Scenario Presets",
       estimatedImpact: "Estimated Impact",
       interestRateChangeTooltip: "Adjust to see how changes in interest rates affect your repayment timeline."
-    }
+    },
+    paymentTimeline: "Payment Timeline",
+    noDataAvailable: "No data available"
   },
   fi: {
     dashboard: {
@@ -194,6 +195,8 @@ export const dashboard = {
       presets: "Skenaarioiden esiasetukset",
       estimatedImpact: "Arvioitu vaikutus",
       interestRateChangeTooltip: "Säädä nähdäksesi miten korkojen muutokset vaikuttavat takaisinmaksuaikatauluusi."
-    }
+    },
+    paymentTimeline: "Maksun aikajana",
+    noDataAvailable: "Tietoja ei saatavilla"
   }
 };
