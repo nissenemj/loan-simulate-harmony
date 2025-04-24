@@ -35,12 +35,15 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
                       (endDate.getMonth() - startDate.getMonth()));
     
     const monthlyReduction = totalDebt / Math.max(1, monthsDiff);
-    const monthlyInterest = (totalAmountToPay - totalDebt) / Math.max(1, monthsDiff);
+    const totalInterest = totalAmountToPay - totalDebt;
+    const monthlyInterest = totalInterest / Math.max(1, monthsDiff);
     
     return Array.from({ length: Math.max(1, monthsDiff) }, (_, index) => ({
       month: index,
+      // For principal, we just show the remaining principal balance
       principal: totalDebt - (monthlyReduction * index),
-      interest: monthlyInterest * (Math.max(1, monthsDiff) - index),
+      // For interest, we track the cumulative interest paid
+      interest: monthlyInterest * index,
     }));
   };
 
@@ -82,11 +85,11 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
               />
               <Tooltip 
                 formatter={(value: number) => formatCurrency(value)}
+                labelFormatter={(label) => `${t('visualization.months')}: ${label}`}
               />
               <Area 
                 type="monotone" 
                 dataKey="principal" 
-                stackId="1"
                 stroke="#0088FE" 
                 fill="#0088FE" 
                 name={t('visualization.principalPayment')}
@@ -94,7 +97,6 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
               <Area 
                 type="monotone" 
                 dataKey="interest" 
-                stackId="1"
                 stroke="#FF8042" 
                 fill="#FF8042"
                 name={t('visualization.interestPayment')}
