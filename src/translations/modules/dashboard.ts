@@ -76,13 +76,22 @@ export const dashboard = {
       
       // New scenario translations
       scenarioComparison: "Debt Scenario Comparison",
-      scenarioDescription: "Compare different debt repayment scenarios",
+      scenarioDescription: "Compare different debt repayment scenarios and their outcomes",
       scenarioDescriptionEnhanced: "See how changes in interest rates, payment amounts, and strategies affect your debt payoff timeline and total interest paid.",
       scenarioGuideTitle: "Understanding Scenario Comparison",
       scenarioGuideIntro: "This tool helps you compare different debt repayment scenarios to make informed decisions about your financial future.",
       currentScenarioExplained: "Current Scenario: Based on your current debt situation and payment amount.",
       optimisticScenarioExplained: "Optimistic Scenario: Assumes lower interest rates and higher monthly payments.",
       pessimisticScenarioExplained: "Pessimistic Scenario: Assumes higher interest rates with your current payment amount.",
+      select: "Select scenario",
+      selected: "Selected scenario",
+      interestRateChange: "Interest Rate Change",
+      interestRateChangeTooltip: "Adjust this to simulate changes in interest rates. Positive values represent rate increases, negative values represent decreases.",
+      estimatedImpact: "Estimated Impact",
+      presets: "Preset Scenarios",
+      lowerInterestRates: "Lower Interest Rates",
+      higherPayment: "Higher Payment",
+      annualBonus: "Annual Bonus"
     }
   },
   fi: {
@@ -160,13 +169,22 @@ export const dashboard = {
       
       // New scenario translations
       scenarioComparison: "Velkaskenaarioiden vertailu",
-      scenarioDescription: "Vertaile erilaisia velanmaksustrategioita",
+      scenarioDescription: "Vertaile erilaisia velanmaksustrategioita ja niiden tuloksia",
       scenarioDescriptionEnhanced: "Näe miten korkojen, maksumäärien ja strategioiden muutokset vaikuttavat velkojesi maksuaikatauluun ja kokonaiskorkoihin.",
       scenarioGuideTitle: "Skenaariovertailun ymmärtäminen",
       scenarioGuideIntro: "Tämä työkalu auttaa sinua vertailemaan erilaisia velanmaksuskenaarioita, jotta voit tehdä tietoon perustuvia päätöksiä taloudellisesta tulevaisuudestasi.",
       currentScenarioExplained: "Nykyinen skenaario: Perustuu nykyiseen velkatilanteeseesi ja maksumäärääsi.",
       optimisticScenarioExplained: "Optimistinen skenaario: Olettaa alhaisemmat korot ja korkeammat kuukausimaksut.",
       pessimisticScenarioExplained: "Pessimistinen skenaario: Olettaa korkeammat korot nykyisellä maksumäärälläsi.",
+      select: "Valitse skenaario",
+      selected: "Valittu skenaario",
+      interestRateChange: "Koron muutos",
+      interestRateChangeTooltip: "Säädä tätä simuloidaksesi korkojen muutoksia. Positiiviset arvot edustavat korkojen nousua, negatiiviset laskua.",
+      estimatedImpact: "Arvioitu vaikutus",
+      presets: "Valmiit skenaariot",
+      lowerInterestRates: "Alemmat korot",
+      higherPayment: "Korkeampi maksu",
+      annualBonus: "Vuosibonus"
     }
   }
 };

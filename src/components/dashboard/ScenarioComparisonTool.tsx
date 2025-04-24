@@ -10,7 +10,7 @@ import { scenarioColors } from '@/utils/chartColors';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ScenarioGuide from './ScenarioGuide';
 import { useCurrencyFormatter } from '@/utils/formatting';
-import { X, AlertCircle, RefreshCw, TrendingDown, TrendingUp } from 'lucide-react';
+import { X, AlertCircle, Info, TrendingDown, TrendingUp } from 'lucide-react';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
 import { combineDebts } from '@/utils/repayment/debtConverters';
@@ -183,6 +183,23 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
     return data;
   }, [scenarioResults]);
   
+  const [announcement, setAnnouncement] = useState('');
+
+  const handleScenarioChange = (scenarioId: string) => {
+    setActiveScenarioId(scenarioId);
+    
+    const scenario = scenarios.find(s => s.id === scenarioId);
+    const result = scenarioResults.find(r => r.id === scenarioId);
+    
+    if (scenario && result) {
+      setAnnouncement(
+        `${t('scenarios.selected')} ${scenario.name}. ` +
+        `${t('visualization.monthsToPayoff')}: ${result.totalMonths} ${t('visualization.months')}. ` +
+        `${t('visualization.totalInterestPaid')}: ${currencyFormatter.format(result.totalInterestPaid)}.`
+      );
+    }
+  };
+
   const handleEditScenario = (scenarioId: string) => {
     const scenario = scenarios.find(s => s.id === scenarioId);
     if (!scenario) return;
@@ -299,7 +316,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
           <div>
             <CardTitle>{t('dashboard.scenarioComparison')}</CardTitle>
             <AlertDescription className="mt-1">
-              {t('dashboard.scenarioDescriptionEnhanced')}
+              {t('dashboard.scenarioDescription')}
               <Button 
                 variant="link" 
                 className="p-0 h-auto text-xs font-normal ml-1" 
@@ -309,7 +326,12 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
               </Button>
             </AlertDescription>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onClose}
+            aria-label={t('common.close')}
+          >
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -317,26 +339,38 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       
       <CardContent>
         <div className="space-y-6">
+          <div role="status" aria-live="polite" className="sr-only">
+            {announcement}
+          </div>
+
           {totalMinPayments > 0 && (
             <Alert className="bg-muted">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                {t('scenarios.minimumPaymentAlert', { payment: currencyFormatter.format(totalMinPayments) }) || 
-                  `Total minimum payments required: ${currencyFormatter.format(totalMinPayments)}. Any scenario with lower monthly payment will not be viable.`}
+                {t('scenarios.minimumPaymentAlert', { payment: currencyFormatter.format(totalMinPayments) })}
               </AlertDescription>
             </Alert>
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {scenarioResults.map(result => {
-              const monthsToPayoff = result.totalMonths;
-              const interestPaid = result.totalInterestPaid;
               const scenario = scenarios.find(s => s.id === result.id);
               
               return (
                 <Card 
                   key={result.id}
-                  className={`${result.id === activeScenarioId ? 'border-primary' : ''}`}
+                  className={`cursor-pointer transition-all ${result.id === activeScenarioId ? 'ring-2 ring-primary' : ''}`}
+                  onClick={() => handleScenarioChange(result.id)}
+                  tabIndex={0}
+                  role="radio"
+                  aria-checked={result.id === activeScenarioId}
+                  aria-label={`${t('scenarios.select')} ${scenario?.name}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleScenarioChange(result.id);
+                      e.preventDefault();
+                    }
+                  }}
                 >
                   <CardHeader className="py-3">
                     <CardTitle className="text-base">{scenario?.name}</CardTitle>
@@ -345,11 +379,11 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">{t('visualization.monthsToPayoff')}</span>
-                        <span className="font-medium">{monthsToPayoff} {t('visualization.months')}</span>
+                        <span className="font-medium">{result.totalMonths} {t('visualization.months')}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">{t('visualization.totalInterestPaid')}</span>
-                        <span className="font-medium">{currencyFormatter.format(interestPaid)}</span>
+                        <span className="font-medium">{currencyFormatter.format(result.totalInterestPaid)}</span>
                       </div>
                       {result.id !== 'current' && (
                         <div className="flex justify-between items-center pt-2 border-t">
@@ -373,7 +407,21 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              {/* Chart goes here */}
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={comparisonChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend />
+                  <Line type="monotone" dataKey="current_balance" stroke="#8884d8" activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="optimistic_balance" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="pessimistic_balance" stroke="#ffc658" />
+                  <Line type="monotone" dataKey="current_interest" stroke="#ff7373" />
+                  <Line type="monotone" dataKey="optimistic_interest" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="pessimistic_interest" stroke="#ffc658" />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
             <div>
               <ScenarioEditor 
