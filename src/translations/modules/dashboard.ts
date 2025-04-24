@@ -100,7 +100,27 @@ export const dashboard = {
       viewRepaymentPlan: "View Repayment Plan"
     },
     paymentTimeline: "Payment Timeline",
-    noDataAvailable: "No data available"
+    noDataAvailable: "No data available",
+    scenarios: {
+      current: "Current Situation",
+      optimistic: "Optimistic",
+      pessimistic: "Pessimistic",
+      selected: "Selected scenario:",
+      monthsToPayoff: "Months to payoff",
+      totalInterest: "Total interest paid",
+      insufficientPayment: "Insufficient payment",
+      calculationError: "Calculation error",
+      increasePayment: "Increase monthly payment for a viable plan",
+      tryDifferentParameters: "Try different parameters",
+      minimumPaymentAlert: "Minimum payments total: {{payment}}. Scenarios with lower monthly payments won't be viable.",
+      name: "Scenario name",
+      interestRateChange: "Interest rate change (%)",
+      monthlyPayment: "Monthly payment",
+      extraPayment: "Annual extra payment",
+      extraPaymentExplanation: "Extra payment made once a year, e.g. tax returns or bonuses",
+      select: "Select scenario",
+      comparedToCurrent: "Compared to current"
+    }
   },
   fi: {
     dashboard: {
@@ -200,6 +220,26 @@ export const dashboard = {
       viewRepaymentPlan: "Katso maksusuunnitelma"
     },
     paymentTimeline: "Maksun aikajana",
-    noDataAvailable: "Tietoja ei saatavilla"
+    noDataAvailable: "Tietoja ei saatavilla",
+    scenarios: {
+      current: "Nykyinen tilanne",
+      optimistic: "Optimistinen",
+      pessimistic: "Pessimistinen",
+      selected: "Valittu skenaario:",
+      monthsToPayoff: "Kuukausia maksaa pois",
+      totalInterest: "Maksettu korko yhteensä",
+      insufficientPayment: "Riittämätön maksu",
+      calculationError: "Laskentavirhe",
+      increasePayment: "Lisää kuukausimaksua luodaksesi toteuttamiskelpoisen suunnitelman",
+      tryDifferentParameters: "Kokeile eri parametreja",
+      minimumPaymentAlert: "Vähimmäismaksut yhteensä: {{payment}}. Skenaariot, joissa kuukausimaksu on pienempi, eivät ole toteuttamiskelpoisia.",
+      name: "Skenaarion nimi",
+      interestRateChange: "Korkomuutos (%)",
+      monthlyPayment: "Kuukausimaksu",
+      extraPayment: "Vuosittainen lisämaksu",
+      extraPaymentExplanation: "Kerran vuodessa suoritettava lisämaksu, esim. veronpalautukset tai bonukset",
+      select: "Valitse skenaario",
+      comparedToCurrent: "Verrattuna nykyiseen"
+    }
   }
 };

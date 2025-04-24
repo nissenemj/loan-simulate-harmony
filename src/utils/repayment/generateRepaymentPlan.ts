@@ -53,10 +53,29 @@ export const generateRepaymentPlan = (
     };
   }
 
-  // Step 3: Prioritize debts according to the method
+  // Step 3: Check if budget is sufficient for actual debt repayment
+  // Calculate the minimum budget required to pay off the debt eventually
+  const totalInterest = activeDebts.reduce((sum, debt) => {
+    const monthlyInterest = (debt.balance * (debt.interestRate / 100)) / 12;
+    return sum + monthlyInterest;
+  }, 0);
+  
+  // If the monthly budget is less than the monthly interest, the debt will never be paid off
+  if (monthlyBudget <= totalInterest) {
+    return {
+      isViable: false,
+      insufficientBudgetMessage: `Your monthly budget of ${monthlyBudget.toFixed(2)} is less than or equal to the monthly interest of ${totalInterest.toFixed(2)}. The debt will never be paid off.`,
+      totalMonths: 0,
+      totalInterestPaid: 0,
+      timeline: [],
+      monthlyAllocation: []
+    };
+  }
+
+  // Step 4: Prioritize debts according to the method
   const prioritizedDebts = prioritizeDebts(activeDebts, method);
 
-  // Step 4: Allocate budget - first cover minimum payments for all debts
+  // Step 5: Allocate budget - first cover minimum payments for all debts
   const initialAllocation: RepaymentPlan['monthlyAllocation'] = activeDebts.map(debt => ({
     id: debt.id,
     name: debt.name,
@@ -66,7 +85,7 @@ export const generateRepaymentPlan = (
     totalPayment: debt.minPayment
   }));
 
-  // Step 5: Allocate extra funds based on strategy
+  // Step 6: Allocate extra funds based on strategy
   const extraBudget = monthlyBudget - totalMinPayment;
   if (extraBudget > 0 && prioritizedDebts.length > 0) {
     if (method === 'equal' || equalDistribution) {
@@ -93,15 +112,27 @@ export const generateRepaymentPlan = (
   }
 
   try {
-    // Step 6: Simulate repayment with the allocation
+    // Step 7: Simulate repayment with the allocation
     const equalDistributionFlag = method === 'equal' || equalDistribution;
     const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistributionFlag);
 
-    // Step 7: Calculate total months and interest paid
+    // Step 8: Calculate total months and interest paid
     const totalMonths = timeline.length;
     const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);
 
-    // Step 8: Find when all credit cards are paid off
+    // Check if the simulation produced a valid timeline
+    if (totalMonths === 0 || timeline.length === 0) {
+      return {
+        isViable: false,
+        insufficientBudgetMessage: "The repayment simulation didn't produce a valid timeline. Please increase your monthly payment.",
+        totalMonths: 0,
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: initialAllocation
+      };
+    }
+
+    // Step 9: Find when all credit cards are paid off
     const creditCardFreeMonth = findCreditCardFreeMonth(activeDebts, timeline);
 
     // Return the complete repayment plan
@@ -114,7 +145,8 @@ export const generateRepaymentPlan = (
       creditCardFreeMonth
     };
   } catch (error) {
-    // General error handling, but no specific handling for maximum months
+    // Improved error handling with more specific information
+    console.error("Error in generateRepaymentPlan:", error);
     return {
       isViable: false,
       insufficientBudgetMessage: error instanceof Error ? error.message : 'Unknown calculation error',

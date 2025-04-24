@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -10,7 +11,7 @@ import { scenarioColors } from '@/utils/chartColors';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ScenarioGuide from './ScenarioGuide';
 import { useCurrencyFormatter } from '@/utils/formatting';
-import { X, AlertCircle, Info, TrendingDown, TrendingUp } from 'lucide-react';
+import { X, AlertCircle, Info, TrendingDown, TrendingUp, ChevronUp, ChevronDown } from 'lucide-react';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
 import { combineDebts } from '@/utils/repayment/debtConverters';
@@ -37,6 +38,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
 }) => {
   const { t } = useLanguage();
   const currencyFormatter = useCurrencyFormatter();
+  const [debugMode, setDebugMode] = useState(false);
   
   const totalDebt = 
     activeLoans.reduce((sum, loan) => sum + loan.amount, 0) + 
@@ -77,12 +79,14 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const totalMinPayments = calculateTotalMinPayments();
   
+  // Fixed default scenarios with minimum payment calculation
   const defaultScenarios: Scenario[] = [
     {
       id: 'current',
       name: t('scenarios.current') || 'Current Situation',
       interestRateAdjustment: 0,
-      monthlyPayment: Math.max(monthlyBudget, totalMinPayments),
+      // Ensure minimum payment is at least 1% of total debt if totalMinPayments is too low
+      monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01),
       extraPayment: 0,
       strategy: 'avalanche'
     },
@@ -90,7 +94,8 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       id: 'optimistic',
       name: t('scenarios.optimistic') || 'Optimistic',
       interestRateAdjustment: -1, // Interest rates go down by 1%
-      monthlyPayment: Math.max(monthlyBudget, totalMinPayments) * 1.2, // 20% more payment
+      // Increase payment by 20% from the current scenario
+      monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01) * 1.2,
       extraPayment: 1000, // Extra annual payment
       strategy: 'avalanche'
     },
@@ -98,7 +103,8 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       id: 'pessimistic',
       name: t('scenarios.pessimistic') || 'Pessimistic',
       interestRateAdjustment: 2, // Interest rates go up by 2%
-      monthlyPayment: Math.max(monthlyBudget, totalMinPayments),
+      // Same as current but with higher interest rates
+      monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01),
       extraPayment: 0,
       strategy: 'avalanche'
     }
@@ -140,31 +146,100 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const activeScenario = scenarios.find(scenario => scenario.id === activeScenarioId) || scenarios[0];
   
+  // Enhanced scenario results with better error handling
   const scenarioResults = React.useMemo(() => {
     return scenarios.map(scenario => {
       const { adjustedLoans, adjustedCards } = adjustDebtsForScenario(scenario);
       const combinedDebts = combineDebts(adjustedLoans, adjustedCards);
       
+      // Check if there are any debts to repay
+      if (combinedDebts.length === 0) {
+        return {
+          id: scenario.id,
+          name: scenario.name,
+          totalMonths: 0,
+          totalInterestPaid: 0,
+          isViable: true,
+          timeline: [],
+          error: 'no-debts'
+        };
+      }
+      
       const effectiveMonthlyPayment = scenario.monthlyPayment + (scenario.extraPayment / 12);
       
-      const plan = generateRepaymentPlan(combinedDebts, effectiveMonthlyPayment, scenario.strategy);
-      
-      return {
-        id: scenario.id,
-        name: scenario.name,
-        totalMonths: plan.totalMonths,
-        totalInterestPaid: plan.totalInterestPaid,
-        isViable: plan.isViable,
-        timeline: plan.timeline
-      };
+      try {
+        const plan = generateRepaymentPlan(combinedDebts, effectiveMonthlyPayment, scenario.strategy);
+        
+        // Check if the plan is viable and has a timeline
+        if (!plan.isViable) {
+          return {
+            id: scenario.id,
+            name: scenario.name,
+            totalMonths: 0,
+            totalInterestPaid: 0,
+            isViable: false,
+            timeline: [],
+            error: 'insufficient-payment',
+            insufficientBudgetMessage: plan.insufficientBudgetMessage
+          };
+        }
+        
+        if (!plan.timeline || plan.timeline.length === 0) {
+          return {
+            id: scenario.id,
+            name: scenario.name,
+            totalMonths: 0,
+            totalInterestPaid: 0,
+            isViable: false,
+            timeline: [],
+            error: 'empty-timeline'
+          };
+        }
+        
+        return {
+          id: scenario.id,
+          name: scenario.name,
+          totalMonths: plan.totalMonths,
+          totalInterestPaid: plan.totalInterestPaid,
+          isViable: plan.isViable,
+          timeline: plan.timeline
+        };
+      } catch (error) {
+        console.error(`Error generating repayment plan for scenario ${scenario.id}:`, error);
+        return {
+          id: scenario.id,
+          name: scenario.name,
+          totalMonths: 0,
+          totalInterestPaid: 0,
+          isViable: false,
+          timeline: [],
+          error: 'calculation-error',
+          errorMessage: error instanceof Error ? error.message : 'Unknown error'
+        };
+      }
     });
   }, [scenarios, activeLoans, activeCards]);
+  
+  // Debug logging
+  useEffect(() => {
+    if (debugMode) {
+      console.group('Scenario Comparison Debug');
+      console.log('Monthly Budget:', monthlyBudget);
+      console.log('Total Min Payments:', totalMinPayments);
+      console.log('Total Debt:', totalDebt);
+      console.log('Active Loans:', activeLoans);
+      console.log('Active Cards:', activeCards);
+      console.log('Scenarios:', scenarios);
+      console.log('Scenario Results:', scenarioResults);
+      console.groupEnd();
+    }
+  }, [debugMode, monthlyBudget, totalMinPayments, totalDebt, activeLoans, activeCards, scenarios, scenarioResults]);
   
   const activeScenarioResults = scenarioResults.find(result => result.id === activeScenarioId);
   
   const comparisonChartData = React.useMemo(() => {
     const maxMonths = Math.max(...scenarioResults.map(result => 
-      result.timeline.length > 0 ? result.timeline.length : 0
+      result.timeline && result.timeline.length > 0 ? result.timeline.length : 0
     ));
     
     if (maxMonths === 0) return [];
@@ -175,7 +250,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       const point: any = { month: month + 1 };
       
       scenarioResults.forEach(result => {
-        if (month < result.timeline.length) {
+        if (result.timeline && month < result.timeline.length) {
           point[`${result.id}_balance`] = result.timeline[month].totalRemaining;
           point[`${result.id}_interest`] = result.timeline[month].totalInterestPaid;
         }
@@ -188,6 +263,24 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   }, [scenarioResults]);
   
   const [announcement, setAnnouncement] = useState('');
+
+  // Helper function to calculate difference between scenarios
+  const calculateDifference = (scenario: any, baseline: any) => {
+    if (!scenario || !baseline || scenario.totalMonths === 0 || baseline.totalMonths === 0) {
+      return null;
+    }
+    
+    const monthDiff = baseline.totalMonths - scenario.totalMonths;
+    const interestDiff = baseline.totalInterestPaid - scenario.totalInterestPaid;
+    
+    if (monthDiff > 0) {
+      return `${monthDiff} ${t('visualization.monthsEarlier')}`;
+    } else if (monthDiff < 0) {
+      return `${Math.abs(monthDiff)} ${t('visualization.monthsLater')}`;
+    } else {
+      return t('visualization.sameTime');
+    }
+  };
 
   const handleScenarioChange = (scenarioId: string) => {
     setActiveScenarioId(scenarioId);
@@ -428,34 +521,185 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
                     }
                   }}
                 >
-                  <CardHeader className="py-3">
-                    <CardTitle className="text-base">{scenario?.name}</CardTitle>
+                  <CardHeader className="py-3 px-4">
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="text-base">{scenario?.name}</CardTitle>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditScenario(result.id);
+                        }}
+                      >
+                        {editingScenarioId === result.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                      </Button>
+                    </div>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">{t('visualization.monthsToPayoff')}</span>
-                        <span className="font-medium">{result.totalMonths} {t('visualization.months')}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">{t('visualization.totalInterestPaid')}</span>
-                        <span className="font-medium">{currencyFormatter.format(result.totalInterestPaid)}</span>
-                      </div>
-                      {result.id !== 'current' && (
-                        <div className="flex justify-between items-center pt-2 border-t">
-                          <span className="text-sm text-muted-foreground">{t('visualization.comparisonResult')}</span>
-                          <div className="flex items-center">
-                            {result.totalMonths < (scenarioResults.find(r => r.id === 'current')?.totalMonths || 0) && (
-                              <span className="text-green-600 flex items-center text-sm">
-                                <TrendingDown className="h-3 w-3 mr-1" />
-                                {scenarioResults.find(r => r.id === 'current')?.totalMonths - result.totalMonths} {t('visualization.months')}
-                              </span>
-                            )}
+                  
+                  {editingScenarioId === result.id ? (
+                    <CardContent className="pt-0">
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium">
+                            {t('scenarios.name')}:
+                          </label>
+                          <input 
+                            type="text" 
+                            name="name"
+                            className="w-full mt-1 p-2 border rounded-md text-sm"
+                            value={editFormData.name}
+                            onChange={handleEditFormChange}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">
+                            {t('scenarios.interestRateChange')}:
+                          </label>
+                          <input 
+                            type="number" 
+                            name="interestRateAdjustment"
+                            className="w-full mt-1 p-2 border rounded-md text-sm"
+                            value={editFormData.interestRateAdjustment}
+                            onChange={handleEditFormChange}
+                            step="0.1"
+                            min="-10"
+                            max="10"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">
+                            {t('scenarios.monthlyPayment')}:
+                          </label>
+                          <input 
+                            type="number" 
+                            name="monthlyPayment"
+                            className="w-full mt-1 p-2 border rounded-md text-sm"
+                            value={editFormData.monthlyPayment}
+                            onChange={handleEditFormChange}
+                            min={totalMinPayments}
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">
+                            {t('scenarios.extraPayment')}:
+                          </label>
+                          <input 
+                            type="number" 
+                            name="extraPayment"
+                            className="w-full mt-1 p-2 border rounded-md text-sm"
+                            value={editFormData.extraPayment}
+                            onChange={handleEditFormChange}
+                            min="0"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {t('scenarios.extraPaymentExplanation')}
+                          </p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium">
+                            {t('dashboard.method')}:
+                          </label>
+                          <div className="grid grid-cols-3 gap-2 mt-1">
+                            <Button 
+                              size="sm"
+                              variant={editFormData.strategy === 'avalanche' ? 'default' : 'outline'}
+                              className="text-xs"
+                              onClick={() => handleStrategyChange('avalanche')}
+                            >
+                              {t('dashboard.avalancheStrategy')}
+                            </Button>
+                            <Button 
+                              size="sm"
+                              variant={editFormData.strategy === 'snowball' ? 'default' : 'outline'}
+                              className="text-xs"
+                              onClick={() => handleStrategyChange('snowball')}
+                            >
+                              {t('dashboard.snowballStrategy')}
+                            </Button>
+                            <Button 
+                              size="sm"
+                              variant={editFormData.strategy === 'equal' ? 'default' : 'outline'}
+                              className="text-xs"
+                              onClick={() => handleStrategyChange('equal')}
+                            >
+                              {t('dashboard.equalStrategy')}
+                            </Button>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  </CardContent>
+                        <div className="flex justify-end space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => setEditingScenarioId(null)}
+                          >
+                            {t('common.cancel')}
+                          </Button>
+                          <Button 
+                            size="sm"
+                            onClick={handleSaveScenario}
+                          >
+                            {t('common.save')}
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  ) : (
+                    <CardContent className="pt-0 pb-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">
+                            {t('scenarios.monthsToPayoff') || 'Months to payoff'}
+                          </span>
+                          <span className="font-medium">
+                            {result.error ? (
+                              <span className="text-destructive">
+                                {result.error === 'insufficient-payment' ? 
+                                  (t('scenarios.insufficientPayment') || 'Insufficient payment') : 
+                                  (t('scenarios.calculationError') || 'Calculation error')}
+                              </span>
+                            ) : (
+                              `${result.totalMonths || 0} ${t('common.months') || 'months'}`
+                            )}
+                          </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">
+                            {t('scenarios.totalInterest') || 'Total interest paid'}
+                          </span>
+                          <span className="font-medium">
+                            {result.error ? 
+                              '-' : 
+                              currencyFormatter.format(result.totalInterestPaid || 0)
+                            }
+                          </span>
+                        </div>
+                        
+                        {result.error === 'insufficient-payment' && (
+                          <div className="mt-2 text-xs text-destructive">
+                            <AlertCircle className="h-3 w-3 inline mr-1" />
+                            {t('scenarios.increasePayment') || 'Increase monthly payment to create a viable plan'}
+                          </div>
+                        )}
+                        
+                        {result.error === 'calculation-error' && (
+                          <div className="mt-2 text-xs text-destructive">
+                            <AlertCircle className="h-3 w-3 inline mr-1" />
+                            {t('scenarios.tryDifferentParameters') || 'Try different parameters'}
+                          </div>
+                        )}
+                        
+                        {!result.error && result.isViable && result.id !== 'current' && (
+                          <div className="mt-2 text-xs text-muted-foreground">
+                            <span className={result.totalMonths < (scenarioResults.find(r => r.id === 'current')?.totalMonths || 0) ? "text-green-600" : "text-destructive"}>
+                              {calculateDifference(result, scenarioResults.find(r => r.id === 'current'))}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  )}
                 </Card>
               );
             })}
@@ -470,16 +714,32 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
                   <YAxis />
                   <Tooltip content={<CustomTooltip />} />
                   <Legend />
-                  <Line type="monotone" dataKey="current_balance" stroke="#8884d8" activeDot={{ r: 8 }} />
-                  <Line type="monotone" dataKey="optimistic_balance" stroke="#82ca9d" />
-                  <Line type="monotone" dataKey="pessimistic_balance" stroke="#ffc658" />
-                  <Line type="monotone" dataKey="current_interest" stroke="#ff7373" />
-                  <Line type="monotone" dataKey="optimistic_interest" stroke="#82ca9d" />
-                  <Line type="monotone" dataKey="pessimistic_interest" stroke="#ffc658" />
+                  {scenarioResults.map(result => {
+                    if (!result.timeline || result.timeline.length === 0) return null;
+                    
+                    return (
+                      <React.Fragment key={result.id}>
+                        <Line 
+                          type="monotone" 
+                          dataKey={`${result.id}_balance`} 
+                          stroke={result.id === 'current' ? "#8884d8" : result.id === 'optimistic' ? "#82ca9d" : "#ffc658"} 
+                          name={`${scenarios.find(s => s.id === result.id)?.name} - ${t('dashboard.remainingDebt')}`}
+                          activeDot={{ r: 8 }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey={`${result.id}_interest`} 
+                          stroke={result.id === 'current' ? "#ff7373" : result.id === 'optimistic' ? "#47A1D6" : "#ff9e40"}
+                          name={`${scenarios.find(s => s.id === result.id)?.name} - ${t('repayment.totalInterestPaid')}`}
+                          strokeDasharray="5 5"
+                        />
+                      </React.Fragment>
+                    );
+                  })}
                 </LineChart>
               </ResponsiveContainer>
               
-              {activeScenarioResults && (
+              {activeScenarioResults && activeScenarioResults.timeline && activeScenarioResults.timeline.length > 0 && (
                 <MilestoneVisualization 
                   timeline={activeScenarioResults.timeline} 
                   totalDebt={totalDebt} 
@@ -497,30 +757,58 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
             </div>
           </div>
         </div>
-      </CardContent>
-      <CardFooter className="pt-6">
-        <div className="flex justify-end gap-4 w-full">
+        
+        {/* Debug toggle in development mode */}
+        {process.env.NODE_ENV === 'development' && (
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={exportScenarioData}
-            className="flex items-center"
+            onClick={() => setDebugMode(!debugMode)}
+            className="absolute bottom-2 right-2 text-xs"
           >
-            <Download className="h-4 w-4 mr-2" />
-            {t('dashboard.exportScenario')}
+            {debugMode ? 'Disable Debug' : 'Enable Debug'}
+          </Button>
+        )}
+      </CardContent>
+      <CardFooter className="pt-6">
+        <div className="flex justify-between w-full">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleResetScenarios}
+          >
+            {t('common.reset')}
           </Button>
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="flex items-center"
-          >
-            <Share className="h-4 w-4 mr-2" />
-            {t('dashboard.shareScenario')}
-          </Button>
+          <div className="flex gap-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={exportScenarioData}
+              className="flex items-center"
+              disabled={!activeScenarioResults || activeScenarioResults.error}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {t('dashboard.exportScenario')}
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleShare}
+              className="flex items-center"
+              disabled={!activeScenarioResults || activeScenarioResults.error}
+            >
+              <Share className="h-4 w-4 mr-2" />
+              {t('dashboard.shareScenario')}
+            </Button>
+          </div>
         </div>
       </CardFooter>
+      
+      {showGuide && (
+        <ScenarioGuide onClose={() => setShowGuide(false)} />
+      )}
     </Card>
   );
 };
