@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,7 +7,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import {
 	Sheet,
 	SheetContent,
-	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
@@ -108,7 +108,7 @@ const NavigationHeader = () => {
 				{isMobile ? (
 					<Sheet open={open} onOpenChange={setOpen}>
 						<SheetTrigger asChild>
-							<Button variant="ghost" size="sm" className="px-2">
+							<Button variant="ghost" size="sm" className="px-2 -mr-2">
 								<Menu className="h-5 w-5" />
 								<span className="sr-only">{t("navigation.menu")}</span>
 							</Button>
@@ -130,7 +130,7 @@ const NavigationHeader = () => {
 								))}
 							</nav>
 							<div className="border-t p-4 space-y-4">
-								<div className="flex items-center gap-2">
+								<div className="flex items-center justify-between gap-2">
 									<LanguageSwitcher />
 									<ModeToggle />
 								</div>
@@ -177,7 +177,7 @@ const NavigationHeader = () => {
 							<ModeToggle />
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
-									<Button variant="outline" size="sm">
+									<Button variant="outline" size="sm" className="h-9">
 										<User className="h-4 w-4 mr-2" />
 										{user ? user.email : t("navigation.account")}
 									</Button>
