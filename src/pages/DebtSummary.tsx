@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from 'react';
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Loan, calculateLoan, formatCurrency, generateRecommendations, calculateTotalMonthlyPayment } from "@/utils/loanCalculations";
@@ -85,11 +85,17 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
   const totalCardBalance = cardsToDisplay.reduce((sum, card) => sum + card.balance, 0);
   const totalDebtBalance = totalLoanBalance + totalCardBalance;
 
+  useEffect(() => {
+    if (activeTab === 'repayment-plan') {
+      calculateRepaymentPlan(budget, method);
+    }
+  }, [budget, method, activeTab]);
+
   const calculateRepaymentPlan = (budgetAmount: number, prioritizationMethod: PrioritizationMethod) => {
     setBudget(budgetAmount);
     setMethod(prioritizationMethod);
     
-    const combinedDebts = combineDebts(loansToDisplay, cardsToDisplay);
+    const combinedDebts = combineDebts(activeLoans, activeCards);
     const plan = generateRepaymentPlan(combinedDebts, budgetAmount, prioritizationMethod);
     
     setRepaymentPlan(plan);
@@ -243,7 +249,10 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
             </div>
             <div className="md:col-span-3">
               {repaymentPlan ? (
-                <RepaymentPlanVisualization plan={repaymentPlan} />
+                <RepaymentPlanVisualization 
+                  plan={repaymentPlan}
+                  debts={[...activeLoans, ...activeCards]}
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center h-full p-10 text-center bg-muted rounded-lg border">
                   <CalculatorIcon className="h-12 w-12 text-muted-foreground mb-4" />
