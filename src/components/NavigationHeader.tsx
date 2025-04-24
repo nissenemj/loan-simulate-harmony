@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -73,7 +72,6 @@ const NavigationHeader = () => {
 		}
 	};
 
-	// Define navigation links based on authentication status
 	const links = user
 		? [
 				{ href: "/dashboard", label: t("navigation.dashboard") },
@@ -89,10 +87,7 @@ const NavigationHeader = () => {
 				{ href: "/blog", label: t("navigation.blog") },
 		  ];
 
-	// Check if a link is active with more precise matching 
 	const isActive = (path: string) => {
-		// Exact match or the current path starts with the navigation path
-		// excluding cases where the nav path is "/" (home) and we're on another page
 		if (path === "/") {
 			return location.pathname === "/";
 		}
@@ -102,58 +97,56 @@ const NavigationHeader = () => {
 
 	return (
 		<header className="bg-background sticky top-0 z-50 w-full border-b">
-			<div className="container flex h-16 items-center justify-between">
-				<div className="flex items-center" onClick={() => navigate("/")}>
+			<div className="container flex h-16 items-center justify-between px-4">
+				<div 
+					className="flex items-center cursor-pointer" 
+					onClick={() => navigate("/")}
+				>
 					<VelkavapausLogo />
 				</div>
 
 				{isMobile ? (
-					// Mobile navigation with sheet/drawer
 					<Sheet open={open} onOpenChange={setOpen}>
 						<SheetTrigger asChild>
-							<Button variant="ghost" size="sm">
+							<Button variant="ghost" size="sm" className="px-2">
 								<Menu className="h-5 w-5" />
 								<span className="sr-only">{t("navigation.menu")}</span>
 							</Button>
 						</SheetTrigger>
-						<SheetContent side="left" className="sm:max-w-xs w-[85vw] max-w-xs">
-							<SheetHeader>
+						<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
+							<div className="border-b px-6 py-4">
 								<SheetTitle>{t("app.title")}</SheetTitle>
-								<SheetDescription>{t("navigation.menu")}</SheetDescription>
-							</SheetHeader>
-							<div className="grid gap-4 py-4">
+							</div>
+							<nav className="flex flex-col gap-1 p-4">
 								{links.map((link) => (
 									<Button
 										key={link.href}
-										variant={isActive(link.href) ? "default" : "ghost"}
+										variant={isActive(link.href) ? "secondary" : "ghost"}
+										className="w-full justify-start"
 										onClick={() => handleNavigation(link.href)}
-										className="h-12 text-base justify-start"
 									>
 										{link.label}
 									</Button>
 								))}
-
-								<div className="mt-2">
+							</nav>
+							<div className="border-t p-4 space-y-4">
+								<div className="flex items-center gap-2">
 									<LanguageSwitcher />
-								</div>
-
-								<div className="mt-2">
 									<ModeToggle />
 								</div>
-
 								{user ? (
 									<Button
 										variant="destructive"
 										onClick={handleLogout}
-										className="mt-4 h-12 text-base"
+										className="w-full"
 									>
 										{t("auth.logout")}
 									</Button>
 								) : (
 									<Button
-										variant="secondary"
+										variant="default"
 										onClick={() => handleNavigation("/auth")}
-										className="mt-4 h-12 text-base"
+										className="w-full"
 									>
 										{t("auth.login")}
 									</Button>
@@ -162,7 +155,6 @@ const NavigationHeader = () => {
 						</SheetContent>
 					</Sheet>
 				) : (
-					// Desktop navigation
 					<div className="flex items-center gap-4">
 						<NavigationMenu>
 							<NavigationMenuList>
@@ -170,8 +162,8 @@ const NavigationHeader = () => {
 									<NavigationMenuItem key={link.href}>
 										<Button
 											onClick={() => handleNavigation(link.href)}
-											variant={isActive(link.href) ? "default" : "ghost"}
-											className="h-9 px-4 py-2"
+											variant={isActive(link.href) ? "secondary" : "ghost"}
+											className="h-9"
 										>
 											{link.label}
 										</Button>
@@ -182,10 +174,10 @@ const NavigationHeader = () => {
 
 						<div className="flex items-center gap-2">
 							<LanguageSwitcher />
-
+							<ModeToggle />
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>
-									<Button variant="outline" size="sm" className="ml-2">
+									<Button variant="outline" size="sm">
 										<User className="h-4 w-4 mr-2" />
 										{user ? user.email : t("navigation.account")}
 									</Button>
@@ -206,8 +198,6 @@ const NavigationHeader = () => {
 									)}
 								</DropdownMenuContent>
 							</DropdownMenu>
-
-							<ModeToggle />
 						</div>
 					</div>
 				)}
