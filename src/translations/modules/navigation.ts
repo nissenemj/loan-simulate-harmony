@@ -1,4 +1,3 @@
-
 // Navigation-related translations
 
 export const navigation = {
@@ -27,6 +26,7 @@ export const navigation = {
       calculator: "Loan Calculator",
       auth: "Login",
       settings: "Settings",
+      viewRepaymentPlan: "View Repayment Plan"
     }
   },
   fi: {
@@ -54,6 +54,7 @@ export const navigation = {
       calculator: "Lainalaskuri",
       auth: "Kirjautuminen",
       settings: "Asetukset",
+      viewRepaymentPlan: "Katso maksusuunnitelma"
     }
   }
 };

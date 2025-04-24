@@ -1,9 +1,11 @@
-
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency } from "@/utils/loanCalculations";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface DebtPaymentTimelineProps {
   totalDebt: number;
@@ -13,8 +15,8 @@ interface DebtPaymentTimelineProps {
 
 const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: DebtPaymentTimelineProps) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
-  // Generate monthly data points until debt free date
   const generateTimelineData = () => {
     if (!totalDebt || !totalAmountToPay || !debtFreeDate) {
       return [];
@@ -23,7 +25,6 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
     const startDate = new Date();
     const endDate = new Date(debtFreeDate);
     
-    // Ensure we have valid dates
     if (isNaN(endDate.getTime())) {
       console.warn('Invalid debt free date:', debtFreeDate);
       return [];
@@ -44,7 +45,6 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
 
   const data = generateTimelineData();
 
-  // Return a message if there's no valid data
   if (!data.length) {
     return (
       <Card className="w-full h-[300px]">
@@ -60,8 +60,18 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
 
   return (
     <Card className="w-full h-[300px]">
-      <CardHeader>
-        <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate('/debt-summary?tab=repayment-plan')}
+        >
+          {t('dashboard.viewRepaymentPlan')}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={200}>
