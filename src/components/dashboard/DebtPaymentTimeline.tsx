@@ -46,29 +46,6 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
 
   const data = generateTimelineData();
 
-  if (!data.length) {
-    return (
-      <Card className="w-full h-[300px]">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/debt-summary?tab=repayment-plan')}
-          >
-            {t('dashboard.viewRepaymentPlan')}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-[200px]">
-          <p className="text-muted-foreground">{t('visualization.noDataAvailable')}</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card className="w-full h-[300px]">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -85,40 +62,46 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
         </Button>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={200}>
-          <AreaChart
-            data={data}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="month" 
-              label={{ value: t('visualization.months'), position: 'bottom' }}
-            />
-            <YAxis 
-              tickFormatter={(value) => formatCurrency(value)}
-            />
-            <Tooltip 
-              formatter={(value: number) => formatCurrency(value)}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="principal" 
-              stackId="1"
-              stroke="#0088FE" 
-              fill="#0088FE" 
-              name={t('visualization.principalPayment')}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="interest" 
-              stackId="1"
-              stroke="#FF8042" 
-              fill="#FF8042"
-              name={t('visualization.interestPayment')}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        {data.length === 0 ? (
+          <div className="flex items-center justify-center h-[200px]">
+            <p className="text-muted-foreground">{t('noDataAvailable')}</p>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart
+              data={data}
+              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="month" 
+                label={{ value: t('visualization.months'), position: 'bottom' }}
+              />
+              <YAxis 
+                tickFormatter={(value) => formatCurrency(value)}
+              />
+              <Tooltip 
+                formatter={(value: number) => formatCurrency(value)}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="principal" 
+                stackId="1"
+                stroke="#0088FE" 
+                fill="#0088FE" 
+                name={t('visualization.principalPayment')}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="interest" 
+                stackId="1"
+                stroke="#FF8042" 
+                fill="#FF8042"
+                name={t('visualization.interestPayment')}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   );

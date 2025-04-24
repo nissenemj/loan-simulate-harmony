@@ -1,3 +1,4 @@
+
 // Dashboard-related translations
 
 export const dashboard = {
@@ -95,7 +96,8 @@ export const dashboard = {
       pessimisticScenarioExplained: "Models what happens if interest rates rise or your payment ability decreases.",
       presets: "Scenario Presets",
       estimatedImpact: "Estimated Impact",
-      interestRateChangeTooltip: "Adjust to see how changes in interest rates affect your repayment timeline."
+      interestRateChangeTooltip: "Adjust to see how changes in interest rates affect your repayment timeline.",
+      viewRepaymentPlan: "View Repayment Plan"
     },
     paymentTimeline: "Payment Timeline",
     noDataAvailable: "No data available"
@@ -194,7 +196,8 @@ export const dashboard = {
       pessimisticScenarioExplained: "Mallintaa mitä tapahtuu, jos korot nousevat tai maksukykysi heikkenee.",
       presets: "Skenaarioiden esiasetukset",
       estimatedImpact: "Arvioitu vaikutus",
-      interestRateChangeTooltip: "Säädä nähdäksesi miten korkojen muutokset vaikuttavat takaisinmaksuaikatauluusi."
+      interestRateChangeTooltip: "Säädä nähdäksesi miten korkojen muutokset vaikuttavat takaisinmaksuaikatauluusi.",
+      viewRepaymentPlan: "Katso maksusuunnitelma"
     },
     paymentTimeline: "Maksun aikajana",
     noDataAvailable: "Tietoja ei saatavilla"

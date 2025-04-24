@@ -35,6 +35,7 @@ import PaymentPlanSummary from '@/components/dashboard/PaymentPlanSummary';
 import DebtBreakdownTabs from '@/components/dashboard/DebtBreakdownTabs';
 import FinancialTips from '@/components/dashboard/FinancialTips';
 import DebtFreeTimeline from '@/components/dashboard/DebtFreeTimeline';
+import DebtPaymentTimeline from '@/components/dashboard/DebtPaymentTimeline'; // Import the DebtPaymentTimeline component
 import LoanSummary from '@/components/LoanSummary';
 import ScenarioComparisonTool from '@/components/dashboard/ScenarioComparisonTool';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
@@ -317,12 +318,20 @@ const Dashboard = () => {
           totalAmountToPay={totalAmountToPay}
         />
         
-        <PaymentPlanSummary
-          monthlyBudget={monthlyBudget}
-          totalMinPayments={totalMinPayments}
-          extraBudget={extraBudget}
-          highestInterestDebt={highestInterestDebt}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <DebtPaymentTimeline
+            totalDebt={totalDebt}
+            totalAmountToPay={totalAmountToPay}
+            debtFreeDate={formattedDebtFreeDate}
+          />
+          
+          <PaymentPlanSummary
+            monthlyBudget={monthlyBudget}
+            totalMinPayments={totalMinPayments}
+            extraBudget={extraBudget}
+            highestInterestDebt={highestInterestDebt}
+          />
+        </div>
         
         <DebtBreakdownTabs 
           activeLoans={activeLoans}
