@@ -1,3 +1,4 @@
+
 // Visualization-related translations
 
 export const visualization = {
@@ -36,11 +37,9 @@ export const visualization = {
       compareScenarios: "Compare Scenarios",
       scenarioComparisonDescription: "Compare how different strategies affect your debt payoff",
       scenarioName: "Scenario",
-      timeSaved: "Time Saved",
       moneySaved: "Money Saved",
       bestScenario: "Best Scenario",
       worstScenario: "Worst Scenario",
-      comparisonResult: "Comparison Result",
       extra100: "Extra €100/mo",
       extra200: "Extra €200/mo",
       extra300: "Extra €300/mo",
@@ -49,9 +48,6 @@ export const visualization = {
       chartHint: "Click on scenario cards to highlight them in the chart",
       comparisonResult: "Compared to Current",
       timeSaved: "Months Saved",
-      interestSaved: "Interest Saved",
-      bestScenario: "Best Scenario",
-      worstScenario: "Worst Scenario",
       selectScenario: "Select Scenario"
     }
   },
@@ -90,11 +86,9 @@ export const visualization = {
       compareScenarios: "Vertaile skenaarioita",
       scenarioComparisonDescription: "Vertaile miten eri strategiat vaikuttavat velkojesi maksuun",
       scenarioName: "Skenaario",
-      timeSaved: "Säästetty aika",
       moneySaved: "Säästetty raha",
       bestScenario: "Paras skenaario",
       worstScenario: "Huonoin skenaario",
-      comparisonResult: "Vertailun tulos",
       extra100: "Lisää 100€/kk",
       extra200: "Lisää 200€/kk",
       extra300: "Lisää 300€/kk",
@@ -103,9 +97,6 @@ export const visualization = {
       chartHint: "Klikkaa skenaariokortteja korostaaksesi ne kaaviossa",
       comparisonResult: "Verrattuna nykyiseen",
       timeSaved: "Säästetyt kuukaudet",
-      interestSaved: "Säästetty korko",
-      bestScenario: "Paras skenaario",
-      worstScenario: "Huonoin skenaario",
       selectScenario: "Valitse skenaario"
     }
   }

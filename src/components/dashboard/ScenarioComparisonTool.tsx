@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+
+import React, { useState, useMemo } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { TrendingDown } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { scenarioColors } from '@/utils/chartColors';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -307,7 +307,7 @@ const ScenarioComparisonTool = ({ activeLoans, activeCards, monthlyBudget, onClo
         <div className="flex justify-between items-center">
           <div>
             <CardTitle>{t('dashboard.scenarioComparison')}</CardTitle>
-            <CardDescription className="mt-1">
+            <AlertDescription className="mt-1">
               {t('dashboard.scenarioDescriptionEnhanced')}
               <Button 
                 variant="link" 
@@ -316,7 +316,7 @@ const ScenarioComparisonTool = ({ activeLoans, activeCards, monthlyBudget, onClo
               >
                 {t('common.learnMore')}
               </Button>
-            </CardDescription>
+            </AlertDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-4 w-4" />
