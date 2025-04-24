@@ -116,6 +116,19 @@ export const generateRepaymentPlan = (
     const equalDistributionFlag = method === 'equal' || equalDistribution;
     const { timeline, finalAllocation } = simulateRepayment(activeDebts, initialAllocation, method, equalDistributionFlag);
 
+    // Check if the simulation exceeds the maximum number of months (40 years = 480 months)
+    const MAX_MONTHS = 480;
+    if (timeline.length > MAX_MONTHS) {
+      return {
+        isViable: false,
+        insufficientBudgetMessage: `Payment calculation exceeded maximum number of months (40 years). Please increase your monthly payment.`,
+        totalMonths: MAX_MONTHS,
+        totalInterestPaid: 0,
+        timeline: [],
+        monthlyAllocation: initialAllocation
+      };
+    }
+
     // Step 8: Calculate total months and interest paid
     const totalMonths = timeline.length;
     const totalInterestPaid = timeline.reduce((sum, month) => sum + month.totalInterestPaid, 0);

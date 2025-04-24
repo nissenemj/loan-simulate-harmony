@@ -13,7 +13,10 @@ export const debtStrategies = {
       insufficientPayment: "Your monthly payment is not enough to pay off all debts",
       compareStrategies: "Compare Strategies",
       detailedPlan: "Detailed Plan",
-      monthByMonth: "Month by Month Analysis"
+      monthByMonth: "Month by Month Analysis",
+      repaymentCalculation: "Repayment Calculation",
+      errorInCalculation: "Error in calculation",
+      tryAgainHigherPayment: "Please try again with a higher monthly payment"
     }
   },
   fi: {
@@ -27,7 +30,10 @@ export const debtStrategies = {
       insufficientPayment: "Kuukausimaksusi ei riitä kaikkien velkojen maksuun",
       compareStrategies: "Vertaile strategioita",
       detailedPlan: "Yksityiskohtainen suunnitelma",
-      monthByMonth: "Kuukausianalyysi"
+      monthByMonth: "Kuukausianalyysi",
+      repaymentCalculation: "Takaisinmaksulaskelma",
+      errorInCalculation: "Virhe laskennassa",
+      tryAgainHigherPayment: "Kokeile uudelleen suuremmalla kuukausimaksulla"
     }
   }
 };
