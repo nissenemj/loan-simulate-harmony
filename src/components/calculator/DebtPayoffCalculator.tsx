@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/table";
 import { X } from "lucide-react";
 import { ResponsiveFormField } from "@/components/ui/ResponsiveFormField";
+import { useError } from "@/contexts/ErrorContext";
+import { toast } from "sonner";
 
 interface DebtPayoffCalculatorProps {
 	initialDebts?: Debt[];
@@ -40,6 +42,7 @@ export function DebtPayoffCalculator({
 	onError,
 }: DebtPayoffCalculatorProps) {
 	const { t } = useTranslation();
+	const { captureError } = useError();
 	const [debts, setDebts] = useState<Debt[]>(initialDebts);
 	const [newDebt, setNewDebt] = useState<Partial<Debt>>({
 		name: "",
@@ -52,6 +55,7 @@ export function DebtPayoffCalculator({
 	const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [isCalculating, setIsCalculating] = useState(false);
+	const [validationErrors, setValidationErrors] = useState<{[key: string]: string | null}>({});
 
 	// Calculate total minimum payment
 	const totalMinimumPayment = debts.reduce(
@@ -89,45 +93,72 @@ export function DebtPayoffCalculator({
 		}
 	}, [debts, totalMonthlyPayment, strategy, onSaveResults, onError]);
 
-	// Handle adding a new debt
+	// Validate a single field
+	const validateField = (name: string, value: any): string | null => {
+		if (name === 'name') {
+			return !value ? t('calculator.errorNameRequired') : null;
+		} else if (['balance', 'interestRate', 'minimumPayment'].includes(name)) {
+			if (value === undefined || value === null || value === '') return t('calculator.errorNumberRequired');
+			if (isNaN(Number(value))) return t('calculator.errorMustBeNumber');
+			if (Number(value) < 0) return t('calculator.errorMustBePositive');
+			return null;
+		}
+		return null;
+	};
+
+	// Handle adding a new debt with validation
 	const handleAddDebt = () => {
-		// Validate inputs
-		if (
-			!newDebt.name ||
-			!newDebt.balance ||
-			!newDebt.interestRate ||
-			!newDebt.minimumPayment
-		) {
-			setError("Please fill in all debt fields");
+		// Validate all fields
+		const errors: {[key: string]: string | null} = {
+			name: validateField('name', newDebt.name),
+			balance: validateField('balance', newDebt.balance),
+			interestRate: validateField('interestRate', newDebt.interestRate),
+			minimumPayment: validateField('minimumPayment', newDebt.minimumPayment),
+		};
+		
+		setValidationErrors(errors);
+		
+		// Check if there are any errors
+		if (Object.values(errors).some(error => error !== null)) {
 			return;
 		}
 
-		// Create new debt with unique ID
-		const debt: Debt = {
-			id: `debt-${Date.now()}`,
-			name: newDebt.name || "",
-			balance: Number(newDebt.balance),
-			interestRate: Number(newDebt.interestRate),
-			minimumPayment: Number(newDebt.minimumPayment),
-		};
+		try {
+			// Create new debt with unique ID
+			const debt: Debt = {
+				id: `debt-${Date.now()}`,
+				name: newDebt.name || "",
+				balance: Number(newDebt.balance),
+				interestRate: Number(newDebt.interestRate),
+				minimumPayment: Number(newDebt.minimumPayment),
+			};
 
-		// Add to debts list
-		setDebts([...debts, debt]);
+			// Add to debts list
+			setDebts([...debts, debt]);
 
-		// Reset new debt form
-		setNewDebt({
-			name: "",
-			balance: 0,
-			interestRate: 0,
-			minimumPayment: 0,
-		});
+			// Reset new debt form
+			setNewDebt({
+				name: "",
+				balance: 0,
+				interestRate: 0,
+				minimumPayment: 0,
+			});
 
-		setError(null);
+			setError(null);
+			toast.success(t('calculator.debtAdded'));
+		} catch (err) {
+			captureError(err, t('calculator.errorAddingDebt'));
+		}
 	};
 
 	// Handle removing a debt
 	const handleRemoveDebt = (id: string) => {
-		setDebts(debts.filter((debt) => debt.id !== id));
+		try {
+			setDebts(debts.filter((debt) => debt.id !== id));
+			toast.info(t('calculator.debtRemoved'));
+		} catch (err) {
+			captureError(err, t('calculator.errorRemovingDebt'));
+		}
 	};
 
 	// Handle strategy change
@@ -146,9 +177,13 @@ export function DebtPayoffCalculator({
 			if (onSaveResults) {
 				onSaveResults(plan);
 			}
+			
+			toast.success(t('calculator.calculationComplete'));
 		} catch (err: any) {
 			setError(err.message || "Error calculating payment plan");
 			setPaymentPlan(null);
+			
+			captureError(err, t('calculator.calculationError'));
 
 			if (onError) {
 				onError(err);
@@ -174,6 +209,17 @@ export function DebtPayoffCalculator({
 		});
 	};
 
+	// Handle input change with validation
+	const handleInputChange = (field: string, value: any) => {
+		setNewDebt({ ...newDebt, [field]: value });
+		// Validate the field
+		const error = validateField(field, value);
+		setValidationErrors(prev => ({
+			...prev,
+			[field]: error
+		}));
+	};
+
 	return (
 		<div className="space-y-8">
 			<div className="space-y-4">
@@ -190,8 +236,9 @@ export function DebtPayoffCalculator({
 						id="debtName"
 						label={t("calculator.debtName")}
 						value={newDebt.name || ''}
-						onChange={(e) => setNewDebt({ ...newDebt, name: e.target.value })}
+						onChange={(e) => handleInputChange('name', e.target.value)}
 						placeholder={t("calculator.debtNamePlaceholder")}
+						error={validationErrors.name || undefined}
 					/>
 
 					<ResponsiveFormField
@@ -199,10 +246,11 @@ export function DebtPayoffCalculator({
 						type="number"
 						label={t("calculator.balance")}
 						value={newDebt.balance || ''}
-						onChange={(e) => setNewDebt({ ...newDebt, balance: parseFloat(e.target.value) })}
+						onChange={(e) => handleInputChange('balance', e.target.value)}
 						placeholder="0.00"
 						min="0"
 						step="0.01"
+						error={validationErrors.balance || undefined}
 					/>
 
 					<ResponsiveFormField
@@ -210,10 +258,11 @@ export function DebtPayoffCalculator({
 						type="number"
 						label={t("calculator.interestRate")}
 						value={newDebt.interestRate || ''}
-						onChange={(e) => setNewDebt({ ...newDebt, interestRate: parseFloat(e.target.value) })}
+						onChange={(e) => handleInputChange('interestRate', e.target.value)}
 						placeholder="0.00"
 						min="0"
 						step="0.01"
+						error={validationErrors.interestRate || undefined}
 					/>
 
 					<ResponsiveFormField
@@ -221,10 +270,11 @@ export function DebtPayoffCalculator({
 						type="number"
 						label={t("calculator.minimumPayment")}
 						value={newDebt.minimumPayment || ''}
-						onChange={(e) => setNewDebt({ ...newDebt, minimumPayment: parseFloat(e.target.value) })}
+						onChange={(e) => handleInputChange('minimumPayment', e.target.value)}
 						placeholder="0.00"
 						min="0"
 						step="0.01"
+						error={validationErrors.minimumPayment || undefined}
 					/>
 
 					<div className="flex items-end">
