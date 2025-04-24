@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import DebtSummary from "./DebtSummary";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { Loan } from "@/utils/loanCalculations";
@@ -8,7 +9,6 @@ import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function DebtSummaryPage() {
-  // Get loans and credit cards from local storage
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const { t } = useLanguage();
@@ -19,7 +19,7 @@ export default function DebtSummaryPage() {
     );
     
     const loanName = loans.find(loan => loan.id === id)?.name || '';
-    toast(t('toast.loanPaidOff') + ': ' + loanName);
+    toast(t('toast.loanPaidOff', { name: loanName }));
   };
 
   const handlePayoffCreditCard = (id: string) => {
@@ -28,15 +28,24 @@ export default function DebtSummaryPage() {
     );
     
     const cardName = creditCards.find(card => card.id === id)?.name || '';
-    toast(t('toast.cardPaidOff') + ': ' + cardName);
+    toast(t('toast.cardPaidOff', { name: cardName }));
   };
 
   return (
-    <DebtSummary 
-      loans={loans} 
-      creditCards={creditCards} 
-      onPayoffLoan={handlePayoffLoan}
-      onPayoffCreditCard={handlePayoffCreditCard}
-    />
+    <>
+      <Helmet>
+        <title>{t('debtSummary.pageTitle')} | {t('app.name')}</title>
+        <meta name="description" content={t('debtSummary.metaDescription')} />
+      </Helmet>
+      <div className="container max-w-4xl mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold mb-8">{t('debtSummary.pageTitle')}</h1>
+        <DebtSummary 
+          loans={loans} 
+          creditCards={creditCards} 
+          onPayoffLoan={handlePayoffLoan}
+          onPayoffCreditCard={handlePayoffCreditCard}
+        />
+      </div>
+    </>
   );
 }

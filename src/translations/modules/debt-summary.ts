@@ -32,7 +32,11 @@ export const debtSummary = {
       tableSummary: "Debt Relationship Summary",
       totalAmountPaid: "Total Amount Paid",
       metaDescription: "Review your overall debt situation, including loans and credit cards.",
-      includingInterestAndFees: "Including principal, interest, and fees"
+      includingInterestAndFees: "Including principal, interest, and fees",
+      toast: {
+        loanPaidOff: "Loan paid off: {{name}}",
+        cardPaidOff: "Credit card paid off: {{name}}"
+      }
     }
   },
   fi: {
@@ -65,7 +69,11 @@ export const debtSummary = {
       tableSummary: "Velkasuhteiden yhteenveto",
       totalAmountPaid: "Maksettu summa yhteensä",
       metaDescription: "Tarkastele kokonaisvelkatilannettasi, mukaan lukien lainat ja luottokortit.",
-      includingInterestAndFees: "Sisältäen pääoman, korot ja maksut"
+      includingInterestAndFees: "Sisältäen pääoman, korot ja maksut",
+      toast: {
+        loanPaidOff: "Laina maksettu: {{name}}",
+        cardPaidOff: "Luottokortti maksettu: {{name}}"
+      }
     }
   }
 };

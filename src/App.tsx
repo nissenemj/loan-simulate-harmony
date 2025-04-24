@@ -24,6 +24,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Index = lazy(() => import('./pages/Index'));
 const Auth = lazy(() => import('./pages/Auth'));
 const DebtStrategies = lazy(() => import('./pages/DebtStrategies'));
+const DebtSummaryPage = lazy(() => import('./pages/DebtSummaryPage'));
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/app" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/debt-strategies" element={<DebtStrategies />} />
+                        <Route path="/debt-summary" element={<DebtSummaryPage />} />
                       </Routes>
                     </Suspense>
                   </main>
