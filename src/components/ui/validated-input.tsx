@@ -51,14 +51,16 @@ export function ValidatedInput({
   };
 
   return (
-    <div className={cn("space-y-2", wrapperClassName)}>
+    <div className={cn("space-y-3", wrapperClassName)}>
       <div className="flex items-start md:items-center justify-between flex-wrap gap-2">
-        <Label htmlFor={props.id} className="text-base md:text-sm">{label}</Label>
+        <Label htmlFor={props.id} className="text-base md:text-sm font-medium text-foreground">
+          {label}
+        </Label>
         {helpText && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger type="button" className="p-2 -m-2">
-                <AlertCircle className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
+                <AlertCircle className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground hover:text-foreground transition-colors" />
               </TooltipTrigger>
               <TooltipContent>
                 <p className="text-sm">{helpText}</p>
@@ -72,7 +74,7 @@ export function ValidatedInput({
           {...props}
           className={cn(
             "pr-8 h-11 md:h-10 text-base md:text-sm",
-            touched && validationState.isValid && "border-green-500 focus-visible:ring-green-500",
+            touched && validationState.isValid && "border-state-success focus-visible:ring-state-success",
             touched && !validationState.isValid && "border-destructive focus-visible:ring-destructive",
             className
           )}
@@ -82,7 +84,7 @@ export function ValidatedInput({
         {touched && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             {validationState.isValid ? (
-              <Check className="h-5 w-5 md:h-4 md:w-4 text-green-500" />
+              <Check className="h-5 w-5 md:h-4 md:w-4 text-state-success" />
             ) : (
               <AlertCircle className="h-5 w-5 md:h-4 md:w-4 text-destructive" />
             )}
