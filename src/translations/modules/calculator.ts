@@ -1,4 +1,3 @@
-
 // Calculator-related translations
 
 export const calculator = {
@@ -54,6 +53,33 @@ export const calculator = {
       monthly: "Monthly",
       quarterly: "Quarterly",
       yearly: "Yearly",
+      
+      consolidationDescription: "Compare different debt consolidation options to potentially save on interest.",
+      consolidationDisclaimer: "Important Information",
+      consolidationDisclaimerText: "These calculations are estimates only. Actual loan terms, rates, and eligibility will depend on your credit score, income, and other factors. Consult with financial institutions for personalized offers.",
+      consolidationConsiderations: "Important Considerations",
+      addCustomOption: "Add Custom Option",
+      editOption: "Edit Option",
+      option: "Option",
+      optionNamePlaceholder: "e.g., Credit Union Loan",
+      term: "Term",
+      termDescription: "Loan term in months",
+      cancel: "Cancel",
+      update: "Update",
+      add: "Add",
+      months: "months",
+      payoffDate: "Payoff Date",
+      potentialSavings: "Potential Savings",
+      saved: "saved",
+      more: "more",
+      personalLoan: "Personal Loan",
+      balanceTransfer: "Balance Transfer",
+      homeEquityLoan: "Home Equity Loan",
+      debtConsolidationLoan: "Debt Consolidation Loan",
+      considerationFees: "Consider any fees associated with consolidation.",
+      considerationCredit: "Your credit score may impact available rates.",
+      considerationCollateral: "Some options may require collateral.",
+      considerationBehavior: "Address spending habits to avoid rebuilding debt."
     }
   },
   fi: {
@@ -108,6 +134,33 @@ export const calculator = {
       monthly: "Kuukausittain",
       quarterly: "Neljännesvuosittain",
       yearly: "Vuosittain",
+      
+      consolidationDescription: "Vertaile eri velkojen yhdistämisvaihtoehtoja säästääksesi mahdollisesti korkokuluissa.",
+      consolidationDisclaimer: "Tärkeää tietoa",
+      consolidationDisclaimerText: "Nämä laskelmat ovat vain arvioita. Todelliset lainaehdot, korot ja kelpoisuus riippuvat luottopisteistäsi, tuloistasi ja muista tekijöistä. Kysy rahoituslaitoksilta henkilökohtaisia tarjouksia.",
+      consolidationConsiderations: "Tärkeitä huomioita",
+      addCustomOption: "Lisää mukautettu vaihtoehto",
+      editOption: "Muokkaa vaihtoehtoa",
+      option: "Vaihtoehto",
+      optionNamePlaceholder: "esim. Osuuspankin laina",
+      term: "Laina-aika",
+      termDescription: "Laina-aika kuukausina",
+      cancel: "Peruuta",
+      update: "Päivitä",
+      add: "Lisää",
+      months: "kuukautta",
+      payoffDate: "Maksupäivä",
+      potentialSavings: "Mahdolliset säästöt",
+      saved: "säästetty",
+      more: "enemmän",
+      personalLoan: "Henkilökohtainen laina",
+      balanceTransfer: "Saldosiirto",
+      homeEquityLoan: "Asuntolaina",
+      debtConsolidationLoan: "Velkajärjestelylaina",
+      considerationFees: "Huomioi yhdistämiseen liittyvät maksut.",
+      considerationCredit: "Luottopisteesi voivat vaikuttaa saatavilla oleviin korkoihin.",
+      considerationCollateral: "Jotkin vaihtoehdot saattavat vaatia vakuuksia.",
+      considerationBehavior: "Kiinnitä huomiota kulutustottumuksiin välttääksesi velkaantumisen uudelleen."
     }
   }
 };
