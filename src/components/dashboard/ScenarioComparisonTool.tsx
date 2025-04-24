@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -79,13 +78,11 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const totalMinPayments = calculateTotalMinPayments();
   
-  // Fixed default scenarios with minimum payment calculation
   const defaultScenarios: Scenario[] = [
     {
       id: 'current',
       name: t('scenarios.current') || 'Current Situation',
       interestRateAdjustment: 0,
-      // Ensure minimum payment is at least 1% of total debt if totalMinPayments is too low
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01),
       extraPayment: 0,
       strategy: 'avalanche'
@@ -93,17 +90,15 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
     {
       id: 'optimistic',
       name: t('scenarios.optimistic') || 'Optimistic',
-      interestRateAdjustment: -1, // Interest rates go down by 1%
-      // Increase payment by 20% from the current scenario
+      interestRateAdjustment: -1,
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01) * 1.2,
-      extraPayment: 1000, // Extra annual payment
+      extraPayment: 1000,
       strategy: 'avalanche'
     },
     {
       id: 'pessimistic',
       name: t('scenarios.pessimistic') || 'Pessimistic',
-      interestRateAdjustment: 2, // Interest rates go up by 2%
-      // Same as current but with higher interest rates
+      interestRateAdjustment: 2,
       monthlyPayment: Math.max(monthlyBudget, totalMinPayments, totalDebt * 0.01),
       extraPayment: 0,
       strategy: 'avalanche'
@@ -146,13 +141,11 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const activeScenario = scenarios.find(scenario => scenario.id === activeScenarioId) || scenarios[0];
   
-  // Enhanced scenario results with better error handling
   const scenarioResults = React.useMemo(() => {
     return scenarios.map(scenario => {
       const { adjustedLoans, adjustedCards } = adjustDebtsForScenario(scenario);
       const combinedDebts = combineDebts(adjustedLoans, adjustedCards);
       
-      // Check if there are any debts to repay
       if (combinedDebts.length === 0) {
         return {
           id: scenario.id,
@@ -170,7 +163,6 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       try {
         const plan = generateRepaymentPlan(combinedDebts, effectiveMonthlyPayment, scenario.strategy);
         
-        // Check if the plan is viable and has a timeline
         if (!plan.isViable) {
           return {
             id: scenario.id,
@@ -220,7 +212,6 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
     });
   }, [scenarios, activeLoans, activeCards]);
   
-  // Debug logging
   useEffect(() => {
     if (debugMode) {
       console.group('Scenario Comparison Debug');
@@ -264,7 +255,6 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const [announcement, setAnnouncement] = useState('');
 
-  // Helper function to calculate difference between scenarios
   const calculateDifference = (scenario: any, baseline: any) => {
     if (!scenario || !baseline || scenario.totalMonths === 0 || baseline.totalMonths === 0) {
       return null;
@@ -758,7 +748,6 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
           </div>
         </div>
         
-        {/* Debug toggle in development mode */}
         {process.env.NODE_ENV === 'development' && (
           <Button 
             variant="outline" 
@@ -786,7 +775,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
               size="sm" 
               onClick={exportScenarioData}
               className="flex items-center"
-              disabled={!activeScenarioResults || activeScenarioResults.error}
+              disabled={!activeScenarioResults || !!activeScenarioResults.error}
             >
               <Download className="h-4 w-4 mr-2" />
               {t('dashboard.exportScenario')}
@@ -797,7 +786,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
               size="sm"
               onClick={handleShare}
               className="flex items-center"
-              disabled={!activeScenarioResults || activeScenarioResults.error}
+              disabled={!activeScenarioResults || !!activeScenarioResults.error}
             >
               <Share className="h-4 w-4 mr-2" />
               {t('dashboard.shareScenario')}
@@ -814,4 +803,3 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
 };
 
 export default ScenarioComparisonTool;
-
