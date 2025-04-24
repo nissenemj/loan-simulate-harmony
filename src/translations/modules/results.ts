@@ -14,6 +14,7 @@ export const results = {
       months: "Months",
       interestSaved: "Interest Saved",
       fasterPayoff: "Faster Payoff",
+      principalDebt: "Principal Debt",
     }
   },
   fi: {
@@ -28,6 +29,7 @@ export const results = {
       months: "Kuukautta",
       interestSaved: "Säästetty korko",
       fasterPayoff: "Nopeampi maksuaika",
+      principalDebt: "Lainapääoma",
     }
   }
 };

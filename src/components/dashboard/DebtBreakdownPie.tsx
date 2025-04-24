@@ -15,8 +15,8 @@ const DebtBreakdownPie = ({ totalDebt, totalMinPayments, totalAmountToPay }: Deb
   const { t } = useLanguage();
   
   const data = [
-    { name: t('dashboard.principalDebt'), value: totalDebt, color: '#0088FE' },
-    { name: t('dashboard.totalInterest'), value: totalAmountToPay - totalDebt, color: '#FF8042' },
+    { name: t('results.principalDebt'), value: totalDebt, color: '#0088FE' },
+    { name: t('results.totalInterest'), value: totalAmountToPay - totalDebt, color: '#FF8042' },
   ];
 
   return (
