@@ -1,60 +1,49 @@
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
-/**
- * Calculate a complete debt payment plan based on the provided debts and strategy
- * 
- * @param debts - Array of debt objects
- * @param totalMonthlyPayment - Total amount to pay each month across all debts
- * @param strategy - Payment strategy (avalanche, snowball, or custom)
- * @param customOrder - Custom order of debt IDs (only used with custom strategy)
- * @returns Complete payment plan with monthly breakdown
- */
+// Optimized helper function to calculate monthly interest
+const calculateMonthlyInterest = (balance: number, annualRate: number): number => {
+  return balance * (annualRate / 100 / 12);
+};
+
 export function calculatePaymentPlan(
   debts: Debt[],
   totalMonthlyPayment: number,
   strategy: PaymentStrategy,
   customOrder?: string[]
 ): PaymentPlan {
-  // Validate inputs
-  if (!debts.length) {
-    throw new Error('No debts provided');
-  }
-  
-  if (totalMonthlyPayment <= 0) {
-    throw new Error('Total monthly payment must be greater than zero');
-  }
-  
-  // Calculate minimum payment sum
+  // Validation and early returns
+  if (!debts.length) throw new Error('No debts provided');
+  if (totalMonthlyPayment <= 0) throw new Error('Total monthly payment must be greater than zero');
+
+  // Calculate minimum payment sum once
   const minimumPaymentSum = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
-  
-  // Ensure total monthly payment is at least the sum of minimum payments
   if (totalMonthlyPayment < minimumPaymentSum) {
     throw new Error('Total monthly payment must be at least the sum of all minimum payments');
   }
-  
-  // Sort debts based on strategy
-  const sortedDebts = sortDebtsByStrategy(debts, strategy, customOrder);
-  
-  // Create working copy of debts to track remaining balances
-  let workingDebts = sortedDebts.map(debt => ({
-    ...debt,
+
+  // Create optimized working copy of debts
+  let workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
+    id: debt.id,
+    minimumPayment: debt.minimumPayment,
+    interestRate: debt.interestRate,
     remainingBalance: debt.balance
   }));
-  
-  // Initialize payment plan
+
   const monthlyPlans: MonthlyPaymentPlan[] = [];
   let currentMonth = 0;
   let totalInterestPaid = 0;
   let totalPaid = 0;
-  
-  // Continue until all debts are paid off
-  while (workingDebts.some(debt => debt.remainingBalance > 0)) {
-    const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() + currentMonth);
-    
+
+  // Pre-calculate start date
+  const startDate = new Date();
+
+  while (workingDebts.some(debt => debt.remainingBalance > 0) && currentMonth < 480) {
+    const monthDate = new Date(startDate);
+    monthDate.setMonth(startDate.getMonth() + currentMonth);
+
     const monthlyPlan: MonthlyPaymentPlan = {
       month: currentMonth,
-      date: currentDate.toISOString().split('T')[0],
+      date: monthDate.toISOString().split('T')[0],
       payments: [],
       totalPaid: 0,
       totalInterestPaid: 0,
@@ -62,113 +51,60 @@ export function calculatePaymentPlan(
       totalRemainingBalance: 0,
       debtsCompleted: []
     };
-    
-    // Calculate required minimum payments first
+
     let availablePayment = totalMonthlyPayment;
-    const minimumPayments = workingDebts
-      .filter(debt => debt.remainingBalance > 0)
-      .reduce((total, debt) => total + Math.min(debt.minimumPayment, debt.remainingBalance), 0);
-    
-    // Ensure we have enough for minimum payments
-    if (availablePayment < minimumPayments) {
-      throw new Error('Insufficient monthly payment to cover minimum payments');
-    }
-    
-    // Sort active debts by strategy
-    const activeDebts = workingDebts
-      .filter(debt => debt.remainingBalance > 0)
-      .sort((a, b) => {
-        if (strategy === 'avalanche') {
-          const interestDiff = b.interestRate - a.interestRate;
-          return Math.abs(interestDiff) < 0.001 ? a.remainingBalance - b.remainingBalance : interestDiff;
-        } else if (strategy === 'snowball') {
-          const balanceDiff = a.remainingBalance - b.remainingBalance;
-          return Math.abs(balanceDiff) < 0.001 ? b.interestRate - a.interestRate : balanceDiff;
-        } else if (strategy === 'custom' && customOrder) {
-          return customOrder.indexOf(a.id) - customOrder.indexOf(b.id);
-        }
-        return b.interestRate - a.interestRate;
-      });
-    
-    const payments: DebtPayment[] = [];
-    
+    const activeDebts = workingDebts.filter(debt => debt.remainingBalance > 0);
+
     // Process each active debt
     for (const debt of activeDebts) {
-      // Calculate interest for this month
-      const monthlyInterestRate = debt.interestRate / 100 / 12;
-      const interestAmount = debt.remainingBalance * monthlyInterestRate;
+      const interestAmount = calculateMonthlyInterest(debt.remainingBalance, debt.interestRate);
+      const requiredPayment = Math.min(debt.minimumPayment, debt.remainingBalance + interestAmount);
       
-      // Calculate minimum required payment
-      const requiredPayment = Math.min(
-        debt.minimumPayment,
-        debt.remainingBalance + interestAmount
-      );
-      
-      // Start with minimum payment
       let paymentAmount = requiredPayment;
       availablePayment -= requiredPayment;
-      
-      // If this is the highest priority debt and we have extra money, add it
-      if (debt.id === activeDebts[0].id && availablePayment > 0) {
-        const maxAdditionalPayment = debt.remainingBalance + interestAmount - requiredPayment;
-        const additionalPayment = Math.min(availablePayment, maxAdditionalPayment);
-        paymentAmount += additionalPayment;
-        availablePayment -= additionalPayment;
+
+      // Apply extra payment to highest priority debt
+      if (debt === activeDebts[0] && availablePayment > 0) {
+        const maxExtraPayment = debt.remainingBalance + interestAmount - requiredPayment;
+        const extraPayment = Math.min(availablePayment, maxExtraPayment);
+        paymentAmount += extraPayment;
+        availablePayment -= extraPayment;
       }
-      
-      // Calculate how much goes to interest vs principal
+
       const interestPortion = Math.min(interestAmount, paymentAmount);
       const principalPortion = paymentAmount - interestPortion;
-      
-      // Calculate new remaining balance
-      const newRemainingBalance = Math.max(0, debt.remainingBalance - principalPortion);
-      
-      // Create payment record
-      const payment: DebtPayment = {
+      const newBalance = Math.max(0, debt.remainingBalance - principalPortion);
+
+      monthlyPlan.payments.push({
         debtId: debt.id,
         amount: paymentAmount,
         interestPaid: interestPortion,
         principalPaid: principalPortion,
-        remainingBalance: newRemainingBalance
-      };
-      
-      payments.push(payment);
-      
-      // Update monthly totals
+        remainingBalance: newBalance
+      });
+
+      // Update totals
       monthlyPlan.totalPaid += paymentAmount;
       monthlyPlan.totalInterestPaid += interestPortion;
       monthlyPlan.totalPrincipalPaid += principalPortion;
-      monthlyPlan.totalRemainingBalance += newRemainingBalance;
-      
-      // Check if debt is paid off this month
-      if (newRemainingBalance === 0) {
+      monthlyPlan.totalRemainingBalance += newBalance;
+
+      if (newBalance === 0) {
         monthlyPlan.debtsCompleted.push(debt.id);
       }
-      
-      // Update working debt
-      debt.remainingBalance = newRemainingBalance;
+
+      debt.remainingBalance = newBalance;
     }
-    
-    // Add payments to monthly plan
-    monthlyPlan.payments = payments;
+
     monthlyPlans.push(monthlyPlan);
-    
-    // Update totals
     totalInterestPaid += monthlyPlan.totalInterestPaid;
     totalPaid += monthlyPlan.totalPaid;
-    
     currentMonth++;
-    
-    // Safety check
-    if (currentMonth > 480) { // 40 years
-      throw new Error('Payment calculation exceeded maximum number of months');
-    }
   }
-  
-  // Calculate payoff date
-  const payoffDate = new Date();
-  payoffDate.setMonth(payoffDate.getMonth() + currentMonth - 1);
-  
+
+  const payoffDate = new Date(startDate);
+  payoffDate.setMonth(startDate.getMonth() + currentMonth - 1);
+
   return {
     monthlyPlans,
     totalMonths: currentMonth,
