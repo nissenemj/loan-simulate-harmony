@@ -33,6 +33,7 @@ export const debtSummary = {
       totalAmountPaid: "Total Amount Paid",
       metaDescription: "Review your overall debt situation, including loans and credit cards.",
       includingInterestAndFees: "Including principal, interest, and fees",
+      summaryExplanation: "This table shows your debt summarized across all loans and credit cards.",
       toast: {
         loanPaidOff: "Loan paid off: {{name}}",
         cardPaidOff: "Credit card paid off: {{name}}"
@@ -70,6 +71,7 @@ export const debtSummary = {
       totalAmountPaid: "Maksettu summa yhteensä",
       metaDescription: "Tarkastele kokonaisvelkatilannettasi, mukaan lukien lainat ja luottokortit.",
       includingInterestAndFees: "Sisältäen pääoman, korot ja maksut",
+      summaryExplanation: "Tämä taulukko näyttää velkasi yhteenvedon kaikista lainoista ja luottokorteista.",
       toast: {
         loanPaidOff: "Laina maksettu: {{name}}",
         cardPaidOff: "Luottokortti maksettu: {{name}}"

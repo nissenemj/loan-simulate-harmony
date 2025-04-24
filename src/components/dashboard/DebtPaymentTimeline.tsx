@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,8 +49,18 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
   if (!data.length) {
     return (
       <Card className="w-full h-[300px]">
-        <CardHeader>
-          <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>{t('visualization.paymentTimeline')}</CardTitle>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/debt-summary?tab=repayment-plan')}
+          >
+            {t('dashboard.viewRepaymentPlan')}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-[200px]">
           <p className="text-muted-foreground">{t('visualization.noDataAvailable')}</p>

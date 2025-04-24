@@ -1,3 +1,4 @@
+
 // Navigation-related translations
 
 export const navigation = {
