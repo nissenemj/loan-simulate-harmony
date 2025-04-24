@@ -15,9 +15,20 @@ const DebtBreakdownPie = ({ totalDebt, totalMinPayments, totalAmountToPay }: Deb
   const { t } = useLanguage();
   
   const data = [
-    { name: t('visualization.principalPayment'), value: totalDebt, color: '#0088FE' },
-    { name: t('visualization.totalInterestPaid'), value: totalAmountToPay - totalDebt, color: '#FF8042' },
+    { 
+      name: t('visualization.totalInterestPaid'), 
+      value: totalAmountToPay - totalDebt,
+      color: '#FF8042'
+    },
+    { 
+      name: t('visualization.principalPayment'), 
+      value: totalDebt,
+      color: '#0088FE'
+    }
   ];
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const getPercentage = (value: number) => ((value / total) * 100).toFixed(1);
 
   return (
     <Card className="w-full h-[300px]">
@@ -35,14 +46,17 @@ const DebtBreakdownPie = ({ totalDebt, totalMinPayments, totalAmountToPay }: Deb
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
-              label={false}
+              label={({ name, value }) => `${name}: ${getPercentage(value)}%`}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value: number) => formatCurrency(value)}
+              formatter={(value: number) => [
+                `${formatCurrency(value)} (${getPercentage(value)}%)`,
+                ''
+              ]}
             />
             <Legend verticalAlign="bottom" height={36} />
           </PieChart>
