@@ -36,9 +36,10 @@ export default function DebtSummaryPage() {
       <Helmet>
         <title>{t('debtSummary.pageTitle')} | {t('app.name')}</title>
         <meta name="description" content={t('debtSummary.metaDescription')} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
-      <div className="container max-w-4xl mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-8">{t('debtSummary.pageTitle')}</h1>
+      <div className="container max-w-4xl mx-auto py-4 md:py-8 px-4">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">{t('debtSummary.pageTitle')}</h1>
         <DebtSummary 
           loans={loans} 
           creditCards={creditCards} 

@@ -52,16 +52,16 @@ export function ValidatedInput({
 
   return (
     <div className={cn("space-y-2", wrapperClassName)}>
-      <div className="flex items-center justify-between">
-        <Label htmlFor={props.id}>{label}</Label>
+      <div className="flex items-start md:items-center justify-between flex-wrap gap-2">
+        <Label htmlFor={props.id} className="text-base md:text-sm">{label}</Label>
         {helpText && (
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger type="button">
-                <AlertCircle className="h-4 w-4 text-muted-foreground" />
+              <TooltipTrigger type="button" className="p-2 -m-2">
+                <AlertCircle className="h-5 w-5 md:h-4 md:w-4 text-muted-foreground" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{helpText}</p>
+                <p className="text-sm">{helpText}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -71,7 +71,7 @@ export function ValidatedInput({
         <Input
           {...props}
           className={cn(
-            "pr-8",
+            "pr-8 h-11 md:h-10 text-base md:text-sm",
             touched && validationState.isValid && "border-green-500 focus-visible:ring-green-500",
             touched && !validationState.isValid && "border-destructive focus-visible:ring-destructive",
             className
@@ -80,11 +80,11 @@ export function ValidatedInput({
           onBlur={handleBlur}
         />
         {touched && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
             {validationState.isValid ? (
-              <Check className="h-4 w-4 text-green-500" />
+              <Check className="h-5 w-5 md:h-4 md:w-4 text-green-500" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-destructive" />
+              <AlertCircle className="h-5 w-5 md:h-4 md:w-4 text-destructive" />
             )}
           </div>
         )}
