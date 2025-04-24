@@ -1,3 +1,4 @@
+
 // Calculator-related translations
 
 export const calculator = {
@@ -54,6 +55,7 @@ export const calculator = {
       quarterly: "Quarterly",
       yearly: "Yearly",
       
+      // Consolidation-related translations
       consolidationDescription: "Compare different debt consolidation options to potentially save on interest.",
       consolidationDisclaimer: "Important Information",
       consolidationDisclaimerText: "These calculations are estimates only. Actual loan terms, rates, and eligibility will depend on your credit score, income, and other factors. Consult with financial institutions for personalized offers.",
@@ -135,6 +137,7 @@ export const calculator = {
       quarterly: "Neljännesvuosittain",
       yearly: "Vuosittain",
       
+      // Consolidation-related translations
       consolidationDescription: "Vertaile eri velkojen yhdistämisvaihtoehtoja säästääksesi mahdollisesti korkokuluissa.",
       consolidationDisclaimer: "Tärkeää tietoa",
       consolidationDisclaimerText: "Nämä laskelmat ovat vain arvioita. Todelliset lainaehdot, korot ja kelpoisuus riippuvat luottopisteistäsi, tuloistasi ja muista tekijöistä. Kysy rahoituslaitoksilta henkilökohtaisia tarjouksia.",
