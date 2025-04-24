@@ -807,10 +807,11 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
       </CardFooter>
       
       {showGuide && (
-        <ScenarioGuide onClose={() => setShowGuide(false)} />
+        <ScenarioGuide isOpen={showGuide} onClose={() => setShowGuide(false)} />
       )}
     </Card>
   );
 };
 
 export default ScenarioComparisonTool;
+
