@@ -24,7 +24,9 @@ export default function BreadcrumbNav({ className }: BreadcrumbNavProps) {
   if (pathSegments.length === 0) return null;
 
   const translatePathSegment = (segment: string) => {
-    const key = `navigation.${segment.replace(/-/g, '')}`;
+    // Convert kebab-case segments to camelCase for translation lookup
+    const normalizedSegment = segment.replace(/-/g, '');
+    const key = `navigation.${normalizedSegment}`;
     return t(key);
   };
 

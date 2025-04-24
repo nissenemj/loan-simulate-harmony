@@ -1,3 +1,4 @@
+
 // Navigation-related translations
 
 export const navigation = {
@@ -13,7 +14,7 @@ export const navigation = {
     },
     navigation: {
       dashboard: "Dashboard",
-      calculator: "Loan Simulator",
+      loanSimulator: "Loan Simulator",
       debtStrategies: "Debt Repayment Strategies",
       blog: "Blog",
       courses: "Courses",
@@ -40,7 +41,7 @@ export const navigation = {
     },
     navigation: {
       dashboard: "Kojelauta",
-      calculator: "Lainasimulaattori",
+      loanSimulator: "Lainasimulaattori",
       debtStrategies: "Velanmaksustrategiat",
       blog: "Blogi",
       courses: "Kurssit",
