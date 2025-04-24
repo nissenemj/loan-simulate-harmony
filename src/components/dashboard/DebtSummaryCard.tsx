@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -5,7 +6,7 @@ import { formatCurrency } from "@/utils/loanCalculations";
 import { CreditCard, DollarSign, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { CalculationTooltip } from "./CalculationExplanations";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 
 interface DebtSummaryCardProps {
 	totalDebt: number;
@@ -42,7 +43,7 @@ const DebtSummaryCard = ({
 							<span className="text-muted-foreground font-medium">
 								{t("dashboard.totalDebt")}
 							</span>
-							<CalculationTooltip content={t("tooltips.totalDebt")} />
+							<HelpTooltip content={t("tooltips.totalDebt")} />
 						</div>
 						<span className="text-2xl md:text-3xl font-bold mt-2">
 							{formattedTotalDebt}
@@ -54,7 +55,7 @@ const DebtSummaryCard = ({
 							<span className="text-sm font-medium">
 								{formattedInterestCost}
 							</span>
-							<CalculationTooltip content={t("tooltips.interestCost")} />
+							<HelpTooltip content={t("tooltips.interestCost")} />
 						</div>
 					</div>
 
@@ -64,7 +65,7 @@ const DebtSummaryCard = ({
 							<span className="text-muted-foreground font-medium">
 								{t("dashboard.estimatedDebtFreeDate")}
 							</span>
-							<CalculationTooltip content={t("tooltips.debtFreeDate")} />
+							<HelpTooltip content={t("tooltips.debtFreeDate")} />
 						</div>
 						<span className="text-2xl md:text-3xl font-bold mt-2">
 							{debtFreeDate}
@@ -74,7 +75,7 @@ const DebtSummaryCard = ({
 								{t("dashboard.totalToPayOff")}:
 							</span>
 							<span className="text-sm font-medium">{formattedTotalPay}</span>
-							<CalculationTooltip content={t("tooltips.totalToPayOff")} />
+							<HelpTooltip content={t("tooltips.totalToPayOff")} />
 						</div>
 					</div>
 
@@ -84,7 +85,7 @@ const DebtSummaryCard = ({
 							<span className="text-muted-foreground font-medium">
 								{t("dashboard.minimumMonthlyPayments")}
 							</span>
-							<CalculationTooltip content={t("tooltips.minimumPayments")} />
+							<HelpTooltip content={t("tooltips.minimumPayments")} />
 						</div>
 						<span className="text-2xl md:text-3xl font-bold mt-2">
 							{formattedMinPayments}
