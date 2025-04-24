@@ -1,4 +1,3 @@
-
 import { DebtItem, PrioritizationMethod, RepaymentPlan } from './types';
 import { prioritizeDebts } from './prioritization';
 
@@ -25,12 +24,12 @@ export const simulateRepayment = (
   
   // Simulate until all debts are paid off
   let month = 1;
-  const MAX_MONTHS = 480; // 40 years
+  // Removed maximum months constraint - let it calculate as long as needed
   
   // Track extra payment amount available for redistribution
   let extraPaymentPool = 0;
   
-  while (currentDebts.some(debt => debt.balance > 0) && month <= MAX_MONTHS) {
+  while (currentDebts.some(debt => debt.balance > 0)) {
     const monthData = {
       month,
       debts: [] as { id: string; name: string; remainingBalance: number; payment: number; interestPaid: number; }[],
@@ -108,11 +107,6 @@ export const simulateRepayment = (
       const excessPayment = principalPayment > debt.balance ? principalPayment - debt.balance : 0;
       principalPayment = Math.min(principalPayment, debt.balance);
       
-      // Add excess payment back to the pool for next month
-      if (excessPayment > 0) {
-        extraPaymentPool += excessPayment;
-      }
-      
       // Calculate actual payment (interest + principal)
       const actualPayment = principalPayment + actualInterestPaid;
       
@@ -186,11 +180,8 @@ export const simulateRepayment = (
     month++;
   }
   
-  // Handle case where repayment takes too long
-  if (month > MAX_MONTHS) {
-    console.warn('Repayment plan calculation hit maximum months limit');
-    throw new Error('Payment calculation exceeded maximum number of months (40 years)');
-  }
+  // No more error handling for maximum months
+  // Just return the calculated timeline regardless of how long it takes
   
   return {
     timeline,

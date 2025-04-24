@@ -114,19 +114,7 @@ export const generateRepaymentPlan = (
       creditCardFreeMonth
     };
   } catch (error) {
-    // If simulation exceeded maximum months or had other errors
-    if (error instanceof Error && error.message.includes('maximum number of months')) {
-      return {
-        isViable: false,
-        insufficientBudgetMessage: `Payment calculation exceeded maximum number of months (40 years)`,
-        totalMonths: 480, // 40 years
-        totalInterestPaid: 0,
-        timeline: [],
-        monthlyAllocation: initialAllocation
-      };
-    }
-    
-    // For other errors
+    // General error handling, but no specific handling for maximum months
     return {
       isViable: false,
       insufficientBudgetMessage: error instanceof Error ? error.message : 'Unknown calculation error',
