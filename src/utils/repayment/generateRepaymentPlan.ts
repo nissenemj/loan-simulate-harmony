@@ -19,7 +19,8 @@ export const generateRepaymentPlan = (
       totalMonths: 0,
       totalInterestPaid: 0,
       timeline: [],
-      monthlyAllocation: []
+      monthlyAllocation: [],
+      creditCardFreeMonth: undefined
     };
   }
 
@@ -33,7 +34,7 @@ export const generateRepaymentPlan = (
       totalInterestPaid: 0,
       timeline: [],
       monthlyAllocation: [],
-      creditCardFreeMonth: 0
+      creditCardFreeMonth: undefined
     };
   }
 

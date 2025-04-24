@@ -108,6 +108,11 @@ export const simulateRepayment = (
       const excessPayment = principalPayment > debt.balance ? principalPayment - debt.balance : 0;
       principalPayment = Math.min(principalPayment, debt.balance);
       
+      // Add excess payment back to the pool for next month
+      if (excessPayment > 0) {
+        extraPaymentPool += excessPayment;
+      }
+      
       // Calculate actual payment (interest + principal)
       const actualPayment = principalPayment + actualInterestPaid;
       
