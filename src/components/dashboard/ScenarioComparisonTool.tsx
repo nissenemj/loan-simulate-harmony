@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { scenarioColors } from '@/utils/chartColors';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ScenarioGuide from './ScenarioGuide';
 import { useCurrencyFormatter } from '@/utils/formatting';
-import { X, AlertCircle, RefreshCw } from 'lucide-react';
+import { X, AlertCircle, RefreshCw, TrendingDown, TrendingUp } from 'lucide-react';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
 import { combineDebts } from '@/utils/repayment/debtConverters';
@@ -136,7 +136,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const activeScenario = scenarios.find(scenario => scenario.id === activeScenarioId) || scenarios[0];
   
-  const scenarioResults = useMemo(() => {
+  const scenarioResults = React.useMemo(() => {
     return scenarios.map(scenario => {
       const { adjustedLoans, adjustedCards } = adjustDebtsForScenario(scenario);
       const combinedDebts = combineDebts(adjustedLoans, adjustedCards);
@@ -158,7 +158,7 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
   
   const activeScenarioResults = scenarioResults.find(result => result.id === activeScenarioId);
   
-  const comparisonChartData = useMemo(() => {
+  const comparisonChartData = React.useMemo(() => {
     const maxMonths = Math.max(...scenarioResults.map(result => 
       result.timeline.length > 0 ? result.timeline.length : 0
     ));
@@ -327,4 +327,67 @@ const ScenarioComparisonTool: React.FC<ScenarioComparisonToolProps> = ({
             </Alert>
           )}
           
-          {/* Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {scenarioResults.map(result => {
+              const monthsToPayoff = result.totalMonths;
+              const interestPaid = result.totalInterestPaid;
+              const scenario = scenarios.find(s => s.id === result.id);
+              
+              return (
+                <Card 
+                  key={result.id}
+                  className={`${result.id === activeScenarioId ? 'border-primary' : ''}`}
+                >
+                  <CardHeader className="py-3">
+                    <CardTitle className="text-base">{scenario?.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">{t('visualization.monthsToPayoff')}</span>
+                        <span className="font-medium">{monthsToPayoff} {t('visualization.months')}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">{t('visualization.totalInterestPaid')}</span>
+                        <span className="font-medium">{currencyFormatter.format(interestPaid)}</span>
+                      </div>
+                      {result.id !== 'current' && (
+                        <div className="flex justify-between items-center pt-2 border-t">
+                          <span className="text-sm text-muted-foreground">{t('visualization.comparisonResult')}</span>
+                          <div className="flex items-center">
+                            {result.totalMonths < (scenarioResults.find(r => r.id === 'current')?.totalMonths || 0) && (
+                              <span className="text-green-600 flex items-center text-sm">
+                                <TrendingDown className="h-3 w-3 mr-1" />
+                                {scenarioResults.find(r => r.id === 'current')?.totalMonths - result.totalMonths} {t('visualization.months')}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              {/* Chart goes here */}
+            </div>
+            <div>
+              <ScenarioEditor 
+                totalMinPayments={totalMinPayments}
+                onUpdate={handleEditFormUpdate}
+                estimatedMonths={estimatedMonths}
+                estimatedInterest={estimatedInterest}
+              />
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ScenarioComparisonTool;
