@@ -5,6 +5,7 @@ export const recommendations = {
   en: {
     recommendations: {
       title: "Recommendations",
+      subtitle: "Useful tools and services",
       topPriority: "Top Priority",
       topPriorityText: "This loan should be paid off first due to high cost.",
       topPriorityTextPlural: "These loans should be paid off first due to high cost.",
@@ -32,6 +33,7 @@ export const recommendations = {
   fi: {
     recommendations: {
       title: "Suositukset",
+      subtitle: "Hyödyllisiä työkaluja ja palveluita",
       topPriority: "Tärkein prioriteetti",
       topPriorityText: "Tämä laina tulisi maksaa pois ensin korkean kustannuksen vuoksi.",
       topPriorityTextPlural: "Nämä lainat tulisi maksaa pois ensin korkean kustannuksen vuoksi.",
@@ -57,3 +59,4 @@ export const recommendations = {
     }
   }
 };
+

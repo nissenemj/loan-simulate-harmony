@@ -1,14 +1,12 @@
 
 import { en, fi } from '@/translations';
 
-// This function will check for missing translations between English and Finnish
 export function checkMissingTranslations() {
   // Only run in development mode
   if (process.env.NODE_ENV !== 'development') {
     return;
   }
 
-  // Function to flatten nested translation objects
   const flattenObject = (obj: any, prefix = ''): Record<string, string> => {
     return Object.keys(obj).reduce((acc: Record<string, string>, key) => {
       const prefixedKey = prefix ? `${prefix}.${key}` : key;
@@ -32,6 +30,12 @@ export function checkMissingTranslations() {
   // Find keys in Finnish but not in English
   const missingInEn = Object.keys(flatFi).filter(key => !(key in flatEn));
   
+  // Find placeholder text (keys containing 'title' or 'subtitle' that match their values)
+  const potentialPlaceholders = Object.entries(flatEn).filter(([key, value]) => 
+    (key.toLowerCase().includes('title') || key.toLowerCase().includes('subtitle')) &&
+    key === value
+  );
+  
   // Log missing translations
   if (missingInFi.length > 0) {
     console.warn(`Missing Finnish translations (${missingInFi.length} keys):`, missingInFi);
@@ -41,16 +45,21 @@ export function checkMissingTranslations() {
     console.warn(`Missing English translations (${missingInEn.length} keys):`, missingInEn);
   }
   
+  if (potentialPlaceholders.length > 0) {
+    console.warn('Potential placeholder text found:', potentialPlaceholders);
+  }
+  
   // Log overall status
-  if (missingInFi.length === 0 && missingInEn.length === 0) {
+  if (missingInFi.length === 0 && missingInEn.length === 0 && potentialPlaceholders.length === 0) {
     console.info('All translations are in sync!');
   } else {
-    console.warn(`Translation check complete. Found ${missingInFi.length + missingInEn.length} missing keys.`);
+    console.warn(`Translation check complete. Found ${missingInFi.length + missingInEn.length} missing keys and ${potentialPlaceholders.length} potential placeholders.`);
   }
 
   return {
     missingInFi,
     missingInEn,
-    complete: missingInFi.length === 0 && missingInEn.length === 0
+    potentialPlaceholders,
+    complete: missingInFi.length === 0 && missingInEn.length === 0 && potentialPlaceholders.length === 0
   };
 }

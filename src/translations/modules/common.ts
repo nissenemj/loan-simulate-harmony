@@ -1,4 +1,3 @@
-
 // Common translations used throughout the application
 
 export const common = {
@@ -18,6 +17,16 @@ export const common = {
       dark: "Dark",
       system: "System",
       toggle: "Toggle theme"
+    },
+    cookieSettings: {
+      title: "Cookie Settings",
+      description: "Manage your cookie preferences",
+      save: "Save preferences",
+      accept: "Accept all",
+      reject: "Reject all",
+      necessary: "Necessary",
+      analytics: "Analytics",
+      marketing: "Marketing"
     },
     loading: "Loading...",
     error: "An error occurred",
@@ -43,6 +52,16 @@ export const common = {
       dark: "Tumma",
       system: "Järjestelmä",
       toggle: "Vaihda teemaa"
+    },
+    cookieSettings: {
+      title: "Evästeasetukset",
+      description: "Hallitse evästeasetuksiasi",
+      save: "Tallenna asetukset",
+      accept: "Hyväksy kaikki",
+      reject: "Hylkää kaikki",
+      necessary: "Välttämättömät",
+      analytics: "Analytiikka",
+      marketing: "Markkinointi"
     },
     loading: "Ladataan...",
     error: "Tapahtui virhe",
