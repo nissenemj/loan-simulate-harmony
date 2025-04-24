@@ -16,10 +16,21 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
 
   // Generate monthly data points until debt free date
   const generateTimelineData = () => {
+    if (!totalDebt || !totalAmountToPay || !debtFreeDate) {
+      return [];
+    }
+
     const startDate = new Date();
     const endDate = new Date(debtFreeDate);
-    const monthsDiff = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
-                      (endDate.getMonth() - startDate.getMonth());
+    
+    // Ensure we have valid dates
+    if (isNaN(endDate.getTime())) {
+      console.warn('Invalid debt free date:', debtFreeDate);
+      return [];
+    }
+    
+    const monthsDiff = Math.max(1, (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+                      (endDate.getMonth() - startDate.getMonth()));
     
     const monthlyReduction = totalDebt / Math.max(1, monthsDiff);
     const monthlyInterest = (totalAmountToPay - totalDebt) / Math.max(1, monthsDiff);
@@ -34,7 +45,7 @@ const DebtPaymentTimeline = ({ totalDebt, totalAmountToPay, debtFreeDate }: Debt
   const data = generateTimelineData();
 
   // Return a message if there's no valid data
-  if (!totalDebt || !totalAmountToPay || !debtFreeDate) {
+  if (!data.length) {
     return (
       <Card className="w-full h-[300px]">
         <CardHeader>
