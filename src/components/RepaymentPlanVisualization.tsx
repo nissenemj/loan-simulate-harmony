@@ -36,14 +36,18 @@ import {
   YAxis 
 } from 'recharts';
 import { cn } from '@/lib/utils';
+import { Loan } from "@/utils/loanCalculations";
+import { CreditCard } from "@/utils/creditCardCalculations";
 
 interface RepaymentPlanVisualizationProps {
   plan: RepaymentPlan;
+  debts?: (Loan | CreditCard)[];
   className?: string;
 }
 
 const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({ 
   plan,
+  debts = [],
   className
 }) => {
   const { t } = useLanguage();
