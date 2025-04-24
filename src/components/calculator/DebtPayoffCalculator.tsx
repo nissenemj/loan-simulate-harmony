@@ -22,7 +22,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { X } from "lucide-react";
-import { ResponsiveFormField } from "@/components/ui/form";
+import { ResponsiveFormField } from "@/components/ui/ResponsiveFormField";
 
 interface DebtPayoffCalculatorProps {
 	initialDebts?: Debt[];
