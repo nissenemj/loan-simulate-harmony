@@ -69,7 +69,7 @@ const DebtStrategies = () => {
     if (error.message && error.message.includes("maximum number of months")) {
       setCalculationError(t('debtStrategies.errorMaxMonths'));
     } else {
-      setCalculationError(error.message || "An error occurred");
+      setCalculationError(error.message || t('debtStrategies.errorInCalculation'));
     }
   };
   

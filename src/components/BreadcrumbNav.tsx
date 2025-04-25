@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -26,6 +27,11 @@ export default function BreadcrumbNav({ className }: BreadcrumbNavProps) {
 		// Special case for debt-summary
 		if (segment === "debt-summary") {
 			return t("navigation.debtSummary");
+		}
+		
+		// Special case for debt-strategies
+		if (segment === "debt-strategies") {
+			return t("navigation.debtStrategies");
 		}
 
 		// Convert kebab-case segments to camelCase for translation lookup

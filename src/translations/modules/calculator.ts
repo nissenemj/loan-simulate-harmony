@@ -1,3 +1,4 @@
+
 // Calculator-related translations
 export const calculator = {
 	en: {
@@ -62,7 +63,7 @@ export const calculator = {
 		monthly: "Monthly",
 		quarterly: "Quarterly",
 		yearly: "Yearly",
-		// Add debt consolidation related translations
+		// Debt consolidation related translations
 		consolidationDescription:
 			"Compare different debt consolidation options to potentially save on interest.",
 		consolidationDisclaimer: "Important Information",
@@ -135,13 +136,6 @@ export const calculator = {
 		payment: "Maksu",
 		remainingBalance: "Jäljellä oleva saldo",
 		paidOff: "Maksettu pois",
-		debtsPaidOff: "Maksetut velat",
-		congratulations: "Onnittelut!",
-		debtFreeMessage: "Olet nyt velaton!",
-		calculateFirst: "Laske ensin velanmaksuaika.",
-		monthly: "Kuukausittain",
-		quarterly: "Neljännesvuosittain",
-		yearly: "Vuosittain",
 		calculate: "Laske",
 		calculationComplete: "Laskenta valmis",
 		calculationError: "Virhe maksusuunnitelman laskennassa",
@@ -153,7 +147,14 @@ export const calculator = {
 		errorNumberRequired: "Arvo vaaditaan",
 		errorMustBeNumber: "Arvon on oltava numero",
 		errorMustBePositive: "Arvon on oltava positiivinen",
-		// Add debt consolidation related translations
+		debtsPaidOff: "Maksetut velat",
+		congratulations: "Onnittelut!",
+		debtFreeMessage: "Olet nyt velaton!",
+		calculateFirst: "Laske ensin velanmaksuaika.",
+		monthly: "Kuukausittain",
+		quarterly: "Neljännesvuosittain",
+		yearly: "Vuosittain",
+		// Debt consolidation related translations in Finnish
 		consolidationDescription:
 			"Vertaile eri velkojen yhdistämisvaihtoehtoja säästääksesi mahdollisesti korkokuluissa.",
 		consolidationDisclaimer: "Tärkeää tietoa",
