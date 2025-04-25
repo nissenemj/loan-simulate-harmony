@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CalculatorIcon, TrendingUp, CoinsIcon, ArrowRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface BudgetInputProps {
   onCalculate: (budget: number, method: PrioritizationMethod) => void;
@@ -23,6 +24,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   const { t } = useLanguage();
   const [budget, setBudget] = useState<number | string>(defaultBudget);
   const [prioritization, setPrioritization] = useState<PrioritizationMethod>(method);
+  const isMobile = useIsMobile();
 
   const handleCalculate = () => {
     if (typeof budget === 'string') {
@@ -40,9 +42,9 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   return (
     <Card className="max-w-full overflow-hidden velkavapaus-card">
       <CardHeader className="space-y-1">
-        <CardTitle className="flex items-center gap-2 text-wrap overflow-hidden">
+        <CardTitle className="flex items-center gap-2 text-wrap">
           <CalculatorIcon className="h-5 w-5 text-primary shrink-0" />
-          <span className="text-wrap break-all overflow-hidden">{t("repayment.title")}</span>
+          <span className="break-words">{t("repayment.title")}</span>
         </CardTitle>
         <CardDescription className="text-wrap break-words">
           {t("repayment.enterBudgetPrompt")}
@@ -73,22 +75,22 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             onValueChange={(value) => setPrioritization(value as PrioritizationMethod)}
             className="space-y-2"
           >
-            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
-              <RadioGroupItem value="avalanche" id="avalanche" />
+            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+              <RadioGroupItem value="avalanche" id="avalanche" className="mt-1" />
               <Label htmlFor="avalanche" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("repayment.avalancheStrategy")}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.avalancheDesc")}</span>
               </Label>
             </div>
-            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
-              <RadioGroupItem value="snowball" id="snowball" />
+            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+              <RadioGroupItem value="snowball" id="snowball" className="mt-1" />
               <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("repayment.snowballStrategy")}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.snowballDesc")}</span>
               </Label>
             </div>
-            <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
-              <RadioGroupItem value="equal" id="equal" />
+            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+              <RadioGroupItem value="equal" id="equal" className="mt-1" />
               <Label htmlFor="equal" className="flex flex-col cursor-pointer w-full">
                 <span className="font-medium text-wrap break-words">{t("dashboard.equalDistribution") || "Equal Distribution"}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">
