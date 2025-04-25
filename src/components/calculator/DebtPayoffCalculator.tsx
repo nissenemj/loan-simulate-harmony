@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
-import { calculatePayoffPlan } from '@/utils/calculator/debtCalculator';
+import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
 import { PrioritizationMethod } from '@/utils/repayment';
 import { 
   AlertCircle, Calculator, Trash2, PlusCircle, CreditCard, 
