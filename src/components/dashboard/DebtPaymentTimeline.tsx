@@ -114,8 +114,14 @@ const DebtPaymentTimeline = ({
 							<XAxis
 								dataKey="month"
 								label={{ value: t("visualization.months"), position: "bottom" }}
+								tickFormatter={(value) => `${value}`}
+								tick={{ fontSize: 12 }}
 							/>
-							<YAxis tickFormatter={(value) => formatCurrency(value)} />
+							<YAxis
+								tickFormatter={(value) => formatCurrency(value)}
+								tick={{ fontSize: 12 }}
+								width={80}
+							/>
 							<Tooltip
 								formatter={(value: number) => formatCurrency(value)}
 								labelFormatter={(label) =>

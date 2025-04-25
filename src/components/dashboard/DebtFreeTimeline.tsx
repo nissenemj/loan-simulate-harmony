@@ -148,7 +148,17 @@ const DebtFreeTimeline = ({
 
 	// Format date as locale string
 	const formatDate = (date: Date | null): string => {
-		if (!date) return t("debtStrategies.errorMaxMonths");
+		if (!date) return t("debtStrategies.insufficientPayment");
+
+		// Check if date is more than 40 years in the future
+		const now = new Date();
+		const maxDate = new Date();
+		maxDate.setFullYear(now.getFullYear() + 40);
+
+		if (date > maxDate) {
+			return t("debtStrategies.errorMaxMonths");
+		}
+
 		return date.toLocaleDateString("fi-FI");
 	};
 
