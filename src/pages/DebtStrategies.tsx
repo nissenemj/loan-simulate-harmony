@@ -23,6 +23,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Calculator, LineChart, TrendingDown, Coins } from 'lucide-react';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
 import { ErrorProvider } from '@/contexts/ErrorContext';
+import BreadcrumbNav from '@/components/BreadcrumbNav';
 
 const DebtStrategies = () => {
   const { t } = useTranslation();
@@ -81,6 +82,7 @@ const DebtStrategies = () => {
         </Helmet>
         
         <div className="space-y-6">
+          <BreadcrumbNav />
           <UnderConstructionBanner />
           
           <div>
