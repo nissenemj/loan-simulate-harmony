@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
 	AreaChart,
@@ -7,6 +8,7 @@ import {
 	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
+	Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -70,20 +72,28 @@ const DebtPaymentTimeline = ({
 		const totalInterest = amountToPay - debt;
 		const monthlyInterest = totalInterest / Math.max(1, monthsDiff);
 
-		// Generate the timeline data
-		return Array.from({ length: Math.max(1, monthsDiff) }, (_, index) => ({
-			month: index,
-			// For principal, we show the remaining principal balance
-			principal: Math.max(0, debt - monthlyReduction * index),
-			// For interest, we track the cumulative interest paid
-			interest: monthlyInterest * index,
-		}));
+		// Generate the timeline data - limit to 24 data points for readability
+		const dataPoints = Math.min(monthsDiff, 24);
+		const interval = Math.max(1, Math.floor(monthsDiff / dataPoints));
+		
+		return Array.from({ length: dataPoints }, (_, index) => {
+			const month = index * interval;
+			return {
+				month,
+				// For principal, we show the remaining principal balance
+				principal: Math.max(0, debt - monthlyReduction * month),
+				// For interest, we track the cumulative interest paid
+				interest: monthlyInterest * month,
+				// Add a formatted month label for the x-axis
+				monthLabel: month === 0 ? t("visualization.start") : `${month} ${t("visualization.months")}`,
+			};
+		});
 	};
 
 	const data = generateTimelineData();
 
 	return (
-		<Card className="w-full h-[300px]">
+		<Card className="w-full h-[350px]">
 			<CardHeader className="flex flex-row items-center justify-between">
 				<div>
 					<CardTitle>{t("visualization.paymentTimeline")}</CardTitle>
@@ -105,36 +115,47 @@ const DebtPaymentTimeline = ({
 						</p>
 					</div>
 				) : (
-					<ResponsiveContainer width="100%" height={200}>
+					<ResponsiveContainer width="100%" height={250}>
 						<AreaChart
 							data={data}
-							margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+							margin={{ top: 10, right: 30, left: 10, bottom: 30 }}
 						>
-							<CartesianGrid strokeDasharray="3 3" />
-							<XAxis
-								dataKey="month"
-								label={{ value: t("visualization.months"), position: "bottom" }}
+							<CartesianGrid strokeDasharray="3 3" opacity={0.6} />
+							<XAxis 
+								dataKey="monthLabel"
+								tick={{ fontSize: 12 }}
+								angle={-45}
+								textAnchor="end"
+								height={60}
 							/>
-							<YAxis tickFormatter={(value) => formatCurrency(value)} />
+							<YAxis 
+								tickFormatter={(value) => formatCurrency(value, true)} 
+								width={80}
+								tick={{ fontSize: 12 }}
+							/>
 							<Tooltip
 								formatter={(value: number) => formatCurrency(value)}
-								labelFormatter={(label) =>
-									`${t("visualization.months")}: ${label}`
-								}
+								labelFormatter={(label) => label}
+								contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
 							/>
+							<Legend wrapperStyle={{ paddingTop: 20 }} />
 							<Area
 								type="monotone"
 								dataKey="principal"
 								stroke="#0088FE"
 								fill="#0088FE"
+								fillOpacity={0.6}
 								name={t("visualization.principalPayment")}
+								strokeWidth={2}
 							/>
 							<Area
 								type="monotone"
 								dataKey="interest"
 								stroke="#FF8042"
 								fill="#FF8042"
+								fillOpacity={0.6}
 								name={t("visualization.interestPayment")}
+								strokeWidth={2}
 							/>
 						</AreaChart>
 					</ResponsiveContainer>
