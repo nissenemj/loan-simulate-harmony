@@ -1,548 +1,337 @@
-import { useState, useEffect } from "react";
-import { Debt, PaymentStrategy, PaymentPlan } from "@/utils/calculator/types";
-import { calculatePaymentPlan } from "@/utils/calculator/debtCalculator";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { useTranslation } from "@/contexts/LanguageContext";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
-import { X } from "lucide-react";
-import { ResponsiveFormField } from "@/components/ui/ResponsiveFormField";
-import { useError } from "@/contexts/ErrorContext";
-import { toast } from "sonner";
+
+import React, { useState, useCallback, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Debt, PaymentPlan } from '@/utils/calculator/types';
+import { calculatePayoffPlan } from '@/utils/calculator/debtCalculator';
+import { PrioritizationMethod } from '@/utils/repayment';
+import { 
+  AlertCircle, Calculator, Trash2, PlusCircle, CreditCard, 
+  BanknoteIcon, PercentIcon, CalendarIcon
+} from 'lucide-react';
+import BudgetInput from '../BudgetInput';
+import { useToast } from '@/hooks/use-toast';
 
 interface DebtPayoffCalculatorProps {
-	initialDebts?: Debt[];
-	onSaveResults?: (plan: PaymentPlan) => void;
-	onError?: (error: any) => void;
+  initialDebts: Debt[];
+  onSaveResults: (plan: PaymentPlan) => void;
+  onError: (error: Error) => void;
 }
 
-/**
- * Debt Payoff Calculator component
- * Allows users to calculate debt payoff plans using different strategies
- */
-export function DebtPayoffCalculator({
-	initialDebts = [],
-	onSaveResults,
-	onError,
-}: DebtPayoffCalculatorProps) {
-	const { t } = useTranslation();
-	const { captureError } = useError();
-	const [debts, setDebts] = useState<Debt[]>(initialDebts);
-	const [newDebt, setNewDebt] = useState<Partial<Debt>>({
-		name: "",
-		balance: 0,
-		interestRate: 0,
-		minimumPayment: 0,
-	});
-	const [strategy, setStrategy] = useState<PaymentStrategy>("avalanche");
-	const [additionalPayment, setAdditionalPayment] = useState(0);
-	const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [isCalculating, setIsCalculating] = useState(false);
-	const [validationErrors, setValidationErrors] = useState<{[key: string]: string | null}>({});
+const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebts, onSaveResults, onError }) => {
+  const { t } = useLanguage();
+  const { toast } = useToast();
+  const [debts, setDebts] = useState<Debt[]>(initialDebts);
+  const [monthlyBudget, setMonthlyBudget] = useState<number>(
+    Math.max(1000, Math.ceil(initialDebts.reduce((sum, debt) => sum + debt.minimumPayment, 0) * 1.2))
+  );
+  const [strategy, setStrategy] = useState<PrioritizationMethod>('avalanche');
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-	// Calculate total minimum payment
-	const totalMinimumPayment = debts.reduce(
-		(sum, debt) => sum + debt.minimumPayment,
-		0
-	);
+  // Calculate total debt and minimum payment
+  const totalDebt = useMemo(() => debts.reduce((sum, debt) => sum + debt.balance, 0), [debts]);
+  const totalMinPayment = useMemo(() => debts.reduce((sum, debt) => sum + debt.minimumPayment, 0), [debts]);
 
-	// Calculate total monthly payment
-	const totalMonthlyPayment = totalMinimumPayment + additionalPayment;
+  // Add a new empty debt
+  const handleAddDebt = useCallback(() => {
+    const newDebt: Debt = {
+      id: `debt-${Date.now()}`,
+      name: `${t('repayment.debtName')} ${debts.length + 1}`,
+      balance: 0,
+      interestRate: 0,
+      minimumPayment: 0,
+      type: 'loan'
+    };
+    setDebts([...debts, newDebt]);
+  }, [debts, t]);
 
-	// Calculate payment plan when inputs change
-	useEffect(() => {
-		if (debts.length === 0) {
-			setPaymentPlan(null);
-			return;
-		}
+  // Remove a debt by ID
+  const handleRemoveDebt = useCallback((id: string) => {
+    setDebts(debts.filter(debt => debt.id !== id));
+  }, [debts]);
 
-		try {
-			const plan = calculatePaymentPlan(debts, totalMonthlyPayment, strategy);
-			setPaymentPlan(plan);
-			setError(null);
+  // Update a debt's property
+  const handleUpdateDebt = useCallback((id: string, field: keyof Debt, value: any) => {
+    setDebts(debts.map(debt => {
+      if (debt.id === id) {
+        return { ...debt, [field]: value };
+      }
+      return debt;
+    }));
+  }, [debts]);
 
-			// Call onSaveResults if provided
-			if (onSaveResults) {
-				onSaveResults(plan);
-			}
-		} catch (err: any) {
-			setError(err.message || "Error calculating payment plan");
-			setPaymentPlan(null);
+  // Calculate the payment plan
+  const handleCalculate = useCallback(async () => {
+    setError(null);
+    
+    // Validate inputs
+    if (debts.length === 0) {
+      toast({
+        title: t('errors.noDebtsTitle'),
+        description: t('debtStrategies.addYourDebts'),
+        variant: 'destructive',
+      });
+      return;
+    }
 
-			// Call onError if provided
-			if (onError) {
-				onError(err);
-			}
-		}
-	}, [debts, totalMonthlyPayment, strategy, onSaveResults, onError]);
+    const invalidDebts = debts.filter(
+      debt => debt.balance <= 0 || debt.interestRate < 0 || debt.minimumPayment <= 0
+    );
+    
+    if (invalidDebts.length > 0) {
+      toast({
+        title: t('errors.invalidDataTitle'),
+        description: t('errors.invalidDebtData'),
+        variant: 'destructive',
+      });
+      return;
+    }
 
-	// Validate a single field
-	const validateField = (name: string, value: any): string | null => {
-		if (name === 'name') {
-			return !value ? t('calculator.errorNameRequired') : null;
-		} else if (['balance', 'interestRate', 'minimumPayment'].includes(name)) {
-			if (value === undefined || value === null || value === '') return t('calculator.errorNumberRequired');
-			if (isNaN(Number(value))) return t('calculator.errorMustBeNumber');
-			if (Number(value) < 0) return t('calculator.errorMustBePositive');
-			return null;
-		}
-		return null;
-	};
+    if (monthlyBudget < totalMinPayment) {
+      toast({
+        title: t('errors.insufficientBudgetTitle'),
+        description: t('debtStrategies.insufficientPayment'),
+        variant: 'destructive',
+      });
+      return;
+    }
 
-	// Handle adding a new debt with validation
-	const handleAddDebt = () => {
-		// Validate all fields
-		const errors: {[key: string]: string | null} = {
-			name: validateField('name', newDebt.name),
-			balance: validateField('balance', newDebt.balance),
-			interestRate: validateField('interestRate', newDebt.interestRate),
-			minimumPayment: validateField('minimumPayment', newDebt.minimumPayment),
-		};
-		
-		setValidationErrors(errors);
-		
-		// Check if there are any errors
-		if (Object.values(errors).some(error => error !== null)) {
-			return;
-		}
+    setIsCalculating(true);
+    
+    try {
+      // Calculate payment plan
+      const plan = await calculatePayoffPlan(debts, monthlyBudget, strategy);
+      
+      // Save and display results
+      setPayoffPlan(plan);
+      onSaveResults(plan);
+      
+      toast({
+        title: t('repayment.planSummary'),
+        description: t('repayment.planDescription'),
+      });
+    } catch (error) {
+      console.error('Error calculating payment plan:', error);
+      setError((error as Error).message);
+      onError(error as Error);
+      
+      toast({
+        title: t('debtStrategies.errorInCalculation'),
+        description: t('debtStrategies.tryAgainHigherPayment'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsCalculating(false);
+    }
+  }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, t, totalMinPayment]);
 
-		try {
-			// Create new debt with unique ID
-			const debt: Debt = {
-				id: `debt-${Date.now()}`,
-				name: newDebt.name || "",
-				balance: Number(newDebt.balance),
-				interestRate: Number(newDebt.interestRate),
-				minimumPayment: Number(newDebt.minimumPayment),
-			};
+  // Handle budget change
+  const handleBudgetChange = useCallback((budget: number, method: PrioritizationMethod) => {
+    setMonthlyBudget(budget);
+    setStrategy(method);
+    // Wait for state update before calculating
+    setTimeout(() => handleCalculate(), 0);
+  }, [handleCalculate]);
 
-			// Add to debts list
-			setDebts([...debts, debt]);
+  return (
+    <div className="space-y-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('debtStrategies.calculatorIntro')}</CardTitle>
+          <CardDescription>{t('repayment.enterBudgetPrompt')}</CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          <div className="space-y-8">
+            {/* Debts Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">{t('debtStrategies.yourDebtsSection')}</h3>
+              
+              {debts.length > 0 ? (
+                <div className="space-y-4">
+                  {debts.map((debt, index) => (
+                    <div key={debt.id} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md">
+                      <div>
+                        <Label htmlFor={`debt-name-${index}`}>{t('loan.name')}</Label>
+                        <Input
+                          id={`debt-name-${index}`}
+                          value={debt.name}
+                          onChange={(e) => handleUpdateDebt(debt.id, 'name', e.target.value)}
+                          placeholder={`${t('repayment.debtName')} ${index + 1}`}
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor={`debt-balance-${index}`}>{t('loan.balance')}</Label>
+                        <div className="relative">
+                          <span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">€</span>
+                          <Input
+                            id={`debt-balance-${index}`}
+                            type="number"
+                            value={debt.balance}
+                            onChange={(e) => handleUpdateDebt(debt.id, 'balance', Number(e.target.value) || 0)}
+                            className="pl-8"
+                            placeholder="0"
+                            min="0"
+                            step="100"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor={`debt-interest-${index}`}>{t('loan.interestRate')}</Label>
+                        <div className="relative">
+                          <Input
+                            id={`debt-interest-${index}`}
+                            type="number"
+                            value={debt.interestRate}
+                            onChange={(e) => handleUpdateDebt(debt.id, 'interestRate', Number(e.target.value) || 0)}
+                            className="pr-8"
+                            placeholder="0"
+                            min="0"
+                            step="0.1"
+                          />
+                          <span className="absolute inset-y-0 right-3 flex items-center text-muted-foreground">%</span>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor={`debt-payment-${index}`}>{t('repayment.minPayment')}</Label>
+                        <div className="relative">
+                          <span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">€</span>
+                          <Input
+                            id={`debt-payment-${index}`}
+                            type="number"
+                            value={debt.minimumPayment}
+                            onChange={(e) => handleUpdateDebt(debt.id, 'minimumPayment', Number(e.target.value) || 0)}
+                            className="pl-8"
+                            placeholder="0"
+                            min="0"
+                            step="10"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-end justify-end">
+                        <Button 
+                          variant="outline" 
+                          size="icon"
+                          onClick={() => handleRemoveDebt(debt.id)}
+                          className="h-10 w-10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {t('debtStrategies.addYourDebts')}
+                  </AlertDescription>
+                </Alert>
+              )}
+              
+              <Button variant="outline" onClick={handleAddDebt} className="w-full">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                {t('debtStrategies.addDebtButton')}
+              </Button>
+            </div>
+            
+            {/* Budget Section */}
+            <div>
+              <BudgetInput 
+                onCalculate={handleBudgetChange} 
+                defaultBudget={monthlyBudget}
+                method={strategy}
+              />
+            </div>
+            
+            {/* Manual Calculate Button */}
+            {debts.length > 0 && (
+              <div className="flex justify-end">
+                <Button 
+                  onClick={handleCalculate} 
+                  disabled={isCalculating}
+                  className="w-full md:w-auto"
+                >
+                  <Calculator className="mr-2 h-4 w-4" />
+                  {isCalculating ? t('common.calculating') : t('debtStrategies.calculateButton')}
+                </Button>
+              </div>
+            )}
+            
+            {/* Results Section */}
+            {payoffPlan && (
+              <div className="border rounded-md p-4 bg-muted/50">
+                <h3 className="text-lg font-medium mb-4">{t('debtStrategies.summaryTitle')}</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex flex-col p-4 bg-card rounded-md border">
+                    <span className="text-sm text-muted-foreground flex items-center">
+                      <BanknoteIcon className="h-4 w-4 mr-2" />
+                      {t('debtStrategies.totalDebt')}
+                    </span>
+                    <span className="text-2xl font-bold mt-1">€{totalDebt.toLocaleString('fi-FI')}</span>
+                  </div>
+                  
+                  <div className="flex flex-col p-4 bg-card rounded-md border">
+                    <span className="text-sm text-muted-foreground flex items-center">
+                      <CalendarIcon className="h-4 w-4 mr-2" />
+                      {t('debtStrategies.timeToPayoff')}
+                    </span>
+                    <span className="text-2xl font-bold mt-1">{payoffPlan.totalMonths} {t('form.months')}</span>
+                  </div>
+                  
+                  <div className="flex flex-col p-4 bg-card rounded-md border">
+                    <span className="text-sm text-muted-foreground flex items-center">
+                      <PercentIcon className="h-4 w-4 mr-2" />
+                      {t('debtStrategies.interestPaid')}
+                    </span>
+                    <span className="text-2xl font-bold mt-1">€{payoffPlan.totalInterestPaid.toLocaleString('fi-FI')}</span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 mt-4">
+                  <div>
+                    <span className="text-sm text-muted-foreground">{t('debtStrategies.minPayment')}</span>
+                    <p className="font-medium">€{totalMinPayment.toLocaleString('fi-FI')}</p>
+                  </div>
+                  
+                  <div>
+                    <span className="text-sm text-muted-foreground">{t('debtStrategies.additionalPayment')}</span>
+                    <p className="font-medium">€{(monthlyBudget - totalMinPayment).toLocaleString('fi-FI')}</p>
+                  </div>
+                  
+                  <div>
+                    <span className="text-sm text-muted-foreground">{t('debtStrategies.totalMonthly')}</span>
+                    <p className="font-medium">€{monthlyBudget.toLocaleString('fi-FI')}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
-			// Reset new debt form
-			setNewDebt({
-				name: "",
-				balance: 0,
-				interestRate: 0,
-				minimumPayment: 0,
-			});
-
-			setError(null);
-			toast.success(t('calculator.debtAdded'));
-		} catch (err) {
-			captureError(err, t('calculator.errorAddingDebt'));
-		}
-	};
-
-	// Handle removing a debt
-	const handleRemoveDebt = (id: string) => {
-		try {
-			setDebts(debts.filter((debt) => debt.id !== id));
-			toast.info(t('calculator.debtRemoved'));
-		} catch (err) {
-			captureError(err, t('calculator.errorRemovingDebt'));
-		}
-	};
-
-	// Handle strategy change
-	const handleStrategyChange = (value: string) => {
-		setStrategy(value as PaymentStrategy);
-	};
-
-	// Handle calculating payment plan
-	const handleCalculate = async () => {
-		try {
-			setIsCalculating(true);
-			const plan = calculatePaymentPlan(debts, totalMonthlyPayment, strategy);
-			setPaymentPlan(plan);
-			setError(null);
-
-			if (onSaveResults) {
-				onSaveResults(plan);
-			}
-			
-			toast.success(t('calculator.calculationComplete'));
-		} catch (err: any) {
-			setError(err.message || "Error calculating payment plan");
-			setPaymentPlan(null);
-			
-			captureError(err, t('calculator.calculationError'));
-
-			if (onError) {
-				onError(err);
-			}
-		} finally {
-			setIsCalculating(false);
-		}
-	};
-
-	// Format currency
-	const formatCurrency = (amount: number) => {
-		return new Intl.NumberFormat("fi-FI", {
-			style: "currency",
-			currency: "EUR",
-		}).format(amount);
-	};
-
-	// Format date
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString("fi-FI", {
-			year: "numeric",
-			month: "long",
-		});
-	};
-
-	// Handle input change with validation
-	const handleInputChange = (field: string, value: any) => {
-		setNewDebt({ ...newDebt, [field]: value });
-		// Validate the field
-		const error = validateField(field, value);
-		setValidationErrors(prev => ({
-			...prev,
-			[field]: error
-		}));
-	};
-
-	return (
-		<div className="space-y-8">
-			<div className="space-y-4">
-				<h2 className="text-2xl font-bold">{t("calculator.addYourDebts")}</h2>
-
-				{error && (
-					<div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded-md">
-						{error}
-					</div>
-				)}
-
-				<div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-					<ResponsiveFormField
-						id="debtName"
-						label={t("calculator.debtName")}
-						value={newDebt.name || ''}
-						onChange={(e) => handleInputChange('name', e.target.value)}
-						placeholder={t("calculator.debtNamePlaceholder")}
-						error={validationErrors.name || undefined}
-					/>
-
-					<ResponsiveFormField
-						id="balance"
-						type="number"
-						label={t("calculator.balance")}
-						value={newDebt.balance || ''}
-						onChange={(e) => handleInputChange('balance', e.target.value)}
-						placeholder="0.00"
-						min="0"
-						step="0.01"
-						error={validationErrors.balance || undefined}
-					/>
-
-					<ResponsiveFormField
-						id="interestRate"
-						type="number"
-						label={t("calculator.interestRate")}
-						value={newDebt.interestRate || ''}
-						onChange={(e) => handleInputChange('interestRate', e.target.value)}
-						placeholder="0.00"
-						min="0"
-						step="0.01"
-						error={validationErrors.interestRate || undefined}
-					/>
-
-					<ResponsiveFormField
-						id="minimumPayment"
-						type="number"
-						label={t("calculator.minimumPayment")}
-						value={newDebt.minimumPayment || ''}
-						onChange={(e) => handleInputChange('minimumPayment', e.target.value)}
-						placeholder="0.00"
-						min="0"
-						step="0.01"
-						error={validationErrors.minimumPayment || undefined}
-					/>
-
-					<div className="flex items-end">
-						<Button 
-							onClick={handleAddDebt}
-							className="w-full"
-							disabled={!newDebt.name || !newDebt.balance || !newDebt.interestRate || !newDebt.minimumPayment}
-							aria-label={t("calculator.addDebt")}
-						>
-							{t("calculator.addDebt")}
-						</Button>
-					</div>
-				</div>
-			</div>
-
-			{debts.length > 0 && (
-				<div className="space-y-4">
-					<h3 className="text-xl font-bold">{t("calculator.yourDebts")}</h3>
-
-					<div className="overflow-x-auto">
-						<Table>
-							<TableHeader>
-								<TableRow>
-									<TableHead>{t("calculator.debtName")}</TableHead>
-									<TableHead className="text-right">
-										{t("calculator.balance")}
-									</TableHead>
-									<TableHead className="text-right">
-										{t("calculator.interestRate")}
-									</TableHead>
-									<TableHead className="text-right">
-										{t("calculator.minimumPayment")}
-									</TableHead>
-									<TableHead className="text-center">
-										{t("calculator.actions")}
-									</TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{debts.map((debt) => (
-									<TableRow key={debt.id}>
-										<TableCell>{debt.name}</TableCell>
-										<TableCell className="text-right">
-											{formatCurrency(debt.balance)}
-										</TableCell>
-										<TableCell className="text-right">
-											{debt.interestRate.toFixed(2)}%
-										</TableCell>
-										<TableCell className="text-right">
-											{formatCurrency(debt.minimumPayment)}
-										</TableCell>
-										<TableCell className="text-center">
-											<Button
-												variant="destructive"
-												size="sm"
-												onClick={() => handleRemoveDebt(debt.id)}
-											>
-												<X className="h-4 w-4 mr-1" />
-												{t("calculator.remove")}
-											</Button>
-										</TableCell>
-									</TableRow>
-								))}
-								<TableRow className="bg-muted/50">
-									<TableCell className="font-medium">
-										{t("calculator.total")}
-									</TableCell>
-									<TableCell className="text-right font-medium">
-										{formatCurrency(
-											debts.reduce((sum, debt) => sum + debt.balance, 0)
-										)}
-									</TableCell>
-									<TableCell className="text-right">-</TableCell>
-									<TableCell className="text-right font-medium">
-										{formatCurrency(totalMinimumPayment)}
-									</TableCell>
-									<TableCell></TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
-					</div>
-				</div>
-			)}
-
-			{debts.length > 0 && (
-				<div className="space-y-4">
-					<h3 className="text-xl font-bold">
-						{t("calculator.paymentStrategy")}
-					</h3>
-
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 stack-mobile">
-						<div>
-							<Tabs value={strategy} onValueChange={handleStrategyChange}>
-								<TabsList className="grid grid-cols-2">
-									<TabsTrigger value="avalanche">
-										{t("calculator.avalanche")}
-									</TabsTrigger>
-									<TabsTrigger value="snowball">
-										{t("calculator.snowball")}
-									</TabsTrigger>
-								</TabsList>
-
-								<TabsContent value="avalanche" className="space-y-2 mt-4">
-									<h4 className="font-semibold">
-										{t("calculator.avalancheStrategy")}
-									</h4>
-									<p className="text-muted-foreground">
-										{t("calculator.avalancheDescription")}
-									</p>
-								</TabsContent>
-
-								<TabsContent value="snowball" className="space-y-2 mt-4">
-									<h4 className="font-semibold">
-										{t("calculator.snowballStrategy")}
-									</h4>
-									<p className="text-muted-foreground">
-										{t("calculator.snowballDescription")}
-									</p>
-								</TabsContent>
-							</Tabs>
-						</div>
-
-						<div className="space-y-4">
-							<div className="space-y-2">
-								<Label htmlFor="additionalPayment">
-									{t("calculator.additionalMonthlyPayment")}
-								</Label>
-								<Input
-									id="additionalPayment"
-									type="number"
-									min="0"
-									step="10"
-									value={additionalPayment}
-									onChange={(e) =>
-										setAdditionalPayment(parseFloat(e.target.value) || 0)
-									}
-									placeholder="0.00"
-								/>
-								<p className="text-sm text-muted-foreground">
-									{t("calculator.additionalPaymentDescription")}
-								</p>
-							</div>
-
-							<div className="bg-muted/50 p-4 rounded-lg">
-								<div className="flex justify-between mb-2">
-									<span>{t("calculator.minimumPayment")}:</span>
-									<span className="font-semibold">
-										{formatCurrency(totalMinimumPayment)}
-									</span>
-								</div>
-								<div className="flex justify-between mb-2">
-									<span>{t("calculator.additionalPayment")}:</span>
-									<span className="font-semibold">
-										{formatCurrency(additionalPayment)}
-									</span>
-								</div>
-								<div className="flex justify-between pt-2 border-t">
-									<span>{t("calculator.totalMonthlyPayment")}:</span>
-									<span className="font-semibold">
-										{formatCurrency(totalMonthlyPayment)}
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			)}
-
-			{paymentPlan && (
-				<div className="space-y-4">
-					<h3 className="text-xl font-bold">
-						{t("calculator.paymentResults")}
-					</h3>
-
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-						<Card>
-							<CardHeader>
-								<CardTitle>{t("calculator.payoffDate")}</CardTitle>
-								<CardDescription>
-									{t("calculator.estimatedCompletion")}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<div className="text-2xl md:text-3xl font-bold">
-									{formatDate(paymentPlan.payoffDate)}
-								</div>
-								<p className="text-muted-foreground">
-									{paymentPlan.totalMonths} {t("calculator.months")}
-								</p>
-							</CardContent>
-						</Card>
-
-						<Card>
-							<CardHeader>
-								<CardTitle>{t("calculator.totalInterest")}</CardTitle>
-								<CardDescription>
-									{t("calculator.interestPaid")}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<div className="text-2xl md:text-3xl font-bold">
-									{formatCurrency(paymentPlan.totalInterestPaid)}
-								</div>
-							</CardContent>
-						</Card>
-
-						<Card>
-							<CardHeader>
-								<CardTitle>{t("calculator.totalPaid")}</CardTitle>
-								<CardDescription>
-									{t("calculator.principalPlusInterest")}
-								</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<div className="text-2xl md:text-3xl font-bold">
-									{formatCurrency(paymentPlan.totalPaid)}
-								</div>
-							</CardContent>
-						</Card>
-					</div>
-
-					<div className="mt-4">
-						<Button onClick={() => onSaveResults && onSaveResults(paymentPlan)}>
-							{t("calculator.saveResults")}
-						</Button>
-					</div>
-				</div>
-			)}
-
-			{debts.length > 0 && (
-				<div className="mt-4">
-					<Button 
-						onClick={handleCalculate}
-						disabled={isCalculating}
-						className="relative"
-					>
-						{isCalculating ? (
-							<>
-								<span className="opacity-0">{t("calculator.calculate")}</span>
-								<span className="absolute inset-0 flex items-center justify-center">
-									<svg
-										className="animate-spin h-5 w-5 text-current"
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-									>
-										<circle
-											className="opacity-25"
-											cx="12"
-											cy="12"
-											r="10"
-											stroke="currentColor"
-											strokeWidth="4"
-										></circle>
-										<path
-											className="opacity-75"
-											fill="currentColor"
-											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-										></path>
-									</svg>
-								</span>
-							</>
-						) : (
-							t("calculator.calculate")
-						)}
-					</Button>
-				</div>
-			)}
-		</div>
-	);
-}
+export default DebtPayoffCalculator;

@@ -21,7 +21,22 @@ export const debtStrategies = {
       calculatorTab: "Debt Payoff Calculator",
       timelineTab: "Debt Payoff Timeline",
       extraPaymentTab: "Extra Payment Impact",
-      consolidationTab: "Debt Consolidation"
+      consolidationTab: "Debt Consolidation",
+      // Calculator sections
+      calculatorIntro: "Calculate how long it will take to pay off your debts",
+      yourDebtsSection: "Your Debts",
+      addDebtButton: "Add Debt",
+      budgetSection: "Your Monthly Budget",
+      strategySection: "Choose Strategy",
+      resultsSection: "Results",
+      summaryTitle: "Payoff Summary",
+      totalDebt: "Total Debt",
+      minPayment: "Minimum Payment",
+      additionalPayment: "Additional Payment",
+      totalMonthly: "Total Monthly",
+      timeToPayoff: "Time to Payoff",
+      interestPaid: "Total Interest",
+      calculateButton: "Calculate Payoff Plan"
     }
   },
   fi: {
@@ -43,7 +58,22 @@ export const debtStrategies = {
       calculatorTab: "Velanmaksulaskuri",
       timelineTab: "Velanmaksuaikataulu",
       extraPaymentTab: "Lisämaksujen vaikutus",
-      consolidationTab: "Lainojen yhdistäminen"
+      consolidationTab: "Lainojen yhdistäminen",
+      // Calculator sections
+      calculatorIntro: "Laske kuinka kauan velkojesi takaisinmaksu kestää",
+      yourDebtsSection: "Velkasi",
+      addDebtButton: "Lisää velka",
+      budgetSection: "Kuukausibudjettisi",
+      strategySection: "Valitse strategia",
+      resultsSection: "Tulokset",
+      summaryTitle: "Maksuyhteenveto",
+      totalDebt: "Kokonaisvelka",
+      minPayment: "Vähimmäismaksu",
+      additionalPayment: "Lisämaksu",
+      totalMonthly: "Kuukausittain yhteensä",
+      timeToPayoff: "Maksuaika",
+      interestPaid: "Korko yhteensä",
+      calculateButton: "Laske maksusuunnitelma"
     }
   }
 };
