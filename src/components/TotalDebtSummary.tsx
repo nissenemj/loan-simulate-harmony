@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AlertCircle, DollarSign, Percent, Calendar, CreditCard as CreditCardIcon } from "lucide-react";
+import { AlertCircle, DollarSign, Percent, Calendar, CreditCard as CreditCardIcon, Calculator } from "lucide-react";
 import AnimatedNumber from "@/components/AnimatedNumber";
 import { cn } from "@/lib/utils";
 
@@ -31,12 +31,14 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
   let totalLoanMonthlyInterest = 0;
   let totalLoanInterestEstimate = 0;
   let totalLoanMonthlyFee = 0;
+  let totalLoanAmountPaid = 0;
 
   loans.forEach(loan => {
     const calculation = calculateLoan(loan);
     totalLoanMonthlyPayment += calculation.monthlyPayment;
     totalLoanMonthlyInterest += calculation.interest;
     totalLoanInterestEstimate += calculation.totalInterest;
+    totalLoanAmountPaid += calculation.totalAmountPaid;
     
     // Add monthly fee if present
     if (loan.monthlyFee) {
@@ -70,6 +72,10 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
   // For total balance, either use the provided value or calculate
   const totalBalance = totalDebtBalance ?? loans.reduce((sum, loan) => sum + loan.amount, 0) + 
     creditCards.reduce((sum, card) => sum + card.balance, 0);
+    
+  // Calculate total amount to be paid (principal + interest)
+  const totalAmountPaid = hasInfiniteInterest ? Infinity : totalLoanAmountPaid + 
+    (totalBalance - loans.reduce((sum, loan) => sum + loan.amount, 0)) + totalCardInterestEstimate;
 
   return (
     <Card className="overflow-hidden shadow-md border-border">
@@ -88,7 +94,7 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
       </CardHeader>
       
       <CardContent className="p-6">
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-5">
           <DebtMetricCard 
             title={t("debtSummary.totalMonthlyPayment")}
             value={totalMonthlyPayment}
@@ -114,6 +120,15 @@ export default function TotalDebtSummary({ loans, creditCards, isDemo = false, t
             title={t("debtSummary.totalBalance")}
             value={totalBalance}
             icon={<CreditCardIcon className="h-5 w-5 text-primary" />}
+          />
+          
+          <DebtMetricCard 
+            title={t("debtSummary.totalAmountPaid")}
+            value={totalAmountPaid}
+            icon={<Calculator className="h-5 w-5 text-primary" />}
+            isInfinite={totalAmountPaid === Infinity}
+            infiniteText={t("debtSummary.neverPaidOff")}
+            note={t("debtSummary.includingInterestAndFees")}
           />
         </div>
         

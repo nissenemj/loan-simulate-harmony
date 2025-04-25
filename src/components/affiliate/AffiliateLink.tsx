@@ -19,13 +19,18 @@ const AffiliateLink: React.FC<AffiliateLinkProps> = ({ link }) => {
   return (
     <Button 
       variant="outline" 
-      className="w-full justify-between mb-2"
+      className="w-full mb-2 pl-4 pr-3 h-auto py-2"
       asChild
       onClick={handleClick}
     >
-      <a href={link.url} target="_blank" rel="noopener noreferrer">
-        {link.title}
-        <ExternalLink className="h-4 w-4 ml-2" />
+      <a 
+        href={link.url} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="flex items-center justify-between w-full"
+      >
+        <span className="truncate mr-2 text-left">{link.title}</span>
+        <ExternalLink className="h-4 w-4 flex-shrink-0 ml-auto" />
       </a>
     </Button>
   );

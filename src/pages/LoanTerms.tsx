@@ -85,10 +85,50 @@ const LoanTerms: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t('loanTerms.pageTitle')} | Loan Calculator</title>
-        <meta name="description" content="Understand financial terms like interest rate and annuity in plain English. Learn what Euribor means, how loan principal works, and more." />
+        <title>{t('loanTerms.pageTitle')} | Velkavapaus.fi</title>
+        <meta name="description" content="Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä. Opi mitä tarkoittaa Euribor, kuinka lainan pääoma toimii ja paljon muuta." />
+        <meta name="keywords" content="lainaehdot, korko, annuiteetti, euribor, lainan pääoma, lainan maksuaika, tasalyhennys, tasaerä" />
+        
+        {/* Canonical link */}
+        <link rel="canonical" href="https://velkavapaus.fi/terms" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={`${t('loanTerms.pageTitle')} | Velkavapaus.fi`} />
+        <meta property="og:description" content="Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä. Opi mitä tarkoittaa Euribor, kuinka lainan pääoma toimii ja paljon muuta." />
+        <meta property="og:url" content="https://velkavapaus.fi/terms" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="https://velkavapaus.fi/og-image.png" />
+        
         <script type="application/ld+json">
           {JSON.stringify(faqSchema)}
+        </script>
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "${t('loanTerms.pageTitle')}",
+              "description": "Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä.",
+              "url": "https://velkavapaus.fi/terms",
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Etusivu",
+                    "item": "https://velkavapaus.fi"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "${t('loanTerms.pageTitle')}",
+                    "item": "https://velkavapaus.fi/terms"
+                  }
+                ]
+              }
+            }
+          `}
         </script>
       </Helmet>
 

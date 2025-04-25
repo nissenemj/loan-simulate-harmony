@@ -5,7 +5,7 @@ export interface AffiliateLink {
   id: string;
   title: string;
   url: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
   trackingId: string;
 }
 
@@ -15,72 +15,197 @@ export interface AffiliateBanner {
   description: string;
   url: string;
   imageUrl: string;
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
   trackingId: string;
-  size: '300x250' | '728x90' | '300x600';
+  size: '300x250' | '728x90' | '300x600' | '320x320' | '336x280' | '980x120' | '300x100';
+  htmlContent?: string; // Added for adtraction banners
 }
 
 export interface AffiliateRecommendation {
   id: string;
   title: string;
+  titleEn?: string; // Added English title
   description: string;
+  descriptionEn?: string; // Added English description
   links: AffiliateLink[];
-  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance';
+  category: 'loan' | 'credit-card' | 'mortgage' | 'refinance' | 'investment' | 'education' | 'budgeting';
 }
 
 // Sample affiliate links data
 export const affiliateLinks: AffiliateLink[] = [
   {
     id: uuidv4(),
-    title: 'BestLoans.com',
-    url: 'https://example.com/bestloans',
+    title: 'Rahalaitos - Lainojen kilpailutus',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
     category: 'loan',
-    trackingId: 'aff_bl_001'
+    trackingId: 'rahalaitos_1'
   },
   {
     id: uuidv4(),
-    title: 'CreditCardDeals',
-    url: 'https://example.com/creditcarddeals',
-    category: 'credit-card',
-    trackingId: 'aff_cc_001'
+    title: 'Etua.fi - Vertaile lainoja',
+    url: 'https://go.adt242.com/t/t?a=1048146716&as=1962325200&t=2&tk=1',
+    category: 'loan',
+    trackingId: 'etua_1'
   },
   {
     id: uuidv4(),
-    title: 'MortgageCompare',
-    url: 'https://example.com/mortgagecompare',
-    category: 'mortgage',
-    trackingId: 'aff_mc_001'
-  },
-  {
-    id: uuidv4(),
-    title: 'RefinanceToday',
-    url: 'https://example.com/refinancetoday',
+    title: 'Rahalaitos',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
     category: 'refinance',
-    trackingId: 'aff_rt_001'
+    trackingId: 'rahalaitos_refinance'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Äänikirjapalvelu',
+    url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+    category: 'education',
+    trackingId: 'storytel_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat ja säästä',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    category: 'loan',
+    trackingId: 'sortter_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rensa - Tasapainota taloutesi',
+    url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
+    category: 'budgeting',
+    trackingId: 'rensa_1'
+  },
+  {
+    id: uuidv4(),
+    title: 'Nordnet - Sijoita paremmin',
+    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+    category: 'education',
+    trackingId: 'nordnet_education'
   }
 ];
 
-// Sample affiliate banners data
+// Affiliate banners data with new Adtraction banners
 export const affiliateBanners: AffiliateBanner[] = [
   {
     id: uuidv4(),
-    title: 'Lower Your Rate Today',
-    description: 'Refinance with rates as low as 4.5%',
-    url: 'https://example.com/refinance-special',
-    imageUrl: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
-    category: 'refinance',
-    trackingId: 'aff_banner_001',
-    size: '300x250'
+    title: 'Nordnet - Sijoita paremmin',
+    description: 'Aloita sijoittaminen Nordnetissä',
+    url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1616887300&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'nordnet_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1616887300&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
   },
   {
     id: uuidv4(),
-    title: 'Premium Credit Card',
-    description: 'Earn 5% cashback on all purchases',
-    url: 'https://example.com/premium-card',
-    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
-    category: 'credit-card',
-    trackingId: 'aff_banner_002',
-    size: '300x250'
+    title: 'Nordnet - Valitse itsellesi sopiva sijoitusvaihtoehto',
+    description: 'Nordnet - aloita sijoittaminen helposti',
+    url: 'https://go.adt231.net/t/t?a=1876582082&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1876582082&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'nordnet_banner_2',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt231.net/t/t?a=1876582082&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1876582082&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sijoittaja.fi - Opi sijoittamaan',
+    description: 'Suomen paras sijoituskoulutus',
+    url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1896287410&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'sijoittaja_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1896287410&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sijoittaja.fi - Sijoituskoulutus',
+    description: 'Opi sijoittamaan ammattimaisesti',
+    url: 'https://go.adt256.com/t/t?a=1896287434&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1896287434&as=1962325200&t=1&tk=1&i=1',
+    category: 'investment',
+    trackingId: 'sijoittaja_banner_2',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt256.com/t/t?a=1896287434&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1896287434&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rahalaitos - Kilpailuta lainasi',
+    description: 'Säästä lainakuluissa',
+    url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1056517297&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'rahalaitos_banner_1',
+    size: '320x320',
+    htmlContent: '<a href="https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1056517297&as=1962325200&t=1&tk=1&i=1" width="320" height="320" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Etua.fi - Vertaile lainoja',
+    description: 'Löydä paras laina sinulle',
+    url: 'https://go.adt242.com/t/t?a=1048146716&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'etua_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt242.com/t/t?a=1296154796&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1296154796&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Kuuntele ja lue tuhansia kirjoja',
+    description: 'Kokeile ilmaiseksi 7 päivää',
+    url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1897988466&as=1962325200&t=1&tk=1&i=1',
+    category: 'education',
+    trackingId: 'storytel_banner_1',
+    size: '300x250',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1897988466&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1897988466&as=1962325200&t=1&tk=1&i=1" width="300" height="250" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Storytel - Kokeile ilmaiseksi 7 päivää',
+    description: 'Äänikirjoja ja e-kirjoja',
+    url: 'https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1',
+    category: 'education',
+    trackingId: 'storytel_banner_blog',
+    size: '300x100',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat',
+    description: 'Vertaa ja säästä koroissa',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'sortter_banner_1',
+    size: '336x280',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1" width="336" height="280" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Sortter - Kilpailuta lainat',
+    description: 'Suomen kattavin lainavertailu',
+    url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1714374467&as=1962325200&t=1&tk=1&i=1',
+    category: 'loan',
+    trackingId: 'sortter_banner_2',
+    size: '980x120',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1714374467&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1714374467&as=1962325200&t=1&tk=1&i=1" width="980" height="120" border="0"></a>'
+  },
+  {
+    id: uuidv4(),
+    title: 'Rensa - Tasapainota taloutesi',
+    description: 'Hallitse menosi ja tulosi tehokkaasti',
+    url: 'https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1',
+    imageUrl: 'https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1',
+    category: 'budgeting',
+    trackingId: 'rensa_banner_1',
+    size: '336x280',
+    htmlContent: '<a href="https://go.adt267.com/t/t?a=1841940996&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1841940996&as=1962325200&t=1&tk=1&i=1" width="336" height="280" border="0"></a>'
   }
 ];
 
@@ -88,45 +213,83 @@ export const affiliateBanners: AffiliateBanner[] = [
 export const affiliateRecommendations: AffiliateRecommendation[] = [
   {
     id: uuidv4(),
-    title: 'Top Loan Refinance Options',
-    description: 'These trusted lenders offer competitive rates for refinancing your existing loans.',
-    category: 'refinance',
+    title: 'Sijoitussuositukset',
+    titleEn: 'Investment Recommendations',
+    description: 'Aloita sijoittaminen näiden luotettavien palveluiden avulla.',
+    descriptionEn: 'Start investing with these trusted services.',
+    category: 'investment',
     links: [
       {
         id: uuidv4(),
-        title: 'QuickRefinance',
-        url: 'https://example.com/quickrefinance',
-        category: 'refinance',
-        trackingId: 'aff_rec_001_1'
+        title: 'Nordnet',
+        url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+        category: 'investment',
+        trackingId: 'nordnet_rec_1'
       },
       {
         id: uuidv4(),
-        title: 'EasyLoanRates',
-        url: 'https://example.com/easyrates',
-        category: 'refinance',
-        trackingId: 'aff_rec_001_2'
+        title: 'Sijoittaja.fi',
+        url: 'https://go.adt256.com/t/t?a=1896287410&as=1962325200&t=2&tk=1',
+        category: 'investment',
+        trackingId: 'sijoittaja_rec_1'
       }
     ]
   },
   {
     id: uuidv4(),
-    title: 'Best Credit Cards for Rewards',
-    description: 'Maximize your benefits with these top-rated rewards credit cards.',
-    category: 'credit-card',
+    title: 'Harkitse uudelleenrahoitusta',
+    titleEn: 'Consider Refinancing',
+    description: 'Nämä luotettavat lainanantajat tarjoavat kilpailukykyisiä korkoja olemassa olevien lainojesi uudelleenrahoitukseen.',
+    descriptionEn: 'These trusted lenders offer competitive rates for refinancing your existing loans.',
+    category: 'refinance',
     links: [
       {
         id: uuidv4(),
-        title: 'Premium Rewards Card',
-        url: 'https://example.com/premium-rewards',
-        category: 'credit-card',
-        trackingId: 'aff_rec_002_1'
+        title: 'Rahalaitos',
+        url: 'https://go.adt284.net/t/t?a=1056517297&as=1962325200&t=2&tk=1',
+        category: 'refinance',
+        trackingId: 'rahalaitos_rec_1'
+      }
+    ]
+  },
+  {
+    id: uuidv4(),
+    title: 'Haluatko oppia lisää?',
+    titleEn: 'Want to learn more?',
+    description: 'Storytel äänikirjapalvelussa on lähes miljoona äänikirjaa, e-kirjaa ja podcastia. Kokeile ilmaiseksi 7 päivän ajan!',
+    descriptionEn: 'Storytel audio book service has nearly a million audiobooks, e-books and podcasts. Try it free for 7 days!',
+    category: 'education',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Storytel - Äänikirjapalvelu',
+        url: 'https://go.adt267.com/t/t?a=1469936600&as=1962325200&t=2&tk=1',
+        category: 'education',
+        trackingId: 'storytel_rec_1'
       },
       {
         id: uuidv4(),
-        title: 'Travel Points Card',
-        url: 'https://example.com/travel-points',
-        category: 'credit-card',
-        trackingId: 'aff_rec_002_2'
+        title: 'Nordnet - Sijoita paremmin',
+        url: 'https://go.adt231.net/t/t?a=1616887300&as=1962325200&t=2&tk=1',
+        category: 'education',
+        trackingId: 'nordnet_edu_rec'
+      }
+    ]
+  },
+  {
+    id: uuidv4(),
+    title: 'Kilpailuta lainasi ja säästä',
+    titleEn: 'Compare loans and save',
+    description: 'Sortter on Suomen kattavin lainavertailu. Vertaa ja löydä edullisin laina helposti.',
+    descriptionEn: 'Sortter is Finland\'s most comprehensive loan comparison. Compare and find the most affordable loan easily.',
+    category: 'loan',
+    links: [
+      {
+        id: uuidv4(),
+        title: 'Sortter - Lainavertailu',
+        url: 'https://go.adt267.com/t/t?a=1329217211&as=1962325200&t=2&tk=1',
+        category: 'loan',
+        trackingId: 'sortter_rec_1'
       }
     ]
   }
@@ -136,11 +299,6 @@ export const affiliateRecommendations: AffiliateRecommendation[] = [
 export const trackAffiliateClick = (trackingId: string, linkType: 'link' | 'banner' | 'recommendation') => {
   // In a real-world scenario, this would send data to an analytics service
   console.log(`Affiliate click tracked: ${trackingId}, type: ${linkType}`);
-  
-  // For demonstration, we'll just log the click, but this could be expanded to:
-  // - Send data to Google Analytics
-  // - Make an API call to a tracking endpoint
-  // - Store in localStorage for later analysis
   
   // Return true to allow the default link behavior
   return true;

@@ -38,7 +38,7 @@ export default function CreditCardSummary({ creditCards }: CreditCardSummaryProp
       formatter: formatCurrency,
     },
     {
-      label: t("creditCard.summary.totalInterest"),
+      label: t("creditCard.summary.totalMonthlyInterest"),
       value: summary.totalMonthlyInterest,
       formatter: formatCurrency,
     },

@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,163 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Dark mode specific styles */
+.dark body {
+  background-color: #121212;
+  color: #E0E0E0;
+}
+
+.dark .velkavapaus-card {
+  background: linear-gradient(to bottom, #1E1E1E, #282828);
+  border-color: #333333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .glassmorphism {
+  background-color: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Chart and visualization styles for dark mode */
+.dark .recharts-text {
+  fill: #E0E0E0 !important;
+}
+
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(224, 224, 224, 0.2) !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: #1E1E1E !important;
+  border-color: #333333 !important;
+  color: #E0E0E0 !important;
+}
+
+.dark .recharts-tooltip-label {
+  color: #FFFFFF !important;
+}
+
+.dark .recharts-tooltip-item-name,
+.dark .recharts-tooltip-item-value {
+  color: #E0E0E0 !important;
+}
+
+.dark .recharts-legend-item-text {
+  color: #E0E0E0 !important;
+}
+
+.dark .recharts-cartesian-axis-line {
+  stroke: rgba(224, 224, 224, 0.3) !important;
+}
+
+.dark .recharts-polar-angle-axis-tick-value,
+.dark .recharts-radial-bar-background-sector {
+  fill: #E0E0E0 !important;
+}
+
+/* Position legend outside of pie charts */
+.pie-chart-container {
+  position: relative;
+}
+
+.pie-chart-legend {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pie-chart-legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.pie-chart-legend-color {
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  border-radius: 2px;
+}
+
+/* Custom CSS variables for our new dark theme */
+:root {
+  /* Dark Mode */
+  --bg-primary: #121212;
+  --bg-secondary: #1E1E1E;
+  --bg-elevated: #282828;
+  --bg-highlight: #333333;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-tertiary: #AAAAAA;
+  --text-disabled: #777777;
+
+  --brand-primary: #6E64FB;
+  --brand-primary-light: #8F87FF;
+  --brand-primary-dark: #4A3FCC;
+  --brand-secondary: #2EBFAA;
+
+  --state-success: #1EB26F;
+  --state-warning: #F6C046;
+  --state-error: #E64553;
+  --state-info: #39A0ED;
+}
+
+/* Add these utility classes for dark mode elements */
+.dark .bg-dark-primary {
+  background-color: var(--bg-primary);
+}
+
+.dark .bg-dark-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.dark .bg-dark-elevated {
+  background-color: var(--bg-elevated);
+}
+
+.dark .bg-dark-highlight {
+  background-color: var(--bg-highlight);
+}
+
+.dark .text-dark-primary {
+  color: var(--text-primary);
+}
+
+.dark .text-dark-secondary {
+  color: var(--text-secondary);
+}
+
+.dark .text-dark-tertiary {
+  color: var(--text-tertiary);
+}
+
+.dark .text-dark-disabled {
+  color: var(--text-disabled);
+}
+
+.dark .border-dark-highlight {
+  border-color: var(--bg-highlight);
+}
+
+.dark .shadow-dark-subtle {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dark .shadow-dark-medium {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .shadow-dark-strong {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
 }

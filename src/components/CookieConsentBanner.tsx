@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 
+// Create a custom event for consent changes
+const consentChangeEvent = new Event('consentChange');
+
 const CookieConsentBanner = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -23,6 +26,12 @@ const CookieConsentBanner = () => {
     const savedConsent = localStorage.getItem('cookieConsent');
     if (!savedConsent) {
       setShowBanner(true);
+    } else {
+      try {
+        setPreferences({...preferences, ...JSON.parse(savedConsent)});
+      } catch (error) {
+        console.error('Error parsing saved consent:', error);
+      }
     }
   }, []);
 
@@ -47,10 +56,19 @@ const CookieConsentBanner = () => {
     setShowBanner(false);
     setShowSettings(false);
     
+    // Dispatch consent change event
+    window.dispatchEvent(consentChangeEvent);
+    
     toast({
       title: "Evästeasetukset tallennettu",
       description: "Kiitos! Evästeasetuksesi on tallennettu.",
     });
+    
+    // If user has denied marketing cookies, we should reload the page
+    // to ensure ads don't load
+    if (!consentPreferences.marketing) {
+      window.location.reload();
+    }
   };
 
   const toggleSettings = () => {
@@ -132,7 +150,8 @@ const CookieConsentBanner = () => {
                       Markkinointievästeet
                     </label>
                     <p className="text-xs text-muted-foreground">
-                      Käytetään affiliate-linkkien seurantaan ja markkinoinnin tehokkuuden mittaamiseen.
+                      Käytetään mainontaa varten, mukaan lukien Google AdSense -mainokset. Nämä evästeet voivat kerätä tietoja 
+                      kiinnostuksen kohteistasi tarjotakseen personoituja mainoksia.
                     </p>
                   </div>
                 </div>

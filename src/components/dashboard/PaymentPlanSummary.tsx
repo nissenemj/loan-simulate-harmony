@@ -64,14 +64,14 @@ const PaymentPlanSummary = ({
             </p>
             {extraBudget > 0 && (
               <p className="text-sm mt-2">
-                {t('dashboard.allocatingExtra').replace('{{amount}}', formatCurrency(extraBudget))}
+                {t('dashboard.allocatingExtra', { amount: formatCurrency(extraBudget) })}
               </p>
             )}
           </div>
         )}
       </CardContent>
       <CardFooter>
-        <Button variant="outline" onClick={() => navigate('/debt-summary')}>
+        <Button variant="outline" onClick={() => navigate('/debt-summary?tab=repayment-plan')}>
           {t('dashboard.viewFullPlan')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

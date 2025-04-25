@@ -1,0 +1,7 @@
+
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Link to the sitemap
+Sitemap: https://velkavapaus.fi/sitemap.xml

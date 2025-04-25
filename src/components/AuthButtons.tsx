@@ -14,48 +14,45 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const AuthButtons = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
 
-  if (!user) {
-    return (
-      <Button 
-        variant="outline" 
-        onClick={() => navigate("/auth")}
-      >
-        {t("auth.login")}
-      </Button>
-    );
-  }
+  const handleLogin = () => {
+    navigate("/auth");
+  };
 
-  // Get initials for avatar
-  const email = user.email || "";
-  const initials = email.substring(0, 2).toUpperCase();
-
-  return (
+  return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer">
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
+        <Button variant="outline" size={isMobile ? "sm" : "default"}>
+          <Avatar className="h-6 w-6 mr-2">
+            <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+          </Avatar>
+          {!isMobile && <span className="truncate max-w-[100px]">{user.email?.split('@')[0]}</span>}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem className="text-muted-foreground">
-          <User className="mr-2 h-4 w-4" />
-          {user.email}
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-          <User className="mr-2 h-4 w-4" />
           {t("auth.dashboard")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => signOut()}>
-          <LogOut className="mr-2 h-4 w-4" />
+        <DropdownMenuItem onClick={signOut}>
+          <LogOut className="h-4 w-4 mr-2" />
           {t("auth.logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  ) : (
+    <Button 
+      variant="outline" 
+      onClick={handleLogin}
+      size={isMobile ? "sm" : "default"}
+    >
+      {t("auth.login")}
+    </Button>
   );
 };

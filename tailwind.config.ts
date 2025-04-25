@@ -21,11 +21,13 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: [
+					'Montserrat',
 					'SF Pro Display',
 					'Inter',
 					'system-ui',
 					'sans-serif',
 				],
+				montserrat: ['Montserrat', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -70,6 +72,12 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				state: {
+					success: 'hsl(var(--state-success))',
+					warning: 'hsl(var(--state-warning))',
+					error: 'hsl(var(--state-error))',
+					info: 'hsl(var(--state-info))'
 				}
 			},
 			borderRadius: {
@@ -127,9 +135,10 @@ export default {
 				'number-change': 'number-change 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
 			},
 			boxShadow: {
-				'subtle': '0 1px 2px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.02)',
-				'elevated': '0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.02)',
+				'subtle': '0 2px 4px rgba(0, 0, 0, 0.3)',
+				'elevated': '0 4px 8px rgba(0, 0, 0, 0.5)',
 				'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+				'strong': '0 8px 16px rgba(0, 0, 0, 0.7)'
 			},
 			backdropBlur: {
 				'subtle': '8px',

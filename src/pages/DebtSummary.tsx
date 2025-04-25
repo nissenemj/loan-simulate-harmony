@@ -1,7 +1,6 @@
-
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from 'react';
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Loan, calculateLoan, formatCurrency, generateRecommendations, calculateTotalMonthlyPayment } from "@/utils/loanCalculations";
 import { CreditCard, calculateCreditCard, formatPayoffTime } from "@/utils/creditCardCalculations";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -26,21 +25,33 @@ interface DebtSummaryProps {
 export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoffCreditCard }: DebtSummaryProps) {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
   const [budget, setBudget] = useState<number>(500);
   const [method, setMethod] = useState<PrioritizationMethod>('avalanche');
   const [repaymentPlan, setRepaymentPlan] = useState<ReturnType<typeof generateRepaymentPlan> | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("summary");
+  
+  const queryParams = new URLSearchParams(location.search);
+  const tabFromUrl = queryParams.get('tab');
+  const [activeTab, setActiveTab] = useState<string>(tabFromUrl === 'repayment-plan' ? 'repayment-plan' : 'summary');
+  
+  useEffect(() => {
+    if (tabFromUrl === 'repayment-plan') {
+      setActiveTab('repayment-plan');
+      if (!repaymentPlan) {
+        calculateRepaymentPlan(budget, method);
+      }
+    } else {
+      setActiveTab('summary');
+    }
+  }, [location, tabFromUrl]);
   
   const activeLoans = loans.filter(loan => loan.isActive);
   const activeCards = creditCards.filter(card => card.isActive);
 
-  // Get sample data if no actual data exists
   const loansToDisplay = activeLoans.length > 0 ? activeLoans : getSampleLoans();
   const cardsToDisplay = activeCards.length > 0 ? activeCards : getSampleCreditCards();
   
-  // Calculate recommendations - get the actual arrays from the return value
   const recommendationsObj = generateRecommendations(loansToDisplay);
-  // Convert recommendations object to array for rendering
   const recommendations = [
     ...(recommendationsObj.topPriorityLoans.length > 0 
       ? [{ type: 'topPriority', loans: recommendationsObj.topPriorityLoans.map(loan => loan.id) }] 
@@ -56,10 +67,8 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
   const hasActiveDebts = activeLoans.length > 0 || activeCards.length > 0;
   const isDemo = activeLoans.length === 0 && activeCards.length === 0;
   
-  // Calculate total payments
   const { totalPayment: totalLoanPayment, totalInterest: totalLoanInterest } = calculateTotalMonthlyPayment(loansToDisplay);
   
-  // Calculate credit card totals
   let totalCardPayment = 0;
   let totalCardInterest = 0;
   
@@ -69,25 +78,30 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
     totalCardInterest += calc.monthlyInterest;
   });
   
-  // Combined totals
   const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
   const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
 
-  // Calculate total loan and credit card balances
   const totalLoanBalance = loansToDisplay.reduce((sum, loan) => sum + loan.amount, 0);
   const totalCardBalance = cardsToDisplay.reduce((sum, card) => sum + card.balance, 0);
   const totalDebtBalance = totalLoanBalance + totalCardBalance;
 
-  // Calculate repayment plan
+  useEffect(() => {
+    if (activeTab === 'repayment-plan') {
+      calculateRepaymentPlan(budget, method);
+    }
+  }, [budget, method, activeTab]);
+
   const calculateRepaymentPlan = (budgetAmount: number, prioritizationMethod: PrioritizationMethod) => {
     setBudget(budgetAmount);
     setMethod(prioritizationMethod);
     
-    const combinedDebts = combineDebts(loansToDisplay, cardsToDisplay);
+    const combinedDebts = combineDebts(activeLoans, activeCards);
     const plan = generateRepaymentPlan(combinedDebts, budgetAmount, prioritizationMethod);
     
     setRepaymentPlan(plan);
     setActiveTab("repayment-plan");
+    
+    navigate('/debt-summary?tab=repayment-plan', { replace: true });
   };
 
   return (
@@ -115,7 +129,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
           </div>
         </div>
         
-        {/* Dashboard Stats */}
         {hasActiveDebts && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-card rounded-lg p-5 shadow-sm border">
@@ -137,7 +150,7 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
             <div className="bg-card rounded-lg p-5 shadow-sm border">
               <div className="flex items-center gap-2 mb-2">
                 <Wallet className="h-5 w-5 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">{t("creditCard.summary.totalBalance")}</span>
+                <span className="text-sm font-medium text-muted-foreground">{t("debtSummary.totalBalance")}</span>
               </div>
               <div className="text-2xl font-bold">
                 {formatCurrency(totalDebtBalance)}
@@ -156,7 +169,6 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
           </div>
         )}
         
-        {/* Recommendations section (if loans exist) */}
         {activeLoans.length > 0 && recommendations.length > 0 && (
           <div className="bg-card rounded-lg p-6 shadow-sm border mb-8">
             <h2 className="text-xl font-bold mb-4">{t("recommendations.title")}</h2>
@@ -188,12 +200,11 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="summary">{t("repayment.summaryTab")}</TabsTrigger>
-          <TabsTrigger value="repayment-plan">{t("repayment.planTab")}</TabsTrigger>
+          <TabsTrigger value="summary" onClick={() => navigate('/debt-summary', { replace: true })}>{t("repayment.summaryTab")}</TabsTrigger>
+          <TabsTrigger value="repayment-plan" onClick={() => navigate('/debt-summary?tab=repayment-plan', { replace: true })}>{t("repayment.planTab")}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="summary" className="space-y-8">
-          {/* Loans and Savings Impact */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="md:col-span-2">
               <section aria-labelledby="loans-heading">
@@ -238,7 +249,10 @@ export default function DebtSummary({ loans, creditCards, onPayoffLoan, onPayoff
             </div>
             <div className="md:col-span-3">
               {repaymentPlan ? (
-                <RepaymentPlanVisualization plan={repaymentPlan} />
+                <RepaymentPlanVisualization 
+                  plan={repaymentPlan}
+                  debts={[...activeLoans, ...activeCards]}
+                />
               ) : (
                 <div className="flex flex-col items-center justify-center h-full p-10 text-center bg-muted rounded-lg border">
                   <CalculatorIcon className="h-12 w-12 text-muted-foreground mb-4" />

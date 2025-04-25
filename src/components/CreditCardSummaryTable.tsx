@@ -43,15 +43,22 @@ export default function CreditCardSummaryTable({
 
   // Process credit card data
   const cardData = creditCards.map(card => {
+    // Ensure we're calculating the monthly interest correctly using the standard formula
     const calculation = calculateCreditCard(card);
     
+    // Monthly interest is calculated as balance * (apr / 100 / 12)
+    const monthlyInterest = calculateMonthlyInterest(card.balance, card.apr);
+    
     totalMinPayment += calculation.effectivePayment;
-    totalMonthlyInterest += calculation.monthlyInterest;
+    totalMonthlyInterest += monthlyInterest; // Use the correct monthly interest calculation
     totalInterestEstimate += calculation.totalInterest;
     
     return {
       card,
-      calculation
+      calculation: {
+        ...calculation,
+        monthlyInterest // Use the correctly calculated monthly interest
+      }
     };
   });
 
@@ -71,7 +78,7 @@ export default function CreditCardSummaryTable({
               <TableHead>{t("debtSummary.cardName")}</TableHead>
               <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
               <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
-              <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
+              <TableHead>{t("debtSummary.totalLifetimeInterest")}</TableHead>
               {onPayoffCreditCard && !isDemo && (
                 <TableHead className="text-right">{t("debtSummary.actions")}</TableHead>
               )}

@@ -1,0 +1,35 @@
+
+<svg 
+  viewBox="0 0 120 120" 
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Background for better visibility in browser tabs -->
+  <rect width="120" height="120" rx="16" fill="#F8F9FC" />
+  
+  <!-- Main triangle outline -->
+  <path 
+    d="M60 20 L10 90 L110 90 Z" 
+    stroke="#3333C2" 
+    stroke-width="4" 
+    fill="none" 
+  />
+  
+  <!-- Inner triangle outline -->
+  <path 
+    d="M40 45 L60 75 L80 45 Z" 
+    stroke="#3333C2" 
+    stroke-width="4" 
+    fill="none" 
+  />
+  
+  <!-- Line at the bottom -->
+  <line 
+    x1="10" 
+    y1="100" 
+    x2="110" 
+    y2="100" 
+    stroke="#3333C2" 
+    stroke-width="4" 
+  />
+</svg>

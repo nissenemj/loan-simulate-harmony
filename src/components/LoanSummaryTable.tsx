@@ -27,14 +27,16 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
   let totalMonthlyPayment = 0;
   let totalMonthlyInterest = 0;
   let totalInterestEstimate = 0;
+  let totalAmountToBePaid = 0;
 
   // Process loan data
   const loanData = loans.map(loan => {
     const calculation = calculateLoan(loan);
     
     totalMonthlyPayment += calculation.monthlyPayment;
-    totalMonthlyInterest += calculation.interest;
+    totalMonthlyInterest += calculation.firstMonthInterest; // Use firstMonthInterest for monthly interest
     totalInterestEstimate += calculation.totalInterest;
+    totalAmountToBePaid += calculation.totalAmountPaid;
     
     return {
       loan,
@@ -45,27 +47,29 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
   return (
     <Card className="overflow-hidden">
       {isDemo && (
-        <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300">
-          <AlertCircle size={16} />
+        <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300" role="alert" aria-live="polite">
+          <AlertCircle size={16} aria-hidden="true" />
           <p className="text-sm font-medium">{t("debtSummary.demoDataMessage")}</p>
         </div>
       )}
       
       <div className="overflow-x-auto">
         <Table>
+          <caption className="sr-only">{t("debtSummary.tableSummary")}</caption>
           <TableHeader>
             <TableRow>
               <TableHead>{t("debtSummary.loanName")}</TableHead>
               <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
               <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
               <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
+              <TableHead>{t("debtSummary.totalAmountPaid")}</TableHead>
             </TableRow>
           </TableHeader>
           
           <TableBody>
             {loanData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-8">
+                <TableCell colSpan={5} className="text-center py-8">
                   {t("debtSummary.noLoansMessage")}
                 </TableCell>
               </TableRow>
@@ -81,13 +85,19 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
                   </TableCell>
                   <TableCell>
                     <AnimatedNumber
-                      value={calculation.interest}
+                      value={calculation.firstMonthInterest}
                       formatter={formatCurrency}
                     />
                   </TableCell>
                   <TableCell>
                     <AnimatedNumber
                       value={calculation.totalInterest}
+                      formatter={formatCurrency}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <AnimatedNumber
+                      value={calculation.totalAmountPaid}
                       formatter={formatCurrency}
                     />
                   </TableCell>
@@ -115,6 +125,12 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
                 <TableCell className="font-bold">
                   <AnimatedNumber
                     value={totalInterestEstimate}
+                    formatter={formatCurrency}
+                  />
+                </TableCell>
+                <TableCell className="font-bold">
+                  <AnimatedNumber
+                    value={totalAmountToBePaid}
                     formatter={formatCurrency}
                   />
                 </TableCell>

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -191,13 +192,13 @@ const LoanForm: React.FC<LoanFormProps> = ({
     if (isEditing && onUpdateLoan) {
       onUpdateLoan(loanData);
       toast({
-        title: t('form.loanUpdated'),
+        title: t('toast.loanUpdated'),
         description: t('form.loanUpdatedDesc'),
       });
     } else {
       onAddLoan(loanData);
       toast({
-        title: t('form.loanAdded'),
+        title: t('toast.loanAdded'),
         description: t('form.loanAddedDesc'),
       });
     }
@@ -216,11 +217,11 @@ const LoanForm: React.FC<LoanFormProps> = ({
   };
   
   return (
-    <form onSubmit={handleSubmit} aria-label="Velan lisäyslomake">
+    <form onSubmit={handleSubmit} aria-label={t('form.loanFormAriaLabel')}>
       <Card 
         className={cn(
           "transition-all duration-300 overflow-hidden", 
-          "bg-white/80 backdrop-blur-subtle shadow-subtle hover:shadow-elevated",
+          "dark:bg-secondary dark:border-bg-highlight backdrop-blur-subtle shadow-subtle hover:shadow-elevated",
           isFocused && "ring-2 ring-primary/20"
         )}
       >
@@ -233,38 +234,38 @@ const LoanForm: React.FC<LoanFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
-                <Banknote size={16} className="text-primary" />
-                {t('form.name')}
+                <Banknote size={16} className="text-brand-primary dark:text-brand-primary-light" />
+                {t('form.labels.name')}
               </Label>
               <Input
                 id="name"
-                placeholder={t('form.placeholderName')}
+                placeholder={t('form.placeholders.namePlaceholder')}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                aria-label="Velan nimi"
+                className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label={t('form.loanNameAriaLabel')}
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="amount" className="text-sm font-medium flex items-center gap-2">
-                <DollarSign size={16} className="text-primary" />
-                {t('form.amount')}
+                <DollarSign size={16} className="text-brand-primary dark:text-brand-primary-light" />
+                {t('form.labels.amount')}
               </Label>
               <Input
                 id="amount"
                 type="number"
                 min="0"
                 step="100"
-                placeholder={t('form.placeholderAmount')}
+                placeholder={t('form.placeholders.amountPlaceholder')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                aria-label="Velan määrä euroina"
+                className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label={t('form.loanAmountAriaLabel')}
                 required
               />
             </div>
@@ -273,41 +274,41 @@ const LoanForm: React.FC<LoanFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="interestRate" className="text-sm font-medium flex items-center gap-2">
-                <Percent size={16} className="text-primary" />
-                {t('form.interestRate')}
+                <Percent size={16} className="text-brand-primary dark:text-brand-primary-light" />
+                {t('form.labels.interestRate')}
               </Label>
               <Input
                 id="interestRate"
                 type="number"
                 min="0"
                 step="0.01"
-                placeholder={t('form.placeholderInterestRate')}
+                placeholder={t('form.placeholders.interestRatePlaceholder')}
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                aria-label="Korko prosentteina"
+                className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label={t('form.interestRateAriaLabel')}
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="termYears" className="text-sm font-medium flex items-center gap-2">
-                <Clock size={16} className="text-primary" />
-                {t('form.termYears')}
+                <Clock size={16} className="text-brand-primary dark:text-brand-primary-light" />
+                {t('form.labels.termYears')}
               </Label>
               <Input
                 id="termYears"
                 type="number"
                 min="1"
                 step="1"
-                placeholder={t('form.placeholderTermYears')}
+                placeholder={t('form.placeholders.termYearsPlaceholder')}
                 value={termYears}
                 onChange={(e) => setTermYears(e.target.value)}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                aria-label="Laina-aika vuosina"
+                className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                aria-label={t('form.termYearsAriaLabel')}
                 required
               />
             </div>
@@ -316,7 +317,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="repaymentType" className="text-sm font-medium">
-                {t('form.repaymentType')}
+                {t('form.labels.repaymentType')}
               </Label>
               <Select
                 value={repaymentType}
@@ -325,16 +326,16 @@ const LoanForm: React.FC<LoanFormProps> = ({
               >
                 <SelectTrigger
                   id="repaymentType"
-                  className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                  aria-label="Lyhennystapa"
+                  className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                  aria-label={t('form.repaymentTypeAriaLabel')}
                 >
-                  <SelectValue placeholder="Valitse lyhennystapa" />
+                  <SelectValue placeholder={t('form.selectRepaymentType')} />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="annuity">{t('repayment.annuity')}</SelectItem>
-                  <SelectItem value="equal-principal">{t('repayment.equalPrincipal')}</SelectItem>
-                  <SelectItem value="fixed-installment">{t('repayment.fixedInstallment')}</SelectItem>
-                  <SelectItem value="custom-payment">{t('repayment.customPayment')}</SelectItem>
+                <SelectContent className="dark:bg-bg-secondary">
+                  <SelectItem value="annuity">{t('loan.types.annuity')}</SelectItem>
+                  <SelectItem value="equal-principal">{t('loan.types.equalPrincipal')}</SelectItem>
+                  <SelectItem value="fixed-installment">{t('loan.types.fixedInstallment')}</SelectItem>
+                  <SelectItem value="custom-payment">{t('loan.types.customPayment')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -342,7 +343,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
             {needsInterestType && (
               <div className="space-y-2">
                 <Label htmlFor="interestType" className="text-sm font-medium">
-                  {t('form.interestType')}
+                  {t('form.labels.interestType')}
                 </Label>
                 <Select
                   value={interestType}
@@ -351,14 +352,14 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 >
                   <SelectTrigger
                     id="interestType"
-                    className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                    aria-label="Korkotyyppi"
+                    className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                    aria-label={t('form.interestTypeAriaLabel')}
                   >
-                    <SelectValue placeholder="Valitse korkotyyppi" />
+                    <SelectValue placeholder={t('form.selectInterestType')} />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="fixed">{t('interest.fixed')}</SelectItem>
-                    <SelectItem value="variable-euribor">{t('interest.variableEuribor')}</SelectItem>
+                  <SelectContent className="dark:bg-bg-secondary">
+                    <SelectItem value="fixed">{t('form.interestTypes.fixed')}</SelectItem>
+                    <SelectItem value="variable-euribor">{t('form.labels.variableEuribor')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -367,21 +368,21 @@ const LoanForm: React.FC<LoanFormProps> = ({
             {isCustomPayment && (
               <div className="space-y-2">
                 <Label htmlFor="customPayment" className="text-sm font-medium flex items-center gap-2">
-                  <DollarSign size={16} className="text-primary" />
-                  {t('form.customPayment')}
+                  <DollarSign size={16} className="text-brand-primary dark:text-brand-primary-light" />
+                  {t('loan.types.customPayment')}
                 </Label>
                 <Input
                   id="customPayment"
                   type="number"
                   min="0"
                   step="10"
-                  placeholder={t('form.placeholderCustomPayment')}
+                  placeholder={t('form.placeholders.monthlyPaymentPlaceholder')}
                   value={customPayment}
                   onChange={(e) => setCustomPayment(e.target.value)}
                   onFocus={() => setIsFocused(true)}
                   onBlur={() => setIsFocused(false)}
-                  className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-                  aria-label="Mukautettu kuukausimaksu"
+                  className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+                  aria-label={t('form.customPaymentAriaLabel')}
                   required={isCustomPayment}
                 />
                 {isCustomPayment && amount && interestRate && customPayment && (
@@ -395,21 +396,21 @@ const LoanForm: React.FC<LoanFormProps> = ({
           
           <div className="space-y-2">
             <Label htmlFor="monthlyFee" className="text-sm font-medium flex items-center gap-2">
-              <DollarSign size={16} className="text-primary" />
-              {t('form.monthlyFee')}
+              <DollarSign size={16} className="text-brand-primary dark:text-brand-primary-light" />
+              {t('form.labels.monthlyFee')}
             </Label>
             <Input
               id="monthlyFee"
               type="number"
               min="0"
               step="0.01"
-              placeholder={t('form.placeholderMonthlyFee')}
+              placeholder={t('form.placeholders.monthlyFeePlaceholder')}
               value={monthlyFee}
               onChange={(e) => setMonthlyFee(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              className="bg-white/50 border-muted shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
-              aria-label="Kuukausimaksu"
+              className="dark:bg-bg-elevated dark:border-bg-highlight shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+              aria-label={t('form.monthlyFeeAriaLabel')}
             />
             <p className="text-xs text-muted-foreground mt-1">
               {t('form.monthlyFeeDescription')}
@@ -423,29 +424,29 @@ const LoanForm: React.FC<LoanFormProps> = ({
                 type="button"
                 variant="outline"
                 onClick={handleCancel}
-                className="flex-1 py-5 transition-all"
-                aria-label="Peruuta muokkaus"
+                className="flex-1 py-5 transition-all dark:bg-bg-elevated dark:border-bg-highlight dark:hover:bg-bg-highlight"
+                aria-label={t('form.cancelAriaLabel')}
               >
                 <X size={18} className="mr-2" />
-                <span>{t('form.cancel')}</span>
+                <span>{t('form.buttons.cancel')}</span>
               </Button>
               <Button
                 type="submit"
-                className="flex-1 bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
-                aria-label="Päivitä velka"
+                className="flex-1 bg-brand-primary hover:bg-brand-primary-light text-white font-medium flex items-center justify-center gap-2 py-5 transition-all dark:bg-brand-primary dark:hover:bg-brand-primary-light"
+                aria-label={t('form.updateAriaLabel')}
               >
                 <Edit size={18} />
-                <span>{t('form.update')}</span>
+                <span>{t('form.buttons.update')}</span>
               </Button>
             </>
           ) : (
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90 text-white font-medium flex items-center justify-center gap-2 py-5 transition-all"
-              aria-label="Lisää velka"
+              className="w-full bg-brand-primary hover:bg-brand-primary-light text-white font-medium flex items-center justify-center gap-2 py-5 transition-all dark:bg-brand-primary dark:hover:bg-brand-primary-light"
+              aria-label={t('form.submitAriaLabel')}
             >
               <PlusCircle size={18} />
-              <span>{t('form.submit')}</span>
+              <span>{t('form.buttons.submit')}</span>
             </Button>
           )}
         </CardFooter>

@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const TermsOfService = () => {
   const { t } = useLanguage();
@@ -15,14 +16,14 @@ const TermsOfService = () => {
   return (
     <>
       <Helmet>
-        <title>Käyttöehdot | Loan Simulate Harmony</title>
-        <meta name="description" content="Käyttöehdot - Loan Simulate Harmony" />
+        <title>Käyttöehdot | Velkavapaus.fi</title>
+        <meta name="description" content="Käyttöehdot - Velkavapaus.fi" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background flex flex-col">
         <NavigationHeader />
         
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-4xl flex-grow">
           <Button 
             variant="outline" 
             size="sm" 
@@ -41,11 +42,11 @@ const TermsOfService = () => {
           <section className="mb-10">
             <h2 className="text-2xl font-semibold mb-4">Johdanto</h2>
             <p className="mb-4">
-              Tervetuloa Loan Simulate Harmony -sovellukseen ("Sovellus", "me", "meidän"). Käyttämällä sovellustamme 
+              Tervetuloa Velkavapaus.fi -sovellukseen ("Sovellus", "me", "meidän"). Käyttämällä sovellustamme 
               hyväksyt nämä käyttöehdot ("Ehdot") kokonaisuudessaan. Jos et hyväksy näitä ehtoja, älä käytä sovellustamme.
             </p>
             <p className="mb-4">
-              Loan Simulate Harmony on velkojenhallintasovellus, joka auttaa käyttäjiä suunnittelemaan velkojensa 
+              Velkavapaus.fi on velkojenhallintasovellus, joka auttaa käyttäjiä suunnittelemaan velkojensa 
               takaisinmaksua ja saavuttamaan taloudellisia tavoitteitaan. Sovellus tarjoaa työkaluja velkojen hallintaan, 
               mutta ei anna taloudellista neuvontaa.
             </p>
@@ -78,7 +79,6 @@ const TermsOfService = () => {
             <ul className="list-disc pl-6 mb-4 space-y-2">
               <li>Laittomiin tarkoituksiin tai lakia rikkovalla tavalla</li>
               <li>Sovelluksen kaatamiseen, häirintään tai vahingoittamiseen</li>
-              <li>Tietomurtoihin tai luvattomaan pääsyyn sovelluksen osiin</li>
               <li>Sovelluksen kopioimiseen, jäljentämiseen tai muokkaamiseen</li>
               <li>Kaupallisiin tarkoituksiin ilman ennakkolupaa</li>
             </ul>
@@ -92,33 +92,27 @@ const TermsOfService = () => {
             <ul className="list-disc pl-6 mb-4 space-y-2">
               <li>Käyttäjätunnuksesi ja salasanasi salassapidosta</li>
               <li>Kaikkien käyttäjätililläsi tapahtuvien toimien turvallisuudesta</li>
-              <li>Antamiesi tietojen oikeellisuudesta ja ajantasaisuudesta</li>
+              <li>Antamiesi tietojen oikeellisuudesta</li>
             </ul>
-            <p className="mb-4">
-              Sinut voidaan pitää vastuussa menetyksistä, jotka aiheutuvat toiselle henkilölle antamiesi 
-              käyttäjätilitietojen käytöstä. Ilmoita meille välittömästi, jos epäilet tietojesi joutuneen vääriin käsiin.
-            </p>
           </section>
 
           <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Immateriaalioikeudet</h2>
+            <h2 className="text-2xl font-semibold mb-4">Tietosuoja</h2>
             <p className="mb-4">
-              Kaikki sovellukseen liittyvät immateriaalioikeudet (kuten tekijänoikeudet, tavaramerkit, patentit) ovat 
-              meidän tai lisenssinantajiemme omaisuutta. Sovelluksen käyttö ei anna sinulle minkäänlaisia oikeuksia näihin 
-              immateriaalioikeuksiin.
+              Sovelluksemme ei jaa talouteen liittyviä tietojasi kolmansien osapuolten kanssa. Kaikki sovellukseen 
+              syöttämäsi taloudelliset tiedot säilytetään turvallisesti ja niitä käytetään vain velanmaksusuunnitelmien 
+              luomiseen ja ylläpitoon.
             </p>
             <p className="mb-4">
-              Et saa kopioida, jäljentää, muokata, julkaista, levittää tai luoda johdannaisteoksia sovelluksesta tai 
-              mistään sen osasta ilman ennakkolupaa.
+              Tarkemmat tiedot henkilötietojesi käsittelystä löydät <Button variant="link" className="p-0 h-auto" onClick={() => navigate("/privacy-policy")}>Tietosuojaselosteestamme</Button>.
             </p>
           </section>
 
           <section className="mb-10">
             <h2 className="text-2xl font-semibold mb-4">Affiliate-linkit</h2>
             <p className="mb-4">
-              Sovelluksemme sisältää affiliate-linkkejä (esim. Ferratum Business Adtractionin kautta ja Nordnet Adservicen kautta). 
-              Jos klikkaat näitä linkkejä ja suoritat ostoksen tai rekisteröidyt palveluun, saatamme saada komissiota. 
-              Tämä ei aiheuta sinulle lisäkustannuksia.
+              Sovelluksemme sisältää affiliate-linkkejä. Jos klikkaat näitä linkkejä ja suoritat ostoksen tai rekisteröidyt palveluun, 
+              saatamme saada komissiota. Tämä ei aiheuta sinulle lisäkustannuksia.
             </p>
             <p className="mb-4">
               Suosittelemme aina tutustumaan huolellisesti kaikkiin palveluihin ennen rekisteröitymistä tai ostoksen tekemistä. 
@@ -134,58 +128,19 @@ const TermsOfService = () => {
               taloudellisista tappioistasi.
             </p>
             <p className="mb-4">
-              Sovellus tarjotaan "sellaisenaan" ja "sellaisena kuin se on saatavilla" ilman minkäänlaisia takuita, 
-              joko suoria tai epäsuoria. Emme takaa, että:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Sovellus vastaa vaatimuksiasi</li>
-              <li>Sovellus toimii keskeytyksettä, on ajantasainen tai virheettömä</li>
-              <li>Virheitä korjataan</li>
-              <li>Sovellus on vapaa viruksista tai muista haitallisista komponenteista</li>
-            </ul>
-            <p className="mb-4">
-              Emme ole sovellettavan lain sallimissa rajoissa vastuussa mistään epäsuorista, satunnaisista, 
-              erityisistä tai välillisistä vahingoista, jotka aiheutuvat sovelluksen käytöstä tai käytön 
-              estymisestä.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Käyttäjätilin päättäminen</h2>
-            <p className="mb-4">
-              Voimme oman harkintamme mukaan päättää, keskeyttää tai rajoittaa pääsyäsi sovellukseen välittömästi 
-              ilman ennakkoilmoitusta tai vastuuta seuraavissa tapauksissa:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Rikot näitä käyttöehtoja</li>
-              <li>Epäilemme perustellusti, että olet osallistunut petolliseen toimintaan</li>
-              <li>Käytät sovellusta laittomiin tarkoituksiin</li>
-              <li>Käyttäjätilisi on ollut passiivinen yli 12 kuukautta</li>
-            </ul>
-            <p className="mb-4">
-              Voit myös itse poistaa käyttäjätilisi milloin tahansa sovelluksen asetuksista tai ottamalla yhteyttä 
-              asiakaspalveluumme.
+              Sovellus tarjotaan "sellaisenaan" ilman minkäänlaisia takuita. Emme takaa, että sovellus olisi aina saatavilla, 
+              virheetön tai että se täyttäisi kaikki tarpeesi.
             </p>
           </section>
 
           <section className="mb-10">
             <h2 className="text-2xl font-semibold mb-4">Käyttöehtojen muutokset</h2>
             <p className="mb-4">
-              Pidätämme oikeuden muuttaa näitä käyttöehtoja milloin tahansa. Ilmoitamme muutoksista sähköpostitse, 
-              sovelluksen kautta tai julkaisemalla päivitetyt ehdot sovelluksessa.
+              Pidätämme oikeuden muuttaa näitä käyttöehtoja milloin tahansa. Ilmoitamme muutoksista sähköpostitse 
+              tai sovelluksen kautta.
             </p>
             <p className="mb-4">
-              Muutokset tulevat voimaan heti, kun ne on julkaistu. Jatkamalla sovelluksen käyttöä päivitysten jälkeen 
-              hyväksyt päivitetyt ehdot.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Sovellettava laki</h2>
-            <p className="mb-4">
-              Näihin käyttöehtoihin sovelletaan Suomen lakia. Kaikki riidat, jotka johtuvat näistä ehdoista tai 
-              liittyvät niihin, ratkaistaan ensisijaisesti neuvottelemalla. Jos neuvottelut eivät johda ratkaisuun, 
-              riita ratkaistaan Suomen tuomioistuimissa.
+              Jatkamalla sovelluksen käyttöä päivitysten jälkeen hyväksyt päivitetyt ehdot.
             </p>
           </section>
 
@@ -195,16 +150,18 @@ const TermsOfService = () => {
               Jos sinulla on kysyttävää näistä käyttöehdoista, ota yhteyttä: 
             </p>
             <p className="mb-4">
-              Sähköposti: support@loansimulateharmony.fi
+              Sähköposti: <a href="mailto:support@velkavapaus.fi" className="text-primary hover:underline">support@velkavapaus.fi</a>
             </p>
           </section>
 
           <Separator className="my-6" />
           
           <p className="text-center text-sm text-muted-foreground mt-8">
-            © {new Date().getFullYear()} Loan Simulate Harmony. Kaikki oikeudet pidätetään.
+            © {new Date().getFullYear()} Velkavapaus.fi. Kaikki oikeudet pidätetään.
           </p>
         </div>
+        
+        <Footer />
       </div>
     </>
   );

@@ -1,83 +1,140 @@
-// App.tsx (päivitetty)
+import React from "react";
+import {
+	BrowserRouter as Router,
+	Route,
+	Routes,
+	Navigate,
+} from "react-router-dom";
+import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "./contexts/LanguageContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ErrorProvider } from "./contexts/ErrorContext";
+import { HelmetProvider } from "react-helmet-async";
+import NavigationHeader from "./components/NavigationHeader";
+import Footer from "./components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { AuthProvider } from "@/contexts/AuthContext";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import LoanTerms from "./pages/LoanTerms";
-import DebtSummaryPage from "./pages/DebtSummaryPage";
-import Auth from "./pages/Auth";
-import NavigationHeader from "./components/NavigationHeader";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LandingPage from "./pages/LandingPage";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import CookiePolicy from "./pages/CookiePolicy";
+import { Suspense, lazy } from "react";
 import CookieConsentBanner from "./components/CookieConsentBanner";
-import Dashboard from "./pages/Dashboard";
-import CreditCardsPage from "./pages/CreditCardsPage"; // Lisätään CreditCardsPage
 
-const queryClient = new QueryClient();
+// Lazy-loaded components
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const BlogAdmin = lazy(() => import("./pages/BlogAdmin"));
+const CoursePage = lazy(() => import("./pages/CoursePage"));
+const CourseAdmin = lazy(() => import("./pages/CourseAdmin"));
+const FileStoragePage = lazy(() => import("./pages/FileStoragePage"));
+const Blog = lazy(() => import("./pages/Blog"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Index = lazy(() => import("./pages/Index"));
+const Auth = lazy(() => import("./pages/Auth"));
+const DebtStrategies = lazy(() => import("./pages/DebtStrategies"));
+const DebtSummaryPage = lazy(() => import("./pages/DebtSummaryPage"));
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
-      <TooltipProvider>
-        <LanguageProvider>
-          <BrowserRouter>
-            <AuthProvider>
-              <Toaster />
-              <Sonner />
-              <CookieConsentBanner />
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <NavigationHeader />
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/loans" element={
-                  <ProtectedRoute>
-                    <NavigationHeader />
-                    <Index />
-                  </ProtectedRoute>
-                } />
-                <Route path="/creditCards" element={
-                  <ProtectedRoute>
-                    <NavigationHeader />
-                    <CreditCardsPage />
-                  </ProtectedRoute>
-                } /> {/* Lisätty /creditCards-reitti */}
-                <Route path="/terms" element={
-                  <>
-                    <NavigationHeader />
-                    <LoanTerms />
-                  </>
-                } />
-                <Route path="/debt-summary" element={
-                  <ProtectedRoute>
-                    <NavigationHeader />
-                    <DebtSummaryPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/cookie-policy" element={<CookiePolicy />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AuthProvider>
-          </BrowserRouter>
-        </LanguageProvider>
-      </TooltipProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
-);
+function App() {
+	return (
+		<HelmetProvider>
+			<ThemeProvider
+				attribute="class"
+				defaultTheme="system"
+				enableSystem
+				disableTransitionOnChange
+			>
+				<Router>
+					<AuthProvider>
+						<LanguageProvider>
+							<ErrorProvider>
+								<div className="flex flex-col min-h-screen">
+									<NavigationHeader />
+									<main className="flex-grow">
+										<Suspense
+											fallback={
+												<div className="flex items-center justify-center min-h-screen">
+													<div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+												</div>
+											}
+										>
+											<Routes>
+												<Route path="/" element={<LandingPage />} />
+												<Route path="/about" element={<AboutPage />} />
+												<Route path="/calculator" element={<Index />} />
+												<Route path="/blog" element={<Blog />} />
+												<Route path="/blog/:postId" element={<BlogPost />} />
+												<Route
+													path="/blog-admin"
+													element={
+														<ProtectedRoute>
+															<BlogAdmin />
+														</ProtectedRoute>
+													}
+												/>
+												<Route
+													path="/admin/blog"
+													element={<Navigate to="/blog-admin" replace />}
+												/>
+												<Route path="/courses" element={<CoursePage />} />
+												<Route
+													path="/courses/admin"
+													element={
+														<ProtectedRoute>
+															<CourseAdmin />
+														</ProtectedRoute>
+													}
+												/>
+												<Route
+													path="/files"
+													element={
+														<ProtectedRoute>
+															<FileStoragePage />
+														</ProtectedRoute>
+													}
+												/>
+												<Route
+													path="/dashboard"
+													element={
+														<ProtectedRoute>
+															<Dashboard />
+														</ProtectedRoute>
+													}
+												/>
+												<Route path="/auth" element={<Auth />} />
+												<Route
+													path="/app"
+													element={<Navigate to="/dashboard" replace />}
+												/>
+												<Route
+													path="/debt-strategies"
+													element={<DebtStrategies />}
+												/>
+												<Route
+													path="/debt-summary"
+													element={<DebtSummaryPage />}
+												/>
+												<Route
+													path="/creditCards"
+													element={
+														<ProtectedRoute>
+															<CreditCardsPage />
+														</ProtectedRoute>
+													}
+												/>
+											</Routes>
+										</Suspense>
+									</main>
+									<Footer />
+									<Toaster />
+									<Sonner />
+									<CookieConsentBanner />
+								</div>
+							</ErrorProvider>
+						</LanguageProvider>
+					</AuthProvider>
+				</Router>
+			</ThemeProvider>
+		</HelmetProvider>
+	);
+}
 
 export default App;

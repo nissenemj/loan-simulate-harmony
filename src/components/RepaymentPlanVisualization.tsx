@@ -36,14 +36,18 @@ import {
   YAxis 
 } from 'recharts';
 import { cn } from '@/lib/utils';
+import { Loan } from "@/utils/loanCalculations";
+import { CreditCard } from "@/utils/creditCardCalculations";
 
 interface RepaymentPlanVisualizationProps {
   plan: RepaymentPlan;
+  debts?: (Loan | CreditCard)[];
   className?: string;
 }
 
 const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({ 
   plan,
+  debts = [],
   className
 }) => {
   const { t } = useLanguage();
@@ -55,6 +59,19 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
         <AlertTitle>{t("repayment.insufficientBudget")}</AlertTitle>
         <AlertDescription>
           {plan.insufficientBudgetMessage || t("repayment.budgetTooLow")}
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  // Check if timeline is empty or calculation hit limits
+  if (!plan.timeline || plan.timeline.length === 0) {
+    return (
+      <Alert variant="destructive" className={className}>
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>{t("repayment.calculationError")}</AlertTitle>
+        <AlertDescription>
+          {t("debtStrategies.errorMaxMonths")}
         </AlertDescription>
       </Alert>
     );
@@ -192,15 +209,16 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart 
                 data={balanceTimelineData} 
-                margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+                margin={{ top: 10, right: 10, left: 20, bottom: 30 }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
                 <XAxis 
                   dataKey="month" 
                   label={{ 
                     value: t("repayment.months"), 
                     position: 'insideBottom', 
-                    offset: -15 
+                    offset: -15,
+                    fill: "var(--text-secondary, #E0E0E0)"
                   }} 
                 />
                 <YAxis 
@@ -209,12 +227,23 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
                     value: t("repayment.balance"), 
                     angle: -90, 
                     position: 'insideLeft', 
-                    offset: -5 
+                    offset: 0,
+                    fill: "var(--text-secondary, #E0E0E0)"
                   }}  
                 />
                 <Tooltip 
                   formatter={(value) => [formatCurrency(Number(value)), t("repayment.totalRemaining")]}
-                  labelFormatter={(label) => `${t("form.months")}: ${label}`}
+                  labelFormatter={(label) => `${t("repayment.months")}: ${label}`}
+                  contentStyle={{
+                    backgroundColor: "var(--bg-secondary, #1E1E1E)",
+                    borderColor: "var(--bg-highlight, #333333)"
+                  }}
+                  itemStyle={{
+                    color: "var(--text-secondary, #E0E0E0)"
+                  }}
+                  labelStyle={{
+                    color: "var(--text-primary, #FFFFFF)"
+                  }}
                 />
                 <Area 
                   type="monotone" 
@@ -241,21 +270,37 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
               <BarChart
                 data={debtPayoffData}
                 layout="vertical"
-                margin={{ top: 10, right: 10, left: 100, bottom: 20 }}
+                margin={{ top: 10, right: 10, left: 100, bottom: 30 }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
                 <XAxis 
                   type="number" 
                   label={{ 
                     value: t("repayment.months"), 
                     position: 'insideBottom', 
-                    offset: -15 
+                    offset: -15,
+                    fill: "var(--text-secondary, #E0E0E0)"
                   }} 
                 />
-                <YAxis dataKey="name" type="category" width={90} />
+                <YAxis 
+                  dataKey="name" 
+                  type="category" 
+                  width={90} 
+                  tick={{ fill: "var(--text-secondary, #E0E0E0)" }}
+                />
                 <Tooltip 
                   formatter={(value) => [`${value} ${t("form.months")}`, t("repayment.payoffTime")]}
                   labelFormatter={(label) => label}
+                  contentStyle={{
+                    backgroundColor: "var(--bg-secondary, #1E1E1E)",
+                    borderColor: "var(--bg-highlight, #333333)"
+                  }}
+                  itemStyle={{
+                    color: "var(--text-secondary, #E0E0E0)"
+                  }}
+                  labelStyle={{
+                    color: "var(--text-primary, #FFFFFF)"
+                  }}
                 />
                 <Bar dataKey="months" fill="hsl(var(--primary))" />
               </BarChart>
