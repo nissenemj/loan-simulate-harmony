@@ -116,19 +116,19 @@ const DebtStrategies = () => {
                 <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
                   <TabsTrigger value="calculator" className="flex items-center gap-2">
                     <Calculator className="h-4 w-4" />
-                    {t('calculator.debtPayoffCalculator')}
+                    {t('debtStrategies.calculatorTab')}
                   </TabsTrigger>
                   <TabsTrigger value="timeline" className="flex items-center gap-2">
                     <LineChart className="h-4 w-4" />
-                    {t('calculator.debtPayoffTimeline')}
+                    {t('debtStrategies.timelineTab')}
                   </TabsTrigger>
                   <TabsTrigger value="extraPayment" className="flex items-center gap-2">
                     <Coins className="h-4 w-4" />
-                    {t('calculator.extraPaymentImpact')}
+                    {t('debtStrategies.extraPaymentTab')}
                   </TabsTrigger>
                   <TabsTrigger value="consolidation" className="flex items-center gap-2">
                     <TrendingDown className="h-4 w-4" />
-                    {t('calculator.debtConsolidation')}
+                    {t('debtStrategies.consolidationTab')}
                   </TabsTrigger>
                 </TabsList>
                 

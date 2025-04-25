@@ -16,7 +16,12 @@ export const debtStrategies = {
       monthByMonth: "Month by Month Analysis",
       repaymentCalculation: "Repayment Calculation",
       errorInCalculation: "Error in calculation",
-      tryAgainHigherPayment: "Please try again with a higher monthly payment"
+      tryAgainHigherPayment: "Please try again with a higher monthly payment",
+      // Tab translations
+      calculatorTab: "Debt Payoff Calculator",
+      timelineTab: "Debt Payoff Timeline",
+      extraPaymentTab: "Extra Payment Impact",
+      consolidationTab: "Debt Consolidation"
     }
   },
   fi: {
@@ -33,7 +38,12 @@ export const debtStrategies = {
       monthByMonth: "Kuukausianalyysi",
       repaymentCalculation: "Takaisinmaksulaskelma",
       errorInCalculation: "Virhe laskennassa",
-      tryAgainHigherPayment: "Kokeile uudelleen suuremmalla kuukausimaksulla"
+      tryAgainHigherPayment: "Kokeile uudelleen suuremmalla kuukausimaksulla",
+      // Tab translations
+      calculatorTab: "Velanmaksulaskuri",
+      timelineTab: "Velanmaksuaikataulu",
+      extraPaymentTab: "Lisämaksujen vaikutus",
+      consolidationTab: "Lainojen yhdistäminen"
     }
   }
 };
