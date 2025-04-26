@@ -5,6 +5,12 @@ export const debtSummary = {
   en: {
     debtSummary: {
       title: "Debt Summary",
+      pageHeading: "Your Complete Debt Overview",
+      sectionHeading: {
+        cards: "Credit Card Debt",
+        loans: "Personal Loans",
+        summary: "Total Debt Summary"
+      },
       cardName: "Name",
       monthlyPayment: "Monthly Payment",
       monthlyInterest: "Monthly Interest",
@@ -43,6 +49,12 @@ export const debtSummary = {
   fi: {
     debtSummary: {
       title: "Velkakatsaus",
+      pageHeading: "Kokonaisvaltainen velkatilanne",
+      sectionHeading: {
+        cards: "Luottokorttilainat",
+        loans: "Henkilökohtaiset lainat",
+        summary: "Velkojen kokonaistilanne"
+      },
       cardName: "Nimi",
       monthlyPayment: "Kuukausierä",
       monthlyInterest: "Kuukausikorko",

@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -95,6 +96,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     setIsCalculating(true);
     
     try {
+      // Cast the strategy to the correct type as expected by calculatePaymentPlan
       const plan = await calculatePaymentPlan(debts, monthlyBudget, strategy);
       
       setPayoffPlan(plan);
