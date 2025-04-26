@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -36,11 +35,9 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Calculate total debt and minimum payment
   const totalDebt = useMemo(() => debts.reduce((sum, debt) => sum + debt.balance, 0), [debts]);
   const totalMinPayment = useMemo(() => debts.reduce((sum, debt) => sum + debt.minimumPayment, 0), [debts]);
 
-  // Add a new empty debt
   const handleAddDebt = useCallback(() => {
     const newDebt: Debt = {
       id: `debt-${Date.now()}`,
@@ -53,12 +50,10 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     setDebts([...debts, newDebt]);
   }, [debts, t]);
 
-  // Remove a debt by ID
   const handleRemoveDebt = useCallback((id: string) => {
     setDebts(debts.filter(debt => debt.id !== id));
   }, [debts]);
 
-  // Update a debt's property
   const handleUpdateDebt = useCallback((id: string, field: keyof Debt, value: any) => {
     setDebts(debts.map(debt => {
       if (debt.id === id) {
@@ -68,11 +63,9 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     }));
   }, [debts]);
 
-  // Calculate the payment plan
   const handleCalculate = useCallback(async () => {
     setError(null);
     
-    // Validate inputs
     if (debts.length === 0) {
       toast({
         title: t('errors.noDebtsTitle'),
@@ -107,10 +100,8 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     setIsCalculating(true);
     
     try {
-      // Calculate payment plan
-      const plan = await calculatePayoffPlan(debts, monthlyBudget, strategy);
+      const plan = await calculatePaymentPlan(debts, monthlyBudget, strategy);
       
-      // Save and display results
       setPayoffPlan(plan);
       onSaveResults(plan);
       
@@ -133,11 +124,9 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     }
   }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, t, totalMinPayment]);
 
-  // Handle budget change
   const handleBudgetChange = useCallback((budget: number, method: PrioritizationMethod) => {
     setMonthlyBudget(budget);
     setStrategy(method);
-    // Wait for state update before calculating
     setTimeout(() => handleCalculate(), 0);
   }, [handleCalculate]);
 
@@ -151,7 +140,6 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
         
         <CardContent>
           <div className="space-y-8">
-            {/* Debts Section */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">{t('debtStrategies.yourDebtsSection')}</h3>
               
@@ -248,7 +236,6 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
               </Button>
             </div>
             
-            {/* Budget Section */}
             <div>
               <BudgetInput 
                 onCalculate={handleBudgetChange} 
@@ -257,7 +244,6 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
               />
             </div>
             
-            {/* Manual Calculate Button */}
             {debts.length > 0 && (
               <div className="flex justify-end">
                 <Button 
@@ -271,7 +257,6 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
               </div>
             )}
             
-            {/* Results Section */}
             {payoffPlan && (
               <div className="border rounded-md p-4 bg-muted/50">
                 <h3 className="text-lg font-medium mb-4">{t('debtStrategies.summaryTitle')}</h3>

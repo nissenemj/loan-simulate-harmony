@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Debt, ExtraPaymentImpact } from '@/utils/calculator/types';
 import { calculateExtraPaymentImpact } from '@/utils/calculator/debtCalculator';
@@ -20,7 +20,7 @@ interface ExtraPaymentCalculatorProps {
  * Extra Payment Impact Calculator component
  * Allows users to see the impact of making an extra payment on a specific debt
  */
-export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
+const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
   const { t } = useTranslation();
   const [selectedDebtId, setSelectedDebtId] = useState<string>('');
   const [extraPaymentAmount, setExtraPaymentAmount] = useState<number>(0);
@@ -245,4 +245,6 @@ export function ExtraPaymentCalculator({ debts }: ExtraPaymentCalculatorProps) {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default ExtraPaymentCalculator;
