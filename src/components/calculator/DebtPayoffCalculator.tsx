@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
-import { PrioritizationMethod } from '@/utils/repayment/types';
+import { PaymentStrategy } from '@/utils/repayment/types';  // Updated import
 import { AlertCircle, Calculator, Trash2, PlusCircle, Banknote, Calendar, Percent } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetInput from '../BudgetInput';
@@ -26,7 +26,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const [monthlyBudget, setMonthlyBudget] = useState<number>(
     Math.max(1000, Math.ceil(initialDebts.reduce((sum, debt) => sum + debt.minimumPayment, 0) * 1.2))
   );
-  const [strategy, setStrategy] = useState<PrioritizationMethod>('avalanche');
+  const [strategy, setStrategy] = useState<PaymentStrategy>('avalanche');  // Updated type
   const [isCalculating, setIsCalculating] = useState(false);
   const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
