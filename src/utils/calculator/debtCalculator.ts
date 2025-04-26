@@ -95,8 +95,17 @@ export function calculatePaymentPlan(
 			let paymentAmount = requiredPayment;
 			availablePayment -= requiredPayment;
 
-			// Apply extra payment to highest priority debt
-			if (debt === activeDebts[0] && availablePayment > 0) {
+			// Apply extra payment based on strategy
+			if (strategy === "equal" && availablePayment > 0) {
+				// For equal strategy, distribute extra payment equally among all active debts
+				const extraPaymentPerDebt = availablePayment / activeDebts.length;
+				const maxExtraPayment =
+					debt.remainingBalance + interestAmount - requiredPayment;
+				const extraPayment = Math.min(extraPaymentPerDebt, maxExtraPayment);
+				paymentAmount += extraPayment;
+				availablePayment -= extraPayment;
+			} else if (debt === activeDebts[0] && availablePayment > 0) {
+				// For avalanche/snowball, apply extra payment to highest priority debt
 				const maxExtraPayment =
 					debt.remainingBalance + interestAmount - requiredPayment;
 				const extraPayment = Math.min(availablePayment, maxExtraPayment);
@@ -182,6 +191,10 @@ export function sortDebtsByStrategy(
 	} else if (strategy === "snowball") {
 		// Sort by balance (lowest to highest)
 		return debtsCopy.sort((a, b) => a.balance - b.balance);
+	} else if (strategy === "equal") {
+		// For equal strategy, order doesn't matter as payments are distributed equally
+		// But we'll sort by interest rate for consistency
+		return debtsCopy.sort((a, b) => b.interestRate - a.interestRate);
 	} else if (strategy === "custom" && customOrder) {
 		// Sort by custom order
 		return debtsCopy.sort((a, b) => {
