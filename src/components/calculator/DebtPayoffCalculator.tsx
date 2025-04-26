@@ -7,8 +7,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
-import { PaymentStrategy } from '@/utils/repayment/types';
-import { AlertCircle, Calculator, Trash2, PlusCircle } from 'lucide-react';
+import { PrioritizationMethod } from '@/utils/repayment/types';
+import { AlertCircle, Calculator, Trash2, PlusCircle, Banknote, Calendar, Percent } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import BudgetInput from '../BudgetInput';
 
@@ -25,7 +25,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const [monthlyBudget, setMonthlyBudget] = useState<number>(
     Math.max(1000, Math.ceil(initialDebts.reduce((sum, debt) => sum + debt.minimumPayment, 0) * 1.2))
   );
-  const [strategy, setStrategy] = useState<PaymentStrategy>('avalanche');
+  const [strategy, setStrategy] = useState<PrioritizationMethod>('avalanche');
   const [isCalculating, setIsCalculating] = useState(false);
   const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -119,7 +119,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     }
   }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, t, totalMinPayment]);
 
-  const handleBudgetChange = useCallback((budget: number, method: PaymentStrategy) => {
+  const handleBudgetChange = useCallback((budget: number, method: PrioritizationMethod) => {
     setMonthlyBudget(budget);
     setStrategy(method);
     setTimeout(() => handleCalculate(), 0);
@@ -260,7 +260,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex flex-col p-4 bg-card rounded-md border">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      <BanknoteIcon className="h-4 w-4 mr-2" />
+                      <Banknote className="h-4 w-4 mr-2" />
                       {t('debtStrategies.totalDebt')}
                     </span>
                     <span className="text-2xl font-bold mt-1">€{totalDebt.toLocaleString('fi-FI')}</span>
@@ -268,7 +268,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                   
                   <div className="flex flex-col p-4 bg-card rounded-md border">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      <CalendarIcon className="h-4 w-4 mr-2" />
+                      <Calendar className="h-4 w-4 mr-2" />
                       {t('debtStrategies.timeToPayoff')}
                     </span>
                     <span className="text-2xl font-bold mt-1">{payoffPlan.totalMonths} {t('form.months')}</span>
@@ -276,7 +276,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                   
                   <div className="flex flex-col p-4 bg-card rounded-md border">
                     <span className="text-sm text-muted-foreground flex items-center">
-                      <PercentIcon className="h-4 w-4 mr-2" />
+                      <Percent className="h-4 w-4 mr-2" />
                       {t('debtStrategies.interestPaid')}
                     </span>
                     <span className="text-2xl font-bold mt-1">€{payoffPlan.totalInterestPaid.toLocaleString('fi-FI')}</span>
