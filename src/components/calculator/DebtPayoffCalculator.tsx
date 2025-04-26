@@ -1,21 +1,16 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
-import { PrioritizationMethod } from '@/utils/repayment';
-import { 
-  AlertCircle, Calculator, Trash2, PlusCircle, CreditCard, 
-  BanknoteIcon, PercentIcon, CalendarIcon
-} from 'lucide-react';
-import BudgetInput from '../BudgetInput';
+import { PaymentStrategy } from '@/utils/repayment/types';
+import { AlertCircle, Calculator, Trash2, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import BudgetInput from '../BudgetInput';
 
 interface DebtPayoffCalculatorProps {
   initialDebts: Debt[];
@@ -30,7 +25,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const [monthlyBudget, setMonthlyBudget] = useState<number>(
     Math.max(1000, Math.ceil(initialDebts.reduce((sum, debt) => sum + debt.minimumPayment, 0) * 1.2))
   );
-  const [strategy, setStrategy] = useState<PrioritizationMethod>('avalanche');
+  const [strategy, setStrategy] = useState<PaymentStrategy>('avalanche');
   const [isCalculating, setIsCalculating] = useState(false);
   const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -124,7 +119,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     }
   }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, t, totalMinPayment]);
 
-  const handleBudgetChange = useCallback((budget: number, method: PrioritizationMethod) => {
+  const handleBudgetChange = useCallback((budget: number, method: PaymentStrategy) => {
     setMonthlyBudget(budget);
     setStrategy(method);
     setTimeout(() => handleCalculate(), 0);
@@ -146,7 +141,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
               {debts.length > 0 ? (
                 <div className="space-y-4">
                   {debts.map((debt, index) => (
-                    <div key={debt.id} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md">
+                    <div key={debt.id} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4 border rounded-md">
                       <div>
                         <Label htmlFor={`debt-name-${index}`}>{t('loan.name')}</Label>
                         <Input
@@ -154,6 +149,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                           value={debt.name}
                           onChange={(e) => handleUpdateDebt(debt.id, 'name', e.target.value)}
                           placeholder={`${t('repayment.debtName')} ${index + 1}`}
+                          className="h-12 md:h-11"
                         />
                       </div>
                       
@@ -166,7 +162,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                             type="number"
                             value={debt.balance}
                             onChange={(e) => handleUpdateDebt(debt.id, 'balance', Number(e.target.value) || 0)}
-                            className="pl-8"
+                            className="pl-8 h-12 md:h-11"
                             placeholder="0"
                             min="0"
                             step="100"
@@ -182,7 +178,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                             type="number"
                             value={debt.interestRate}
                             onChange={(e) => handleUpdateDebt(debt.id, 'interestRate', Number(e.target.value) || 0)}
-                            className="pr-8"
+                            className="pr-8 h-12 md:h-11"
                             placeholder="0"
                             min="0"
                             step="0.1"
@@ -200,7 +196,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                             type="number"
                             value={debt.minimumPayment}
                             onChange={(e) => handleUpdateDebt(debt.id, 'minimumPayment', Number(e.target.value) || 0)}
-                            className="pl-8"
+                            className="pl-8 h-12 md:h-11"
                             placeholder="0"
                             min="0"
                             step="10"
@@ -213,7 +209,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                           variant="outline" 
                           size="icon"
                           onClick={() => handleRemoveDebt(debt.id)}
-                          className="h-10 w-10"
+                          className="h-12 w-12 md:h-11 md:w-11"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -230,7 +226,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                 </Alert>
               )}
               
-              <Button variant="outline" onClick={handleAddDebt} className="w-full">
+              <Button variant="outline" onClick={handleAddDebt} className="w-full h-12 md:h-11">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 {t('debtStrategies.addDebtButton')}
               </Button>
@@ -249,7 +245,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                 <Button 
                   onClick={handleCalculate} 
                   disabled={isCalculating}
-                  className="w-full md:w-auto"
+                  className="w-full md:w-auto h-12 md:h-11"
                 >
                   <Calculator className="mr-2 h-4 w-4" />
                   {isCalculating ? t('common.calculating') : t('debtStrategies.calculateButton')}
