@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { PaymentStrategy } from '@/utils/repayment/types';  // Updated import
+import { PrioritizationMethod } from '@/utils/repayment/types';  // Updated import
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,14 +9,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 interface BudgetInputProps {
-  onCalculate: (budget: number, method: PaymentStrategy) => void;
+  onCalculate: (budget: number, method: PrioritizationMethod) => void;
   defaultBudget?: number;
-  method: PaymentStrategy;
+  method: PrioritizationMethod;
 }
 
 const BudgetInput: React.FC<BudgetInputProps> = ({ onCalculate, defaultBudget = 1000, method }) => {
   const [budget, setBudget] = useState<number>(defaultBudget);
-  const [strategy, setStrategy] = useState<PaymentStrategy>(method);
+  const [strategy, setStrategy] = useState<PrioritizationMethod>(method);
   const { t } = useLanguage();
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +24,7 @@ const BudgetInput: React.FC<BudgetInputProps> = ({ onCalculate, defaultBudget = 
     setBudget(newBudget);
   };
 
-  const handleStrategyChange = (value: PaymentStrategy) => {
+  const handleStrategyChange = (value: PrioritizationMethod) => {
     setStrategy(value);
   };
 
