@@ -37,6 +37,9 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 		// Strip any Markdown heading syntax (# headers)
 		let cleanedContent = content.replace(/^#+\s+.+$/gm, '');
 		
+		// Remove meta description suggestions
+		cleanedContent = cleanedContent.replace(/\(Meta-kuvaus ehdotus:.*?\)/g, '');
+		
 		// Split by paragraphs and take the first substantive one
 		const paragraphs = cleanedContent.split("\n\n").filter(p => p.trim().length > 0);
 		let firstParagraph = paragraphs[0] || '';
