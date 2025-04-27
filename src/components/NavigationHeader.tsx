@@ -19,7 +19,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "@/components/ModeToggle";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
 	NavigationMenu,
 	NavigationMenuItem,
@@ -90,15 +90,17 @@ const NavigationHeader = () => {
 		if (path === "/") {
 			return location.pathname === "/";
 		}
-		return location.pathname === path || 
-		       (path !== "/" && location.pathname.startsWith(`${path}/`));
+		return (
+			location.pathname === path ||
+			(path !== "/" && location.pathname.startsWith(`${path}/`))
+		);
 	};
 
 	return (
 		<header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b transition-all">
 			<div className="container flex h-16 items-center justify-between px-4">
-				<div 
-					className="flex items-center cursor-pointer" 
+				<div
+					className="flex items-center cursor-pointer"
 					onClick={() => navigate("/")}
 				>
 					<VelkavapausLogo />
@@ -128,13 +130,13 @@ const NavigationHeader = () => {
 									))}
 								</nav>
 								<div className="mt-auto p-4 border-t">
-									<Button 
-										variant="default" 
-										size="lg" 
+									<Button
+										variant="default"
+										size="lg"
 										className="w-full h-12 text-base font-medium"
-										onClick={() => handleNavigation('/calculator')}
+										onClick={() => handleNavigation("/calculator")}
 									>
-										{t('navigation.startFreeCalculation')}
+										{t("navigation.startFreeCalculation")}
 									</Button>
 								</div>
 							</div>
@@ -159,17 +161,17 @@ const NavigationHeader = () => {
 						</NavigationMenu>
 
 						<div className="flex items-center gap-2">
-							<Button 
+							<Button
 								variant="default"
 								size="lg"
 								className="h-12 px-6 text-base font-medium hidden md:flex"
-								onClick={() => handleNavigation('/calculator')}
+								onClick={() => handleNavigation("/calculator")}
 							>
-								{t('navigation.startFreeCalculation')}
+								{t("navigation.startFreeCalculation")}
 							</Button>
 							<div className="flex items-center gap-2">
 								<LanguageSwitcher />
-								<ModeToggle />
+								<ThemeToggle />
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button variant="outline" size="sm" className="h-9">
@@ -179,7 +181,9 @@ const NavigationHeader = () => {
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end" className="w-56">
 										{!user ? (
-											<DropdownMenuItem onClick={() => handleNavigation("/auth")}>
+											<DropdownMenuItem
+												onClick={() => handleNavigation("/auth")}
+											>
 												{t("auth.login")}
 											</DropdownMenuItem>
 										) : (
