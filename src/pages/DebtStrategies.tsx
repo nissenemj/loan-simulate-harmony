@@ -1,8 +1,50 @@
-import React from 'react';
+
+import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Info, Calculator, LineChart, Coins, TrendingDown } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import BreadcrumbNav from '@/components/BreadcrumbNav';
+import UnderConstructionBanner from '@/components/UnderConstructionBanner';
+import { Navigate } from 'react-router-dom';
+
+// Import debt-related components
+import DebtVisualization from '@/components/calculator/DebtVisualization';
+import DebtPayoffCalculator from '@/components/calculator/DebtPayoffCalculator';
+import DebtPayoffTimeline from '@/components/calculator/DebtPayoffTimeline';
+import DebtConsolidationCalculator from '@/components/calculator/DebtConsolidationCalculator';
+import ExtraPaymentCalculator from '@/components/calculator/ExtraPaymentCalculator';
+
+// Import types
+import { Debt, PaymentPlan } from '@/utils/calculator/types';
 
 const DebtStrategies = () => {
+  // State management for debts and payment plans
+  const [loans, setLoans] = useState<Debt[]>([]);
+  const [creditCards, setCreditCards] = useState<Debt[]>([]);
+  const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
+  const [calculationError, setCalculationError] = useState<string | null>(null);
+  
+  // Combined debts for calculations
+  const debts = [...loans, ...creditCards];
+
+  // Translation hook
+  const { t } = useLanguage();
+  
+  // Handlers for calculator results
+  const handleSaveResults = (plan: PaymentPlan) => {
+    setPaymentPlan(plan);
+    setCalculationError(null);
+  };
+  
+  const handleCalculationError = (error: Error) => {
+    setCalculationError(error.message);
+    setPaymentPlan(null);
+  };
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
