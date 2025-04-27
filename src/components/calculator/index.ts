@@ -1,5 +1,5 @@
-// Export all named exports from calculator components
-export { DebtConsolidationCalculator } from "./DebtConsolidationCalculator";
-export { DebtPayoffCalculator } from "./DebtPayoffCalculator";
+export { default as DebtConsolidationCalculator } from "./DebtConsolidationCalculator";
+export { default as DebtPayoffCalculator } from "./DebtPayoffCalculator";
 export { DebtPayoffTimeline } from "./DebtPayoffTimeline";
-export { ExtraPaymentCalculator } from "./ExtraPaymentCalculator";
+export { default as ExtraPaymentCalculator } from "./ExtraPaymentCalculator";
+export { default as DebtVisualization } from "./DebtVisualization";

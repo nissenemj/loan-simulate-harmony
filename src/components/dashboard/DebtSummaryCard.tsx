@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { HelpTooltip } from "@/components/ui/help-tooltip";
 import DebtBreakdownPie from "./DebtBreakdownPie";
-import DebtPaymentTimeline from "./DebtPaymentTimeline";
 
 interface DebtSummaryCardProps {
 	totalDebt: number;
@@ -117,11 +116,6 @@ const DebtSummaryCard = ({
 					totalDebt={totalDebt}
 					totalMinPayments={totalMinPayments}
 					totalAmountToPay={totalAmountToPay}
-				/>
-				<DebtPaymentTimeline 
-					totalDebt={totalDebt}
-					totalAmountToPay={totalAmountToPay}
-					debtFreeDate={debtFreeDate}
 				/>
 			</div>
 		</div>

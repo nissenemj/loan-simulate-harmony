@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import NavigationHeader from "@/components/NavigationHeader";
@@ -5,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const CookiePolicy = () => {
   const navigate = useNavigate();
@@ -13,13 +15,33 @@ const CookiePolicy = () => {
     <>
       <Helmet>
         <title>Evästekäytäntö | Velkavapaus.fi</title>
-        <meta name="description" content="Velkavapaus.fi - Evästekäytäntö ja tietoa käyttämistämme evästeistä" />
+        <meta 
+          name="description" 
+          content="Velkavapaus.fi evästekäytäntö - Tietoa siitä, miten käytämme evästeitä sivustollamme ja miten voit hallita niitä."
+        />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Evästekäytäntö | Velkavapaus.fi",
+              "description": "Velkavapaus.fi evästekäytäntö - Tietoa siitä, miten käytämme evästeitä sivustollamme ja miten voit hallita niitä.",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Velkavapaus.fi",
+                "url": "https://velkavapaus.fi"
+              },
+              "datePublished": "2023-05-01",
+              "dateModified": "${new Date().toISOString().split('T')[0]}"
+            }
+          `}
+        </script>
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background flex flex-col">
         <NavigationHeader />
         
-        <div className="container mx-auto py-8 px-4 max-w-4xl">
+        <div className="container mx-auto py-8 px-4 max-w-4xl flex-grow">
           <Button 
             variant="outline" 
             size="sm" 
@@ -139,9 +161,11 @@ const CookiePolicy = () => {
           <Separator className="my-6" />
           
           <p className="text-center text-sm text-muted-foreground mt-8">
-            © {new Date().getFullYear()} Loan Simulate Harmony. Kaikki oikeudet pidätetään.
+            © {new Date().getFullYear()} Velkavapaus.fi. Kaikki oikeudet pidätetään.
           </p>
         </div>
+        
+        <Footer />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Debt } from '@/utils/calculator/types';
 import { calculateConsolidationOptions } from '@/utils/calculator/debtCalculator';
@@ -32,7 +32,7 @@ interface ConsolidationOption {
  * Debt Consolidation Calculator component
  * Allows users to see potential consolidation options for their debts
  */
-export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculatorProps) {
+const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps) => {
   const { t, locale } = useTranslation();
   const [consolidationOptions, setConsolidationOptions] = useState<ConsolidationOption[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -406,4 +406,6 @@ export function DebtConsolidationCalculator({ debts }: DebtConsolidationCalculat
       </CardContent>
     </Card>
   );
-}
+};
+
+export default DebtConsolidationCalculator;

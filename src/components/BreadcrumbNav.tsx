@@ -23,13 +23,25 @@ export default function BreadcrumbNav({ className }: BreadcrumbNavProps) {
 	if (pathSegments.length === 0) return null;
 
 	const translatePathSegment = (segment: string) => {
-		// Special case for debt-summary
-		if (segment === "debt-summary") {
-			return t("navigation.debtSummary");
+		// Map kebab-case route segments to their translation keys
+		const routeToTranslationMap: Record<string, string> = {
+			"debt-summary": "navigation.debtSummary",
+			"debt-strategies": "navigation.debtStrategies",
+			"loans": "navigation.loans",
+			"credit-cards": "navigation.creditCards",
+			"dashboard": "navigation.dashboard",
+			"about": "navigation.about",
+			"settings": "navigation.settings",
+			"profile": "navigation.profile"
+		};
+
+		// If we have a direct mapping, use it
+		if (routeToTranslationMap[segment]) {
+			return t(routeToTranslationMap[segment]);
 		}
 
-		// Convert kebab-case segments to camelCase for translation lookup
-		const normalizedSegment = segment.replace(/-/g, "");
+		// Otherwise, convert kebab-case segments to camelCase for translation lookup
+		const normalizedSegment = segment.replace(/-./g, x => x[1].toUpperCase());
 		const key = `navigation.${normalizedSegment}`;
 		return t(key);
 	};

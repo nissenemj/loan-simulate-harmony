@@ -58,10 +58,26 @@
           "logo": {
             "@type": "ImageObject",
             "url": "https://velkavapaus.fi/images/logo.png"
-          }
+          },
+          "sameAs": [
+            "https://www.facebook.com/velkavapaus",
+            "https://twitter.com/velkavapausFI",
+            "https://www.instagram.com/velkavapaus.fi/"
+          ]
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://velkavapaus.fi/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "mainEntity": {
+          "@type": "WebPage",
+          "@id": "https://velkavapaus.fi",
+          "url": "https://velkavapaus.fi"
         }
       }
     </script>
+
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

@@ -10,12 +10,14 @@ import {
 	DebtPayoffTimeline,
 	DebtConsolidationCalculator,
 	ExtraPaymentCalculator,
+	DebtVisualization,
 } from "@/components/calculator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info, Calculator, LineChart, TrendingDown, Coins } from "lucide-react";
 import UnderConstructionBanner from "@/components/UnderConstructionBanner";
 import { ErrorProvider } from "@/contexts/ErrorContext";
+import BreadcrumbNav from "@/components/BreadcrumbNav";
 
 const DebtStrategies = () => {
 	const { t } = useTranslation();
@@ -69,7 +71,9 @@ const DebtStrategies = () => {
 		if (error.message && error.message.includes("maximum number of months")) {
 			setCalculationError(t("debtStrategies.errorMaxMonths"));
 		} else {
-			setCalculationError(error.message || "An error occurred");
+			setCalculationError(
+				error.message || t("debtStrategies.errorInCalculation")
+			);
 		}
 	};
 
@@ -83,6 +87,7 @@ const DebtStrategies = () => {
 				</Helmet>
 
 				<div className="space-y-6">
+					<BreadcrumbNav />
 					<UnderConstructionBanner />
 
 					<div>
@@ -103,7 +108,7 @@ const DebtStrategies = () => {
 						</Alert>
 					) : (
 						<>
-							{/* Visualization component removed as it doesn't exist */}
+							<DebtVisualization debts={debts} paymentPlan={paymentPlan} />
 
 							{calculationError && (
 								<Alert variant="destructive" className="my-4">
@@ -119,28 +124,28 @@ const DebtStrategies = () => {
 										className="flex items-center gap-2"
 									>
 										<Calculator className="h-4 w-4" />
-										{t("calculator.debtPayoffCalculator")}
+										{t("debtStrategies.calculatorTab")}
 									</TabsTrigger>
 									<TabsTrigger
 										value="timeline"
 										className="flex items-center gap-2"
 									>
 										<LineChart className="h-4 w-4" />
-										{t("calculator.debtPayoffTimeline")}
+										{t("debtStrategies.timelineTab")}
 									</TabsTrigger>
 									<TabsTrigger
 										value="extraPayment"
 										className="flex items-center gap-2"
 									>
 										<Coins className="h-4 w-4" />
-										{t("calculator.extraPaymentImpact")}
+										{t("debtStrategies.extraPaymentTab")}
 									</TabsTrigger>
 									<TabsTrigger
 										value="consolidation"
 										className="flex items-center gap-2"
 									>
 										<TrendingDown className="h-4 w-4" />
-										{t("calculator.debtConsolidation")}
+										{t("debtStrategies.consolidationTab")}
 									</TabsTrigger>
 								</TabsList>
 

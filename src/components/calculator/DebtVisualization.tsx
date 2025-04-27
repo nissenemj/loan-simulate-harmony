@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +17,7 @@ interface DebtVisualizationProps {
  * Debt Visualization component
  * Provides different visualization options for debt data
  */
-export function DebtVisualization({ debts, paymentPlan }: DebtVisualizationProps) {
+const DebtVisualization = ({ debts, paymentPlan }: DebtVisualizationProps) => {
   const { t } = useTranslation();
   
   // Check if we have valid debts to display
@@ -58,4 +57,6 @@ export function DebtVisualization({ debts, paymentPlan }: DebtVisualizationProps
       </div>
     </div>
   );
-}
+};
+
+export default DebtVisualization;
