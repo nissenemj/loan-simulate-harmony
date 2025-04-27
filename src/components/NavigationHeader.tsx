@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -100,7 +101,7 @@ const NavigationHeader = () => {
             <VelkavapausLogo />
           </div>
           
-          <DesktopNav />
+          <DesktopNav links={links} isActive={isActive} handleNavigation={handleNavigation} />
         </div>
 
         <div className="flex items-center gap-2">
@@ -193,7 +194,14 @@ const NavigationHeader = () => {
   );
 };
 
-const DesktopNav = () => (
+// Define the props interface for the DesktopNav component
+interface DesktopNavProps {
+  links: Array<{ href: string; label: string }>;
+  isActive: (path: string) => boolean;
+  handleNavigation: (path: string) => void;
+}
+
+const DesktopNav = ({ links, isActive, handleNavigation }: DesktopNavProps) => (
   <nav className="hidden md:flex items-center gap-1">
     {links.map((link) => (
       <Button
