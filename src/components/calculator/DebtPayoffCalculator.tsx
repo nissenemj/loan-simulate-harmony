@@ -222,7 +222,7 @@ const DebtPayoffCalculator = ({
               className="max-w-xs"
             />
             <span className="text-sm text-muted-foreground">
-              {t('calculator.minimumRequired')}: {formatCurrency(debts.reduce((sum, debt) => sum + debt.minimumPayment, 0))}
+              {t('common.minimumRequired')}: {formatCurrency(debts.reduce((sum, debt) => sum + debt.minimumPayment, 0))}
             </span>
           </div>
         </div>
@@ -230,7 +230,7 @@ const DebtPayoffCalculator = ({
         {/* Strategy selection */}
         <div>
           <Label htmlFor="strategy" className="block mb-2">
-            {t('calculator.repaymentStrategy')}
+            {t('common.repaymentStrategy')}
           </Label>
           <RadioGroup
             value={strategy}
@@ -240,18 +240,18 @@ const DebtPayoffCalculator = ({
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="avalanche" id="avalanche" />
               <Label htmlFor="avalanche" className="font-normal">
-                {t('calculator.avalancheStrategy')}
+                {t('common.avalancheStrategy')}
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t('calculator.avalancheDescription')}
+                  {t('common.avalancheDescription')}
                 </p>
               </Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="snowball" id="snowball" />
               <Label htmlFor="snowball" className="font-normal">
-                {t('calculator.snowballStrategy')}
+                {t('common.snowballStrategy')}
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t('calculator.snowballDescription')}
+                  {t('common.snowballDescription')}
                 </p>
               </Label>
             </div>

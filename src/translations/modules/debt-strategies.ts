@@ -36,7 +36,15 @@ export const debtStrategies = {
       totalMonthly: "Total Monthly",
       timeToPayoff: "Time to Payoff",
       interestPaid: "Total Interest",
-      calculateButton: "Calculate Payoff Plan"
+      calculateButton: "Calculate Payoff Plan",
+      // Added missing translations
+      saveStrategy: "Save Strategy",
+      saveStrategyTitle: "Save Your Repayment Strategy",
+      saveStrategyDescription: "Give your strategy a name to save it for future reference",
+      strategyName: "Strategy Name",
+      strategyNamePlaceholder: "My Debt Payoff Strategy",
+      strategySaved: "Strategy '{name}' has been saved",
+      strategySaveError: "There was an error saving your strategy"
     }
   },
   fi: {
@@ -73,7 +81,15 @@ export const debtStrategies = {
       totalMonthly: "Kuukausittain yhteensä",
       timeToPayoff: "Maksuaika",
       interestPaid: "Korko yhteensä",
-      calculateButton: "Laske maksusuunnitelma"
+      calculateButton: "Laske maksusuunnitelma",
+      // Added missing translations
+      saveStrategy: "Tallenna strategia",
+      saveStrategyTitle: "Tallenna velanmaksustrategiasi",
+      saveStrategyDescription: "Anna strategiallesi nimi tulevaa käyttöä varten",
+      strategyName: "Strategian nimi",
+      strategyNamePlaceholder: "Oma velanmaksustrategia",
+      strategySaved: "Strategia '{name}' on tallennettu",
+      strategySaveError: "Strategian tallentamisessa tapahtui virhe"
     }
   }
 };
