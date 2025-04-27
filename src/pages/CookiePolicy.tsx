@@ -17,8 +17,9 @@ const CookiePolicy = () => {
         <title>Evästekäytäntö | Velkavapaus.fi</title>
         <meta 
           name="description" 
-          content="Velkavapaus.fi evästekäytäntö - Tietoa siitä, miten käytämme evästeitä sivustollamme ja miten voit hallita niitä."
+          content="Selvitä miten Velkavapaus.fi käyttää evästeitä parantaakseen käyttäjäkokemustasi. Tutustu evästekäytäntöihimme ja opi hallitsemaan evästeasetuksiasi." 
         />
+        <meta name="keywords" content="evästeet, evästekäytäntö, cookies, verkkopalvelu, yksityisyys" />
         <script type="application/ld+json">
           {`
             {
@@ -30,6 +31,23 @@ const CookiePolicy = () => {
                 "@type": "Organization",
                 "name": "Velkavapaus.fi",
                 "url": "https://velkavapaus.fi"
+              },
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Etusivu",
+                    "item": "https://velkavapaus.fi"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Evästekäytäntö",
+                    "item": "https://velkavapaus.fi/cookie-policy"
+                  }
+                ]
               },
               "datePublished": "2023-05-01",
               "dateModified": "${new Date().toISOString().split('T')[0]}"

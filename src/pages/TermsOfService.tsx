@@ -19,8 +19,9 @@ const TermsOfService = () => {
         <title>Käyttöehdot | Velkavapaus.fi</title>
         <meta 
           name="description" 
-          content="Velkavapaus.fi käyttöehdot - Tutustu palvelumme käyttöehtoihin, jotka määrittävät oikeudet ja vastuut sovelluksen käytössä."
+          content="Velkavapaus.fi käyttöehdot - Tutustu palvelumme käyttöehtoihin, jotka määrittävät oikeudet ja vastuut sovelluksen käytössä." 
         />
+        <meta name="keywords" content="käyttöehdot, palveluehdot, säännöt, vastuut, velkaneuvonta" />
         <script type="application/ld+json">
           {`
             {
@@ -32,6 +33,23 @@ const TermsOfService = () => {
                 "@type": "Organization",
                 "name": "Velkavapaus.fi",
                 "url": "https://velkavapaus.fi"
+              },
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Etusivu",
+                    "item": "https://velkavapaus.fi"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Käyttöehdot",
+                    "item": "https://velkavapaus.fi/terms"
+                  }
+                ]
               },
               "datePublished": "2023-05-01",
               "dateModified": "${new Date().toISOString().split('T')[0]}"
