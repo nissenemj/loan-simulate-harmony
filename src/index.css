@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500&family=Montserrat:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,6 +6,9 @@
 
 @layer base {
   :root {
+    /* Add Montserrat to font families */
+    --font-montserrat: 'Montserrat', sans-serif;
+
     /* Base colors */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
@@ -36,6 +39,11 @@
     --ring: 222 84% 4.9%;
 
     --radius: 0.75rem;
+  }
+
+  /* Define Montserrat font classes */
+  .font-montserrat {
+    font-family: var(--font-montserrat);
   }
 
   .dark {
@@ -544,7 +552,6 @@
   height: 12px;
   margin-right: 4px;
   border-radius: 2px;
-}
 }
 
 /* Mobile styles, form elements, and glassmorphism effects */

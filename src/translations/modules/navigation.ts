@@ -7,7 +7,7 @@ export const navigation = {
       loans: "Loans",
       creditCards: "Credit Cards",
       debtSummary: "Debt Summary",
-      glossary: "Glossary",
+      glossary: "Financial Glossary",
       affiliate: "Affiliate",
       blog: "Blog",
     },
@@ -27,7 +27,8 @@ export const navigation = {
       auth: "Login",
       settings: "Settings",
       viewRepaymentPlan: "View Repayment Plan",
-      startFreeCalculation: "Start Free Plan"
+      startFreeCalculation: "Start Free Plan",
+      feedback: "Feedback"
     }
   },
   fi: {
@@ -36,7 +37,7 @@ export const navigation = {
       loans: "Lainat",
       creditCards: "Luottokortit",
       debtSummary: "Velkakatsaus",
-      glossary: "Sanasto",
+      glossary: "Talouden sanasto",
       affiliate: "Suositukset",
       blog: "Blogi",
     },
@@ -56,7 +57,8 @@ export const navigation = {
       auth: "Kirjautuminen",
       settings: "Asetukset",
       viewRepaymentPlan: "Katso maksusuunnitelma",
-      startFreeCalculation: "Aloita ilmainen suunnitelma"
+      startFreeCalculation: "Aloita ilmainen suunnitelma",
+      feedback: "Palaute"
     }
   }
 };

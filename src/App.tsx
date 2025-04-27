@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import {
 	BrowserRouter as Router,
 	Route,
@@ -15,7 +15,6 @@ import Footer from "./components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { Suspense, lazy } from "react";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 
 // Lazy-loaded components
@@ -33,6 +32,7 @@ const Auth = lazy(() => import("./pages/Auth"));
 const DebtStrategies = lazy(() => import("./pages/DebtStrategies"));
 const DebtSummaryPage = lazy(() => import("./pages/DebtSummaryPage"));
 const Feedback = lazy(() => import("./pages/Feedback"));
+const Glossary = lazy(() => import("./pages/Glossary"));
 
 function App() {
 	return (
@@ -113,14 +113,7 @@ function App() {
 													path="/debt-summary"
 													element={<DebtSummaryPage />}
 												/>
-												<Route
-													path="/creditCards"
-													element={
-														<ProtectedRoute>
-															<CreditCardsPage />
-														</ProtectedRoute>
-													}
-												/>
+												<Route path="/glossary" element={<Glossary />} />
 												<Route path="/feedback" element={<Feedback />} />
 											</Routes>
 										</Suspense>

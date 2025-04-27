@@ -4,6 +4,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
+	NavigationMenu,
+	NavigationMenuList,
+	NavigationMenuItem,
+	NavigationMenuTrigger,
+	NavigationMenuContent,
+	NavigationMenuLink,
+} from "@/components/ui/navigation-menu";
+import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
@@ -20,15 +28,11 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import {
-	NavigationMenu,
-	NavigationMenuItem,
-	NavigationMenuList,
-} from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { toast } from "@/components/ui/use-toast";
 import VelkavapausLogo from "./VelkavapausLogo";
+import { cn } from "@/lib/utils";
 
 const NavigationHeader = () => {
 	const [open, setOpen] = useState(false);
@@ -78,12 +82,14 @@ const NavigationHeader = () => {
 				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
 				{ href: "/courses", label: t("navigation.courses") },
 				{ href: "/blog", label: t("navigation.blog") },
+				{ href: "/feedback", label: t("navigation.feedback") },
 		  ]
 		: [
 				{ href: "/calculator", label: t("navigation.calculator") },
 				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
 				{ href: "/courses", label: t("navigation.courses") },
 				{ href: "/blog", label: t("navigation.blog") },
+				{ href: "/feedback", label: t("navigation.feedback") },
 		  ];
 
 	const isActive = (path: string) => {
@@ -97,7 +103,7 @@ const NavigationHeader = () => {
 	};
 
 	return (
-		<header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b transition-all">
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex h-16 items-center justify-between px-4">
 				<div
 					className="flex items-center cursor-pointer"
@@ -109,36 +115,36 @@ const NavigationHeader = () => {
 				{isMobile ? (
 					<Sheet open={open} onOpenChange={setOpen}>
 						<SheetTrigger asChild>
-							<Button variant="ghost" size="sm" className="px-2 -mr-2">
+							<Button variant="ghost" size="sm" className="px-2">
 								<Menu className="h-5 w-5" />
 								<span className="sr-only">{t("navigation.menu")}</span>
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
-							<div className="flex flex-col h-full">
+							<SheetHeader className="p-4 border-b">
 								<SheetTitle>{t("app.title")}</SheetTitle>
-								<nav className="flex flex-col gap-1 p-4">
-									{links.map((link) => (
-										<Button
-											key={link.href}
-											variant={isActive(link.href) ? "secondary" : "ghost"}
-											className="w-full justify-start"
-											onClick={() => handleNavigation(link.href)}
-										>
-											{link.label}
-										</Button>
-									))}
-								</nav>
-								<div className="mt-auto p-4 border-t">
+							</SheetHeader>
+							<nav className="flex flex-col gap-1 p-4">
+								{links.map((link) => (
 									<Button
-										variant="default"
-										size="lg"
-										className="w-full h-12 text-base font-medium"
-										onClick={() => handleNavigation("/calculator")}
+										key={link.href}
+										variant={isActive(link.href) ? "secondary" : "ghost"}
+										className="w-full justify-start"
+										onClick={() => handleNavigation(link.href)}
 									>
-										{t("navigation.startFreeCalculation")}
+										{link.label}
 									</Button>
-								</div>
+								))}
+							</nav>
+							<div className="mt-auto p-4 border-t">
+								<Button
+									variant="default"
+									size="lg"
+									className="w-full h-12 text-base font-medium"
+									onClick={() => handleNavigation("/calculator")}
+								>
+									{t("navigation.startFreeCalculation")}
+								</Button>
 							</div>
 						</SheetContent>
 					</Sheet>
@@ -151,7 +157,11 @@ const NavigationHeader = () => {
 										<Button
 											onClick={() => handleNavigation(link.href)}
 											variant={isActive(link.href) ? "secondary" : "ghost"}
-											className="h-9"
+											className={cn(
+												"h-9 px-4 py-2",
+												isActive(link.href) &&
+													"bg-accent text-accent-foreground"
+											)}
 										>
 											{link.label}
 										</Button>
@@ -164,7 +174,7 @@ const NavigationHeader = () => {
 							<Button
 								variant="default"
 								size="lg"
-								className="h-12 px-6 text-base font-medium hidden md:flex"
+								className="h-10 px-6 text-base font-medium hidden md:flex"
 								onClick={() => handleNavigation("/calculator")}
 							>
 								{t("navigation.startFreeCalculation")}

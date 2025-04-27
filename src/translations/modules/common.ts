@@ -34,7 +34,9 @@ export const common = {
     noData: "No data available",
     preview: "Preview",
     save: "Save",
-    cancel: "Cancel"
+    cancel: "Cancel",
+    search: "Search",
+    noResults: "No results found"
   },
   fi: {
     app: {
@@ -69,7 +71,9 @@ export const common = {
     noData: "Tietoja ei saatavilla",
     preview: "Esikatselu",
     save: "Tallenna",
-    cancel: "Peruuta"
+    cancel: "Peruuta",
+    search: "Hae",
+    noResults: "Tuloksia ei löytynyt"
   }
 };
 
