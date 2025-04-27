@@ -14,7 +14,7 @@ import { Navigate } from 'react-router-dom';
 // Import debt-related components
 import DebtVisualization from '@/components/calculator/DebtVisualization';
 import DebtPayoffCalculator from '@/components/calculator/DebtPayoffCalculator';
-import DebtPayoffTimeline from '@/components/calculator/DebtPayoffTimeline';
+import { DebtPayoffTimeline } from '@/components/calculator/DebtPayoffTimeline'; // Changed import
 import DebtConsolidationCalculator from '@/components/calculator/DebtConsolidationCalculator';
 import ExtraPaymentCalculator from '@/components/calculator/ExtraPaymentCalculator';
 
