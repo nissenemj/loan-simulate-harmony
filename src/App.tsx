@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
 import { Suspense, lazy } from 'react';
+import ChatBot from './components/ChatBot';
 
 // Lazy-loaded components
 const BlogPost = lazy(() => import('./pages/BlogPost'));
@@ -85,6 +86,7 @@ function App() {
                     </Suspense>
                   </main>
                   <Footer />
+                  <ChatBot />
                   <Toaster />
                 </div>
               </ErrorProvider>
