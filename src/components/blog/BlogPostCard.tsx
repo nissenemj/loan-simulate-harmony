@@ -34,7 +34,18 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 	const isMobile = useIsMobile();
 
 	const getExcerpt = (content: string, maxLength: number = 200) => {
-		const firstParagraph = content.split("\n\n")[0];
+		// Strip any Markdown heading syntax (# headers)
+		let cleanedContent = content.replace(/^#+\s+.+$/gm, '');
+		
+		// Split by paragraphs and take the first substantive one
+		const paragraphs = cleanedContent.split("\n\n").filter(p => p.trim().length > 0);
+		let firstParagraph = paragraphs[0] || '';
+		
+		// Ensure we don't return any raw "Markdown" text that might be leftover
+		if (firstParagraph.trim().toLowerCase() === "markdown") {
+			firstParagraph = paragraphs[1] || '';
+		}
+		
 		if (firstParagraph.length <= maxLength) return firstParagraph;
 		return firstParagraph.substring(0, maxLength) + "...";
 	};
