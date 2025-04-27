@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Send } from "lucide-react";
+import { ValidatedInput } from "@/components/ui/validated-input";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,12 +30,8 @@ interface NewsletterSignupProps {
   className?: string;
 }
 
-// Constants for Supabase URL and key - using the ones from the client file
-const SUPABASE_URL = "https://jwzzkqelqsqsirfowevs.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enprcWVscXNxc2lyZm93ZXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTE2OTMsImV4cCI6MjA1Nzk2NzY5M30.o7TJCcPktro0nhTCNdVnT3mTno2uqfE1Zy31giCb9TE";
-
 const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const form = useForm<FormValues>({
@@ -45,16 +42,24 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
     },
   });
 
+  const validateEmail = (value: string) => {
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    return { 
+      isValid, 
+      message: isValid ? undefined : (language === 'fi' ? 'Virheellinen sähköpostiosoite' : 'Invalid email address') 
+    };
+  };
+
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
       // First try to use the newsletter-signup edge function
       try {
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-signup`, {
+        const response = await fetch('https://jwzzkqelqsqsirfowevs.supabase.co/functions/v1/newsletter-signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enprcWVscXNxc2lyZm93ZXZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTE2OTMsImV4cCI6MjA1Nzk2NzY5M30.o7TJCcPktro0nhTCNdVnT3mTno2uqfE1Zy31giCb9TE`
           },
           body: JSON.stringify({
             email: data.email,
@@ -118,9 +123,11 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
               <FormItem>
                 <FormLabel>{t("common.email") || "Sähköposti"}</FormLabel>
                 <FormControl>
-                  <Input
+                  <ValidatedInput
                     type="email"
                     placeholder={t("newsletter.emailPlaceholder") || "email@example.com"}
+                    label={t("common.email")}
+                    validation={validateEmail}
                     {...field}
                   />
                 </FormControl>
