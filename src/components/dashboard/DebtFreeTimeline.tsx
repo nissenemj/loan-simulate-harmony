@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -165,6 +166,11 @@ const DebtFreeTimeline = ({
 		}
 	};
 
+	// Navigate to debt strategies page with selected strategy
+	const goToRepaymentPlan = () => {
+		navigate("/debt-strategies");
+	};
+
 	return (
 		<Card>
 			<CardHeader>
@@ -271,10 +277,11 @@ const DebtFreeTimeline = ({
 				</div>
 				<Button
 					variant="outline"
-					onClick={() => navigate("/debt-summary?tab=repayment-plan")}
+					onClick={goToRepaymentPlan}
+					className="flex items-center gap-2"
 				>
 					{t("dashboard.goToRepaymentPlan")}
-					<ArrowRight className="ml-2 h-4 w-4" />
+					<ArrowRight className="h-4 w-4" />
 				</Button>
 			</CardFooter>
 		</Card>

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -9,12 +9,15 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import BreadcrumbNav from '@/components/BreadcrumbNav';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
-import { Navigate } from 'react-router-dom';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Loan } from '@/utils/loanCalculations';
+import { CreditCard } from '@/utils/creditCardCalculations';
+import { convertLoanToDebtItem, convertCreditCardToDebtItem, DebtItem } from '@/utils/repayment';
 
 // Import debt-related components
 import DebtVisualization from '@/components/calculator/DebtVisualization';
 import DebtPayoffCalculator from '@/components/calculator/DebtPayoffCalculator';
-import { DebtPayoffTimeline } from '@/components/calculator/DebtPayoffTimeline'; // Changed import
+import { DebtPayoffTimeline } from '@/components/calculator/DebtPayoffTimeline';
 import DebtConsolidationCalculator from '@/components/calculator/DebtConsolidationCalculator';
 import ExtraPaymentCalculator from '@/components/calculator/ExtraPaymentCalculator';
 
@@ -22,11 +25,53 @@ import ExtraPaymentCalculator from '@/components/calculator/ExtraPaymentCalculat
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 
 const DebtStrategies = () => {
+  // Load stored loans and credit cards from local storage
+  const [storedLoans, setStoredLoans] = useLocalStorage<Loan[]>("loans", []);
+  const [storedCreditCards, setStoredCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  
   // State management for debts and payment plans
   const [loans, setLoans] = useState<Debt[]>([]);
   const [creditCards, setCreditCards] = useState<Debt[]>([]);
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
   const [calculationError, setCalculationError] = useState<string | null>(null);
+  
+  // Effect to convert stored loans and credit cards to debt items
+  useEffect(() => {
+    // Filter for active loans and credit cards
+    const activeLoans = storedLoans.filter(loan => loan.isActive);
+    const activeCards = storedCreditCards.filter(card => card.isActive);
+
+    // Convert loans to debt items
+    const loanDebts: Debt[] = activeLoans.map(loan => ({
+      id: loan.id,
+      name: loan.name,
+      balance: loan.amount,
+      interestRate: loan.interestRate,
+      minimumPayment: loan.minPayment || calculateMinPayment(loan),
+      type: 'loan'
+    }));
+
+    // Convert credit cards to debt items
+    const cardDebts: Debt[] = activeCards.map(card => ({
+      id: card.id,
+      name: card.name,
+      balance: card.balance,
+      interestRate: card.apr,
+      minimumPayment: Math.max(card.minPayment, card.balance * (card.minPaymentPercent / 100)),
+      type: 'credit-card'
+    }));
+
+    setLoans(loanDebts);
+    setCreditCards(cardDebts);
+    
+    console.log('Loaded debts:', { loanDebts, cardDebts });
+  }, [storedLoans, storedCreditCards]);
+
+  // Helper function to calculate minimum payment for loans
+  const calculateMinPayment = (loan: Loan): number => {
+    // Simple calculation for loan minimum payment if not provided
+    return (loan.amount * loan.interestRate / 100 / 12) + (loan.amount / (loan.termYears * 12));
+  };
   
   // Combined debts for calculations
   const debts = [...loans, ...creditCards];
