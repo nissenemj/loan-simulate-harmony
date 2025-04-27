@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -95,8 +96,23 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 			<CardContent
 				className={`pb-4 flex-grow ${isMobile ? "p-3 pt-0" : ""} text-left`}
 			>
-				<div className="text-muted-foreground text-sm markdown">
-					<ReactMarkdown>
+				<div className="text-muted-foreground text-sm prose prose-sm dark:prose-invert">
+					<ReactMarkdown
+						components={{
+							p: ({ children }) => <p className="my-1">{children}</p>,
+							a: ({ href, children }) => (
+								<a href={href} className="text-primary hover:underline">
+									{children}
+								</a>
+							),
+							ul: ({ children }) => <ul className="list-disc pl-4 my-2">{children}</ul>,
+							ol: ({ children }) => <ol className="list-decimal pl-4 my-2">{children}</ol>,
+							li: ({ children }) => <li className="ml-2">{children}</li>,
+							strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+							em: ({ children }) => <em className="italic">{children}</em>,
+							code: ({ children }) => <code className="bg-muted px-1 py-0.5 rounded">{children}</code>,
+						}}
+					>
 						{getExcerpt(post.content, isMobile ? 100 : 200)}
 					</ReactMarkdown>
 				</div>
