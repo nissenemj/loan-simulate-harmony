@@ -29,6 +29,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Info, Save } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { PrioritizationMethod } from '@/utils/repayment/types';
 
 interface DebtPayoffCalculatorProps {
   initialDebts: Debt[];
@@ -136,6 +137,13 @@ const DebtPayoffCalculator = ({
     }
   };
   
+  // Helper function to convert PaymentStrategy to PrioritizationMethod
+  const convertToPrioritizationMethod = (paymentStrategy: PaymentStrategy): PrioritizationMethod => {
+    if (paymentStrategy === 'avalanche') return 'avalanche';
+    if (paymentStrategy === 'snowball') return 'snowball';
+    return 'equal'; // 'custom' strategy is mapped to 'equal' in PrioritizationMethod
+  };
+  
   // Save strategy
   const handleSaveStrategy = () => {
     if (!paymentPlan || !strategyName.trim()) return;
@@ -158,7 +166,7 @@ const DebtPayoffCalculator = ({
           totalRemaining: month.totalRemainingBalance,
           totalPaid: month.totalPaid,
           totalInterestPaid: month.totalInterestPaid,
-          strategy: strategy
+          strategy: convertToPrioritizationMethod(strategy)
         })),
         isViable: true,
         monthlyAllocation: debts.map(debt => ({
@@ -176,7 +184,7 @@ const DebtPayoffCalculator = ({
       // Save the strategy
       saveRepaymentStrategy(
         strategyName.trim(),
-        strategy === 'avalanche' ? 'avalanche' : strategy === 'snowball' ? 'snowball' : 'equal',
+        convertToPrioritizationMethod(strategy),
         monthlyPayment,
         repaymentPlan
       );
