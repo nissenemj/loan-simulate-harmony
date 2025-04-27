@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -32,7 +32,10 @@ const DebtStrategies = () => {
 		"creditCards",
 		[]
 	);
-	const [debts, setDebts] = useState<Debt[]>(() => {
+	const [debts, setDebts] = useState<Debt[]>([]);
+
+	// Update debts when loans or credit cards change
+	useEffect(() => {
 		// Convert loans and credit cards to Debt objects
 		const loanDebts: Debt[] = loans
 			.filter((loan) => loan.isActive)
@@ -60,8 +63,8 @@ const DebtStrategies = () => {
 				type: "credit-card",
 			}));
 
-		return [...loanDebts, ...creditCardDebts];
-	});
+		setDebts([...loanDebts, ...creditCardDebts]);
+	}, [loans, creditCards]);
 
 	const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
 	const [calculationError, setCalculationError] = useState<string | null>(null);

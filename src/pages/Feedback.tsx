@@ -24,7 +24,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import BreadcrumbNav from "@/components/BreadcrumbNav";
 
@@ -52,6 +52,7 @@ type FeedbackFormValues = z.infer<typeof feedbackFormSchema>;
 const Feedback = () => {
 	const { t } = useLanguage();
 	const { user } = useAuth();
+	const { toast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 
