@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -82,12 +81,14 @@ const NavigationHeader = () => {
         { href: "/debt-strategies", label: t("navigation.debtStrategies") },
         { href: "/courses", label: t("navigation.courses") },
         { href: "/blog", label: t("navigation.blog") },
+        { href: "/feedback", label: t("navigation.feedback") }
       ]
     : [
         { href: "/calculator", label: t("navigation.calculator") },
         { href: "/debt-strategies", label: t("navigation.debtStrategies") },
         { href: "/courses", label: t("navigation.courses") },
         { href: "/blog", label: t("navigation.blog") },
+        { href: "/feedback", label: t("navigation.feedback") }
       ];
 
   const isActive = (path: string) => {

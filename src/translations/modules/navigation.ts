@@ -27,7 +27,8 @@ export const navigation = {
       auth: "Login",
       settings: "Settings",
       viewRepaymentPlan: "View Repayment Plan",
-      startFreeCalculation: "Start Free Plan"
+      startFreeCalculation: "Start Free Plan",
+      feedback: "Feedback"
     }
   },
   fi: {
@@ -56,7 +57,8 @@ export const navigation = {
       auth: "Kirjautuminen",
       settings: "Asetukset",
       viewRepaymentPlan: "Katso maksusuunnitelma",
-      startFreeCalculation: "Aloita ilmainen suunnitelma"
+      startFreeCalculation: "Aloita ilmainen suunnitelma",
+      feedback: "Palaute"
     }
   }
 };
