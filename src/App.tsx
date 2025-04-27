@@ -32,6 +32,7 @@ const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
 const DebtStrategies = lazy(() => import("./pages/DebtStrategies"));
 const DebtSummaryPage = lazy(() => import("./pages/DebtSummaryPage"));
+const Feedback = lazy(() => import("./pages/Feedback"));
 
 function App() {
 	return (
@@ -120,6 +121,7 @@ function App() {
 														</ProtectedRoute>
 													}
 												/>
+												<Route path="/feedback" element={<Feedback />} />
 											</Routes>
 										</Suspense>
 									</main>
