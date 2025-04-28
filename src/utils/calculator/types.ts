@@ -1,4 +1,3 @@
-
 /**
  * Types for debt calculation
  */
@@ -36,6 +35,8 @@ export type PaymentStrategy =
   'avalanche' | 
   /** Pay smallest balance debts first (builds momentum) */
   'snowball' | 
+  /** Distribute extra payments equally across all debts */
+  'equal' |
   /** Custom payment allocation specified by user */
   'custom';
 

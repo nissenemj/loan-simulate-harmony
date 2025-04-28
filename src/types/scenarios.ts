@@ -1,5 +1,7 @@
 
-export type Strategy = 'avalanche' | 'snowball' | 'equal';
+import { PaymentStrategy } from '../utils/calculator/types';
+
+export type Strategy = PaymentStrategy;
 
 export interface Scenario {
   id: string;

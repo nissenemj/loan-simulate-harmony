@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Debt, PaymentPlan } from '@/utils/calculator/types';
+import { Debt, PaymentPlan, PaymentStrategy } from '@/utils/calculator/types';
 import { calculatePaymentPlan } from '@/utils/calculator/debtCalculator';
 import { PrioritizationMethod } from '@/utils/repayment';
 import { 
@@ -100,7 +100,8 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     setIsCalculating(true);
     
     try {
-      const plan = await calculatePaymentPlan(debts, monthlyBudget, strategy);
+      const paymentStrategy: PaymentStrategy = strategy as PaymentStrategy;
+      const plan = await calculatePaymentPlan(debts, monthlyBudget, paymentStrategy);
       
       setPayoffPlan(plan);
       onSaveResults(plan);
