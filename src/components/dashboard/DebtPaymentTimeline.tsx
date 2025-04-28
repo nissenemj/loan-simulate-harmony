@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
 	AreaChart,
@@ -75,7 +74,7 @@ const DebtPaymentTimeline = ({
 		// Generate the timeline data - limit to 24 data points for readability
 		const dataPoints = Math.min(monthsDiff, 24);
 		const interval = Math.max(1, Math.floor(monthsDiff / dataPoints));
-		
+
 		return Array.from({ length: dataPoints }, (_, index) => {
 			const month = index * interval;
 			return {
@@ -85,7 +84,10 @@ const DebtPaymentTimeline = ({
 				// For interest, we track the cumulative interest paid
 				interest: monthlyInterest * month,
 				// Add a formatted month label for the x-axis
-				monthLabel: month === 0 ? t("visualization.start") : `${month} ${t("visualization.months")}`,
+				monthLabel:
+					month === 0
+						? t("visualization.start")
+						: `${month} ${t("visualization.months")}`,
 			};
 		});
 	};
@@ -121,22 +123,26 @@ const DebtPaymentTimeline = ({
 							margin={{ top: 10, right: 30, left: 10, bottom: 30 }}
 						>
 							<CartesianGrid strokeDasharray="3 3" opacity={0.6} />
-							<XAxis 
+							<XAxis
 								dataKey="monthLabel"
 								tick={{ fontSize: 12 }}
 								angle={-45}
 								textAnchor="end"
 								height={60}
 							/>
-							<YAxis 
-								tickFormatter={(value) => formatCurrency(value)} 
+							<YAxis
+								tickFormatter={(value) => formatCurrency(value)}
 								width={80}
 								tick={{ fontSize: 12 }}
 							/>
 							<Tooltip
 								formatter={(value: number) => formatCurrency(value)}
 								labelFormatter={(label) => label}
-								contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
+								contentStyle={{
+									backgroundColor: "rgba(255, 255, 255, 0.9)",
+									borderRadius: "8px",
+									boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+								}}
 							/>
 							<Legend wrapperStyle={{ paddingTop: 20 }} />
 							<Area
