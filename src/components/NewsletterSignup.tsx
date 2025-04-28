@@ -70,10 +70,10 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
         const result = await response.json();
         
         if (!response.ok) {
-          throw new Error(result.error || 'Error subscribing to newsletter');
+          throw new Error(result.error || t('newsletter.subscribeError'));
         }
         
-        toast.success(t("newsletter.subscribeSuccess") || "Kiitos tilauksestasi! Olet nyt uutiskirjeemme tilaaja.");
+        toast.success(t("newsletter.subscribeSuccess"));
         form.reset();
         return;
       } catch (edgeFunctionError) {
@@ -88,18 +88,18 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
 
       if (error) {
         if (error.code === "23505") { // Unique violation code
-          toast.error(t("newsletter.alreadySubscribed") || "Olet jo tilannut uutiskirjeemme.");
+          toast.error(t("newsletter.alreadySubscribed"));
         } else {
-          toast.error(t("newsletter.subscribeError") || "Virhe uutiskirjeen tilaamisessa. Yritä uudelleen.");
+          toast.error(t("newsletter.subscribeError"));
           console.error("Newsletter subscription error:", error);
         }
       } else {
-        toast.success(t("newsletter.subscribeSuccess") || "Kiitos tilauksestasi! Olet nyt uutiskirjeemme tilaaja.");
+        toast.success(t("newsletter.subscribeSuccess"));
         form.reset();
       }
     } catch (error) {
       console.error("Unexpected error:", error);
-      toast.error(t("common.error") || "Virhe tapahtui. Yritä uudelleen.");
+      toast.error(t("common.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -108,10 +108,10 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
   return (
     <div className={`p-6 bg-accent/20 rounded-lg shadow-sm ${className}`}>
       <h3 className="text-xl font-bold mb-2">
-        {t("newsletter.title") || "Tilaa uutiskirjeemme"}
+        {t("newsletter.title")}
       </h3>
       <p className="text-muted-foreground mb-4">
-        {t("newsletter.description") || "Saat säännöllisesti talousvinkkejä ja neuvoja velanhoitoon."}
+        {t("newsletter.description")}
       </p>
 
       <Form {...form}>
@@ -121,11 +121,11 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("common.email") || "Sähköposti"}</FormLabel>
+                <FormLabel>{t("common.email")}</FormLabel>
                 <FormControl>
                   <ValidatedInput
                     type="email"
-                    placeholder={t("newsletter.emailPlaceholder") || "email@example.com"}
+                    placeholder={t("newsletter.emailPlaceholder")}
                     label={t("common.email")}
                     validation={validateEmail}
                     {...field}
@@ -141,10 +141,10 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("common.name") || "Nimi"} ({t("common.optional") || "valinnainen"})</FormLabel>
+                <FormLabel>{t("common.name")} ({t("common.optional")})</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder={t("newsletter.namePlaceholder") || "Etunimi Sukunimi"}
+                    placeholder={t("newsletter.namePlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -156,8 +156,8 @@ const NewsletterSignup = ({ className }: NewsletterSignupProps) => {
           <Button type="submit" disabled={isSubmitting}>
             <Send className="mr-2 h-4 w-4" />
             {isSubmitting 
-              ? (t("common.submitting") || "Lähetetään...") 
-              : (t("newsletter.subscribe") || "Tilaa uutiskirje")}
+              ? t("common.submitting")
+              : t("newsletter.subscribe")}
           </Button>
         </form>
       </Form>

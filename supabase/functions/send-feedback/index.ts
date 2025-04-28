@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
 
     const { error } = await resend.emails.send({
       from: 'Velkavapaus.fi <feedback@velkavapaus.fi>',
-      to: ['nissenemj@gmail.com'],
+      to: ['nissenemj@gmail.com'], // Fixed email address
       subject: 'Uusi palaute Velkavapaus.fi-sivustolta',
       html: `
         <h2>Uusi palaute</h2>
