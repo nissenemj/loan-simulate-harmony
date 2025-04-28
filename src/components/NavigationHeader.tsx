@@ -90,130 +90,118 @@ const NavigationHeader = () => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
+  const MobileNav = () => (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-6 w-6" />
+          <span className="sr-only">{t("navigation.menu")}</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[280px] sm:w-[350px]">
+        <SheetHeader className="border-b pb-4 mb-4">
+          <SheetTitle>{t("app.title")}</SheetTitle>
+        </SheetHeader>
+        <nav className="flex flex-col space-y-2">
+          {links.map((link) => (
+            <Button
+              key={link.href}
+              variant={isActive(link.href) ? "secondary" : "ghost"}
+              className="w-full justify-start"
+              onClick={() => handleNavigation(link.href)}
+            >
+              <Navigation className="mr-2 h-4 w-4" />
+              {link.label}
+            </Button>
+          ))}
+        </nav>
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="flex flex-col gap-2">
+            {!user ? (
+              <Button
+                className="w-full"
+                onClick={() => handleNavigation("/auth")}
+              >
+                {t("auth.login")}
+              </Button>
+            ) : (
+              <Button
+                className="w-full"
+                variant="outline"
+                onClick={handleLogout}
+              >
+                {t("auth.logout")}
+              </Button>
+            )}
+            <div className="flex items-center justify-between">
+              <LanguageSwitcher />
+              <ModeToggle />
+            </div>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+
+  const DesktopNav = () => (
+    <div className="hidden md:flex items-center gap-4">
+      <nav className="flex items-center gap-1">
+        {links.map((link) => (
+          <Button
+            key={link.href}
+            variant={isActive(link.href) ? "secondary" : "ghost"}
+            className="px-4"
+            onClick={() => handleNavigation(link.href)}
+          >
+            {link.label}
+          </Button>
+        ))}
+      </nav>
+      <div className="flex items-center gap-2 ml-4">
+        <LanguageSwitcher />
+        <ModeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm">
+              {user ? user.email : t("navigation.account")}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            {!user ? (
+              <DropdownMenuItem onClick={() => handleNavigation("/auth")}>
+                {t("auth.login")}
+              </DropdownMenuItem>
+            ) : (
+              <>
+                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  {t("auth.logout")}
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-6">
+      <div className="container flex h-14 items-center justify-between px-4">
+        <div className="flex items-center gap-4">
           <div 
-            className="flex items-center cursor-pointer transition-opacity hover:opacity-90" 
+            className="flex items-center cursor-pointer" 
             onClick={() => handleNavigation("/")}
           >
             <VelkavapausLogo />
           </div>
-          
-          <DesktopNav links={links} isActive={isActive} handleNavigation={handleNavigation} />
         </div>
-
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2">
-            <LanguageSwitcher />
-            <ModeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="min-w-[120px] justify-start gap-2"
-                >
-                  <span className="truncate">
-                    {user ? user.email : t("navigation.account")}
-                  </span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                {!user ? (
-                  <DropdownMenuItem onClick={() => handleNavigation("/auth")}>
-                    {t("auth.login")}
-                  </DropdownMenuItem>
-                ) : (
-                  <>
-                    <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      {t("auth.logout")}
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">{t("navigation.menu")}</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <SheetHeader className="border-b pb-4 mb-4">
-                <SheetTitle className="text-left">{t("app.title")}</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col space-y-2">
-                {links.map((link) => (
-                  <Button
-                    key={link.href}
-                    variant={isActive(link.href) ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-2 h-11"
-                    onClick={() => handleNavigation(link.href)}
-                  >
-                    <Navigation className="h-4 w-4" />
-                    {link.label}
-                  </Button>
-                ))}
-              </nav>
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="flex flex-col gap-3">
-                  {!user ? (
-                    <Button
-                      className="w-full"
-                      onClick={() => handleNavigation("/auth")}
-                    >
-                      {t("auth.login")}
-                    </Button>
-                  ) : (
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={handleLogout}
-                    >
-                      {t("auth.logout")}
-                    </Button>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <LanguageSwitcher />
-                    <ModeToggle />
-                  </div>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+        <MobileNav />
+        <DesktopNav />
       </div>
     </header>
   );
 };
-
-// Define the props interface for the DesktopNav component
-interface DesktopNavProps {
-  links: Array<{ href: string; label: string }>;
-  isActive: (path: string) => boolean;
-  handleNavigation: (path: string) => void;
-}
-
-const DesktopNav = ({ links, isActive, handleNavigation }: DesktopNavProps) => (
-  <nav className="hidden md:flex items-center gap-1">
-    {links.map((link) => (
-      <Button
-        key={link.href}
-        variant={isActive(link.href) ? "secondary" : "ghost"}
-        className="px-3 h-9"
-        onClick={() => handleNavigation(link.href)}
-      >
-        {link.label}
-      </Button>
-    ))}
-  </nav>
-);
 
 export default NavigationHeader;
