@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -32,38 +32,60 @@ const DebtStrategies = () => {
 		"creditCards",
 		[]
 	);
-	const [debts, setDebts] = useState<Debt[]>([]);
+	// Convert loans and credit cards to Debt objects directly
+	const debts = useMemo(() => {
+		console.log("Calculating debts from loans and credit cards");
+		console.log("Loans:", loans);
+		console.log("Credit Cards:", creditCards);
 
-	// Update debts when loans or credit cards change
-	useEffect(() => {
-		// Convert loans and credit cards to Debt objects
+		// Check if loans and credit cards are loaded
+		if (!loans || !creditCards) {
+			console.log("Loans or credit cards not loaded yet");
+			return [];
+		}
+
+		// Convert loans to Debt objects
 		const loanDebts: Debt[] = loans
 			.filter((loan) => loan.isActive)
-			.map((loan) => ({
-				id: loan.id,
-				name: loan.name,
-				balance: loan.amount,
-				interestRate: loan.interestRate,
-				minimumPayment:
-					loan.minPayment || (loan.amount * loan.interestRate) / 100 / 12,
-				type: "loan",
-			}));
+			.map((loan) => {
+				// Calculate minimum payment if not provided
+				const minPayment =
+					loan.minPayment || (loan.amount * loan.interestRate) / 100 / 12;
 
+				return {
+					id: loan.id,
+					name: loan.name,
+					balance: loan.amount,
+					interestRate: loan.interestRate,
+					minimumPayment: minPayment,
+					type: "loan",
+				};
+			});
+
+		// Convert credit cards to Debt objects
 		const creditCardDebts: Debt[] = creditCards
 			.filter((card) => card.isActive)
-			.map((card) => ({
-				id: card.id,
-				name: card.name,
-				balance: card.balance,
-				interestRate: card.apr,
-				minimumPayment: Math.max(
-					card.minPayment,
-					card.balance * (card.minPaymentPercent / 100)
-				),
-				type: "credit-card",
-			}));
+			.map((card) => {
+				// Calculate minimum payment based on percentage or fixed amount
+				const minPayment = Math.max(
+					card.minPayment || 0,
+					(card.balance * (card.minPaymentPercent || 0)) / 100
+				);
 
-		setDebts([...loanDebts, ...creditCardDebts]);
+				return {
+					id: card.id,
+					name: card.name,
+					balance: card.balance,
+					interestRate: card.apr,
+					minimumPayment: minPayment,
+					type: "credit-card",
+				};
+			});
+
+		// Combine loan and credit card debts
+		const result = [...loanDebts, ...creditCardDebts];
+		console.log("Calculated debts:", result);
+		return result;
 	}, [loans, creditCards]);
 
 	const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
