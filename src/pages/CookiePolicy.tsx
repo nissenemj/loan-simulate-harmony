@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import NavigationHeader from "@/components/NavigationHeader";
@@ -6,7 +5,6 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Footer from "@/components/Footer";
 
 const CookiePolicy = () => {
   const navigate = useNavigate();
@@ -15,51 +13,13 @@ const CookiePolicy = () => {
     <>
       <Helmet>
         <title>Evästekäytäntö | Velkavapaus.fi</title>
-        <meta 
-          name="description" 
-          content="Selvitä miten Velkavapaus.fi käyttää evästeitä parantaakseen käyttäjäkokemustasi. Tutustu evästekäytäntöihimme ja opi hallitsemaan evästeasetuksiasi." 
-        />
-        <meta name="keywords" content="evästeet, evästekäytäntö, cookies, verkkopalvelu, yksityisyys" />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "WebPage",
-              "name": "Evästekäytäntö | Velkavapaus.fi",
-              "description": "Velkavapaus.fi evästekäytäntö - Tietoa siitä, miten käytämme evästeitä sivustollamme ja miten voit hallita niitä.",
-              "publisher": {
-                "@type": "Organization",
-                "name": "Velkavapaus.fi",
-                "url": "https://velkavapaus.fi"
-              },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Etusivu",
-                    "item": "https://velkavapaus.fi"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Evästekäytäntö",
-                    "item": "https://velkavapaus.fi/cookie-policy"
-                  }
-                ]
-              },
-              "datePublished": "2023-05-01",
-              "dateModified": "${new Date().toISOString().split('T')[0]}"
-            }
-          `}
-        </script>
+        <meta name="description" content="Velkavapaus.fi - Evästekäytäntö ja tietoa käyttämistämme evästeistä" />
       </Helmet>
 
-      <div className="min-h-screen bg-background flex flex-col">
+      <div className="min-h-screen bg-background">
         <NavigationHeader />
         
-        <div className="container mx-auto py-8 px-4 max-w-4xl flex-grow">
+        <div className="container mx-auto py-8 px-4 max-w-4xl">
           <Button 
             variant="outline" 
             size="sm" 
@@ -179,11 +139,9 @@ const CookiePolicy = () => {
           <Separator className="my-6" />
           
           <p className="text-center text-sm text-muted-foreground mt-8">
-            © {new Date().getFullYear()} Velkavapaus.fi. Kaikki oikeudet pidätetään.
+            © {new Date().getFullYear()} Loan Simulate Harmony. Kaikki oikeudet pidätetään.
           </p>
         </div>
-        
-        <Footer />
       </div>
     </>
   );

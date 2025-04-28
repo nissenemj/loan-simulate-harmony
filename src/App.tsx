@@ -25,7 +25,6 @@ const Index = lazy(() => import('./pages/Index'));
 const Auth = lazy(() => import('./pages/Auth'));
 const DebtStrategies = lazy(() => import('./pages/DebtStrategies'));
 const DebtSummaryPage = lazy(() => import('./pages/DebtSummaryPage'));
-const Glossary = lazy(() => import('./pages/Glossary'));
 
 function App() {
   return (
@@ -80,7 +79,6 @@ function App() {
                         <Route path="/app" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/debt-strategies" element={<DebtStrategies />} />
                         <Route path="/debt-summary" element={<DebtSummaryPage />} />
-                        <Route path="/glossary" element={<Glossary />} />
                       </Routes>
                     </Suspense>
                   </main>

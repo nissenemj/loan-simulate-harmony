@@ -17,45 +17,7 @@ const PrivacyPolicy = () => {
     <>
       <Helmet>
         <title>Tietosuojaseloste | Velkavapaus.fi</title>
-        <meta 
-          name="description" 
-          content="Tutustu Velkavapaus.fi-palvelun tietosuojakäytäntöön. Kerromme avoimesti, miten keräämme, käsittelemme ja suojaamme henkilötietojasi palvelussamme." 
-        />
-        <meta name="keywords" content="tietosuoja, yksityisyys, henkilötiedot, GDPR, tietosuojaseloste" />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "WebPage",
-              "name": "Tietosuojaseloste | Velkavapaus.fi",
-              "description": "Velkavapaus.fi tietosuojaseloste - Miten keräämme, käsittelemme ja suojaamme henkilötietojasi palvelussamme.",
-              "publisher": {
-                "@type": "Organization",
-                "name": "Velkavapaus.fi",
-                "url": "https://velkavapaus.fi"
-              },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Etusivu",
-                    "item": "https://velkavapaus.fi"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Tietosuojaseloste",
-                    "item": "https://velkavapaus.fi/privacy-policy"
-                  }
-                ]
-              },
-              "datePublished": "2023-05-01",
-              "dateModified": "${new Date().toISOString().split('T')[0]}"
-            }
-          `}
-        </script>
+        <meta name="description" content="Tietosuojaseloste - Velkavapaus.fi" />
       </Helmet>
 
       <div className="min-h-screen bg-background flex flex-col">

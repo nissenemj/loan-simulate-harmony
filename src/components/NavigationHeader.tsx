@@ -95,7 +95,7 @@ const NavigationHeader = () => {
 	};
 
 	return (
-		<header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b transition-all">
+		<header className="bg-background sticky top-0 z-50 w-full border-b">
 			<div className="container flex h-16 items-center justify-between px-4">
 				<div 
 					className="flex items-center cursor-pointer" 
@@ -113,36 +113,49 @@ const NavigationHeader = () => {
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
-							<div className="flex flex-col h-full">
+							<div className="border-b px-6 py-4">
 								<SheetTitle>{t("app.title")}</SheetTitle>
-								<nav className="flex flex-col gap-1 p-4">
-									{links.map((link) => (
-										<Button
-											key={link.href}
-											variant={isActive(link.href) ? "secondary" : "ghost"}
-											className="w-full justify-start"
-											onClick={() => handleNavigation(link.href)}
-										>
-											{link.label}
-										</Button>
-									))}
-								</nav>
-								<div className="mt-auto p-4 border-t">
-									<Button 
-										variant="default" 
-										size="lg" 
-										className="w-full h-12 text-base font-medium"
-										onClick={() => handleNavigation('/calculator')}
+							</div>
+							<nav className="flex flex-col gap-1 p-4">
+								{links.map((link) => (
+									<Button
+										key={link.href}
+										variant={isActive(link.href) ? "secondary" : "ghost"}
+										className="w-full justify-start"
+										onClick={() => handleNavigation(link.href)}
 									>
-										{t('navigation.startFreeCalculation')}
+										{link.label}
 									</Button>
+								))}
+							</nav>
+							<div className="border-t p-4 space-y-4">
+								<div className="flex items-center justify-between gap-2">
+									<LanguageSwitcher />
+									<ModeToggle />
 								</div>
+								{user ? (
+									<Button
+										variant="destructive"
+										onClick={handleLogout}
+										className="w-full"
+									>
+										{t("auth.logout")}
+									</Button>
+								) : (
+									<Button
+										variant="default"
+										onClick={() => handleNavigation("/auth")}
+										className="w-full"
+									>
+										{t("auth.login")}
+									</Button>
+								)}
 							</div>
 						</SheetContent>
 					</Sheet>
 				) : (
 					<div className="flex items-center gap-4">
-						<NavigationMenu className="hidden md:flex">
+						<NavigationMenu>
 							<NavigationMenuList>
 								{links.map((link) => (
 									<NavigationMenuItem key={link.href}>
@@ -159,41 +172,31 @@ const NavigationHeader = () => {
 						</NavigationMenu>
 
 						<div className="flex items-center gap-2">
-							<Button 
-								variant="default"
-								size="lg"
-								className="h-12 px-6 text-base font-medium hidden md:flex"
-								onClick={() => handleNavigation('/calculator')}
-							>
-								{t('navigation.startFreeCalculation')}
-							</Button>
-							<div className="flex items-center gap-2">
-								<LanguageSwitcher />
-								<ModeToggle />
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button variant="outline" size="sm" className="h-9">
-											<User className="h-4 w-4 mr-2" />
-											{user ? user.email : t("navigation.account")}
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="w-56">
-										{!user ? (
-											<DropdownMenuItem onClick={() => handleNavigation("/auth")}>
-												{t("auth.login")}
+							<LanguageSwitcher />
+							<ModeToggle />
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="outline" size="sm" className="h-9">
+										<User className="h-4 w-4 mr-2" />
+										{user ? user.email : t("navigation.account")}
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end" className="w-56">
+									{!user ? (
+										<DropdownMenuItem onClick={() => handleNavigation("/auth")}>
+											{t("auth.login")}
+										</DropdownMenuItem>
+									) : (
+										<>
+											<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+											<DropdownMenuSeparator />
+											<DropdownMenuItem onClick={handleLogout}>
+												{t("auth.logout")}
 											</DropdownMenuItem>
-										) : (
-											<>
-												<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-												<DropdownMenuSeparator />
-												<DropdownMenuItem onClick={handleLogout}>
-													{t("auth.logout")}
-												</DropdownMenuItem>
-											</>
-										)}
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</div>
+										</>
+									)}
+								</DropdownMenuContent>
+							</DropdownMenu>
 						</div>
 					</div>
 				)}

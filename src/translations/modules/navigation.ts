@@ -1,3 +1,4 @@
+
 // Navigation-related translations
 
 export const navigation = {
@@ -7,7 +8,7 @@ export const navigation = {
       loans: "Loans",
       creditCards: "Credit Cards",
       debtSummary: "Debt Summary",
-      glossary: "Financial Glossary",
+      glossary: "Glossary",
       affiliate: "Affiliate",
       blog: "Blog",
     },
@@ -26,8 +27,7 @@ export const navigation = {
       calculator: "Loan Calculator",
       auth: "Login",
       settings: "Settings",
-      viewRepaymentPlan: "View Repayment Plan",
-      startFreeCalculation: "Start Free Plan"
+      viewRepaymentPlan: "View Repayment Plan"
     }
   },
   fi: {
@@ -36,7 +36,7 @@ export const navigation = {
       loans: "Lainat",
       creditCards: "Luottokortit",
       debtSummary: "Velkakatsaus",
-      glossary: "Talouden sanasto",
+      glossary: "Sanasto",
       affiliate: "Suositukset",
       blog: "Blogi",
     },
@@ -55,8 +55,7 @@ export const navigation = {
       calculator: "Lainalaskuri",
       auth: "Kirjautuminen",
       settings: "Asetukset",
-      viewRepaymentPlan: "Katso maksusuunnitelma",
-      startFreeCalculation: "Aloita ilmainen suunnitelma"
+      viewRepaymentPlan: "Katso maksusuunnitelma"
     }
   }
 };
