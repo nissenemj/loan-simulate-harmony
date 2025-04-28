@@ -1,4 +1,3 @@
-
 import { common } from "./modules/common";
 import { navigation } from "./modules/navigation";
 import { forms } from "./modules/forms";
@@ -25,7 +24,6 @@ import { alerts } from "./modules/alerts";
 import { affiliate } from "./modules/affiliate";
 import { errors } from "./modules/errors";
 import { savings } from "./modules/savings";
-import { feedback } from "./modules/feedback";
 
 // Merge all translation modules for English
 export const en = {
@@ -55,7 +53,6 @@ export const en = {
 	...affiliate.en,
 	...errors.en,
 	...savings.en,
-	...feedback.en,
 };
 
 // Merge all translation modules for Finnish
@@ -86,7 +83,6 @@ export const fi = {
 	...affiliate.fi,
 	...errors.fi,
 	...savings.fi,
-	...feedback.fi,
 };
 
 // Also export as default for backward compatibility

@@ -1,241 +1,219 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
 import {
-	NavigationMenu,
-	NavigationMenuList,
-	NavigationMenuItem,
-	NavigationMenuTrigger,
-	NavigationMenuContent,
-	NavigationMenuLink,
-} from "@/components/ui/navigation-menu";
-import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Menu, User } from "lucide-react";
+import { ModeToggle } from "@/components/ModeToggle";
+import { Menu, Navigation } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { toast } from "@/components/ui/use-toast";
 import VelkavapausLogo from "./VelkavapausLogo";
 
 const NavigationHeader = () => {
-	const [open, setOpen] = useState(false);
-	const { user, logout } = useAuth();
-	const { t } = useLanguage();
-	const isMobile = useIsMobile();
-	const navigate = useNavigate();
-	const location = useLocation();
+  const [open, setOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const { t } = useLanguage();
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-	const handleLogout = async () => {
-		try {
-			await logout();
-			setOpen(false);
-			toast({
-				title: "Logged out successfully",
-				description: "You have been logged out of your account.",
-			});
-		} catch (error) {
-			console.error("Logout error:", error);
-			toast({
-				title: "Logout failed",
-				description: "There was a problem logging out. Please try again.",
-				variant: "destructive",
-			});
-		}
-	};
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setOpen(false);
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Logout failed",
+        description: "There was a problem logging out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
-	const handleNavigation = (path: string) => {
-		try {
-			navigate(path);
-			if (open) setOpen(false);
-		} catch (error) {
-			console.error("Navigation error:", error);
-			toast({
-				title: "Navigation error",
-				description:
-					"There was a problem navigating to the page. Please try again.",
-				variant: "destructive",
-			});
-		}
-	};
+  const handleNavigation = (path: string) => {
+    try {
+      navigate(path);
+      if (open) setOpen(false);
+    } catch (error) {
+      console.error("Navigation error:", error);
+      toast({
+        title: "Navigation error",
+        description: "There was a problem navigating to the page. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
-	const links = user
-		? [
-				{ href: "/dashboard", label: t("navigation.dashboard") },
-				{ href: "/calculator", label: t("navigation.calculator") },
-				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
-				{ href: "/courses", label: t("navigation.courses") },
-				{ href: "/blog", label: t("navigation.blog") },
-				{ href: "/feedback", label: t("navigation.feedback") },
-		  ]
-		: [
-				{ href: "/calculator", label: t("navigation.calculator") },
-				{ href: "/debt-strategies", label: t("navigation.debtStrategies") },
-				{ href: "/courses", label: t("navigation.courses") },
-				{ href: "/blog", label: t("navigation.blog") },
-				{ href: "/feedback", label: t("navigation.feedback") },
-		  ];
+  const links = user
+    ? [
+        { href: "/dashboard", label: t("navigation.dashboard") },
+        { href: "/calculator", label: t("navigation.calculator") },
+        { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/courses", label: t("navigation.courses") },
+        { href: "/blog", label: t("navigation.blog") },
+        { href: "/feedback", label: t("navigation.feedback") }
+      ]
+    : [
+        { href: "/calculator", label: t("navigation.calculator") },
+        { href: "/debt-strategies", label: t("navigation.debtStrategies") },
+        { href: "/courses", label: t("navigation.courses") },
+        { href: "/blog", label: t("navigation.blog") },
+        { href: "/feedback", label: t("navigation.feedback") }
+      ];
 
-	const isActive = (path: string) => {
-		if (path === "/") {
-			return location.pathname === "/";
-		}
-		return (
-			location.pathname === path ||
-			(path !== "/" && location.pathname.startsWith(`${path}/`))
-		);
-	};
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
-	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-			<div className="container flex h-16 items-center justify-between px-4">
-				<div
-					className="flex items-center cursor-pointer"
-					onClick={() => navigate("/")}
-				>
-					<VelkavapausLogo />
-				</div>
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-6">
+          <div 
+            className="flex items-center cursor-pointer transition-opacity hover:opacity-90" 
+            onClick={() => handleNavigation("/")}
+          >
+            <VelkavapausLogo />
+          </div>
+          
+          <DesktopNav links={links} isActive={isActive} handleNavigation={handleNavigation} />
+        </div>
 
-				{isMobile ? (
-					<Sheet open={open} onOpenChange={setOpen}>
-						<SheetTrigger asChild>
-							<Button variant="ghost" size="sm" className="px-2">
-								<Menu className="h-5 w-5" />
-								<span className="sr-only">{t("navigation.menu")}</span>
-							</Button>
-						</SheetTrigger>
-						<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
-							<SheetHeader className="p-4 border-b">
-								<SheetTitle>{t("app.title")}</SheetTitle>
-							</SheetHeader>
-							<nav className="flex flex-col gap-1 p-4">
-								{links.map((link) => (
-									<Button
-										key={link.href}
-										variant={isActive(link.href) ? "secondary" : "ghost"}
-										className="w-full justify-start"
-										onClick={() => handleNavigation(link.href)}
-									>
-										{link.label}
-									</Button>
-								))}
-							</nav>
-							<div className="mt-auto p-4 border-t">
-								<Button
-									variant="default"
-									size="lg"
-									className="w-full h-12 text-base font-medium"
-									onClick={() => handleNavigation("/calculator")}
-								>
-									{t("navigation.startFreeCalculation")}
-								</Button>
-							</div>
-						</SheetContent>
-					</Sheet>
-				) : (
-					<div className="flex items-center gap-4">
-						<NavigationMenu className="hidden md:flex">
-							<NavigationMenuList>
-								{links.map((link) => (
-									<NavigationMenuItem key={link.href}>
-										<Button
-											onClick={() => handleNavigation(link.href)}
-											variant={isActive(link.href) ? "secondary" : "ghost"}
-											className={cn(
-												"h-9 px-4 py-2",
-												isActive(link.href) &&
-													"bg-accent text-accent-foreground"
-											)}
-										>
-											{link.label}
-										</Button>
-									</NavigationMenuItem>
-								))}
-							</NavigationMenuList>
-						</NavigationMenu>
-
-						<div className="flex items-center gap-2">
-							<Button
-								variant="default"
-								size="lg"
-								className="h-10 px-6 text-base font-medium hidden md:flex"
-								onClick={() => handleNavigation("/calculator")}
-							>
-								{t("navigation.startFreeCalculation")}
-							</Button>
-							<div className="flex items-center gap-2">
-								<LanguageSwitcher />
-								<ThemeToggle />
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button variant="outline" size="sm" className="h-9">
-											<User className="h-4 w-4 mr-2" />
-											{user ? user.email : t("navigation.account")}
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="w-56">
-										{!user ? (
-											<DropdownMenuItem
-												onClick={() => handleNavigation("/auth")}
-											>
-												{t("auth.login")}
-											</DropdownMenuItem>
-										) : (
-											<>
-												<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-												<DropdownMenuSeparator />
-												<DropdownMenuItem onClick={handleLogout}>
-													{t("auth.logout")}
-												</DropdownMenuItem>
-											</>
-										)}
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</div>
-						</div>
-					</div>
-				)}
-			</div>
-		</header>
-	);
+        <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageSwitcher />
+            <ModeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="min-w-[120px] justify-start gap-2"
+                >
+                  <span className="truncate">
+                    {user ? user.email : t("navigation.account")}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {!user ? (
+                  <DropdownMenuItem onClick={() => handleNavigation("/auth")}>
+                    {t("auth.login")}
+                  </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      {t("auth.logout")}
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">{t("navigation.menu")}</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetHeader className="border-b pb-4 mb-4">
+                <SheetTitle className="text-left">{t("app.title")}</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col space-y-2">
+                {links.map((link) => (
+                  <Button
+                    key={link.href}
+                    variant={isActive(link.href) ? "secondary" : "ghost"}
+                    className="w-full justify-start gap-2 h-11"
+                    onClick={() => handleNavigation(link.href)}
+                  >
+                    <Navigation className="h-4 w-4" />
+                    {link.label}
+                  </Button>
+                ))}
+              </nav>
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="flex flex-col gap-3">
+                  {!user ? (
+                    <Button
+                      className="w-full"
+                      onClick={() => handleNavigation("/auth")}
+                    >
+                      {t("auth.login")}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      onClick={handleLogout}
+                    >
+                      {t("auth.logout")}
+                    </Button>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <LanguageSwitcher />
+                    <ModeToggle />
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
 };
 
 // Define the props interface for the DesktopNav component
 interface DesktopNavProps {
-	links: Array<{ href: string; label: string }>;
-	isActive: (path: string) => boolean;
-	handleNavigation: (path: string) => void;
+  links: Array<{ href: string; label: string }>;
+  isActive: (path: string) => boolean;
+  handleNavigation: (path: string) => void;
 }
 
 const DesktopNav = ({ links, isActive, handleNavigation }: DesktopNavProps) => (
-	<nav className="hidden md:flex items-center gap-1">
-		{links.map((link) => (
-			<Button
-				key={link.href}
-				variant={isActive(link.href) ? "secondary" : "ghost"}
-				className="px-3 h-9"
-				onClick={() => handleNavigation(link.href)}
-			>
-				{link.label}
-			</Button>
-		))}
-	</nav>
+  <nav className="hidden md:flex items-center gap-1">
+    {links.map((link) => (
+      <Button
+        key={link.href}
+        variant={isActive(link.href) ? "secondary" : "ghost"}
+        className="px-3 h-9"
+        onClick={() => handleNavigation(link.href)}
+      >
+        {link.label}
+      </Button>
+    ))}
+  </nav>
 );
 
 export default NavigationHeader;
