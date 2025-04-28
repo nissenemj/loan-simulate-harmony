@@ -1,52 +1,81 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Info, Calculator, LineChart, Coins, TrendingDown } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import NewsletterSignup from '@/components/NewsletterSignup';
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import BreadcrumbNav from '@/components/BreadcrumbNav';
-import UnderConstructionBanner from '@/components/UnderConstructionBanner';
-import { Navigate } from 'react-router-dom';
-
-// Import debt-related components
-import DebtVisualization from '@/components/calculator/DebtVisualization';
-import DebtPayoffCalculator from '@/components/calculator/DebtPayoffCalculator';
-import { DebtPayoffTimeline } from '@/components/calculator/DebtPayoffTimeline'; // Changed import
-import DebtConsolidationCalculator from '@/components/calculator/DebtConsolidationCalculator';
-import ExtraPaymentCalculator from '@/components/calculator/ExtraPaymentCalculator';
-
-// Import types
+import { useTranslation } from '@/contexts/LanguageContext';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Loan } from '@/utils/loanCalculations';
+import { CreditCard } from '@/utils/creditCardCalculations';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
+import { 
+  DebtPayoffCalculator,
+  DebtPayoffTimeline,
+  DebtConsolidationCalculator,
+  ExtraPaymentCalculator,
+  DebtVisualization
+} from '@/components/calculator';
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Info, Calculator, LineChart, TrendingDown, Coins } from 'lucide-react';
+import UnderConstructionBanner from '@/components/UnderConstructionBanner';
+import { ErrorProvider } from '@/contexts/ErrorContext';
+import BreadcrumbNav from '@/components/BreadcrumbNav';
 
 const DebtStrategies = () => {
-  // State management for debts and payment plans
-  const [loans, setLoans] = useState<Debt[]>([]);
-  const [creditCards, setCreditCards] = useState<Debt[]>([]);
+  const { t } = useTranslation();
+  const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
+  const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
+  const [debts, setDebts] = useState<Debt[]>(() => {
+    // Convert loans and credit cards to Debt objects
+    const loanDebts: Debt[] = loans
+      .filter(loan => loan.isActive)
+      .map(loan => ({
+        id: loan.id,
+        name: loan.name,
+        balance: loan.amount,
+        interestRate: loan.interestRate,
+        minimumPayment: loan.minPayment || loan.amount * loan.interestRate / 100 / 12,
+        type: 'loan'
+      }));
+    
+    const creditCardDebts: Debt[] = creditCards
+      .filter(card => card.isActive)
+      .map(card => ({
+        id: card.id,
+        name: card.name,
+        balance: card.balance,
+        interestRate: card.apr,
+        minimumPayment: Math.max(card.minPayment, card.balance * (card.minPaymentPercent / 100)),
+        type: 'credit-card'
+      }));
+    
+    return [...loanDebts, ...creditCardDebts];
+  });
+  
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
   const [calculationError, setCalculationError] = useState<string | null>(null);
   
-  // Combined debts for calculations
-  const debts = [...loans, ...creditCards];
-
-  // Translation hook
-  const { t } = useLanguage();
-  
-  // Handlers for calculator results
+  // Handle saving payment plan
   const handleSaveResults = (plan: PaymentPlan) => {
-    setPaymentPlan(plan);
     setCalculationError(null);
+    setPaymentPlan(plan);
   };
   
-  const handleCalculationError = (error: Error) => {
-    setCalculationError(error.message);
-    setPaymentPlan(null);
+  // Handle calculation errors
+  const handleCalculationError = (error: any) => {
+    if (error.message && error.message.includes("maximum number of months")) {
+      setCalculationError(t('debtStrategies.errorMaxMonths'));
+    } else {
+      setCalculationError(error.message || t('debtStrategies.errorInCalculation'));
+    }
   };
-
+  
   return (
-    <div className="min-h-screen">
+    <ErrorProvider>
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <Helmet>
           <title>{t('debtStrategies.pageTitle')} | {t('app.title')}</title>
@@ -140,14 +169,7 @@ const DebtStrategies = () => {
           )}
         </div>
       </div>
-      
-      <div className="relative h-[500px] w-full mt-16 rounded-lg overflow-hidden">
-        <div className="relative z-10 h-full flex flex-col items-center justify-center p-8">
-          <NewsletterSignup className="w-full max-w-xl relative z-10 bg-background/80 backdrop-blur-sm" />
-        </div>
-        <BackgroundBeams />
-      </div>
-    </div>
+    </ErrorProvider>
   );
 };
 
