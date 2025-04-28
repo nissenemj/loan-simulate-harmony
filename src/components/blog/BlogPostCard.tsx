@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -34,21 +33,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 	const isMobile = useIsMobile();
 
 	const getExcerpt = (content: string, maxLength: number = 200) => {
-		// Strip any Markdown heading syntax (# headers)
-		let cleanedContent = content.replace(/^#+\s+.+$/gm, '');
-		
-		// Remove meta description suggestions
-		cleanedContent = cleanedContent.replace(/\(Meta-kuvaus ehdotus:.*?\)/g, '');
-		
-		// Split by paragraphs and take the first substantive one
-		const paragraphs = cleanedContent.split("\n\n").filter(p => p.trim().length > 0);
-		let firstParagraph = paragraphs[0] || '';
-		
-		// Ensure we don't return any raw "Markdown" text that might be leftover
-		if (firstParagraph.trim().toLowerCase() === "markdown") {
-			firstParagraph = paragraphs[1] || '';
-		}
-		
+		const firstParagraph = content.split("\n\n")[0];
 		if (firstParagraph.length <= maxLength) return firstParagraph;
 		return firstParagraph.substring(0, maxLength) + "...";
 	};
@@ -110,27 +95,8 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 			<CardContent
 				className={`pb-4 flex-grow ${isMobile ? "p-3 pt-0" : ""} text-left`}
 			>
-				<div className="text-muted-foreground text-sm prose prose-sm dark:prose-invert">
-					<ReactMarkdown
-						components={{
-							// Apply proper component for paragraph
-							p: ({ children }) => <p className="my-1">{children}</p>,
-							// Make links styled and clickable
-							a: ({ href, children }) => (
-								<a href={href} className="text-primary hover:underline">
-									{children}
-								</a>
-							),
-							// Format lists properly
-							ul: ({ children }) => <ul className="list-disc pl-4 my-2">{children}</ul>,
-							ol: ({ children }) => <ol className="list-decimal pl-4 my-2">{children}</ol>,
-							li: ({ children }) => <li className="ml-2">{children}</li>,
-							// Most importantly, render bold text correctly
-							strong: ({ children }) => <span className="font-semibold">{children}</span>,
-							em: ({ children }) => <em className="italic">{children}</em>,
-							code: ({ children }) => <code className="bg-muted px-1 py-0.5 rounded">{children}</code>,
-						}}
-					>
+				<div className="text-muted-foreground text-sm markdown">
+					<ReactMarkdown>
 						{getExcerpt(post.content, isMobile ? 100 : 200)}
 					</ReactMarkdown>
 				</div>
