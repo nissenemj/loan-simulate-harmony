@@ -1,5 +1,4 @@
-
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -10,8 +9,7 @@ import NavigationHeader from './components/NavigationHeader';
 import Footer from './components/Footer';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
-import ChatBot from './components/ChatBot';
-import Feedback from './pages/Feedback';
+import { Suspense, lazy } from 'react';
 
 // Lazy-loaded components
 const BlogPost = lazy(() => import('./pages/BlogPost'));
@@ -83,12 +81,10 @@ function App() {
                         <Route path="/debt-strategies" element={<DebtStrategies />} />
                         <Route path="/debt-summary" element={<DebtSummaryPage />} />
                         <Route path="/glossary" element={<Glossary />} />
-                        <Route path="/feedback" element={<Feedback />} />
                       </Routes>
                     </Suspense>
                   </main>
                   <Footer />
-                  <ChatBot />
                   <Toaster />
                 </div>
               </ErrorProvider>
