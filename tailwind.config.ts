@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,7 @@ export default {
       fontFamily: {
         'display': ['Inter', 'system-ui', 'sans-serif'],
         'body': ['Roboto', 'system-ui', 'sans-serif'],
+        'montserrat': ['Montserrat', 'system-ui', 'sans-serif'],
       },
       spacing: {
         'section': '2.5rem',

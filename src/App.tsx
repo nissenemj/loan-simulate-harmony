@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from "@/components/theme-provider"
@@ -25,6 +26,7 @@ const Index = lazy(() => import('./pages/Index'));
 const Auth = lazy(() => import('./pages/Auth'));
 const DebtStrategies = lazy(() => import('./pages/DebtStrategies'));
 const DebtSummaryPage = lazy(() => import('./pages/DebtSummaryPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 function App() {
   return (
@@ -79,6 +81,7 @@ function App() {
                         <Route path="/app" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/debt-strategies" element={<DebtStrategies />} />
                         <Route path="/debt-summary" element={<DebtSummaryPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
                       </Routes>
                     </Suspense>
                   </main>
