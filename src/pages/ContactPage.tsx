@@ -77,37 +77,37 @@ const ContactPage = () => {
   return (
     <>
       <Helmet>
-        <title>{t('contact.pageTitle') || 'Contact Us'} | Velkavapaus</title>
-        <meta name="description" content={t('contact.metaDescription') || 'Contact the Velkavapaus team for assistance with debt-related questions or technical support.'} />
+        <title>{t('contact.pageTitle')} | Velkavapaus</title>
+        <meta name="description" content={t('contact.metaDescription')} />
       </Helmet>
       
       <div className="container max-w-4xl py-12 px-4 md:px-6">
-        <h1 className="text-3xl font-bold text-center mb-8">{t('contact.title') || 'Contact Us'}</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">{t('contact.title')}</h1>
         
         <div className="grid md:grid-cols-5 gap-8">
           <div className="md:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>{t('contact.infoTitle') || 'Get in Touch'}</CardTitle>
+                <CardTitle>{t('contact.infoTitle')}</CardTitle>
                 <CardDescription>
-                  {t('contact.infoDesc') || 'We\'re here to help with any questions you may have.'}
+                  {t('contact.infoDesc')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-medium">{t('contact.emailTitle') || 'Email'}</h3>
+                  <h3 className="font-medium">{t('contact.emailTitle')}</h3>
                   <p className="text-muted-foreground">info@velkavapaus.fi</p>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium">{t('contact.hoursTitle') || 'Customer Service Hours'}</h3>
-                  <p className="text-muted-foreground">{t('contact.hours') || 'Mon - Fri: 9:00 - 16:00'}</p>
+                  <h3 className="font-medium">{t('contact.hoursTitle')}</h3>
+                  <p className="text-muted-foreground">{t('contact.hours')}</p>
                 </div>
                 
                 <div>
-                  <h3 className="font-medium">{t('contact.responseTitle') || 'Response Time'}</h3>
+                  <h3 className="font-medium">{t('contact.responseTitle')}</h3>
                   <p className="text-muted-foreground">
-                    {t('contact.responseText') || 'We aim to respond to all inquiries within 1-2 business days.'}
+                    {t('contact.responseText')}
                   </p>
                 </div>
               </CardContent>
@@ -117,9 +117,9 @@ const ContactPage = () => {
           <div className="md:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle>{t('contact.formTitle') || 'Send us a message'}</CardTitle>
+                <CardTitle>{t('contact.formTitle')}</CardTitle>
                 <CardDescription>
-                  {t('contact.formDesc') || 'Fill out the form below and we\'ll get back to you as soon as possible.'}
+                  {t('contact.formDesc')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -129,16 +129,16 @@ const ContactPage = () => {
                       <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">
-                      {t('contact.thankYou') || 'Thank you!'}
+                      {t('contact.thankYou')}
                     </h3>
                     <p className="text-muted-foreground mb-6">
-                      {t('contact.successMessage') || 'Your message has been received. We\'ll get back to you shortly.'}
+                      {t('contact.successMessage')}
                     </p>
                     <Button 
                       onClick={() => setSubmitted(false)}
                       variant="outline"
                     >
-                      {t('contact.sendAnother') || 'Send another message'}
+                      {t('contact.sendAnother')}
                     </Button>
                   </div>
                 ) : (
@@ -151,7 +151,7 @@ const ContactPage = () => {
                           <FormItem>
                             <FormLabel>{t('common.name') || 'Name'}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t('contact.namePlaceholder') || 'Your name'} {...field} />
+                              <Input placeholder={t('contact.namePlaceholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -167,7 +167,7 @@ const ContactPage = () => {
                             <FormControl>
                               <Input 
                                 type="email" 
-                                placeholder={t('contact.emailPlaceholder') || 'your.email@example.com'} 
+                                placeholder={t('contact.emailPlaceholder')} 
                                 {...field} 
                               />
                             </FormControl>
@@ -184,7 +184,7 @@ const ContactPage = () => {
                             <FormLabel>{t('contact.message') || 'Message'}</FormLabel>
                             <FormControl>
                               <Textarea 
-                                placeholder={t('contact.messagePlaceholder') || 'How can we help you?'} 
+                                placeholder={t('contact.messagePlaceholder')} 
                                 className="min-h-[120px]" 
                                 {...field} 
                               />
@@ -207,7 +207,7 @@ const ContactPage = () => {
                         ) : (
                           <>
                             <Send className="mr-2 h-4 w-4" />
-                            {t('contact.submit') || 'Send Message'}
+                            {t('contact.submit')}
                           </>
                         )}
                       </Button>
