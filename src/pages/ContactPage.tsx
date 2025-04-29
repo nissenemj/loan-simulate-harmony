@@ -83,36 +83,6 @@ const ContactPage = () => {
       
       <div className="container max-w-4xl py-12 px-4 md:px-6">
         <h1 className="text-3xl font-bold text-center mb-8">{t('contact.title')}</h1>
-        
-        <div className="grid md:grid-cols-5 gap-8">
-          <div className="md:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t('contact.infoTitle')}</CardTitle>
-                <CardDescription>
-                  {t('contact.infoDesc')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-medium">{t('contact.emailTitle')}</h3>
-                  <p className="text-muted-foreground">info@velkavapaus.fi</p>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium">{t('contact.hoursTitle')}</h3>
-                  <p className="text-muted-foreground">{t('contact.hours')}</p>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium">{t('contact.responseTitle')}</h3>
-                  <p className="text-muted-foreground">
-                    {t('contact.responseText')}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
           
           <div className="md:col-span-3">
             <Card>
