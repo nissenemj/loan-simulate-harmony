@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,15 +20,11 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/ModeToggle";
-import {
-	NavigationMenu,
-	NavigationMenuItem,
-	NavigationMenuList,
-} from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { toast } from "@/components/ui/use-toast";
 import VelkavapausLogo from "./VelkavapausLogo";
+import NavHeader from "@/components/ui/nav-header";
 
 const NavigationHeader = () => {
 	const [open, setOpen] = useState(false);
@@ -93,15 +88,17 @@ const NavigationHeader = () => {
 		if (path === "/") {
 			return location.pathname === "/";
 		}
-		return location.pathname === path || 
-		       (path !== "/" && location.pathname.startsWith(`${path}/`));
+		return (
+			location.pathname === path ||
+			(path !== "/" && location.pathname.startsWith(`${path}/`))
+		);
 	};
 
 	return (
-		<header className="bg-background sticky top-0 z-50 w-full border-b">
+		<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b">
 			<div className="container flex h-16 items-center justify-between px-4">
-				<div 
-					className="flex items-center cursor-pointer" 
+				<div
+					className="flex items-center cursor-pointer"
 					onClick={() => navigate("/")}
 				>
 					<VelkavapausLogo />
@@ -158,21 +155,7 @@ const NavigationHeader = () => {
 					</Sheet>
 				) : (
 					<div className="flex items-center gap-4">
-						<NavigationMenu>
-							<NavigationMenuList>
-								{links.map((link) => (
-									<NavigationMenuItem key={link.href}>
-										<Button
-											onClick={() => handleNavigation(link.href)}
-											variant={isActive(link.href) ? "secondary" : "ghost"}
-											className="h-9"
-										>
-											{link.label}
-										</Button>
-									</NavigationMenuItem>
-								))}
-							</NavigationMenuList>
-						</NavigationMenu>
+						<NavHeader onNavigate={handleNavigation} />
 
 						<div className="flex items-center gap-2">
 							<LanguageSwitcher />
