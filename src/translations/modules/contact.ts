@@ -15,15 +15,19 @@ export const contact = {
     responseText: "We aim to respond to all inquiries within 1-2 business days.",
     formTitle: "Send us a message",
     formDesc: "Fill out the form below and we'll get back to you as soon as possible.",
+    name: "Name",
+    email: "Email",
     message: "Message",
     namePlaceholder: "Your name",
     emailPlaceholder: "your.email@example.com",
     messagePlaceholder: "How can we help you?",
     submit: "Send Message",
+    submitting: "Submitting...",
     submitSuccess: "Your message has been sent!",
     thankYou: "Thank you!",
     successMessage: "Your message has been received. We'll get back to you shortly.",
-    sendAnother: "Send another message"
+    sendAnother: "Send another message",
+    error: "An error occurred while submitting the form"
   },
   fi: {
     pageTitle: "Ota yhteyttä",
@@ -38,15 +42,19 @@ export const contact = {
     responseText: "Pyrimme vastaamaan kaikkiin tiedusteluihin 1-2 arkipäivän kuluessa.",
     formTitle: "Lähetä meille viesti",
     formDesc: "Täytä alla oleva lomake, niin otamme sinuun yhteyttä mahdollisimman pian.",
+    name: "Nimi",
+    email: "Sähköposti",
     message: "Viesti",
     namePlaceholder: "Nimesi",
     emailPlaceholder: "sahkoposti@esimerkki.fi",
     messagePlaceholder: "Miten voimme auttaa sinua?",
     submit: "Lähetä viesti",
+    submitting: "Lähetetään...",
     submitSuccess: "Viestisi on lähetetty!",
     thankYou: "Kiitos!",
     successMessage: "Olemme vastaanottaneet viestisi. Palaamme asiaan pian.",
-    sendAnother: "Lähetä toinen viesti"
+    sendAnother: "Lähetä toinen viesti",
+    error: "Lomakkeen lähettämisessä tapahtui virhe"
   }
 };
 

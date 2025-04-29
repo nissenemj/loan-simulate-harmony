@@ -59,16 +59,16 @@ const ContactPage = () => {
         ]);
       
       if (error) {
-        toast.error(t('common.error') || 'An error occurred while submitting the form');
+        toast.error(t('contact.error'));
         console.error('Error submitting contact form:', error);
       } else {
-        toast.success(t('contact.submitSuccess') || 'Your message has been sent!');
+        toast.success(t('contact.submitSuccess'));
         form.reset();
         setSubmitted(true);
       }
     } catch (error) {
       console.error('Contact form submission error:', error);
-      toast.error(t('common.error') || 'An error occurred while submitting the form');
+      toast.error(t('contact.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -149,7 +149,7 @@ const ContactPage = () => {
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('common.name') || 'Name'}</FormLabel>
+                            <FormLabel>{t('contact.name')}</FormLabel>
                             <FormControl>
                               <Input placeholder={t('contact.namePlaceholder')} {...field} />
                             </FormControl>
@@ -163,7 +163,7 @@ const ContactPage = () => {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('common.email') || 'Email'}</FormLabel>
+                            <FormLabel>{t('contact.email')}</FormLabel>
                             <FormControl>
                               <Input 
                                 type="email" 
@@ -181,7 +181,7 @@ const ContactPage = () => {
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('contact.message') || 'Message'}</FormLabel>
+                            <FormLabel>{t('contact.message')}</FormLabel>
                             <FormControl>
                               <Textarea 
                                 placeholder={t('contact.messagePlaceholder')} 
@@ -202,7 +202,7 @@ const ContactPage = () => {
                         {isSubmitting ? (
                           <>
                             <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-r-transparent"></div>
-                            {t('common.submitting') || 'Submitting...'}
+                            {t('contact.submitting')}
                           </>
                         ) : (
                           <>
