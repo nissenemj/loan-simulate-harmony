@@ -154,8 +154,10 @@ const NavigationHeader = () => {
 						</SheetContent>
 					</Sheet>
 				) : (
-					<div className="flex items-center gap-4">
-						<NavHeader onNavigate={handleNavigation} />
+					<div className="flex flex-1 items-center justify-end gap-4">
+						<div className="flex-1 mx-4">
+							<NavHeader onNavigate={handleNavigation} />
+						</div>
 
 						<div className="flex items-center gap-2">
 							<LanguageSwitcher />
