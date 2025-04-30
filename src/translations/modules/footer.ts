@@ -4,9 +4,9 @@ export const footer = {
 	en: {
 		footer: {
 			about: {
-				title: "About Loan Simulate Harmony",
+				title: "About Velkavapaus.fi",
 				description:
-					"Loan Simulate Harmony is a free tool to help you create and track a customized debt repayment plan.",
+					"Velkavapaus.fi is a free tool to help you create and track a customized debt repayment plan.",
 			},
 			aboutUs: {
 				title: "About Us",
