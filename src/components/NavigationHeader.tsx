@@ -85,11 +85,7 @@ const NavigationHeader = () => {
 	// Define navigation items based on user authentication status
 	const mainNavItems = user
 		? [
-				{
-					href: "/dashboard",
-					label: t("navigation.dashboard"),
-					icon: <PieChart className="h-4 w-4" />,
-				},
+				// Dashboard link removed from main nav to avoid duplication with user dropdown
 				{
 					href: "/calculator",
 					label: t("navigation.calculator"),
@@ -275,14 +271,24 @@ const NavigationHeader = () => {
 									<ModeToggle />
 								</div>
 								{user ? (
-									<Button
-										variant="destructive"
-										onClick={handleLogout}
-										className="w-full"
-									>
-										<LogOut className="h-4 w-4 mr-2" />
-										{t("auth.logout")}
-									</Button>
+									<>
+										<Button
+											variant="default"
+											onClick={() => handleNavigation("/dashboard")}
+											className="w-full"
+										>
+											<PieChart className="h-4 w-4 mr-2" />
+											{t("navigation.dashboard")}
+										</Button>
+										<Button
+											variant="destructive"
+											onClick={handleLogout}
+											className="w-full"
+										>
+											<LogOut className="h-4 w-4 mr-2" />
+											{t("auth.logout")}
+										</Button>
+									</>
 								) : (
 									<div className="space-y-2">
 										<Button

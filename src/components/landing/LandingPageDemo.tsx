@@ -189,21 +189,28 @@ const LandingPageDemo = () => {
 	const { monthsDiff, interestDiff } = strategyComparison();
 
 	return (
-		<section className="py-12 px-4">
+		<section className="py-16 px-4 bg-muted/30 dark:bg-muted/10">
 			<div className="container mx-auto max-w-5xl">
-				<div className="text-center mb-8">
-					<h2 className="text-2xl md:text-3xl font-bold mb-2">
+				<div className="text-center mb-10">
+					<div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm mb-3">
+						<Calculator className="h-4 w-4 mr-2" />
+						{t("landing.demo.badge") || "Kokeile nyt"}
+					</div>
+					<h2 className="text-3xl md:text-4xl font-bold mb-3">
 						{t("landing.demo.title")}
 					</h2>
-					<p className="text-muted-foreground max-w-2xl mx-auto">
+					<p className="text-muted-foreground max-w-2xl mx-auto text-lg">
 						{t("landing.demo.subtitle")}
 					</p>
 				</div>
 
-				<Card className="shadow-lg">
-					<CardHeader>
-						<CardTitle>{t("landing.demo.calculatorTitle")}</CardTitle>
-						<CardDescription>
+				<Card className="shadow-xl border-primary/10">
+					<CardHeader className="border-b bg-muted/30 dark:bg-muted/10">
+						<CardTitle className="text-xl md:text-2xl flex items-center">
+							<Calculator className="h-5 w-5 mr-2 text-primary" />
+							{t("landing.demo.calculatorTitle")}
+						</CardTitle>
+						<CardDescription className="text-base">
 							{t("landing.demo.calculatorDescription")}
 						</CardDescription>
 					</CardHeader>
@@ -404,24 +411,26 @@ const LandingPageDemo = () => {
 						{currentResults && (
 							<div className="space-y-6 pt-4">
 								<div className="border-t pt-6">
-									<h3 className="text-lg font-medium mb-4">
+									<h3 className="text-xl font-semibold mb-6 flex items-center">
+										<Lightbulb className="h-5 w-5 mr-2 text-primary" />
 										{t("landing.demo.resultsTitle")}
 									</h3>
 
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 										{/* Time savings */}
-										<Card className="bg-muted/30">
-											<CardContent className="pt-6">
-												<div className="flex items-start gap-4">
-													<div className="bg-primary/10 p-2 rounded-full">
+										<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
+											<CardContent className="pt-6 relative">
+												<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
+												<div className="flex items-start gap-4 relative z-10">
+													<div className="bg-primary/20 p-3 rounded-full">
 														<Clock className="h-6 w-6 text-primary" />
 													</div>
 													<div>
-														<h4 className="font-medium">
+														<h4 className="font-medium text-lg">
 															{t("landing.demo.timeSavingsTitle")}
 														</h4>
-														<div className="mt-1 space-y-1">
-															<p className="text-2xl font-bold">
+														<div className="mt-2 space-y-1">
+															<p className="text-3xl font-bold">
 																{monthsSaved} {t("landing.demo.months")}
 															</p>
 															<p className="text-sm text-muted-foreground">
@@ -434,18 +443,19 @@ const LandingPageDemo = () => {
 										</Card>
 
 										{/* Interest savings */}
-										<Card className="bg-muted/30">
-											<CardContent className="pt-6">
-												<div className="flex items-start gap-4">
-													<div className="bg-primary/10 p-2 rounded-full">
+										<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
+											<CardContent className="pt-6 relative">
+												<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
+												<div className="flex items-start gap-4 relative z-10">
+													<div className="bg-primary/20 p-3 rounded-full">
 														<Coins className="h-6 w-6 text-primary" />
 													</div>
 													<div>
-														<h4 className="font-medium">
+														<h4 className="font-medium text-lg">
 															{t("landing.demo.interestSavingsTitle")}
 														</h4>
-														<div className="mt-1 space-y-1">
-															<p className="text-2xl font-bold">
+														<div className="mt-2 space-y-1">
+															<p className="text-3xl font-bold">
 																{currencyFormatter.format(interestSaved)}
 															</p>
 															<p className="text-sm text-muted-foreground">
@@ -527,22 +537,24 @@ const LandingPageDemo = () => {
 								</div>
 
 								{/* CTA */}
-								<div className="border-t pt-6 text-center">
-									<h3 className="text-lg font-medium mb-2">
-										{t("landing.demo.ctaTitle")}
-									</h3>
-									<p className="text-muted-foreground mb-4 max-w-2xl mx-auto">
-										{t("landing.demo.ctaDescription")}
-									</p>
+								<div className="border-t pt-8 text-center">
+									<div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 shadow-md">
+										<h3 className="text-xl font-semibold mb-3">
+											{t("landing.demo.ctaTitle")}
+										</h3>
+										<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+											{t("landing.demo.ctaDescription")}
+										</p>
 
-									<Button
-										size="lg"
-										className="bg-primary text-white hover:bg-primary/90 transition-colors dark:bg-brand-primary dark:hover:bg-brand-primary-light"
-										onClick={handleCTAClick}
-									>
-										{t("landing.demo.ctaButton")}
-										<ArrowRight className="ml-2 h-5 w-5" />
-									</Button>
+										<Button
+											size="lg"
+											className="bg-primary text-white hover:bg-primary/90 transition-colors dark:bg-brand-primary dark:hover:bg-brand-primary-light h-12 px-6 text-base"
+											onClick={handleCTAClick}
+										>
+											{t("landing.demo.ctaButton")}
+											<ArrowRight className="ml-2 h-5 w-5" />
+										</Button>
+									</div>
 								</div>
 							</div>
 						)}

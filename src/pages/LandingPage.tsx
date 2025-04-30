@@ -19,6 +19,7 @@ import AdSenseBanner from "@/components/AdSenseBanner";
 import { affiliateBanners } from "@/utils/affiliateData";
 import AffiliateBanner from "@/components/affiliate/AffiliateBanner";
 import LandingPageDemo from "@/components/landing/LandingPageDemo";
+import LazyImage from "@/components/ui/lazy-image";
 
 const LandingPage = () => {
 	const { t, language } = useLanguage();
@@ -99,21 +100,24 @@ const LandingPage = () => {
 			</Helmet>
 
 			<div className="hero-gradient">
-				<section className="pt-10 pb-16 px-4 md:pt-16 md:pb-20">
+				<section className="pt-12 pb-16 px-4 md:pt-20 md:pb-24">
 					<div className="container mx-auto max-w-5xl">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
 							<div className="space-y-6">
-								<h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+								<div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm mb-2">
+									{t("landing.hero.badge") || "Velkavapaus.fi"}
+								</div>
+								<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
 									{t("landing.hero.headline")}
 								</h1>
-								<p className="text-lg md:text-xl text-muted-foreground max-w-md">
+								<p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed">
 									{t("landing.hero.subheadline")}
 								</p>
 								{!user ? (
-									<div className="flex flex-col sm:flex-row gap-4">
+									<div className="flex flex-col sm:flex-row gap-4 pt-2">
 										<Button
 											size="lg"
-											className="bg-primary hover:bg-primary/90 transition-colors"
+											className="bg-primary hover:bg-primary/90 transition-colors h-12 px-6 text-base"
 											onClick={handleCTAClick}
 										>
 											{t("landing.hero.cta")}
@@ -122,16 +126,17 @@ const LandingPage = () => {
 										<Button
 											variant="outline"
 											size="lg"
+											className="h-12 px-6 text-base"
 											onClick={() => navigate("/terms")}
 										>
 											{t("landing.hero.secondaryCta")}
 										</Button>
 									</div>
 								) : (
-									<div className="flex flex-col sm:flex-row gap-4">
+									<div className="flex flex-col sm:flex-row gap-4 pt-2">
 										<Button
 											size="lg"
-											className="bg-primary hover:bg-primary/90 transition-colors"
+											className="bg-primary hover:bg-primary/90 transition-colors h-12 px-6 text-base"
 											onClick={() => navigate("/dashboard")}
 										>
 											{t("landing.hero.loggedInCta")}
@@ -140,19 +145,32 @@ const LandingPage = () => {
 										<Button
 											variant="outline"
 											size="lg"
+											className="h-12 px-6 text-base"
 											onClick={() => navigate("/blog")}
 										>
 											{t("landing.hero.blogCta")}
 										</Button>
 									</div>
 								)}
+
+								<div className="pt-4 flex items-center text-sm text-muted-foreground">
+									<CheckCircle className="h-4 w-4 mr-2 text-primary" />
+									<span>
+										{t("landing.hero.feature1") || "Ilmainen käyttää"}
+									</span>
+									<span className="mx-2">•</span>
+									<CheckCircle className="h-4 w-4 mr-2 text-primary" />
+									<span>
+										{t("landing.hero.feature2") || "Ei rekisteröintiä"}
+									</span>
+								</div>
 							</div>
-							<div className="rounded-lg shadow-xl overflow-hidden hidden md:block">
-								<img
+							<div className="rounded-2xl shadow-xl overflow-hidden hidden md:block border border-muted/20 bg-card">
+								<LazyImage
 									src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600"
 									alt={t("landing.hero.imageAlt")}
 									className="w-full h-auto object-cover"
-									loading="lazy"
+									wrapperClassName="aspect-[4/3]"
 								/>
 							</div>
 						</div>
@@ -282,11 +300,11 @@ const LandingPage = () => {
 												</ul>
 											</div>
 											<div className="rounded-lg overflow-hidden shadow-md">
-												<img
+												<LazyImage
 													src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
 													alt={t("landing.methods.avalanche.imageAlt")}
 													className="w-full h-auto"
-													loading="lazy"
+													wrapperClassName="aspect-[4/3]"
 												/>
 											</div>
 										</div>
@@ -327,11 +345,11 @@ const LandingPage = () => {
 												</ul>
 											</div>
 											<div className="rounded-lg overflow-hidden shadow-md">
-												<img
+												<LazyImage
 													src="https://images.unsplash.com/photo-1586892477838-2b96e85e0f96?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=500"
 													alt={t("landing.methods.snowball.imageAlt")}
 													className="w-full h-auto"
-													loading="lazy"
+													wrapperClassName="aspect-[4/3]"
 												/>
 											</div>
 										</div>
