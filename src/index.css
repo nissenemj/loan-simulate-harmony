@@ -1,591 +1,634 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* Base colors */
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
-    
-    /* Component colors */
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    
-    /* Brand colors */
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 142 71% 45%;
-    --secondary-foreground: 210 40% 98%;
-    
-    /* UI colors */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 90%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    
-    /* Border and input colors */
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222 84% 4.9%;
+	:root {
+		/* Base colors */
+		--background: 0 0% 100%;
+		--foreground: 222 47% 11%;
 
-    --radius: 0.75rem;
-  }
+		/* Component colors */
+		--card: 0 0% 100%;
+		--card-foreground: 222 47% 11%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 222 47% 11%;
 
-  .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
-    
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
-    
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 142 71% 45%;
-    --secondary-foreground: 210 40% 98%;
-    
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+		/* Brand colors */
+		--primary: 217 91% 60%;
+		--primary-foreground: 210 40% 98%;
+		--secondary: 142 71% 45%;
+		--secondary-foreground: 210 40% 98%;
+
+		/* UI colors */
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+		--accent: 210 40% 90%;
+		--accent-foreground: 222.2 47.4% 11.2%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 210 40% 98%;
+
+		/* Border and input colors */
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--ring: 222 84% 4.9%;
+
+		--radius: 0.75rem;
+	}
+
+	.dark {
+		--background: 222 47% 11%;
+		--foreground: 210 40% 98%;
+
+		--card: 222 47% 11%;
+		--card-foreground: 210 40% 98%;
+		--popover: 222 47% 11%;
+		--popover-foreground: 210 40% 98%;
+
+		--primary: 217 91% 60%;
+		--primary-foreground: 210 40% 98%;
+		--secondary: 142 71% 45%;
+		--secondary-foreground: 210 40% 98%;
+
+		--muted: 217.2 32.6% 17.5%;
+		--muted-foreground: 215 20.2% 65.1%;
+		--accent: 217.2 32.6% 17.5%;
+		--accent-foreground: 210 40% 98%;
+
+		--destructive: 0 62.8% 30.6%;
+		--destructive-foreground: 210 40% 98%;
+
+		--border: 217.2 32.6% 17.5%;
+		--input: 217.2 32.6% 17.5%;
+		--ring: 212.7 26.8% 83.9%;
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
-  /* Typography scale */
-  h1, .h1 {
-    @apply font-display text-4xl font-bold tracking-tight mb-section;
-  }
-  
-  h2, .h2 {
-    @apply font-display text-3xl font-semibold tracking-tight mb-content;
-  }
-  
-  h3, .h3 {
-    @apply font-display text-2xl font-semibold mb-4;
-  }
-  
-  h4, .h4 {
-    @apply font-display text-xl font-medium mb-3;
-  }
-  
-  p, li {
-    @apply font-body text-base leading-relaxed mb-content;
-  }
-  
-  /* Enhanced vertical rhythm */
-  section {
-    @apply py-section;
-  }
-  
-  /* Content spacing */
-  .content-spacing > * + * {
-    @apply mt-content;
-  }
-  
-  /* Button styles using brand colors */
-  .btn-primary {
-    @apply bg-velkavapaus-blue text-white hover:bg-velkavapaus-blue/90 
+	* {
+		@apply border-border;
+	}
+
+	/* Typography scale */
+	h1,
+	.h1 {
+		@apply font-display text-4xl font-bold tracking-tight mb-section;
+	}
+
+	h2,
+	.h2 {
+		@apply font-display text-3xl font-semibold tracking-tight mb-content;
+	}
+
+	h3,
+	.h3 {
+		@apply font-display text-2xl font-semibold mb-4;
+	}
+
+	h4,
+	.h4 {
+		@apply font-display text-xl font-medium mb-3;
+	}
+
+	p,
+	li {
+		@apply font-body text-base leading-relaxed mb-content;
+	}
+
+	/* Enhanced vertical rhythm */
+	section {
+		@apply py-section;
+	}
+
+	/* Content spacing */
+	.content-spacing > * + * {
+		@apply mt-content;
+	}
+
+	/* Button styles using brand colors */
+	.btn-primary {
+		@apply bg-velkavapaus-blue text-white hover:bg-velkavapaus-blue/90
            transition-colors duration-200;
-  }
-  
-  .btn-secondary {
-    @apply bg-velkavapaus-green text-white hover:bg-velkavapaus-green/90 
+	}
+
+	.btn-secondary {
+		@apply bg-velkavapaus-green text-white hover:bg-velkavapaus-green/90
            transition-colors duration-200;
-  }
-  
-  /* Existing utility classes */
-  html {
-    font-size: 15px;
-  }
+	}
 
-  @media (min-width: 768px) {
-    html {
-      font-size: 16px;
-    }
-  }
+	/* Existing utility classes */
+	html {
+		font-size: 15px;
+	}
 
-  /* Improve touch targets on mobile */
-  @media (max-width: 767px) {
-    button,
-    .button,
-    a.button,
-    input[type="button"],
-    input[type="submit"],
-    input[type="reset"] {
-      min-height: 44px;
-      min-width: 44px;
-    }
+	@media (min-width: 768px) {
+		html {
+			font-size: 16px;
+		}
+	}
 
-    input,
-    select,
-    textarea {
-      font-size: 16px; /* Prevents iOS zoom on focus */
-    }
-  }
+	/* Improve touch targets on mobile */
+	@media (max-width: 767px) {
+		button,
+		.button,
+		a.button,
+		input[type="button"],
+		input[type="submit"],
+		input[type="reset"] {
+			min-height: 44px;
+			min-width: 44px;
+		}
 
-  :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+		input,
+		select,
+		textarea {
+			font-size: 16px; /* Prevents iOS zoom on focus */
+		}
+	}
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+	:root {
+		--background: 210 40% 98%;
+		--foreground: 222 47% 11%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+		--card: 0 0% 100%;
+		--card-foreground: 222 47% 11%;
 
-    --primary: 240 70% 40%;
-    --primary-foreground: 0 0% 98%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 222 47% 11%;
 
-    --secondary: 240 25% 96%;
-    --secondary-foreground: 222 47% 11%;
+		--primary: 240 70% 40%;
+		--primary-foreground: 0 0% 98%;
 
-    --muted: 240 25% 96%;
-    --muted-foreground: 215 16% 47%;
+		--secondary: 240 25% 96%;
+		--secondary-foreground: 222 47% 11%;
 
-    --accent: 240 25% 96%;
-    --accent-foreground: 222 47% 11%;
+		--muted: 240 25% 96%;
+		--muted-foreground: 215 16% 47%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+		--accent: 240 25% 96%;
+		--accent-foreground: 222 47% 11%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 84% 5%;
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 210 40% 98%;
 
-    --radius: 0.75rem;
+		--border: 214 32% 91%;
+		--input: 214 32% 91%;
+		--ring: 222 84% 5%;
 
-    --sidebar-background: 240 30% 98%;
-    --sidebar-foreground: 240 10% 26%;
-    --sidebar-primary: 240 70% 40%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 25% 96%;
-    --sidebar-accent-foreground: 240 10% 10%;
-    --sidebar-border: 240 13% 91%;
-    --sidebar-ring: 240 70% 60%;
+		--radius: 0.75rem;
 
-    /* Tilavärit */
-    --state-success: 156 71% 41%;
-    --state-warning: 43 93% 62%;
-    --state-error: 354 79% 59%;
-    --state-info: 204 80% 58%;
-  }
+		--sidebar-background: 240 30% 98%;
+		--sidebar-foreground: 240 10% 26%;
+		--sidebar-primary: 240 70% 40%;
+		--sidebar-primary-foreground: 0 0% 98%;
+		--sidebar-accent: 240 25% 96%;
+		--sidebar-accent-foreground: 240 10% 10%;
+		--sidebar-border: 240 13% 91%;
+		--sidebar-ring: 240 70% 60%;
 
-  .dark {
-    /* Taustat */
-    --background: 0 0% 7%; /* #121212 */
-    --foreground: 0 0% 100%; /* #FFFFFF */
+		/* Tilavärit */
+		--state-success: 156 71% 41%;
+		--state-warning: 43 93% 62%;
+		--state-error: 354 79% 59%;
+		--state-info: 204 80% 58%;
+	}
 
-    --card: 0 0% 12%; /* #1E1E1E */
-    --card-foreground: 0 0% 88%; /* #E0E0E0 */
+	.dark {
+		/* Taustat */
+		--background: 0 0% 7%; /* #121212 */
+		--foreground: 0 0% 100%; /* #FFFFFF */
 
-    --popover: 0 0% 12%; /* #1E1E1E */
-    --popover-foreground: 0 0% 88%; /* #E0E0E0 */
+		--card: 0 0% 12%; /* #1E1E1E */
+		--card-foreground: 0 0% 88%; /* #E0E0E0 */
 
-    --primary: 246 89% 69%; /* #6E64FB */
-    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+		--popover: 0 0% 12%; /* #1E1E1E */
+		--popover-foreground: 0 0% 88%; /* #E0E0E0 */
 
-    --secondary: 0 0% 16%; /* #282828 */
-    --secondary-foreground: 0 0% 88%; /* #E0E0E0 */
+		--primary: 246 89% 69%; /* #6E64FB */
+		--primary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --muted: 0 0% 16%; /* #282828 */
-    --muted-foreground: 0 0% 67%; /* #AAAAAA */
+		--secondary: 0 0% 16%; /* #282828 */
+		--secondary-foreground: 0 0% 88%; /* #E0E0E0 */
 
-    --accent: 0 0% 16%; /* #282828 */
-    --accent-foreground: 0 0% 100%; /* #FFFFFF */
+		--muted: 0 0% 16%; /* #282828 */
+		--muted-foreground: 0 0% 67%; /* #AAAAAA */
 
-    --destructive: 354 79% 59%; /* #E64553 */
-    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+		--accent: 0 0% 16%; /* #282828 */
+		--accent-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --border: 0 0% 20%; /* #333333 */
-    --input: 0 0% 20%; /* #333333 */
-    --ring: 246 89% 69%; /* #6E64FB */
+		--destructive: 354 79% 59%; /* #E64553 */
+		--destructive-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --sidebar-background: 0 0% 12%; /* #1E1E1E */
-    --sidebar-foreground: 0 0% 88%; /* #E0E0E0 */
-    --sidebar-primary: 246 89% 69%; /* #6E64FB */
-    --sidebar-primary-foreground: 0 0% 100%; /* #FFFFFF */
-    --sidebar-accent: 0 0% 16%; /* #282828 */
-    --sidebar-accent-foreground: 0 0% 88%; /* #E0E0E0 */
-    --sidebar-border: 0 0% 20%; /* #333333 */
-    --sidebar-ring: 246 89% 69%; /* #6E64FB */
+		--border: 0 0% 20%; /* #333333 */
+		--input: 0 0% 20%; /* #333333 */
+		--ring: 246 89% 69%; /* #6E64FB */
 
-    /* Tilavärit */
-    --state-success: 156 71% 41%; /* #1EB26F */
-    --state-warning: 43 93% 62%; /* #F6C046 */
-    --state-error: 354 79% 59%; /* #E64553 */
-    --state-info: 204 80% 58%; /* #39A0ED */
-  }
+		--sidebar-background: 0 0% 12%; /* #1E1E1E */
+		--sidebar-foreground: 0 0% 88%; /* #E0E0E0 */
+		--sidebar-primary: 246 89% 69%; /* #6E64FB */
+		--sidebar-primary-foreground: 0 0% 100%; /* #FFFFFF */
+		--sidebar-accent: 0 0% 16%; /* #282828 */
+		--sidebar-accent-foreground: 0 0% 88%; /* #E0E0E0 */
+		--sidebar-border: 0 0% 20%; /* #333333 */
+		--sidebar-ring: 246 89% 69%; /* #6E64FB */
+
+		/* Tilavärit */
+		--state-success: 156 71% 41%; /* #1EB26F */
+		--state-warning: 43 93% 62%; /* #F6C046 */
+		--state-error: 354 79% 59%; /* #E64553 */
+		--state-info: 204 80% 58%; /* #39A0ED */
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+	* {
+		@apply border-border;
+	}
 
-  html,
-  body {
-    @apply scroll-smooth antialiased font-montserrat;
-  }
+	html,
+	body {
+		@apply scroll-smooth antialiased font-montserrat;
+	}
 
-  body {
-    @apply bg-background text-foreground transition-colors duration-300;
-  }
+	body {
+		@apply bg-background text-foreground transition-colors duration-300;
+	}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-montserrat font-semibold tracking-tight;
-  }
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-montserrat font-semibold tracking-tight;
+	}
 
-  /* Remove default focus styles for mouse users ONLY if :focus-visible is supported */
-  .js-focus-visible :focus:not(.focus-visible) {
-    @apply outline-none;
-  }
+	/* Remove default focus styles for mouse users ONLY if :focus-visible is supported */
+	.js-focus-visible :focus:not(.focus-visible) {
+		@apply outline-none;
+	}
 
-  /* Add default focus style back for keyboard navigation/accessibility */
-  .focus-visible,
-  :focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary;
-  }
+	/* Add default focus style back for keyboard navigation/accessibility */
+	.focus-visible,
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-primary;
+	}
 
-  /* Hide number input spinners */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
+	/* Hide number input spinners */
+	input[type="number"]::-webkit-inner-spin-button,
+	input[type="number"]::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
 
-  /* Smooth scrolling */
-  .smooth-scroll {
-    @apply scroll-smooth;
-  }
+	/* Smooth scrolling */
+	.smooth-scroll {
+		@apply scroll-smooth;
+	}
 
-  /* Glass effect */
-  .glass {
-    @apply bg-white/70 dark:bg-black/70 backdrop-blur-subtle shadow-glass;
-  }
+	/* Glass effect */
+	.glass {
+		@apply bg-white/70 dark:bg-black/70 backdrop-blur-subtle shadow-glass;
+	}
 
-  /* Loan card transitions */
-  .loan-card {
-    @apply transition-all duration-500 ease-out;
-  }
+	/* Loan card transitions */
+	.loan-card {
+		@apply transition-all duration-500 ease-out;
+	}
 
-  .loan-card.inactive {
-    @apply opacity-40 grayscale;
-  }
+	.loan-card.inactive {
+		@apply opacity-40 grayscale;
+	}
 
-  /* Table animations */
-  .table-row-enter {
-    @apply opacity-0 -translate-y-4;
-  }
-  .table-row-enter-active {
-    @apply opacity-100 translate-y-0 transition-all duration-300 ease-out;
-  }
+	/* Table animations */
+	.table-row-enter {
+		@apply opacity-0 -translate-y-4;
+	}
+	.table-row-enter-active {
+		@apply opacity-100 translate-y-0 transition-all duration-300 ease-out;
+	}
 
-  /* Form focus styles */
-  .form-focus-ring {
-    @apply focus-within:ring-2 focus-within:ring-primary/20 focus-within:ring-offset-2 transition-all duration-200;
-  }
+	/* Form focus styles */
+	.form-focus-ring {
+		@apply focus-within:ring-2 focus-within:ring-primary/20 focus-within:ring-offset-2 transition-all duration-200;
+	}
 
-  /* Text wrapping utilities */
-  .text-wrap {
-    @apply break-words hyphens-auto;
-  }
+	/* Text wrapping utilities */
+	.text-wrap {
+		@apply break-words hyphens-auto;
+	}
 
-  /* Custom card styles */
-  .velkavapaus-card {
-    @apply rounded-lg border bg-gradient-to-b from-white to-secondary/30 dark:from-secondary/10 dark:to-secondary/5 shadow-md;
-  }
+	/* Custom card styles */
+	.velkavapaus-card {
+		@apply rounded-lg border bg-gradient-to-b from-white to-secondary/30 dark:from-secondary/10 dark:to-secondary/5 shadow-md;
+	}
 
-  /* Dark mode card styles */
-  .dark .velkavapaus-card {
-    @apply border-border/30 bg-gradient-to-b from-accent/20 to-background shadow-lg;
-  }
+	/* Dark mode card styles */
+	.dark .velkavapaus-card {
+		@apply border-border/30 bg-gradient-to-b from-accent/20 to-background shadow-lg;
+	}
 
-  /* Glass morphism */
-  .glassmorphism {
-    @apply backdrop-blur-xl bg-white/5 dark:bg-black/30 border border-white/10 dark:border-white/5 shadow-glass;
-  }
+	/* Glass morphism */
+	.glassmorphism {
+		@apply backdrop-blur-xl bg-white/5 dark:bg-black/30 border border-white/10 dark:border-white/5 shadow-glass;
+	}
 
-  /* Dark mode specific utility classes */
-  .dark-card-gradient {
-    @apply bg-gradient-to-br from-secondary/30 to-background;
-  }
+	/* Dark mode specific utility classes */
+	.dark-card-gradient {
+		@apply bg-gradient-to-br from-secondary/30 to-background;
+	}
 
-  /* Hero gradient */
-  .hero-gradient {
-    @apply bg-gradient-to-b from-background via-background to-accent/50 dark:from-background dark:via-background/95 dark:to-accent/20;
-  }
+	/* Hero gradient */
+	.hero-gradient {
+		@apply bg-gradient-to-b from-background via-background to-accent/50 dark:from-background dark:via-background/95 dark:to-accent/20;
+	}
 }
 
 /* Logo styles */
 .velkavapaus-logo {
-  @apply relative inline-flex flex-col items-center font-montserrat;
+	@apply relative inline-flex flex-col items-center font-montserrat;
 }
 
 .velkavapaus-logo-symbol {
-  @apply relative h-12 w-24 mb-1;
+	@apply relative h-12 w-24 mb-1;
 }
 
 .velkavapaus-logo-text {
-  @apply text-base font-medium tracking-tight text-primary;
+	@apply text-base font-medium tracking-tight text-primary;
 }
 
 .velkavapaus-logo-line {
-  @apply w-full h-0.5 bg-primary/80 mt-0.5 mb-1;
+	@apply w-full h-0.5 bg-primary/80 mt-0.5 mb-1;
 }
 
 /* Mobile-friendly styles */
 @media (max-width: 767px) {
-  /* Improve spacing on mobile */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    word-break: break-word;
-    hyphens: auto;
-  }
+	/* Improve spacing on mobile */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		word-break: break-word;
+		hyphens: auto;
+	}
 
-  /* Adjust table display on small screens */
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+	/* Adjust table display on small screens */
+	table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
 
-  /* Improve form elements on mobile */
-  .form-row {
-    margin-bottom: 1.25rem;
-  }
+	/* Improve form elements on mobile */
+	.form-row {
+		margin-bottom: 1.25rem;
+	}
 
-  /* Better spacing for stacked elements */
-  .stack-mobile > * + * {
-    margin-top: 1rem;
-  }
+	/* Better spacing for stacked elements */
+	.stack-mobile > * + * {
+		margin-top: 1rem;
+	}
 }
 
 /* Markdown styles for blog content */
 .markdown h1 {
-  @apply text-2xl md:text-3xl font-bold mt-6 mb-4;
+	@apply text-2xl md:text-3xl font-bold mt-6 mb-4;
 }
 
 .markdown h2 {
-  @apply text-xl md:text-2xl font-bold mt-5 mb-3;
+	@apply text-xl md:text-2xl font-bold mt-5 mb-3;
 }
 
 .markdown h3 {
-  @apply text-lg md:text-xl font-semibold mt-4 mb-2;
+	@apply text-lg md:text-xl font-semibold mt-4 mb-2;
 }
 
 /* Custom CSS variables for our new dark theme */
 :root {
-  /* Dark Mode */
-  --bg-primary: #121212;
-  --bg-secondary: #1E1E1E;
-  --bg-elevated: #282828;
-  --bg-highlight: #333333;
+	/* Dark Mode */
+	--bg-primary: #121212;
+	--bg-secondary: #1e1e1e;
+	--bg-elevated: #282828;
+	--bg-highlight: #333333;
 
-  --text-primary: #FFFFFF;
-  --text-secondary: #E0E0E0;
-  --text-tertiary: #AAAAAA;
-  --text-disabled: #777777;
+	--text-primary: #ffffff;
+	--text-secondary: #e0e0e0;
+	--text-tertiary: #aaaaaa;
+	--text-disabled: #777777;
 
-  --brand-primary: #6E64FB;
-  --brand-primary-light: #8F87FF;
-  --brand-primary-dark: #4A3FCC;
-  --brand-secondary: #2EBFAA;
+	--brand-primary: #6e64fb;
+	--brand-primary-light: #8f87ff;
+	--brand-primary-dark: #4a3fcc;
+	--brand-secondary: #2ebfaa;
 
-  --state-success: #1EB26F;
-  --state-warning: #F6C046;
-  --state-error: #E64553;
-  --state-info: #39A0ED;
+	--state-success: #1eb26f;
+	--state-warning: #f6c046;
+	--state-error: #e64553;
+	--state-info: #39a0ed;
 }
 
 /* Add these utility classes for dark mode elements */
 .dark .bg-dark-primary {
-  background-color: var(--bg-primary);
+	background-color: var(--bg-primary);
 }
 
 .dark .bg-dark-secondary {
-  background-color: var(--bg-secondary);
+	background-color: var(--bg-secondary);
 }
 
 .dark .bg-dark-elevated {
-  background-color: var(--bg-elevated);
+	background-color: var(--bg-elevated);
 }
 
 .dark .bg-dark-highlight {
-  background-color: var(--bg-highlight);
+	background-color: var(--bg-highlight);
 }
 
 .dark .text-dark-primary {
-  color: var(--text-primary);
+	color: var(--text-primary);
 }
 
 .dark .text-dark-secondary {
-  color: var(--text-secondary);
+	color: var(--text-secondary);
 }
 
 .dark .text-dark-tertiary {
-  color: var(--text-tertiary);
+	color: var(--text-tertiary);
 }
 
 .dark .text-dark-disabled {
-  color: var(--text-disabled);
+	color: var(--text-disabled);
 }
 
 .dark .border-dark-highlight {
-  border-color: var(--bg-highlight);
+	border-color: var(--bg-highlight);
 }
 
 .dark .shadow-dark-subtle {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .dark .shadow-dark-medium {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .dark .shadow-dark-strong {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
 }
 
 /* Chart and visualization styles for dark mode */
 .dark .recharts-text {
-  fill: #E0E0E0 !important;
+	fill: #e0e0e0 !important;
 }
 
 .dark .recharts-cartesian-grid-horizontal line,
 .dark .recharts-cartesian-grid-vertical line {
-  stroke: rgba(224, 224, 224, 0.2) !important;
+	stroke: rgba(224, 224, 224, 0.2) !important;
 }
 
 .dark .recharts-default-tooltip {
-  background-color: #1E1E1E !important;
-  border-color: #333333 !important;
-  color: #E0E0E0 !important;
+	background-color: #1e1e1e !important;
+	border-color: #333333 !important;
+	color: #e0e0e0 !important;
 }
 
 .dark .recharts-tooltip-label {
-  color: #FFFFFF !important;
+	color: #ffffff !important;
 }
 
 .dark .recharts-tooltip-item-name,
 .dark .recharts-tooltip-item-value {
-  color: #E0E0E0 !important;
+	color: #e0e0e0 !important;
 }
 
 .dark .recharts-legend-item-text {
-  color: #E0E0E0 !important;
+	color: #e0e0e0 !important;
 }
 
 .dark .recharts-cartesian-axis-line {
-  stroke: rgba(224, 224, 224, 0.3) !important;
+	stroke: rgba(224, 224, 224, 0.3) !important;
 }
 
 .dark .recharts-polar-angle-axis-tick-value,
 .dark .recharts-radial-bar-background-sector {
-  fill: #E0E0E0 !important;
+	fill: #e0e0e0 !important;
+}
+
+/* Enhanced button styling for dark mode */
+.dark button,
+.dark .button {
+	color: var(--text-primary);
+}
+
+.dark button.bg-primary,
+.dark .button.bg-primary {
+	background-color: var(--brand-primary);
+	color: white;
+}
+
+.dark button.bg-primary:hover,
+.dark .button.bg-primary:hover {
+	background-color: var(--brand-primary-light);
+}
+
+.dark button.bg-secondary,
+.dark .button.bg-secondary {
+	background-color: var(--bg-elevated);
+	color: var(--text-secondary);
+}
+
+.dark button.bg-secondary:hover,
+.dark .button.bg-secondary:hover {
+	background-color: var(--bg-highlight);
+}
+
+.dark button.border,
+.dark .button.border {
+	border-color: var(--bg-highlight);
+}
+
+.dark button.border:hover,
+.dark .button.border:hover {
+	background-color: var(--bg-elevated);
 }
 
 /* Position legend outside of pie charts */
 .pie-chart-container {
-  position: relative;
+	position: relative;
 }
 
 .pie-chart-legend {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 1rem;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 1rem;
 }
 
 .pie-chart-legend-item {
-  display: flex;
-  align-items: center;
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
+	display: flex;
+	align-items: center;
+	margin-right: 1rem;
+	margin-bottom: 0.5rem;
 }
 
 .pie-chart-legend-color {
-  width: 12px;
-  height: 12px;
-  margin-right: 4px;
-  border-radius: 2px;
+	width: 12px;
+	height: 12px;
+	margin-right: 4px;
+	border-radius: 2px;
 }
 
 /* Mobile styles, form elements, and glassmorphism effects */
 @media (max-width: 767px) {
-  /* Improve spacing on mobile */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    word-break: break-word;
-    hyphens: auto;
-  }
+	/* Improve spacing on mobile */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		word-break: break-word;
+		hyphens: auto;
+	}
 
-  /* Adjust table display on small screens */
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+	/* Adjust table display on small screens */
+	table {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
 
-  /* Improve form elements on mobile */
-  .form-row {
-    margin-bottom: 1.25rem;
-  }
+	/* Improve form elements on mobile */
+	.form-row {
+		margin-bottom: 1.25rem;
+	}
 
-  /* Better spacing for stacked elements */
-  .stack-mobile > * + * {
-    margin-top: 1rem;
-  }
+	/* Better spacing for stacked elements */
+	.stack-mobile > * + * {
+		margin-top: 1rem;
+	}
 }
 
 /* Markdown styles for blog content */
 .markdown h1 {
-  @apply text-2xl md:text-3xl font-bold mt-6 mb-4;
+	@apply text-2xl md:text-3xl font-bold mt-6 mb-4;
 }
 
 .markdown h2 {
-  @apply text-xl md:text-2xl font-bold mt-5 mb-3;
+	@apply text-xl md:text-2xl font-bold mt-5 mb-3;
 }
 
 .markdown h3 {
-  @apply text-lg md:text-xl font-semibold mt-4 mb-2;
+	@apply text-lg md:text-xl font-semibold mt-4 mb-2;
 }
