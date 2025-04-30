@@ -161,9 +161,10 @@ export const landing = {
 				description:
 					"Luo ilmainen velanmaksusuunnitelma ja ota taloutesi hallintaan Velkavapaus.fi:n avulla. Aloita velaton matkasi tänään!",
 				keywords:
-					"velanmaksu, lainanhallinta, taloustyökalut, velkalumipallostrategia, velkavyörytysstrategia, taloudellinen vapaus, velaton",
+					"velanmaksu, lainanhallinta, taloustyökalut, lumipallo-menetelmä, lumivyöry-menetelmä, taloudellinen vapaus, velaton",
 			},
 			hero: {
+				badge: "Velkavapaus.fi",
 				headline: "Ota hallinta velanmaksustasi",
 				subheadline:
 					"Luo selkeä polku taloudelliseen vapauteen helppokäyttöisillä velanmaksutyökaluilla",
@@ -172,8 +173,11 @@ export const landing = {
 				secondaryCta: "Lue lisää",
 				loggedInCta: "Siirry kojelaudalle",
 				blogCta: "Lue talousvinkkejä",
+				feature1: "Ilmainen käyttää",
+				feature2: "Ei rekisteröintiä",
 			},
 			demo: {
+				badge: "Kokeile nyt",
 				title: "Kokeile velkalaskuriamme",
 				subtitle:
 					"Katso kuinka paljon nopeammin voisit olla velaton yksinkertaisen laskurimme avulla",
@@ -235,9 +239,9 @@ export const landing = {
 				subtitle:
 					"Eri menetelmät toimivat eri ihmisille. Löydä mikä toimii sinulle.",
 				avalanche: {
-					title: "Velkavyöry",
+					title: "Lumivyöry",
 					description:
-						"Velkavyörymenetelmä keskittyy maksamaan korkeakorkoisimmat velat ensin ja tekemään vähimmäismaksut muille veloille.",
+						"Lumivyöry-menetelmä keskittyy maksamaan korkeakorkoisimmat velat ensin ja tekemään vähimmäismaksut muille veloille.",
 					benefit1: "Matemaattisesti optimaalinen - säästää eniten korkokuluja",
 					benefit2: "Vähentää kokonaismaksuaikaa",
 					benefit3: "Paras niille, joita motivoi pitkän aikavälin säästöt",
@@ -245,9 +249,9 @@ export const landing = {
 						"Kaavio, joka näyttää korkomaksujen vähentymisen ajan myötä",
 				},
 				snowball: {
-					title: "Velkalumipalllo",
+					title: "Lumipallo",
 					description:
-						"Velkalumipalllo-menetelmä keskittyy maksamaan pienimmät velat ensin momentin ja motivaation luomiseksi.",
+						"Lumipallo-menetelmä keskittyy maksamaan pienimmät velat ensin momentin ja motivaation luomiseksi.",
 					benefit1: "Luo varhaisia voittoja motivaation rakentamiseksi",
 					benefit2: "Yksinkertaistaa taloutta vähentämällä maksujen määrää",
 					benefit3: "Paras niille, jotka tarvitsevat psykologisia voittoja",
@@ -268,7 +272,7 @@ export const landing = {
 					"Ehdottomasti! Sovellus toimii minkä tahansa tyyppisen lainan kanssa, mukaan lukien opintolainat, luottokortit, henkilökohtaiset lainat, autolainat ja asuntolainat.",
 				question4: "Mikä on lumivyöry- ja lumipallomenetelmien ero?",
 				answer4:
-					"Lumivyörymenetelmässä priorisoidaan korkeakorkoisten velkojen maksaminen ensin säästääksesi eniten korkokuluissa. Lumipallomenetelmässä keskitytään pienimpien velkojen maksamiseen ensin, mikä luo momentin ja motivaation.",
+					"Lumivyöry-menetelmässä priorisoidaan korkeakorkoisten velkojen maksaminen ensin säästääksesi eniten korkokuluissa. Lumipallo-menetelmässä keskitytään pienimpien velkojen maksamiseen ensin, mikä luo momentin ja motivaation.",
 			},
 			finalCta: {
 				title: "Aloita velaton matkasi tänään",
@@ -281,7 +285,7 @@ export const landing = {
 			testimonial2:
 				"Olen kokeillut monia budjetointisovelluksia, mutta tämä on ainoa, joka todella auttoi luomaan realistisen velanmaksusuunnitelman.",
 			testimonial3:
-				"Velkalumipallostrategia muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuoteen mennessä!",
+				"Lumipallo-menetelmä muutti elämäni. Olen jo maksanut kolme luottokorttia ja olen matkalla velattomaksi ensi vuoteen mennessä!",
 		},
 		footer: {
 			about: {
