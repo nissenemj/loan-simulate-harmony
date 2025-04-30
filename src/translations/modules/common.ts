@@ -7,6 +7,7 @@ export const common = {
 			name: "Velkavapaus.fi",
 			description: "Simplify and optimize your debt repayment.",
 			language: "Language",
+			footer: "© 2023 Velkavapaus.fi. All rights reserved.",
 		},
 		language: {
 			en: "English",
@@ -42,6 +43,7 @@ export const common = {
 			name: "Velkavapaus.fi",
 			description: "Yksinkertaista ja optimoi velanmaksuasi.",
 			language: "Kieli",
+			footer: "© 2023 Velkavapaus.fi. Kaikki oikeudet pidätetään.",
 		},
 		language: {
 			en: "English",
