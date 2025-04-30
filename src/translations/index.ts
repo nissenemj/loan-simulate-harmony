@@ -28,6 +28,8 @@ import { contact } from "./modules/contact";
 import { tour } from "./modules/tour";
 import { calculatorEnhancements } from "./modules/calculator-enhancements";
 import { debtPayoff } from "./modules/debt-payoff";
+import { faq } from "./modules/faq";
+import { demoData } from "./modules/demo-data";
 
 // Merge all translation modules for English
 export const en = {
@@ -61,6 +63,8 @@ export const en = {
 	...tour.en,
 	...calculatorEnhancements.en,
 	...debtPayoff.en,
+	...faq.en,
+	...demoData.en,
 };
 
 // Merge all translation modules for Finnish
@@ -95,6 +99,8 @@ export const fi = {
 	...tour.fi,
 	...calculatorEnhancements.fi,
 	...debtPayoff.fi,
+	...faq.fi,
+	...demoData.fi,
 };
 
 // Also export as default for backward compatibility
