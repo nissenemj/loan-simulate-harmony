@@ -28,7 +28,9 @@ const Calculator = () => {
           <p className="text-muted-foreground mt-2">{t('debtStrategies.pageDescription')}</p>
         </div>
         
-        <DebtStrategies />
+        <ErrorProvider>
+          <DebtStrategies />
+        </ErrorProvider>
       </div>
     </div>
   );

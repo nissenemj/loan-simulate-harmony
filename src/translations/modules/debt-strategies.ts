@@ -36,7 +36,21 @@ export const debtStrategies = {
       totalMonthly: "Total Monthly",
       timeToPayoff: "Time to Payoff",
       interestPaid: "Total Interest",
-      calculateButton: "Calculate Payoff Plan"
+      calculateButton: "Calculate Payoff Plan",
+      // Budget input section
+      budgetInput: {
+        title: "Your Monthly Budget",
+        description: "How much can you pay towards debt each month?",
+        currentlyPaying: "Currently paying",
+        minimumPayments: "Minimum payments",
+        budgetAmount: "Budget amount",
+        calculateButton: "Calculate Plan",
+        strategyLabel: "Choose strategy",
+        avalancheStrategy: "Avalanche method",
+        snowballStrategy: "Snowball method",
+        avalancheDescription: "Highest interest first (saves money)",
+        snowballDescription: "Smallest balance first (builds momentum)"
+      }
     }
   },
   fi: {
@@ -73,7 +87,21 @@ export const debtStrategies = {
       totalMonthly: "Kuukausittain yhteensä",
       timeToPayoff: "Maksuaika",
       interestPaid: "Korko yhteensä",
-      calculateButton: "Laske maksusuunnitelma"
+      calculateButton: "Laske maksusuunnitelma",
+      // Budget input section
+      budgetInput: {
+        title: "Kuukausibudjettisi",
+        description: "Kuinka paljon voit maksaa velkoja kuukaudessa?",
+        currentlyPaying: "Maksat nyt",
+        minimumPayments: "Vähimmäismaksut",
+        budgetAmount: "Budjettisumma",
+        calculateButton: "Laske suunnitelma",
+        strategyLabel: "Valitse strategia",
+        avalancheStrategy: "Vyörytysmenetelmä",
+        snowballStrategy: "Lumipallomenetelmä",
+        avalancheDescription: "Korkeimmat korot ensin (säästät rahaa)",
+        snowballDescription: "Pienimmät velat ensin (luo motivaatiota)"
+      }
     }
   }
 };
