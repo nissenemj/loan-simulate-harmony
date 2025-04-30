@@ -27,6 +27,7 @@ import { savings } from "./modules/savings";
 import { contact } from "./modules/contact";
 import { tour } from "./modules/tour";
 import { calculatorEnhancements } from "./modules/calculator-enhancements";
+import { debtPayoff } from "./modules/debt-payoff";
 
 // Merge all translation modules for English
 export const en = {
@@ -59,6 +60,7 @@ export const en = {
 	...contact.en,
 	...tour.en,
 	...calculatorEnhancements.en,
+	...debtPayoff.en,
 };
 
 // Merge all translation modules for Finnish
@@ -92,6 +94,7 @@ export const fi = {
 	...contact.fi,
 	...tour.fi,
 	...calculatorEnhancements.fi,
+	...debtPayoff.fi,
 };
 
 // Also export as default for backward compatibility

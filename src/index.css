@@ -355,7 +355,7 @@
 }
 
 .velkavapaus-logo-symbol {
-	@apply relative h-12 w-24 mb-1;
+	@apply relative h-12 w-24 mb-1 overflow-hidden;
 }
 
 .velkavapaus-logo-text {
