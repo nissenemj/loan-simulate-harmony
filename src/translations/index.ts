@@ -1,4 +1,3 @@
-
 import { common } from "./modules/common";
 import { navigation } from "./modules/navigation";
 import { forms } from "./modules/forms";
@@ -26,6 +25,8 @@ import { affiliate } from "./modules/affiliate";
 import { errors } from "./modules/errors";
 import { savings } from "./modules/savings";
 import { contact } from "./modules/contact";
+import { tour } from "./modules/tour";
+import { calculatorEnhancements } from "./modules/calculator-enhancements";
 
 // Merge all translation modules for English
 export const en = {
@@ -56,6 +57,8 @@ export const en = {
 	...errors.en,
 	...savings.en,
 	...contact.en,
+	...tour.en,
+	...calculatorEnhancements.en,
 };
 
 // Merge all translation modules for Finnish
@@ -87,6 +90,8 @@ export const fi = {
 	...errors.fi,
 	...savings.fi,
 	...contact.fi,
+	...tour.fi,
+	...calculatorEnhancements.fi,
 };
 
 // Also export as default for backward compatibility
