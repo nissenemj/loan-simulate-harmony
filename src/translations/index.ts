@@ -30,6 +30,7 @@ import { calculatorEnhancements } from "./modules/calculator-enhancements";
 import { debtPayoff } from "./modules/debt-payoff";
 import { faq } from "./modules/faq";
 import { demoData } from "./modules/demo-data";
+import { settings } from "./modules/settings";
 
 // Merge all translation modules for English
 export const en = {
@@ -65,6 +66,7 @@ export const en = {
 	...debtPayoff.en,
 	...faq.en,
 	...demoData.en,
+	...settings.en,
 };
 
 // Merge all translation modules for Finnish
@@ -101,6 +103,7 @@ export const fi = {
 	...debtPayoff.fi,
 	...faq.fi,
 	...demoData.fi,
+	...settings.fi,
 };
 
 // Also export as default for backward compatibility

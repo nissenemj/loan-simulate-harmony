@@ -281,6 +281,14 @@ const NavigationHeader = () => {
 											{t("navigation.dashboard")}
 										</Button>
 										<Button
+											variant="outline"
+											onClick={() => handleNavigation("/settings")}
+											className="w-full"
+										>
+											<Settings className="h-4 w-4 mr-2" />
+											{t("navigation.settings")}
+										</Button>
+										<Button
 											variant="destructive"
 											onClick={handleLogout}
 											className="w-full"

@@ -32,6 +32,7 @@ const DebtStrategies = lazy(() => import("./pages/DebtStrategies"));
 const DebtSummaryPage = lazy(() => import("./pages/DebtSummaryPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const FAQPage = lazy(() => import("./pages/FAQPage"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 function App() {
 	return (
@@ -114,6 +115,14 @@ function App() {
 												/>
 												<Route path="/contact" element={<ContactPage />} />
 												<Route path="/faq" element={<FAQPage />} />
+												<Route
+													path="/settings"
+													element={
+														<ProtectedRoute>
+															<Settings />
+														</ProtectedRoute>
+													}
+												/>
 											</Routes>
 										</Suspense>
 									</main>
