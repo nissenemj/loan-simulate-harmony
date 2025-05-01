@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -42,6 +43,8 @@ interface DebtSummaryProps {
 	creditCards: CreditCard[];
 	onPayoffLoan: (id: string) => void;
 	onPayoffCreditCard: (id: string) => void;
+	onClearLoans?: () => void;
+	onClearCreditCards?: () => void;
 }
 
 export default function DebtSummary({
@@ -49,6 +52,8 @@ export default function DebtSummary({
 	creditCards,
 	onPayoffLoan,
 	onPayoffCreditCard,
+	onClearLoans,
+	onClearCreditCards,
 }: DebtSummaryProps) {
 	const { t } = useLanguage();
 	const navigate = useNavigate();
@@ -170,6 +175,17 @@ export default function DebtSummary({
 		navigate("/debt-summary?tab=repayment-plan", { replace: true });
 	};
 
+	const handleClearDemoData = () => {
+		// Clear demo data using the provided handlers
+		if (activeLoans.length === 0 && onClearLoans) {
+			onClearLoans();
+		}
+		if (activeCards.length === 0 && onClearCreditCards) {
+			onClearCreditCards();
+		}
+		toast.success(t("demoData.demoCleared"));
+	};
+
 	return (
 		<div className="container px-4 py-8 mx-auto">
 			<Helmet>
@@ -204,16 +220,7 @@ export default function DebtSummary({
 				{isDemo && (
 					<DemoDataNotice
 						className="mb-8"
-						onClearDemoData={() => {
-							// Clear demo data
-							if (activeLoans.length === 0) {
-								setLoans([]);
-							}
-							if (activeCards.length === 0) {
-								setCreditCards([]);
-							}
-							toast.success(t("demoData.demoCleared"));
-						}}
+						onClearDemoData={handleClearDemoData}
 					/>
 				)}
 

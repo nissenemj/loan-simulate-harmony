@@ -14,25 +14,25 @@ const Calculator = () => {
   const { t } = useTranslation();
 
   return (
-    <ErrorProvider>
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
-        <Helmet>
-          <title>{t('calculator.debtPayoffCalculator')} | {t('app.title')}</title>
-          <meta name="description" content={t('debtStrategies.pageDescription')} />
-        </Helmet>
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
+      <Helmet>
+        <title>{t('calculator.debtPayoffCalculator')} | {t('app.title')}</title>
+        <meta name="description" content={t('debtStrategies.pageDescription')} />
+      </Helmet>
+      
+      <div className="space-y-6">
+        <BreadcrumbNav />
         
-        <div className="space-y-6">
-          <BreadcrumbNav />
-          
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{t('calculator.debtPayoffCalculator')}</h1>
-            <p className="text-muted-foreground mt-2">{t('debtStrategies.pageDescription')}</p>
-          </div>
-          
-          <DebtStrategies />
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{t('calculator.debtPayoffCalculator')}</h1>
+          <p className="text-muted-foreground mt-2">{t('debtStrategies.pageDescription')}</p>
         </div>
+        
+        <ErrorProvider>
+          <DebtStrategies />
+        </ErrorProvider>
       </div>
-    </ErrorProvider>
+    </div>
   );
 };
 

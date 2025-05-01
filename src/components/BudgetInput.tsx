@@ -92,9 +92,9 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
             <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
               <RadioGroupItem value="equal" id="equal" className="mt-1" />
               <Label htmlFor="equal" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("dashboard.equalDistribution") || "Equal Distribution"}</span>
+                <span className="font-medium text-wrap break-words">{t("repayment.equalStrategy")}</span>
                 <span className="text-xs text-muted-foreground text-wrap break-words">
-                  {t("repayment.equalDesc") || "Distributes extra payments equally across all debts."}
+                  {t("repayment.equalDesc")}
                 </span>
               </Label>
             </div>

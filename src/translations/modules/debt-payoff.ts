@@ -117,7 +117,31 @@ export const debtPayoff = {
         considerFees: "Consider any fees associated with consolidation",
         considerCredit: "Your credit score may impact available rates",
         considerCollateral: "Some options may require collateral",
-        considerBehavior: "Address spending habits to avoid rebuilding debt"
+        considerBehavior: "Address spending habits to avoid rebuilding debt",
+        debtConsolidation: "Debt Consolidation",
+        consolidationDescription: "See how combining your debts could save money",
+        noDebtsAdded: "No debts added yet. Add debts to see consolidation options.",
+        consolidationDisclaimer: "Important Note",
+        consolidationDisclaimerText: "These are estimates. Contact lenders for actual rates and terms.",
+        optionNamePlaceholder: "E.g., Bank Loan, Credit Union",
+        update: "Update",
+        cancel: "Cancel",
+        add: "Add",
+        editOption: "Edit Option", 
+        saved: "saved",
+        more: "more",
+        termDescription: "Length of loan in months",
+        personalLoan: "Personal Loan",
+        balanceTransfer: "Balance Transfer",
+        homeEquityLoan: "Home Equity Loan",
+        debtConsolidationLoan: "Debt Consolidation Loan",
+        potentialSavings: "Potential Savings",
+        payoffDate: "Payoff Date",
+        consolidationConsiderations: "Important Considerations",
+        considerationFees: "Consider any fees associated with consolidation",
+        considerationCredit: "Your credit score may impact available rates",
+        considerationCollateral: "Some options may require collateral",
+        considerationBehavior: "Address spending habits to avoid rebuilding debt"
       }
     }
   },
@@ -213,7 +237,7 @@ export const debtPayoff = {
       
       // Debt consolidation calculator translations
       consolidation: {
-        title: "Velkojen yhdistämislaskuri",
+        title: "Lainojen yhdistämislaskuri",
         description: "Tutki vaihtoehtoja velkojesi yhdistämiseksi",
         currentDebts: "Nykyiset velat",
         consolidationOptions: "Yhdistämisvaihtoehdot",
@@ -237,7 +261,31 @@ export const debtPayoff = {
         considerFees: "Huomioi yhdistämiseen liittyvät maksut",
         considerCredit: "Luottopisteesi voivat vaikuttaa saatavilla oleviin korkoihin",
         considerCollateral: "Jotkin vaihtoehdot saattavat vaatia vakuuksia",
-        considerBehavior: "Kiinnitä huomiota kulutustottumuksiin välttääksesi velkaantumisen uudelleen"
+        considerBehavior: "Kiinnitä huomiota kulutustottumuksiin välttääksesi velkaantumisen uudelleen",
+        debtConsolidation: "Lainojen yhdistäminen",
+        consolidationDescription: "Katso miten velkojen yhdistäminen voi säästää rahaa",
+        noDebtsAdded: "Ei vielä lisättyjä velkoja. Lisää velkoja nähdäksesi yhdistämisvaihtoehdot.",
+        consolidationDisclaimer: "Tärkeä huomautus",
+        consolidationDisclaimerText: "Nämä ovat arvioita. Ota yhteyttä lainanantajiin saadaksesi todelliset korot ja ehdot.",
+        optionNamePlaceholder: "Esim. Pankkilaina, Osuuspankki",
+        update: "Päivitä",
+        cancel: "Peruuta",
+        add: "Lisää",
+        editOption: "Muokkaa vaihtoehtoa",
+        saved: "säästetty",
+        more: "enemmän",
+        termDescription: "Lainan pituus kuukausina",
+        personalLoan: "Henkilökohtainen laina",
+        balanceTransfer: "Velkasaldosiirto",
+        homeEquityLoan: "Asuntolaina",
+        debtConsolidationLoan: "Yhdistelmälaina",
+        potentialSavings: "Mahdolliset säästöt",
+        payoffDate: "Maksupäivä",
+        consolidationConsiderations: "Tärkeitä huomioita",
+        considerationFees: "Huomioi yhdistämiseen liittyvät maksut",
+        considerationCredit: "Luottopisteesi voivat vaikuttaa saatavilla oleviin korkoihin",
+        considerationCollateral: "Jotkin vaihtoehdot saattavat vaatia vakuuksia",
+        considerationBehavior: "Kiinnitä huomiota kulutustottumuksiin välttääksesi velkaantumisen uudelleen"
       }
     }
   }

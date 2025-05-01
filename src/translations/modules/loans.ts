@@ -1,3 +1,4 @@
+
 // Loan-related translations
 
 export const loans = {
@@ -11,6 +12,19 @@ export const loans = {
 			startDate: "Start Date",
 			endDate: "End Date",
 			additionalPayment: "Additional Payment",
+			budgetInput: {
+				title: "Monthly Budget",
+				description: "How much can you afford to pay each month towards your debt?",
+				currentlyPaying: "You're currently paying",
+				minimumPayments: "Minimum payments",
+				budgetAmount: "Budget amount",
+				calculateButton: "Calculate Repayment Plan",
+				strategyLabel: "Choose repayment strategy",
+				avalancheStrategy: "Avalanche (highest interest first)",
+				snowballStrategy: "Snowball (smallest balance first)",
+				avalancheDescription: "Pay off highest interest loans first (saves the most money)",
+				snowballDescription: "Pay off smallest loans first (builds momentum)"
+			},
 			types: {
 				annuity: "Annuity",
 				equalPrincipal: "Equal Principal",
@@ -40,6 +54,19 @@ export const loans = {
 			startDate: "Aloituspäivä",
 			endDate: "Päättymispäivä",
 			additionalPayment: "Lisämaksu",
+			budgetInput: {
+				title: "Kuukausibudjetti",
+				description: "Kuinka paljon voit maksaa kuukaudessa veloistasi?",
+				currentlyPaying: "Maksat tällä hetkellä",
+				minimumPayments: "Vähimmäismaksut",
+				budgetAmount: "Budjettisumma",
+				calculateButton: "Laske maksusuunnitelma",
+				strategyLabel: "Valitse maksustrategia",
+				avalancheStrategy: "Vyörytys (korkeimmat korot ensin)",
+				snowballStrategy: "Lumipallo (pienimmät velat ensin)",
+				avalancheDescription: "Maksa korkeimmat korot ensin (säästät eniten rahaa)",
+				snowballDescription: "Maksa pienimmät velat ensin (luo motivaatiota)"
+			},
 			types: {
 				annuity: "Annuiteetti",
 				equalPrincipal: "Tasalyhennys",

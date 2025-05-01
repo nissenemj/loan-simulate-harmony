@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Debt } from '@/utils/calculator/types';
@@ -54,10 +55,10 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
     try {
       // Define some common consolidation options
       const options = [
-        { name: t('calculator.personalLoan'), interestRate: 10.99, termMonths: 60 },
-        { name: t('calculator.balanceTransfer'), interestRate: 0, termMonths: 18 },
-        { name: t('calculator.homeEquityLoan'), interestRate: 7.5, termMonths: 120 },
-        { name: t('calculator.debtConsolidationLoan'), interestRate: 8.99, termMonths: 48 }
+        { name: t('debtPayoff.consolidation.personalLoan'), interestRate: 10.99, termMonths: 60 },
+        { name: t('debtPayoff.consolidation.balanceTransfer'), interestRate: 0, termMonths: 18 },
+        { name: t('debtPayoff.consolidation.homeEquityLoan'), interestRate: 7.5, termMonths: 120 },
+        { name: t('debtPayoff.consolidation.debtConsolidationLoan'), interestRate: 8.99, termMonths: 48 }
       ];
       
       const results = calculateConsolidationOptions(debts, options);
@@ -184,12 +185,12 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingDown className="h-5 w-5 text-primary" />
-            {t('calculator.debtConsolidation')}
+            {t('debtPayoff.consolidation.debtConsolidation')}
           </CardTitle>
-          <CardDescription>{t('calculator.consolidationDescription')}</CardDescription>
+          <CardDescription>{t('debtPayoff.consolidation.consolidationDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>{t('calculator.noDebtsAdded')}</p>
+          <p>{t('debtPayoff.consolidation.noDebtsAdded')}</p>
         </CardContent>
       </Card>
     );
@@ -200,9 +201,9 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingDown className="h-5 w-5 text-primary" />
-          {t('calculator.debtConsolidation')}
+          {t('debtPayoff.consolidation.debtConsolidation')}
         </CardTitle>
-        <CardDescription>{t('calculator.consolidationDescription')}</CardDescription>
+        <CardDescription>{t('debtPayoff.consolidation.consolidationDescription')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && (
@@ -214,10 +215,10 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
         <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 p-4 rounded">
           <p className="font-semibold flex items-center">
             <Info className="h-4 w-4 mr-2" />
-            {t('calculator.consolidationDisclaimer')}
+            {t('debtPayoff.consolidation.consolidationDisclaimer')}
           </p>
           <p className="mt-1 text-sm">
-            {t('calculator.consolidationDisclaimerText')}
+            {t('debtPayoff.consolidation.consolidationDisclaimerText')}
           </p>
         </div>
 
@@ -225,29 +226,29 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
           <DialogTrigger asChild>
             <Button className="mb-4 flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              {t('calculator.addCustomOption')}
+              {t('debtPayoff.consolidation.addCustomOption')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {isEditing ? t('calculator.editOption') : t('calculator.addCustomOption')}
+                {isEditing ? t('debtPayoff.consolidation.editOption') : t('debtPayoff.consolidation.addCustomOption')}
               </DialogTitle>
             </DialogHeader>
             
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="optionName">{t('calculator.option')}</Label>
+                <Label htmlFor="optionName">{t('debtPayoff.consolidation.option')}</Label>
                 <Input
                   id="optionName"
                   value={customOption.name}
                   onChange={(e) => setCustomOption({...customOption, name: e.target.value})}
-                  placeholder={t('calculator.optionNamePlaceholder')}
+                  placeholder={t('debtPayoff.consolidation.optionNamePlaceholder')}
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="interestRate">{t('calculator.interestRate')}</Label>
+                <Label htmlFor="interestRate">{t('debtPayoff.consolidation.interestRate')}</Label>
                 <Input
                   id="interestRate"
                   type="number"
@@ -260,7 +261,7 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="termMonths">{t('calculator.term')}</Label>
+                <Label htmlFor="termMonths">{t('debtPayoff.consolidation.term')}</Label>
                 <Input
                   id="termMonths"
                   type="number"
@@ -270,18 +271,18 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                   placeholder="0"
                 />
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.termDescription')}
+                  {t('debtPayoff.consolidation.termDescription')}
                 </p>
               </div>
             </div>
             
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">{t('calculator.cancel')}</Button>
+                <Button variant="outline">{t('debtPayoff.consolidation.cancel')}</Button>
               </DialogClose>
               <DialogClose asChild>
                 <Button onClick={isEditing ? handleUpdateOption : handleAddCustomOption}>
-                  {isEditing ? t('calculator.update') : t('calculator.add')}
+                  {isEditing ? t('debtPayoff.consolidation.update') : t('debtPayoff.consolidation.add')}
                 </Button>
               </DialogClose>
             </DialogFooter>
@@ -293,13 +294,13 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{t('calculator.option')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.interestRate')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.term')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.monthlyPayment')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.totalInterest')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.payoffDate')}</TableHead>
-                  <TableHead className="text-right">{t('calculator.potentialSavings')}</TableHead>
+                  <TableHead>{t('debtPayoff.consolidation.option')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.interestRate')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.term')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.monthlyPayment')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.totalInterest')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.payoffDate')}</TableHead>
+                  <TableHead className="text-right">{t('debtPayoff.consolidation.potentialSavings')}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -308,7 +309,7 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                   <TableRow key={option.id} className={option.interestSaved > 0 ? "bg-green-50/30 dark:bg-green-950/30" : ""}>
                     <TableCell className="font-medium">{option.name}</TableCell>
                     <TableCell className="text-right">{option.interestRate.toFixed(2)}%</TableCell>
-                    <TableCell className="text-right">{option.termMonths} {t('calculator.months')}</TableCell>
+                    <TableCell className="text-right">{option.termMonths} {t('debtPayoff.consolidation.months')}</TableCell>
                     <TableCell className="text-right">{formatCurrency(option.monthlyPayment)}</TableCell>
                     <TableCell className="text-right">{formatCurrency(option.totalInterestPaid)}</TableCell>
                     <TableCell className="text-right">{formatDate(option.payoffDate)}</TableCell>
@@ -316,10 +317,10 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                       {option.interestSaved > 0 ? (
                         <>
                           <CheckCircle2 className="h-4 w-4" />
-                          {formatCurrency(option.interestSaved)} {t('calculator.saved')}
+                          {formatCurrency(option.interestSaved)} {t('debtPayoff.consolidation.saved')}
                         </>
                       ) : (
-                        formatCurrency(Math.abs(option.interestSaved)) + " " + t('calculator.more')
+                        formatCurrency(Math.abs(option.interestSaved)) + " " + t('debtPayoff.consolidation.more')
                       )}
                     </TableCell>
                     <TableCell>
@@ -336,12 +337,12 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>{t('calculator.editOption')}</DialogTitle>
+                              <DialogTitle>{t('debtPayoff.consolidation.editOption')}</DialogTitle>
                             </DialogHeader>
                             
                             <div className="grid gap-4 py-4">
                               <div className="space-y-2">
-                                <Label htmlFor="editOptionName">{t('calculator.option')}</Label>
+                                <Label htmlFor="editOptionName">{t('debtPayoff.consolidation.option')}</Label>
                                 <Input
                                   id="editOptionName"
                                   value={customOption.name}
@@ -350,7 +351,7 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                               </div>
                               
                               <div className="space-y-2">
-                                <Label htmlFor="editInterestRate">{t('calculator.interestRate')}</Label>
+                                <Label htmlFor="editInterestRate">{t('debtPayoff.consolidation.interestRate')}</Label>
                                 <Input
                                   id="editInterestRate"
                                   type="number"
@@ -362,7 +363,7 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                               </div>
                               
                               <div className="space-y-2">
-                                <Label htmlFor="editTermMonths">{t('calculator.term')}</Label>
+                                <Label htmlFor="editTermMonths">{t('debtPayoff.consolidation.term')}</Label>
                                 <Input
                                   id="editTermMonths"
                                   type="number"
@@ -375,11 +376,11 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
                             
                             <DialogFooter>
                               <DialogClose asChild>
-                                <Button variant="outline">{t('calculator.cancel')}</Button>
+                                <Button variant="outline">{t('debtPayoff.consolidation.cancel')}</Button>
                               </DialogClose>
                               <DialogClose asChild>
                                 <Button onClick={handleUpdateOption}>
-                                  {t('calculator.update')}
+                                  {t('debtPayoff.consolidation.update')}
                                 </Button>
                               </DialogClose>
                             </DialogFooter>
@@ -395,12 +396,12 @@ const DebtConsolidationCalculator = ({ debts }: DebtConsolidationCalculatorProps
         )}
         
         <div className="mt-4 space-y-2 bg-muted/50 p-4 rounded-lg">
-          <h4 className="font-semibold">{t('calculator.consolidationConsiderations')}</h4>
+          <h4 className="font-semibold">{t('debtPayoff.consolidation.consolidationConsiderations')}</h4>
           <ul className="list-disc pl-5 space-y-1">
-            <li>{t('calculator.considerationFees')}</li>
-            <li>{t('calculator.considerationCredit')}</li>
-            <li>{t('calculator.considerationCollateral')}</li>
-            <li>{t('calculator.considerationBehavior')}</li>
+            <li>{t('debtPayoff.consolidation.considerationFees')}</li>
+            <li>{t('debtPayoff.consolidation.considerationCredit')}</li>
+            <li>{t('debtPayoff.consolidation.considerationCollateral')}</li>
+            <li>{t('debtPayoff.consolidation.considerationBehavior')}</li>
           </ul>
         </div>
       </CardContent>

@@ -24,7 +24,7 @@ export default function DebtSummaryPage() {
     );
     
     const loanName = loans.find(loan => loan.id === id)?.name || '';
-    toast(t('toast.loanPaidOff', { name: loanName }));
+    toast(t('debtSummary.toast.loanPaidOff', { name: loanName }));
   };
 
   const handlePayoffCreditCard = (id: string) => {
@@ -33,7 +33,15 @@ export default function DebtSummaryPage() {
     );
     
     const cardName = creditCards.find(card => card.id === id)?.name || '';
-    toast(t('toast.cardPaidOff', { name: cardName }));
+    toast(t('debtSummary.toast.cardPaidOff', { name: cardName }));
+  };
+
+  const handleClearLoans = () => {
+    setLoans([]);
+  };
+
+  const handleClearCreditCards = () => {
+    setCreditCards([]);
   };
 
   return (
@@ -62,6 +70,8 @@ export default function DebtSummaryPage() {
           creditCards={creditCards} 
           onPayoffLoan={handlePayoffLoan}
           onPayoffCreditCard={handlePayoffCreditCard}
+          onClearLoans={handleClearLoans}
+          onClearCreditCards={handleClearCreditCards}
         />
       </div>
     </>
