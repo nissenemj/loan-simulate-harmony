@@ -5,6 +5,8 @@ export const contact = {
 		contact: {
 			pageTitle: "Contact Us",
 			title: "Contact Us",
+			subtitle:
+				"We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
 			metaDescription:
 				"Contact the Velkavapaus team for assistance with debt-related questions or technical support.",
 			infoTitle: "Get in Touch",
@@ -77,6 +79,8 @@ export const contact = {
 		contact: {
 			pageTitle: "Ota yhteyttä",
 			title: "Ota yhteyttä",
+			subtitle:
+				"Kuulemme mielellämme sinusta. Lähetä meille viesti, niin vastaamme mahdollisimman pian.",
 			metaDescription:
 				"Ota yhteyttä Velkavapaus-tiimiin saadaksesi apua velkakysymyksiin tai teknistä tukea.",
 			infoTitle: "Yhteystiedot",
