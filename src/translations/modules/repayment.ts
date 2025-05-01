@@ -27,6 +27,7 @@ export const repayment = {
       date: "Date",
       balance: "Balance",
       minimumPayment: "Minimum Payment",
+      monthlyPayment: "Monthly Payment",
       debtName: "Debt Name",
       debtPaidOff: "Debt Paid Off",
       minimumPaymentsOnly: "Minimum Payments Only", // Changed from duplicate 'minimumPayments'
@@ -97,6 +98,7 @@ export const repayment = {
       date: "Päivämäärä",
       balance: "Saldo",
       minimumPayment: "Vähimmäismaksu",
+      monthlyPayment: "Kuukausimaksu",
       debtName: "Velan nimi",
       debtPaidOff: "Velka maksettu",
       minimumPaymentsOnly: "Vain vähimmäismaksut", // Changed from duplicate 'minimumPayments'

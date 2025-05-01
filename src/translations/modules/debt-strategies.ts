@@ -18,6 +18,7 @@ export const debtStrategies = {
       repaymentCalculation: "Repayment Calculation",
       errorInCalculation: "Error in calculation",
       tryAgainHigherPayment: "Please try again with a higher monthly payment",
+      monthlyPayment: "Monthly Payment",
       // Tab translations
       calculatorTab: "Debt Payoff Calculator",
       timelineTab: "Debt Payoff Timeline",
@@ -73,6 +74,7 @@ export const debtStrategies = {
       repaymentCalculation: "Takaisinmaksulaskelma",
       errorInCalculation: "Virhe laskennassa",
       tryAgainHigherPayment: "Kokeile uudelleen suuremmalla kuukausimaksulla",
+      monthlyPayment: "Kuukausimaksu",
       // Tab translations
       calculatorTab: "Velanmaksulaskuri",
       timelineTab: "Velanmaksuaikataulu",
