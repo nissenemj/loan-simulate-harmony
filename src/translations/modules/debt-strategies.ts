@@ -11,6 +11,7 @@ export const debtStrategies = {
       addYourDebts: "Add your debts",
       errorMaxMonths: "Payment calculation exceeded maximum number of months (40 years)",
       insufficientPayment: "Your monthly payment is not enough to pay off all debts",
+      insufficientBudget: "Your budget of {{amount}} is insufficient to cover the minimum payments of {{minimum}}",
       compareStrategies: "Compare Strategies",
       detailedPlan: "Detailed Plan",
       monthByMonth: "Month by Month Analysis",
@@ -30,6 +31,8 @@ export const debtStrategies = {
       strategySection: "Choose Strategy",
       resultsSection: "Results",
       summaryTitle: "Payoff Summary",
+      summaryTab: "Summary",
+      planTab: "Plan",
       totalDebt: "Total Debt",
       minPayment: "Minimum Payment",
       additionalPayment: "Additional Payment",
@@ -37,6 +40,7 @@ export const debtStrategies = {
       timeToPayoff: "Time to Payoff",
       interestPaid: "Total Interest",
       calculateButton: "Calculate Payoff Plan",
+      calculateNow: "Calculate Now",
       // Budget input section
       budgetInput: {
         title: "Your Monthly Budget",
@@ -62,6 +66,7 @@ export const debtStrategies = {
       addYourDebts: "Lisää velkasi",
       errorMaxMonths: "Maksulaskenta ylitti maksimikuukausimäärän (40 vuotta)",
       insufficientPayment: "Kuukausimaksusi ei riitä kaikkien velkojen maksuun",
+      insufficientBudget: "Budjettisi {{amount}} ei riitä kattamaan vähimmäismaksuja {{minimum}}",
       compareStrategies: "Vertaile strategioita",
       detailedPlan: "Yksityiskohtainen suunnitelma",
       monthByMonth: "Kuukausianalyysi",
@@ -81,6 +86,8 @@ export const debtStrategies = {
       strategySection: "Valitse strategia",
       resultsSection: "Tulokset",
       summaryTitle: "Maksuyhteenveto",
+      summaryTab: "Yhteenveto",
+      planTab: "Suunnitelma",
       totalDebt: "Kokonaisvelka",
       minPayment: "Vähimmäismaksu",
       additionalPayment: "Lisämaksu",
@@ -88,6 +95,7 @@ export const debtStrategies = {
       timeToPayoff: "Maksuaika",
       interestPaid: "Korko yhteensä",
       calculateButton: "Laske maksusuunnitelma",
+      calculateNow: "Laske nyt",
       // Budget input section
       budgetInput: {
         title: "Kuukausibudjettisi",
