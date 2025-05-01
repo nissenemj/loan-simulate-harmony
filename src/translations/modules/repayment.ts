@@ -29,7 +29,7 @@ export const repayment = {
       minimumPayment: "Minimum Payment",
       debtName: "Debt Name",
       debtPaidOff: "Debt Paid Off",
-      minimumPayments: "Minimum Payments Only",
+      minimumPaymentsOnly: "Minimum Payments Only", // Changed from duplicate 'minimumPayments'
       snowball: "Snowball Method",
       avalanche: "Avalanche Method",
       equal: "Equal Distribution",
@@ -99,7 +99,7 @@ export const repayment = {
       minimumPayment: "Vähimmäismaksu",
       debtName: "Velan nimi",
       debtPaidOff: "Velka maksettu",
-      minimumPayments: "Vain vähimmäismaksut",
+      minimumPaymentsOnly: "Vain vähimmäismaksut", // Changed from duplicate 'minimumPayments'
       snowball: "Lumipallomenetelmä",
       avalanche: "Vyörytysmenetelmä",
       equal: "Tasainen jakaminen",
