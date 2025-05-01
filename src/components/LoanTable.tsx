@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
 	Table,
@@ -112,13 +113,13 @@ const LoanTable: React.FC<LoanTableProps> = ({
 				<Table>
 					<TableHeader>
 						<TableRow className="bg-secondary/50">
-							<TableHead>{t("loan.table.name")}</TableHead>
+							<TableHead>{t("table.name")}</TableHead>
 							<TableHead
 								className="cursor-pointer hover:bg-secondary/80 transition-colors"
 								onClick={() => handleSort("monthlyPayment")}
 							>
 								<div className="flex items-center gap-1">
-									{t("loan.table.monthlyPayment")}
+									{t("table.monthlyPayment")}
 									{sortField === "monthlyPayment" &&
 										(sortDirection === "asc" ? (
 											<ArrowUp size={14} />
@@ -132,7 +133,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
 								onClick={() => handleSort("interestRate")}
 							>
 								<div className="flex items-center gap-1">
-									{t("loan.table.interestRate")}
+									{t("table.interestRate")}
 									{sortField === "interestRate" &&
 										(sortDirection === "asc" ? (
 											<ArrowUp size={14} />
@@ -146,7 +147,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
 								onClick={() => handleSort("totalInterest")}
 							>
 								<div className="flex items-center gap-1">
-									{t("loan.table.totalInterest")}
+									{t("table.totalInterest")}
 									{sortField === "totalInterest" &&
 										(sortDirection === "asc" ? (
 											<ArrowUp size={14} />
@@ -155,11 +156,11 @@ const LoanTable: React.FC<LoanTableProps> = ({
 										))}
 								</div>
 							</TableHead>
-							<TableHead>{t("loan.table.term")}</TableHead>
+							<TableHead>{t("table.term")}</TableHead>
 							<TableHead>{t("repayment.repaymentType")}</TableHead>
 							<TableHead>{t("form.monthlyFee")}</TableHead>
 							<TableHead className="text-right">
-								{t("debtSummary.actions")}
+								{t("table.actions")}
 							</TableHead>
 						</TableRow>
 					</TableHeader>
