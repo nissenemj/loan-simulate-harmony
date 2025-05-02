@@ -1,3 +1,4 @@
+
 // Footer translations
 
 export const footer = {
@@ -7,6 +8,7 @@ export const footer = {
 				title: "About Velkavapaus.fi",
 				description:
 					"Velkavapaus.fi is a free tool to help you create and track a customized debt repayment plan.",
+				mission: "Empowering Finns to achieve financial freedom by providing clear insights and effective strategies to conquer debt.",
 			},
 			aboutUs: {
 				title: "About Us",
@@ -46,6 +48,7 @@ export const footer = {
 				title: "Tietoa Velkavapaus.fi:stä",
 				description:
 					"Velkavapaus.fi on ilmainen työkalu, joka auttaa sinua luomaan ja seuraamaan yksilöllistä velanmaksusuunnitelmaa.",
+				mission: "Autamme suomalaisia saavuttamaan taloudellisen vapauden tarjoamalla selkeitä näkemyksiä ja tehokkaita strategioita velkojen voittamiseen.",
 			},
 			aboutUs: {
 				title: "Tietoa Meistä",
