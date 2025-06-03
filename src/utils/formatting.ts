@@ -1,5 +1,5 @@
 
-import { useTranslation } from '@/contexts/LanguageContext';
+// Simplified Finnish formatting utilities without internationalization
 
 export interface CurrencyFormatOptions {
   currency?: string;
@@ -9,8 +9,6 @@ export interface CurrencyFormatOptions {
 }
 
 export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
-  const { locale } = useTranslation();
-  
   const defaultOptions = {
     currency: 'EUR',
     minimumFractionDigits: 2,
@@ -21,7 +19,7 @@ export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
   
   return {
     format: (value: number) => {
-      return new Intl.NumberFormat(locale, {
+      return new Intl.NumberFormat('fi-FI', {
         style: 'currency',
         currency: defaultOptions.currency,
         minimumFractionDigits: defaultOptions.minimumFractionDigits,
@@ -29,7 +27,7 @@ export function useCurrencyFormatter(options: CurrencyFormatOptions = {}) {
       }).format(value);
     },
     formatWithoutSymbol: (value: number) => {
-      return new Intl.NumberFormat(locale, {
+      return new Intl.NumberFormat('fi-FI', {
         style: 'decimal',
         minimumFractionDigits: defaultOptions.minimumFractionDigits,
         maximumFractionDigits: defaultOptions.maximumFractionDigits
@@ -42,8 +40,6 @@ export function usePercentageFormatter(options: {
   minimumFractionDigits?: number; 
   maximumFractionDigits?: number;
 } = {}) {
-  const { locale } = useTranslation();
-  
   const defaultOptions = {
     minimumFractionDigits: 1,
     maximumFractionDigits: 2,
@@ -51,17 +47,15 @@ export function usePercentageFormatter(options: {
   };
   
   return (value: number) => {
-    return new Intl.NumberFormat(locale, {
+    return new Intl.NumberFormat('fi-FI', {
       style: 'percent',
       minimumFractionDigits: defaultOptions.minimumFractionDigits,
       maximumFractionDigits: defaultOptions.maximumFractionDigits
-    }).format(value / 100); // Convert from percentage to decimal
+    }).format(value / 100);
   };
 }
 
 export function useDateFormatter(options: Intl.DateTimeFormatOptions = {}) {
-  const { locale } = useTranslation();
-  
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -71,6 +65,33 @@ export function useDateFormatter(options: Intl.DateTimeFormatOptions = {}) {
   
   return (date: Date | string) => {
     const dateObj = typeof date === 'string' ? new Date(date) : date;
-    return new Intl.DateTimeFormat(locale, defaultOptions).format(dateObj);
+    return new Intl.DateTimeFormat('fi-FI', defaultOptions).format(dateObj);
   };
 }
+
+// Static formatters for direct use
+export const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('fi-FI', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+};
+
+export const formatPercentage = (value: number): string => {
+  return new Intl.NumberFormat('fi-FI', {
+    style: 'percent',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 2
+  }).format(value / 100);
+};
+
+export const formatDate = (date: Date | string): string => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('fi-FI', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(dateObj);
+};

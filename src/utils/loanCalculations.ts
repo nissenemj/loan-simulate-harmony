@@ -1,4 +1,3 @@
-
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -366,10 +365,10 @@ export const calculateLoan = (loan: Loan): LoanCalculationResult => {
 };
 
 /**
- * Format a number as currency in EUR
+ * Format a number as currency in EUR using Finnish locale
  */
 export const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat('de-DE', {
+  return new Intl.NumberFormat('fi-FI', {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 2,
@@ -378,10 +377,10 @@ export const formatCurrency = (value: number): string => {
 };
 
 /**
- * Format a number as a percentage
+ * Format a number as a percentage using Finnish locale
  */
 export const formatPercentage = (value: number): string => {
-  return new Intl.NumberFormat('en', {
+  return new Intl.NumberFormat('fi-FI', {
     style: 'percent',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2

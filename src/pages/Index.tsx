@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import {
@@ -6,7 +7,6 @@ import {
 	generateRecommendations,
 } from "@/utils/loanCalculations";
 import { CreditCard } from "@/utils/creditCardCalculations";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 import LoanForm from "@/components/LoanForm";
@@ -30,13 +30,12 @@ export default function Index() {
 		[]
 	);
 	const [loanToEdit, setLoanToEdit] = useState<Loan | null>(null);
-	const { t } = useLanguage();
 	const [activeTab, setActiveTab] = useState<string>("loans");
 	const isMobile = useIsMobile();
 
 	const handleAddLoan = (loan: Loan) => {
 		setLoans((prev) => [...prev, loan]);
-		toast(t("toast.loanAdded"));
+		toast("Laina lisätty");
 	};
 
 	const handleUpdateLoan = (updatedLoan: Loan) => {
@@ -44,7 +43,7 @@ export default function Index() {
 			prev.map((loan) => (loan.id === updatedLoan.id ? updatedLoan : loan))
 		);
 		setLoanToEdit(null);
-		toast(t("toast.loanUpdated"));
+		toast("Laina päivitetty");
 	};
 
 	const handleEditLoan = (loan: Loan) => {
@@ -70,7 +69,7 @@ export default function Index() {
 
 	const handleAddCreditCard = (card: CreditCard) => {
 		setCreditCards((prev) => [...prev, card]);
-		toast(t("toast.cardAdded"));
+		toast("Luottokortti lisätty");
 	};
 
 	const handleToggleCreditCardActive = (id: string, isActive: boolean) => {
@@ -85,7 +84,7 @@ export default function Index() {
 				loan.id === id ? { ...loan, amount: 0, isActive: false } : loan
 			)
 		);
-		toast(t("toast.loanPaidOff"));
+		toast("Laina merkitty maksetuksi");
 	};
 
 	const handleTabChange = (value: string) => {
@@ -109,7 +108,7 @@ export default function Index() {
 			<UnderConstructionBanner />
 
 			<div className="flex justify-between items-center mb-6">
-				<h1 className="text-3xl font-bold">{t("tabs.loans")}</h1>
+				<h1 className="text-3xl font-bold">Lainat</h1>
 			</div>
 
 			<Tabs
@@ -123,9 +122,9 @@ export default function Index() {
 						isMobile ? "grid-cols-1 gap-2" : "grid-cols-3"
 					} mb-8`}
 				>
-					<TabsTrigger value="loans">{t("tabs.loans")}</TabsTrigger>
-					<TabsTrigger value="creditCards">{t("tabs.creditCards")}</TabsTrigger>
-					<TabsTrigger value="affiliate">{t("tabs.affiliate")}</TabsTrigger>
+					<TabsTrigger value="loans">Lainat</TabsTrigger>
+					<TabsTrigger value="creditCards">Luottokortit</TabsTrigger>
+					<TabsTrigger value="affiliate">Kumppanit</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="loans" className="space-y-8">
