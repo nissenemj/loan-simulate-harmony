@@ -28,9 +28,6 @@ export interface EnhancedFormFieldProps extends React.InputHTMLAttributes<HTMLIn
   showRequiredIndicator?: boolean;
 }
 
-/**
- * Enhanced form field component with real-time validation feedback
- */
 export function EnhancedFormField({
   label,
   helpText,
@@ -49,14 +46,12 @@ export function EnhancedFormField({
   const [validationState, setValidationState] = useState<ValidationResult>({ isValid: true });
   const [value, setValue] = useState(props.defaultValue?.toString() || props.value?.toString() || "");
   
-  // Update validation state when value changes
   useEffect(() => {
     if (touched && validation && !focused) {
       setValidationState(validation(value));
     }
   }, [value, touched, validation, focused]);
   
-  // Update value when props.value changes
   useEffect(() => {
     if (props.value !== undefined) {
       setValue(props.value.toString());
@@ -67,7 +62,6 @@ export function EnhancedFormField({
     const newValue = e.target.value;
     setValue(newValue);
     
-    // If already touched and not focused, validate on change
     if (touched && validation && !focused) {
       setValidationState(validation(newValue));
     }
@@ -91,7 +85,6 @@ export function EnhancedFormField({
     props.onFocus?.(e);
   };
   
-  // Determine if we should show an error
   const showError = touched && !validationState.isValid;
   const errorText = showError ? (validationState.message || errorMessage) : null;
   
@@ -101,7 +94,7 @@ export function EnhancedFormField({
         <Label 
           htmlFor={props.id} 
           className={cn(
-            "flex items-center gap-1",
+            "flex items-center gap-1 text-sm font-medium",
             showError && "text-destructive",
             labelClassName
           )}
@@ -119,7 +112,7 @@ export function EnhancedFormField({
                 <Info className="h-4 w-4 text-muted-foreground cursor-help" />
               </TooltipTrigger>
               <TooltipContent>
-                <p className="max-w-xs">{helpText}</p>
+                <p className="max-w-xs text-sm">{helpText}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -131,9 +124,10 @@ export function EnhancedFormField({
           {...props}
           value={props.value !== undefined ? props.value : value}
           className={cn(
-            "pr-8",
-            touched && validationState.isValid && "border-state-success focus-visible:ring-state-success",
-            showError && "border-destructive focus-visible:ring-destructive",
+            "h-11 md:h-10 text-base md:text-sm transition-colors",
+            showValidationIcon && "pr-10",
+            touched && validationState.isValid && "border-green-500 focus-visible:ring-green-500",
+            showError && "border-red-500 focus-visible:ring-red-500",
             className
           )}
           onChange={handleChange}
@@ -147,9 +141,9 @@ export function EnhancedFormField({
         {touched && showValidationIcon && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
             {validationState.isValid ? (
-              <Check className="h-4 w-4 text-state-success" />
+              <Check className="h-4 w-4 text-green-500" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-destructive" />
+              <AlertCircle className="h-4 w-4 text-red-500" />
             )}
           </div>
         )}
@@ -158,7 +152,7 @@ export function EnhancedFormField({
       {showError && errorText && (
         <p 
           id={`${props.id}-error`} 
-          className="text-sm font-medium text-destructive"
+          className="text-sm font-medium text-red-500"
         >
           {errorText}
         </p>

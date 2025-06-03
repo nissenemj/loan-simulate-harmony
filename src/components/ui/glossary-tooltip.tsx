@@ -7,29 +7,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface GlossaryTooltipProps {
   term: string;
+  definition: string;
   children?: React.ReactNode;
   className?: string;
 }
 
 const GlossaryTooltip: React.FC<GlossaryTooltipProps> = ({
   term,
+  definition,
   children,
   className
 }) => {
-  const { t } = useLanguage();
-  
-  // Get the glossary definition
-  const definition = t(`guidance.glossary.${term}`);
-  
-  if (!definition || definition === `guidance.glossary.${term}`) {
-    // If no translation found, just return the children without tooltip
-    return <>{children}</>;
-  }
-  
   return (
     <TooltipProvider>
       <Tooltip>
@@ -41,8 +32,8 @@ const GlossaryTooltip: React.FC<GlossaryTooltipProps> = ({
             </span>
           )}
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs">
-          <p className="text-sm">{definition}</p>
+        <TooltipContent className="max-w-xs bg-white border shadow-lg">
+          <p className="text-sm text-gray-900">{definition}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
