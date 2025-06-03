@@ -1,6 +1,6 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Calendar, User } from "lucide-react";
 import {
 	Card,
@@ -29,7 +29,6 @@ interface BlogPostCardProps {
 }
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
-	const { t } = useLanguage();
 	const isMobile = useIsMobile();
 
 	const getExcerpt = (content: string, maxLength: number = 200) => {
@@ -105,7 +104,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, formatDate }) => {
 			<CardFooter className={`pt-0 ${isMobile ? "p-3" : ""} justify-start`}>
 				<Link to={`/blog/${post.id}`}>
 					<Button variant="outline" size={isMobile ? "sm" : "default"}>
-						{t("blog.readMore")}
+						Lue lisää
 					</Button>
 				</Link>
 			</CardFooter>

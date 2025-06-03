@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -17,7 +16,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Menu, User, LogOut, Settings, Calculator } from "lucide-react";
 
 const NavigationHeader: React.FC = () => {
-	const { t } = useLanguage();
 	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -41,11 +39,11 @@ const NavigationHeader: React.FC = () => {
 	};
 
 	const navItems = [
-		{ href: "/", label: t("navigation.home") },
-		{ href: "/calculator", label: t("navigation.calculator") },
-		{ href: "/debt-strategies", label: t("navigation.strategies") },
-		{ href: "/blog", label: t("navigation.blog") },
-		{ href: "/contact", label: t("navigation.contact") },
+		{ href: "/", label: "Koti" },
+		{ href: "/calculator", label: "Laskuri" },
+		{ href: "/debt-strategies", label: "Strategiat" },
+		{ href: "/blog", label: "Blogi" },
+		{ href: "/contact", label: "Yhteystiedot" },
 	];
 
 	const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
@@ -73,7 +71,7 @@ const NavigationHeader: React.FC = () => {
 				{/* Logo */}
 				<Link to="/" className="flex items-center space-x-2">
 					<span className="text-xl font-bold text-primary">
-						{t("app.name")}
+						Velkavapaus
 					</span>
 				</Link>
 
@@ -103,25 +101,25 @@ const NavigationHeader: React.FC = () => {
 									className="cursor-pointer"
 								>
 									<User className="mr-2 h-4 w-4" />
-									<span>{t("auth.dashboard")}</span>
+									<span>Hallintapaneeli</span>
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									onClick={() => navigate("/settings")}
 									className="cursor-pointer"
 								>
 									<Settings className="mr-2 h-4 w-4" />
-									<span>{t("navigation.settings")}</span>
+									<span>Asetukset</span>
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
 									<LogOut className="mr-2 h-4 w-4" />
-									<span>{t("auth.logout")}</span>
+									<span>Kirjaudu ulos</span>
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
 					) : (
 						<Button asChild>
-							<Link to="/auth">{t("auth.login")}</Link>
+							<Link to="/auth">Kirjaudu sisään</Link>
 						</Button>
 					)}
 				</div>
@@ -133,7 +131,7 @@ const NavigationHeader: React.FC = () => {
 						<SheetTrigger asChild>
 							<Button variant="ghost" size="icon">
 								<Menu className="h-5 w-5" />
-								<span className="sr-only">{t("navigation.menu")}</span>
+								<span className="sr-only">Valikko</span>
 							</Button>
 						</SheetTrigger>
 						<SheetContent side="right" className="w-[280px]">
@@ -143,7 +141,7 @@ const NavigationHeader: React.FC = () => {
 									onClick={handleLinkClick}
 									className="text-lg font-semibold"
 								>
-									{t("app.name")}
+									Velkavapaus
 								</Link>
 								
 								<nav className="flex flex-col space-y-3">
@@ -162,7 +160,7 @@ const NavigationHeader: React.FC = () => {
 												}}
 											>
 												<User className="mr-2 h-4 w-4" />
-												{t("auth.dashboard")}
+												Hallintapaneeli
 											</Button>
 											<Button
 												variant="ghost"
@@ -173,7 +171,7 @@ const NavigationHeader: React.FC = () => {
 												}}
 											>
 												<Settings className="mr-2 h-4 w-4" />
-												{t("navigation.settings")}
+												Asetukset
 											</Button>
 											<Button
 												variant="ghost"
@@ -181,7 +179,7 @@ const NavigationHeader: React.FC = () => {
 												onClick={handleLogout}
 											>
 												<LogOut className="mr-2 h-4 w-4" />
-												{t("auth.logout")}
+												Kirjaudu ulos
 											</Button>
 										</div>
 									) : (
@@ -192,7 +190,7 @@ const NavigationHeader: React.FC = () => {
 												handleLinkClick();
 											}}
 										>
-											{t("auth.login")}
+											Kirjaudu sisään
 										</Button>
 									)}
 								</div>

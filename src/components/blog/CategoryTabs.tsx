@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CategoryTabsProps {
@@ -15,7 +14,6 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
   selectedCategory,
   setSelectedCategory,
 }) => {
-  const { t } = useLanguage();
   const isMobile = useIsMobile();
 
   return (
@@ -34,7 +32,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
               : "hover:bg-muted"
           }`}
         >
-          {t("blog.allPosts")}
+          Kaikki artikkelit
         </TabsTrigger>
         {categories.map((category) => (
           <TabsTrigger 

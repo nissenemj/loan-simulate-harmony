@@ -1,14 +1,12 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import CookieSettingsButton from "./CookieSettingsButton";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 
 const Footer = () => {
-	const { t } = useLanguage();
 	const currentYear = new Date().getFullYear();
 
 	// Social media links - these would be replaced with actual links
@@ -26,7 +24,7 @@ const Footer = () => {
 					{/* About Us Column */}
 					<div>
 						<h3 className="font-bold text-lg mb-4">
-							{t("footer.aboutUs.title")}
+							Tietoa meistä
 						</h3>
 						<ul className="space-y-2">
 							<li>
@@ -35,7 +33,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/about">{t("footer.aboutUs.mission")}</Link>
+									<Link to="/about">Missio</Link>
 								</Button>
 							</li>
 							<li>
@@ -44,19 +42,19 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/contact">{t("footer.aboutUs.contact")}</Link>
+									<Link to="/contact">Yhteystiedot</Link>
 								</Button>
 							</li>
 						</ul>
 						<p className="text-muted-foreground mt-4 text-sm">
-							{t("footer.about.description")}
+							Autamme sinua hallitsemaan velkojasi ja pääsemään kohti taloudellista vapautta
 						</p>
 					</div>
 
 					{/* Product Column */}
 					<div>
 						<h3 className="font-bold text-lg mb-4">
-							{t("footer.product.title")}
+							Tuote
 						</h3>
 						<ul className="space-y-2">
 							<li>
@@ -65,7 +63,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/calculator">{t("footer.product.features")}</Link>
+									<Link to="/calculator">Ominaisuudet</Link>
 								</Button>
 							</li>
 							<li>
@@ -74,7 +72,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/#demo">{t("footer.product.demo")}</Link>
+									<Link to="/#demo">Demo</Link>
 								</Button>
 							</li>
 						</ul>
@@ -83,7 +81,7 @@ const Footer = () => {
 					{/* Resources Column */}
 					<div>
 						<h3 className="font-bold text-lg mb-4">
-							{t("footer.resources.title")}
+							Resurssit
 						</h3>
 						<ul className="space-y-2">
 							<li>
@@ -92,7 +90,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/blog">{t("footer.resources.blog")}</Link>
+									<Link to="/blog">Blogi</Link>
 								</Button>
 							</li>
 							<li>
@@ -102,7 +100,7 @@ const Footer = () => {
 									asChild
 								>
 									<Link to="/debt-strategies">
-										{t("footer.resources.debtStrategies")}
+										Velkastrategiat
 									</Link>
 								</Button>
 							</li>
@@ -112,7 +110,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/faq">{t("footer.resources.faq")}</Link>
+									<Link to="/faq">UKK</Link>
 								</Button>
 							</li>
 						</ul>
@@ -121,7 +119,7 @@ const Footer = () => {
 					{/* Legal Column */}
 					<div>
 						<h3 className="font-bold text-lg mb-4">
-							{t("footer.legal.title")}
+							Laillisuus
 						</h3>
 						<ul className="space-y-2">
 							<li>
@@ -130,7 +128,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/privacy-policy">{t("footer.legal.privacy")}</Link>
+									<Link to="/privacy-policy">Tietosuoja</Link>
 								</Button>
 							</li>
 							<li>
@@ -139,7 +137,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/terms-of-service">{t("footer.legal.terms")}</Link>
+									<Link to="/terms-of-service">Käyttöehdot</Link>
 								</Button>
 							</li>
 							<li>
@@ -148,7 +146,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/cookie-policy">{t("footer.legal.cookies")}</Link>
+									<Link to="/cookie-policy">Evästeet</Link>
 								</Button>
 							</li>
 							<li>
@@ -175,7 +173,7 @@ const Footer = () => {
 
 					<div className="flex flex-col md:flex-row items-center gap-4">
 						<p className="text-sm text-muted-foreground">
-							© {currentYear} {t("app.title")}. {t("footer.copyright")}
+							© {currentYear} Velkavapaus.fi. Kaikki oikeudet pidätetään.
 						</p>
 					</div>
 				</div>

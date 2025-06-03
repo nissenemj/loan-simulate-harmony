@@ -2,7 +2,6 @@
 import React from 'react';
 import { AffiliateRecommendation as RecommendationType } from '@/utils/affiliateData';
 import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 interface AffiliateRecommendationProps {
   recommendation: RecommendationType;
@@ -11,8 +10,6 @@ interface AffiliateRecommendationProps {
 const AffiliateRecommendation: React.FC<AffiliateRecommendationProps> = ({
   recommendation
 }) => {
-  const { t } = useLanguage();
-
   // Käytetään aina suomenkielisiä tekstejä
   const title = recommendation.title;
   const description = recommendation.description;

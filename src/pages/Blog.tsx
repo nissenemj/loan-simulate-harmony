@@ -1,6 +1,6 @@
+
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useLanguage } from "@/contexts/LanguageContext";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
 import AdSenseBanner from "@/components/AdSenseBanner";
@@ -24,7 +24,6 @@ interface BlogPost {
 }
 
 const Blog = () => {
-	const { t, language } = useLanguage();
 	const [posts, setPosts] = useState<BlogPost[]>([]);
 	const [categories, setCategories] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -74,7 +73,7 @@ const Blog = () => {
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
-		return new Intl.DateTimeFormat(language === "fi" ? "fi-FI" : "en-US", {
+		return new Intl.DateTimeFormat("fi-FI", {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
@@ -84,8 +83,8 @@ const Blog = () => {
 	return (
 		<>
 			<Helmet>
-				<title>{t("blog.pageTitle")}</title>
-				<meta name="description" content={t("blog.pageDescription")} />
+				<title>Blogi | Velkavapaus.fi</title>
+				<meta name="description" content="Lue talousvinkkejä ja neuvoja velanhoitoon" />
 				<meta
 					name="keywords"
 					content="velanhoito, budjetointi, taloudenhallinta, velkavapaus, blogi"
@@ -96,9 +95,9 @@ const Blog = () => {
 			<main className="container max-w-5xl mx-auto py-6 md:py-8 px-4 md:px-6">
 				<div className="mb-8">
 					<h1 className="text-3xl md:text-4xl font-bold mb-4">
-						{t("blog.title")}
+						Blogi
 					</h1>
-					<p className="text-muted-foreground text-lg">{t("blog.subtitle")}</p>
+					<p className="text-muted-foreground text-lg">Talousvinkkejä ja neuvoja velanhoitoon</p>
 				</div>
 
 				<AdminLink />
@@ -127,9 +126,7 @@ const Blog = () => {
 						<CardContent className="flex flex-col items-center justify-center pt-6">
 							<Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
 							<p className="mt-4 text-center text-muted-foreground">
-								{language === "fi"
-									? "Ladataan blogiartikkeleita..."
-									: "Loading blog posts..."}
+								Ladataan blogiartikkeleita...
 							</p>
 						</CardContent>
 					</Card>
@@ -141,9 +138,7 @@ const Blog = () => {
 							<Card className="w-full p-8">
 								<CardContent className="pt-6 text-center">
 									<p className="text-muted-foreground">
-										{language === "fi"
-											? "Ei artikkeleita tässä kategoriassa."
-											: "No posts in this category."}
+										Ei artikkeleita tässä kategoriassa.
 									</p>
 								</CardContent>
 							</Card>
