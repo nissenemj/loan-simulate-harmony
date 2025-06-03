@@ -5,6 +5,7 @@ export const debtSummary = {
 	en: {
 		debtSummary: {
 			title: "Debt Summary",
+			pageTitle: "Debt Summary",
 			totalDebt: "Total Debt",
 			totalMonthlyPayment: "Total Monthly Payment",
 			totalMonthlyInterest: "Total Monthly Interest",
@@ -37,6 +38,7 @@ export const debtSummary = {
 	fi: {
 		debtSummary: {
 			title: "Velkayhteenveto",
+			pageTitle: "Velkayhteenveto",
 			totalDebt: "Kokonaisvelka",
 			totalMonthlyPayment: "Kuukausimaksu yhteensä",
 			totalMonthlyInterest: "Kuukausittaiset korot yhteensä",
