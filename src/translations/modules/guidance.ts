@@ -1,181 +1,172 @@
 
-// User guidance and help text translations
-
 export const guidance = {
-  fi: {
+  en: {
     guidance: {
-      // Field tooltips
-      fieldTooltips: {
-        debtName: "Anna velkasi tunnistettava nimi (esim. 'Luottokortti', 'Opintolaina')",
-        balance: "Nykyinen velkasumma, jonka olet velkaa",
-        interestRate: "Vuotuinen korkoprosentti (todellinen vuosikorko) tälle velalle",
-        minimumPayment: "Pienin summa, jonka lainanantajasi vaatii maksamaan kuukausittain",
-        extraPayment: "Lisäsumma vähimmäismaksujen lisäksi maksamisen nopeuttamiseksi",
-        strategy: "Valitse maksustrategia: Lumipallo (pienin velka ensin) tai Vyöry (korkein korko ensin)"
+      // Tooltip texts
+      tooltips: {
+        debtName: "Give each debt a name you'll recognize, like 'Visa Card' or 'Car Loan'",
+        balance: "Enter the current amount you owe, not the original loan amount",
+        interestRate: "This is your APR (Annual Percentage Rate) - check your statements",
+        minimumPayment: "The minimum required payment from your lender each month",
+        extraPayment: "Any additional amount you can pay beyond the minimums",
+        strategy: "Choose how to prioritize your debt payments for optimal results"
       },
       
       // Example data
       exampleData: {
-        fillWithExample: "Täytä esimerkillä",
-        clearAndEnterOwn: "Katso miten se toimii esimerkkitiedoilla, sitten tyhjennä ja syötä omat tietosi",
-        exampleNote: "Esimerkkitiedot ladattu - korvaa ne omilla tiedoillasi"
-      },
-      
-      // Strategy comparison
-      strategyComparison: {
-        compareStrategies: "Vertaile strategioita",
-        snowballBest: "Lumipallo-menetelmä sopii sinulle jos haluat nopeita voittoja ja motivaatiota",
-        avalancheBest: "Vyöry-menetelmä säästää eniten rahaa pitkällä aikavälillä",
-        learnMore: "Lue lisää strategioista"
+        buttonText: "Fill with Example Data",
+        added: "Example data added",
+        description: "See how the calculator works with sample debt information"
       },
       
       // Results interpretation
-      resultsGuide: {
-        howToRead: "Miten tulkita näitä tuloksia",
-        totalInterest: "Kokonaiskorko: Kaikki korkokustannukset maksuajan aikana",
-        payoffDate: "Maksupäivä: Arvioitu päivämäärä jolloin kaikki velat on maksettu",
-        totalPaid: "Maksettu yhteensä: Pääoma + kaikki korot",
-        monthlyPayment: "Kuukausierä: Kokonaissumma kuukaudessa (vähimmäismaksut + lisämaksu)",
-        savings: "Säästöt: Paljonko säästät verrattuna vain vähimmäismaksuihin"
+      results: {
+        interpretationTitle: "Understanding Your Results",
+        debtFreeDate: "This is when you'll be completely debt-free if you stick to the plan",
+        totalInterest: "The total amount you'll pay in interest over the life of your debts",
+        totalPaid: "The combined total of principal and interest you'll pay",
+        monthlyPayment: "Your total monthly payment including minimums and extra payments",
+        strategy: "The method used to prioritize which debts to pay off first"
       },
       
-      // Progress indicators
+      // Progress indicator
       progress: {
-        step1: "Vaihe 1/3: Syötä velkatiedot",
-        step2: "Vaihe 2/3: Valitse strategia ja lisämaksu",
-        step3: "Vaihe 3/3: Tarkastele tuloksia",
-        currentStep: "Nykyinen vaihe"
+        addDebts: "Add Your Debts",
+        chooseStrategy: "Choose Strategy", 
+        reviewResults: "Review Results",
+        step: "Step {{current}} of {{total}}"
+      },
+      
+      // Tour
+      tour: {
+        welcome: "Welcome to Velkavapaus.fi",
+        welcomeDescription: "Let's take a quick tour to help you get started",
+        addDebt: "Add Your Debts",
+        addDebtDescription: "Start by adding your debts with their details",
+        chooseStrategy: "Choose Strategy",
+        chooseStrategyDescription: "Select the best repayment method for you",
+        viewResults: "View Results",
+        viewResultsDescription: "See your debt-free timeline and savings",
+        getStarted: "Get Started",
+        skip: "Skip Tour",
+        next: "Next",
+        previous: "Previous"
       },
       
       // Extra payment impact
       extraPaymentImpact: {
-        adding: "Lisäämällä",
-        extraPerMonth: "€ lisää kuukaudessa voit säästää",
-        monthsAnd: "kuukautta ja",
-        inInterest: "€ korkokuluissa"
+        title: "Impact of Extra Payment",
+        adding: "Adding",
+        extraPerMonth: "extra per month",
+        monthsAnd: "months and",
+        inInterest: "in interest"
       },
       
-      // Interactive tour
-      tour: {
-        welcomeTitle: "Tervetuloa velkalaskuriin",
-        welcomeDescription: "Ota nopea kierros ja opi käyttämään laskuria tehokkaasti",
-        debtFieldsTitle: "Syötä velkojesi tiedot",
-        debtFieldsDescription: "Aloita syöttämällä jokaisen velkasi nimi, saldo, korko ja vähimmäismaksu",
-        strategyTitle: "Valitse takaisinmaksustrategia",
-        strategyDescription: "Lumipallo- ja Vyöry-menetelmillä on erilaiset edut - valitse sinulle sopiva",
-        budgetTitle: "Aseta kuukausittainen budjetti",
-        budgetDescription: "Määritä paljonko voit maksaa velkoja kuukausittain yhteensä",
-        resultsTitle: "Tulkitse tuloksiasi",
-        resultsDescription: "Näe milloin olet velaton ja paljonko säästät eri strategioilla",
-        skipTour: "Ohita kierros",
-        nextStep: "Seuraava",
-        previousStep: "Edellinen",
-        startCalculating: "Aloita laskeminen"
-      },
-      
-      // Validation messages
+      // Form validation
       validation: {
-        required: "Tämä kenttä on pakollinen",
-        positiveNumber: "Syötä positiivinen luku",
-        reasonableInterest: "Varmista korko - useimmat lainat ovat 0-25% välillä",
-        minimumTooHigh: "Vähimmäismaksu vaikuttaa korkealta verrattuna saldoon",
-        nameExists: "Tämä nimi on jo käytössä - anna yksilöllinen nimi"
+        required: "This field is required",
+        positiveNumber: "Must be a positive number",
+        validEmail: "Please enter a valid email address",
+        minLength: "Must be at least {{length}} characters",
+        maxLength: "Must be no more than {{length}} characters",
+        range: "Value must be between {{min}} and {{max}}"
       },
       
       // Glossary terms
       glossary: {
-        interestRate: "Korkoprosentti: Vuotuinen kustannus lainan käytöstä, ilmaistuna prosentteina pääomasta",
-        minimumPayment: "Vähimmäismaksu: Pienin summa, joka lainanantajan mukaan on maksettava kuukausittain",
-        principal: "Pääoma: Alkuperäinen lainasumma ilman korkoja",
-        apr: "Todellinen vuosikorko: Lainan kokonaiskustannus vuodessa mukaan lukien korot ja palkkiot",
-        snowball: "Lumipallo-menetelmä: Maksa ensin pienin velka, sitten seuraavaksi pienin",
-        avalanche: "Vyöry-menetelmä: Maksa ensin korkein korko, sitten seuraavaksi korkein",
-        debtFreeDate: "Velattomuuspäivä: Arvioitu päivämäärä, jolloin kaikki velat on maksettu",
-        extraPayment: "Lisämaksu: Vähimmäismaksun ylittävä summa, joka nopeuttaa velan maksua"
+        debt: "Money that is owed to a lender",
+        interestRate: "The percentage charged on borrowed money",
+        minimumPayment: "The lowest amount you must pay each month",
+        principal: "The original amount of money borrowed",
+        apr: "Annual Percentage Rate - the yearly cost of borrowing",
+        balance: "The amount of money currently owed",
+        avalanche: "Debt repayment method focusing on highest interest rates first",
+        snowball: "Debt repayment method focusing on smallest balances first"
       }
     }
   },
-  en: {
+  fi: {
     guidance: {
-      fieldTooltips: {
-        debtName: "Give your debt a recognizable name (e.g., 'Credit Card', 'Student Loan')",
-        balance: "The current amount you owe on this debt",
-        interestRate: "The annual percentage rate (APR) for this debt",
-        minimumPayment: "The smallest amount your lender requires you to pay each month",
-        extraPayment: "Additional amount beyond minimum payments to accelerate payoff",
-        strategy: "Choose payment strategy: Snowball (smallest debt first) or Avalanche (highest interest first)"
+      // Tooltip texts
+      tooltips: {
+        debtName: "Anna jokaiselle velalle nimi, jonka tunnistat, kuten 'Visa-kortti' tai 'Autolaina'",
+        balance: "Syötä nykyinen velkasumma, ei alkuperäinen lainasumma",
+        interestRate: "Tämä on todellinen vuosikorko - tarkista tiliotteistasi",
+        minimumPayment: "Lainanantajan vaatima vähimmäiskuukausimaksu",
+        extraPayment: "Mikä tahansa lisäsumma, jonka voit maksaa vähimmäismaksujen lisäksi",
+        strategy: "Valitse kuinka priorisoit velkojen maksuja optimaalisten tulosten saamiseksi"
       },
       
+      // Example data
       exampleData: {
-        fillWithExample: "Fill with Example",
-        clearAndEnterOwn: "See how it works with sample data, then clear and enter your own",
-        exampleNote: "Example data loaded - replace with your own information"
+        buttonText: "Täytä esimerkkitiedoilla",
+        added: "Esimerkkitiedot lisätty",
+        description: "Katso miten laskuri toimii esimerkkivelkatiedoilla"
       },
       
-      strategyComparison: {
-        compareStrategies: "Compare Strategies",
-        snowballBest: "Snowball method is best if you want quick wins and motivation",
-        avalancheBest: "Avalanche method saves the most money in the long run",
-        learnMore: "Learn more about strategies"
+      // Results interpretation
+      results: {
+        interpretationTitle: "Tulosten tulkinta",
+        debtFreeDate: "Tämä on päivämäärä, jolloin olet täysin velaton noudattaessasi suunnitelmaa",
+        totalInterest: "Kokonaissumma, jonka maksat korkoja velkojesi elinkaaren aikana",
+        totalPaid: "Pääoman ja korkojen yhteissumma, jonka maksat",
+        monthlyPayment: "Kuukausittainen kokonaismaksusi sisältäen vähimmäismaksut ja lisämaksut",
+        strategy: "Menetelmä, jolla priorisoidaan, mitkä velat maksetaan ensin"
       },
       
-      resultsGuide: {
-        howToRead: "How to Read These Results",
-        totalInterest: "Total Interest: All interest costs over the payment period",
-        payoffDate: "Payoff Date: Estimated date when all debts will be paid off",
-        totalPaid: "Total Paid: Principal + all interest",
-        monthlyPayment: "Monthly Payment: Total amount per month (minimum payments + extra)",
-        savings: "Savings: How much you save compared to paying only minimums"
-      },
-      
+      // Progress indicator
       progress: {
-        step1: "Step 1/3: Enter debt details",
-        step2: "Step 2/3: Choose strategy and extra payment",
-        step3: "Step 3/3: Review results",
-        currentStep: "Current step"
+        addDebts: "Lisää velkasi",
+        chooseStrategy: "Valitse strategia",
+        reviewResults: "Tarkastele tuloksia",
+        step: "Vaihe {{current}}/{{total}}"
       },
       
-      extraPaymentImpact: {
-        adding: "Adding",
-        extraPerMonth: "€ extra per month could save you",
-        monthsAnd: "months and",
-        inInterest: "€ in interest"
-      },
-      
+      // Tour
       tour: {
-        welcomeTitle: "Welcome to the Debt Calculator",
-        welcomeDescription: "Take a quick tour to learn how to use the calculator effectively",
-        debtFieldsTitle: "Enter Your Debt Details",
-        debtFieldsDescription: "Start by entering each debt's name, balance, interest rate, and minimum payment",
-        strategyTitle: "Choose Repayment Strategy",
-        strategyDescription: "Snowball and Avalanche methods have different benefits - choose what works for you",
-        budgetTitle: "Set Monthly Budget",
-        budgetDescription: "Determine how much you can pay toward debts each month in total",
-        resultsTitle: "Interpret Your Results",
-        resultsDescription: "See when you'll be debt-free and how much you'll save with different strategies",
-        skipTour: "Skip Tour",
-        nextStep: "Next",
-        previousStep: "Previous",
-        startCalculating: "Start Calculating"
+        welcome: "Tervetuloa Velkavapaus.fi:hin",
+        welcomeDescription: "Tehdään nopea kierros auttaaksemme sinua alkuun",
+        addDebt: "Lisää velkasi",
+        addDebtDescription: "Aloita lisäämällä velkasi niiden tietoineen",
+        chooseStrategy: "Valitse strategia",
+        chooseStrategyDescription: "Valitse sinulle paras takaisinmaksumenetelmä",
+        viewResults: "Tarkastele tuloksia",
+        viewResultsDescription: "Näe velaton aikataulusi ja säästösi",
+        getStarted: "Aloita",
+        skip: "Ohita kierros",
+        next: "Seuraava",
+        previous: "Edellinen"
       },
       
+      // Extra payment impact
+      extraPaymentImpact: {
+        title: "Lisämaksun vaikutus",
+        adding: "Lisäämällä",
+        extraPerMonth: "lisää kuukaudessa",
+        monthsAnd: "kuukautta ja",
+        inInterest: "korkosäästöä"
+      },
+      
+      // Form validation
       validation: {
-        required: "This field is required",
-        positiveNumber: "Please enter a positive number",
-        reasonableInterest: "Double-check the interest rate - most loans are between 0-25%",
-        minimumTooHigh: "Minimum payment seems high compared to balance",
-        nameExists: "This name is already used - please provide a unique name"
+        required: "Tämä kenttä on pakollinen",
+        positiveNumber: "Täytyy olla positiivinen luku",
+        validEmail: "Syötä kelvollinen sähköpostiosoite",
+        minLength: "Täytyy olla vähintään {{length}} merkkiä",
+        maxLength: "Saa olla enintään {{length}} merkkiä",
+        range: "Arvon täytyy olla välillä {{min}} ja {{max}}"
       },
       
+      // Glossary terms
       glossary: {
-        interestRate: "Interest Rate: The yearly cost of borrowing money, expressed as a percentage of the principal",
-        minimumPayment: "Minimum Payment: The smallest amount the lender requires you to pay each month",
-        principal: "Principal: The original loan amount without interest",
-        apr: "APR: Annual Percentage Rate - the total yearly cost of the loan including interest and fees",
-        snowball: "Snowball Method: Pay off smallest debt first, then next smallest",
-        avalanche: "Avalanche Method: Pay off highest interest rate first, then next highest",
-        debtFreeDate: "Debt-Free Date: Estimated date when all debts will be paid off",
-        extraPayment: "Extra Payment: Amount above minimum payments that accelerates debt payoff"
+        debt: "Rahaa, joka on velkaa lainanantajalle",
+        interestRate: "Lainatusta rahasta veloitettava prosenttiosuus",
+        minimumPayment: "Pienin summa, joka sinun täytyy maksaa kuukausittain",
+        principal: "Alkuperäinen lainattu rahasumma",
+        apr: "Todellinen vuosikorko - lainanoton vuosittainen kustannus",
+        balance: "Tällä hetkellä velkaa oleva rahasumma",
+        avalanche: "Velanmaksumenetelmä, joka keskittyy korkeimpiin korkoihin ensin",
+        snowball: "Velanmaksumenetelmä, joka keskittyy pienimpiin saldoihin ensin"
       }
     }
   }

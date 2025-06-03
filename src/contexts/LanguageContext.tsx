@@ -61,11 +61,10 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 	const t = (key: string, params?: Record<string, string | number>): string => {
 		let translation = fiTranslations[key];
 
-		if (translation === undefined) {
+		if (translation === undefined || translation === null) {
 			console.warn(`Translation key missing: ${key}`);
-			// Return only the last part of the key for a more user-friendly fallback
-			const parts = key.split(".");
-			return parts[parts.length - 1];
+			// Return the key itself instead of just the last part for better debugging
+			return key;
 		}
 
 		// If we have parameters, replace them in the translation string
