@@ -1,5 +1,3 @@
-
-
 // Repayment-related translations
 
 export const repayment = {
@@ -63,6 +61,8 @@ export const repayment = {
 			avalancheMethod: "Avalanche Method",
 			snowballMethod: "Snowball Method",
 			chooseStrategy: "Choose Your Strategy",
+			minPayment: "Min Payment",
+			budgetPlaceholder: "Enter monthly budget",
 		},
 	},
 	fi: {
@@ -127,7 +127,8 @@ export const repayment = {
 			avalancheMethod: "Lumivyörymenetelmä",
 			snowballMethod: "Lumipallomenetelmä",
 			chooseStrategy: "Valitse strategiasi",
+			minPayment: "Vähimmäismaksu",
+			budgetPlaceholder: "Syötä kuukausittainen budjetti",
 		},
 	},
 };
-
