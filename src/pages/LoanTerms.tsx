@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -9,7 +8,6 @@ import { ChevronLeft, Search, Home, InfoIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Helmet } from 'react-helmet-async';
 import { useIsMobile } from '@/hooks/use-mobile';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const LoanTerms: React.FC = () => {
   const navigate = useNavigate();
@@ -145,7 +143,6 @@ const LoanTerms: React.FC = () => {
             </Button>
             <h1 className="text-3xl font-bold">{t('loanTerms.pageTitle')}</h1>
           </div>
-          <LanguageSwitcher />
         </div>
         
         <Card className="mb-8">
