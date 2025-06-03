@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { PiggyBank, TrendingDown, DollarSign } from 'lucide-react';
 import { Loan, calculateLoan, formatCurrency } from '@/utils/loanCalculations';
 import { toast } from 'sonner';
-import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedNumber from './AnimatedNumber';
 import { cn } from '@/lib/utils';
 
@@ -15,7 +14,6 @@ interface SavingsImpactProps {
 }
 
 const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) => {
-  const { t } = useLanguage();
   const activeLoans = loans.filter(loan => loan.isActive);
   
   if (activeLoans.length === 0) {
@@ -38,7 +36,8 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
   
   const handlePayoffClick = (id: string) => {
     onPayoffLoan(id);
-    toast(t('toast.loanPaidOff') + ': ' + loans.find(loan => loan.id === id)?.name);
+    const loanName = loans.find(loan => loan.id === id)?.name;
+    toast('Laina merkitty maksetuksi: ' + loanName);
   };
 
   return (
@@ -48,7 +47,7 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
           <div className="bg-primary/10 p-2 rounded-full">
             <PiggyBank className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="text-lg font-medium">{t('savings.title')}</h3>
+          <h3 className="text-lg font-medium">Säästömahdollisuudet</h3>
         </div>
         
         <div className="space-y-4">
@@ -70,7 +69,7 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
                   {loan.name}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {t('savings.payingOffNow')}
+                  Maksamalla pois nyt säästät
                 </p>
                 <p className="text-lg font-semibold text-green-600 flex items-center gap-1">
                   <DollarSign size={16} />
@@ -85,13 +84,13 @@ const SavingsImpact: React.FC<SavingsImpactProps> = ({ loans, onPayoffLoan }) =>
                 className="bg-white hover:bg-green-50 border-green-200 text-green-700 hover:text-green-800"
                 onClick={() => handlePayoffClick(loan.id)}
               >
-                {t('savings.payOff')}
+                Maksa pois
               </Button>
             </div>
           ))}
           
           <p className="text-sm text-center text-muted-foreground pt-2">
-            {t('savings.description')}
+            Näet kuinka paljon säästät korkokuluissa maksamalla lainan pois heti
           </p>
         </div>
       </CardContent>

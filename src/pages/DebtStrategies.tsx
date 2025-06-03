@@ -149,7 +149,7 @@ const DebtStrategies = () => {
                     <Alert>
                       <Info className="h-4 w-4" />
                       <AlertDescription>
-                        Laske ensin takaisinmaksusuunnitelma Laskuri-välilehdellä nähdäksesi aikajanar.
+                        Laske ensin takaisinmaksusuunnitelma Laskuri-välilehdellä nähdäksesi aikajanan.
                       </AlertDescription>
                     </Alert>
                   )}

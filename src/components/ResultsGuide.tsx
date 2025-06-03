@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
 	Collapsible,
@@ -28,29 +28,28 @@ interface ResultsGuideProps {
 }
 
 const ResultsGuide: React.FC<ResultsGuideProps> = ({ className }) => {
-	const { t } = useLanguage();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const guideItems = [
 		{
 			icon: <Calendar className="h-5 w-5 text-primary" />,
-			title: t("results.payoffDate"),
-			description: t("help.resultsGuide.payoffDate"),
+			title: "Takaisinmaksuaika",
+			description: "Kuinka kauan kestää päästä veloista eroon",
 		},
 		{
 			icon: <DollarSign className="h-5 w-5 text-primary" />,
-			title: t("results.totalInterest"),
-			description: t("help.resultsGuide.totalInterest"),
+			title: "Korot yhteensä",
+			description: "Kuinka paljon maksat korkoja kaiken kaikkiaan",
 		},
 		{
 			icon: <CreditCard className="h-5 w-5 text-primary" />,
-			title: t("results.totalPaid"),
-			description: t("help.resultsGuide.totalPaid"),
+			title: "Maksettu yhteensä",
+			description: "Kokonaissumma pääoma + korot",
 		},
 		{
 			icon: <TrendingUp className="h-5 w-5 text-primary" />,
-			title: t("calculator.totalMonthlyPayment"),
-			description: t("help.resultsGuide.monthlyPayment"),
+			title: "Kuukausimaksu yhteensä",
+			description: "Paljonko maksat kuukaudessa yhteensä",
 		},
 	];
 
@@ -63,7 +62,7 @@ const ResultsGuide: React.FC<ResultsGuideProps> = ({ className }) => {
 							<div className="flex items-center gap-2">
 								<Info className="h-5 w-5 text-primary" />
 								<CardTitle className="text-lg">
-									{t("help.resultsGuide.title")}
+									Miten lukea tuloksia
 								</CardTitle>
 							</div>
 							<Button variant="ghost" size="sm">
@@ -75,7 +74,7 @@ const ResultsGuide: React.FC<ResultsGuideProps> = ({ className }) => {
 							</Button>
 						</div>
 						<CardDescription>
-							{t("help.resultsGuide.description")}
+							Opas tulosten tulkitsemiseen
 						</CardDescription>
 					</CardHeader>
 				</CollapsibleTrigger>
@@ -100,16 +99,16 @@ const ResultsGuide: React.FC<ResultsGuideProps> = ({ className }) => {
 						
 						<div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
 							<h4 className="font-medium text-sm text-primary mb-2">
-								{t("help.quickTips.title")}
+								Hyödyllisiä vinkkejä
 							</h4>
 							<ul className="space-y-2 text-sm text-muted-foreground">
 								<li className="flex items-start gap-2">
 									<span className="text-primary mt-1">•</span>
-									{t("help.quickTips.consistency")}
+									Pidä kiinni maksuaikataulusta säännöllisesti
 								</li>
 								<li className="flex items-start gap-2">
 									<span className="text-primary mt-1">•</span>
-									{t("help.quickTips.extraPayments")}
+									Pienetkin lisämaksut voivat säästää merkittävästi korkokuluissa
 								</li>
 							</ul>
 						</div>
