@@ -21,6 +21,11 @@ const ResultsInterpretationGuide: React.FC<ResultsInterpretationGuideProps> = ({
   
   if (!paymentPlan) return null;
   
+  // Calculate total original debt from the first month's data
+  const totalOriginalDebt = paymentPlan.monthlyPlans.length > 0 
+    ? paymentPlan.monthlyPlans[0].totalRemainingBalance + paymentPlan.monthlyPlans[0].totalPrincipalPaid
+    : 0;
+  
   const interpretationItems = [
     {
       icon: DollarSign,
@@ -37,7 +42,7 @@ const ResultsInterpretationGuide: React.FC<ResultsInterpretationGuideProps> = ({
     {
       icon: TrendingDown,
       key: 'totalPaid',
-      value: `€${(paymentPlan.totalInterestPaid + paymentPlan.debts.reduce((sum, debt) => sum + debt.balance, 0)).toLocaleString('fi-FI', { maximumFractionDigits: 0 })}`,
+      value: `€${(paymentPlan.totalInterestPaid + totalOriginalDebt).toLocaleString('fi-FI', { maximumFractionDigits: 0 })}`,
       description: t('guidance.resultsGuide.totalPaid')
     },
     {
