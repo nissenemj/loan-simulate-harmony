@@ -74,14 +74,11 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
     }
   }, [debts, t, isMobile]);
 
-  // Custom label formatter for better readability
-  const formatXAxisLabel = (value: string) => {
+  // Simple tick formatter for X-axis that only returns strings
+  const formatXAxisTick = (value: string) => {
     if (isMobile && value.length > 12) {
-      return value.split(' ').map((word, index) => (
-        <tspan key={index} x={0} dy={index === 0 ? 0 : 12}>
-          {word}
-        </tspan>
-      ));
+      // For mobile, truncate long labels
+      return value.substring(0, 10) + '...';
     }
     return value;
   };
@@ -108,7 +105,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                     margin={{ 
                       top: 20, 
                       right: 20, 
-                      left: 20, 
+                      left: isMobile ? 80 : 100, 
                       bottom: isMobile ? 120 : 80 
                     }}
                   >
@@ -123,7 +120,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         fill: 'hsl(var(--foreground))'
                       }}
                       interval={0}
-                      tickFormatter={formatXAxisLabel}
+                      tickFormatter={formatXAxisTick}
                     />
                     <YAxis
                       tick={{ 
@@ -134,6 +131,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         value: t('visualization.monthsToPayoff'), 
                         angle: -90, 
                         position: 'insideLeft',
+                        offset: isMobile ? -60 : -80,
                         style: { 
                           textAnchor: 'middle',
                           fill: 'hsl(var(--foreground))'
@@ -180,7 +178,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                     margin={{ 
                       top: 20, 
                       right: 20, 
-                      left: 20, 
+                      left: isMobile ? 80 : 100, 
                       bottom: isMobile ? 120 : 80 
                     }}
                   >
@@ -195,7 +193,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         fill: 'hsl(var(--foreground))'
                       }}
                       interval={0}
-                      tickFormatter={formatXAxisLabel}
+                      tickFormatter={formatXAxisTick}
                     />
                     <YAxis
                       tick={{ 
@@ -206,6 +204,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         value: t('visualization.totalInterestPaid'), 
                         angle: -90, 
                         position: 'insideLeft',
+                        offset: isMobile ? -60 : -80,
                         style: { 
                           textAnchor: 'middle',
                           fill: 'hsl(var(--foreground))'
