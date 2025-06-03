@@ -114,6 +114,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
 					<TableHeader>
 						<TableRow className="bg-secondary/50">
 							<TableHead>{t("table.name")}</TableHead>
+							<TableHead>{t("table.balance")}</TableHead>
 							<TableHead
 								className="cursor-pointer hover:bg-secondary/80 transition-colors"
 								onClick={() => handleSort("monthlyPayment")}
@@ -194,6 +195,12 @@ const LoanTable: React.FC<LoanTableProps> = ({
 												Euribor
 											</Badge>
 										)}
+									</TableCell>
+									<TableCell>
+										<AnimatedNumber
+											value={loan.currentBalance || loan.amount}
+											formatter={(val) => formatCurrency(val)}
+										/>
 									</TableCell>
 									<TableCell>
 										<AnimatedNumber
