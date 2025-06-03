@@ -1,81 +1,39 @@
 
-// Debt summary-related translations
+// Debt summary related translations
 
 export const debtSummary = {
-  en: {
-    debtSummary: {
-      title: "Debt Summary",
-      cardName: "Name",
-      monthlyPayment: "Monthly Payment",
-      monthlyInterest: "Monthly Interest",
-      totalLifetimeInterest: "Total Lifetime Interest",
-      payoffButton: "Pay Off",
-      noCardsMessage: "No credit cards added.",
-      totalCards: "Total",
-      neverPaidOff: "Never paid off",
-      demoDataMessage: "This is demo data. Add your own credit cards to get a personalized estimate.",
-      actions: "Actions",
-      loanName: "Loan Name",
-      monthlyInterestEstimate: "Monthly Interest Est.",
-      totalInterestEstimate: "Total Interest Est.",
-      noLoansMessage: "No loans added.",
-      totalLoans: "Loans Total",
-      totalSummarySection: "Debt Totals",
-      backButton: "Back",
-      pageTitle: "Your Debt Summary",
-      pageDescription: "Review your overall debt situation and payment scenarios.",
-      loansSection: "Loans",
-      creditCardsSection: "Credit Cards",
-      totalMonthlyPayment: "Total Monthly Payment",
-      totalMonthlyInterest: "Total Monthly Interest",
-      totalBalance: "Total Balance",
-      tableSummary: "Debt Relationship Summary",
-      totalAmountPaid: "Total Amount Paid",
-      metaDescription: "Review your overall debt situation, including loans and credit cards.",
-      includingInterestAndFees: "Including principal, interest, and fees",
-      summaryExplanation: "This table shows your debt summarized across all loans and credit cards.",
-      toast: {
-        loanPaidOff: "Loan paid off: {{name}}",
-        cardPaidOff: "Credit card paid off: {{name}}"
-      }
-    }
-  },
-  fi: {
-    debtSummary: {
-      title: "Velkakatsaus",
-      cardName: "Nimi",
-      monthlyPayment: "Kuukausierä",
-      monthlyInterest: "Kuukausikorko",
-      totalLifetimeInterest: "Kokonaiskorko eliniän aikana",
-      payoffButton: "Maksa pois",
-      noCardsMessage: "Ei lisättyjä luottokortteja.",
-      totalCards: "Yhteensä",
-      neverPaidOff: "Ei koskaan maksettu pois",
-      demoDataMessage: "Tämä on demotietoa. Lisää omat luottokorttisi saadaksesi henkilökohtaisen arvion.",
-      actions: "Toiminnot",
-      loanName: "Lainan nimi",
-      monthlyInterestEstimate: "Kuukausikorko arvio",
-      totalInterestEstimate: "Kokonaiskorko arvio",
-      noLoansMessage: "Ei lisättyjä lainoja.",
-      totalLoans: "Lainat yhteensä",
-      totalSummarySection: "Velan kokonaismäärät",
-      backButton: "Takaisin",
-      pageTitle: "Velkakatsauksesi",
-      pageDescription: "Tarkastele kokonaisvelkatilannettasi ja maksusuunnitelmia.",
-      loansSection: "Lainat",
-      creditCardsSection: "Luottokortit",
-      totalMonthlyPayment: "Kuukausimaksu yhteensä",
-      totalMonthlyInterest: "Kuukausikorko yhteensä",
-      totalBalance: "Kokonaissaldo",
-      tableSummary: "Velkasuhteiden yhteenveto",
-      totalAmountPaid: "Maksettu summa yhteensä",
-      metaDescription: "Tarkastele kokonaisvelkatilannettasi, mukaan lukien lainat ja luottokortit.",
-      includingInterestAndFees: "Sisältäen pääoman, korot ja maksut",
-      summaryExplanation: "Tämä taulukko näyttää velkasi yhteenvedon kaikista lainoista ja luottokorteista.",
-      toast: {
-        loanPaidOff: "Laina maksettu: {{name}}",
-        cardPaidOff: "Luottokortti maksettu: {{name}}"
-      }
-    }
-  }
+	en: {
+		debtSummary: {
+			title: "Debt Summary",
+			totalDebt: "Total Debt",
+			totalMonthlyPayment: "Total Monthly Payment",
+			totalMonthlyInterest: "Total Monthly Interest",
+			monthlyPayment: "Monthly Payment",
+			averageInterestRate: "Average Interest Rate",
+			estimatedPayoffTime: "Estimated Payoff Time",
+			totalInterestPaid: "Total Interest Paid",
+			debtToIncomeRatio: "Debt-to-Income Ratio",
+			payoffTimeline: "Payoff Timeline",
+			recommendedStrategy: "Recommended Strategy",
+			quickWins: "Quick Wins",
+			highPriorityDebts: "High Priority Debts",
+		},
+	},
+	fi: {
+		debtSummary: {
+			title: "Velkayhteenveto",
+			totalDebt: "Kokonaisvelka",
+			totalMonthlyPayment: "Kuukausimaksu yhteensä",
+			totalMonthlyInterest: "Kuukausittaiset korot yhteensä",
+			monthlyPayment: "Kuukausimaksu",
+			averageInterestRate: "Keskimääräinen korkoprosentti",
+			estimatedPayoffTime: "Arvioitu maksuaika",
+			totalInterestPaid: "Maksetut korot yhteensä",
+			debtToIncomeRatio: "Velka-tulo-suhde",
+			payoffTimeline: "Maksuaikataulu",
+			recommendedStrategy: "Suositeltu strategia",
+			quickWins: "Nopeat voitot",
+			highPriorityDebts: "Korkean prioriteetin velat",
+		},
+	},
 };

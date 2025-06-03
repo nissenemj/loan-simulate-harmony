@@ -38,7 +38,7 @@ const LoanSummary: React.FC<LoanSummaryProps> = ({ loans }) => {
             </div>
             
             <div className="space-y-2 text-center p-4 bg-secondary/50 rounded-lg">
-              <h3 className="text-sm font-medium text-muted-foreground">{t('loan.table.monthlyPayment')}</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t('debtSummary.monthlyPayment')}</h3>
               <p className="text-2xl font-semibold">
                 <AnimatedNumber 
                   value={totalPrincipal} 
