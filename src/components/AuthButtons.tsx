@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Avatar, 
   AvatarFallback 
@@ -13,13 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export const AuthButtons = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const { t } = useLanguage();
   const isMobile = useIsMobile();
 
   const handleLogin = () => {
@@ -38,11 +36,11 @@ export const AuthButtons = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-          {t("auth.dashboard")}
+          Hallintapaneeli
         </DropdownMenuItem>
         <DropdownMenuItem onClick={signOut}>
           <LogOut className="h-4 w-4 mr-2" />
-          {t("auth.logout")}
+          Kirjaudu ulos
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -52,7 +50,7 @@ export const AuthButtons = () => {
       onClick={handleLogin}
       size={isMobile ? "sm" : "default"}
     >
-      {t("auth.login")}
+      Kirjaudu sisään
     </Button>
   );
 };

@@ -1,5 +1,5 @@
+
 import React, { useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -21,7 +21,6 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 
 const HelpWidget: React.FC = () => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +32,7 @@ const HelpWidget: React.FC = () => {
 			return [
 				{
 					icon: <Calculator className="h-4 w-4" />,
-					label: t("help.calculatorGuide"),
+					label: "Laskurin opas",
 					action: () => {
 						// TODO: Implement calculator tutorial
 						console.log("Calculator tutorial");
@@ -41,7 +40,7 @@ const HelpWidget: React.FC = () => {
 				},
 				{
 					icon: <PlayCircle className="h-4 w-4" />,
-					label: t("help.watchDemo"),
+					label: "Katso demo",
 					action: () => {
 						// TODO: Implement demo video
 						console.log("Demo video");
@@ -54,7 +53,7 @@ const HelpWidget: React.FC = () => {
 			return [
 				{
 					icon: <Lightbulb className="h-4 w-4" />,
-					label: t("help.dashboardTips"),
+					label: "Hallintapaneelin vinkit",
 					action: () => {
 						// TODO: Implement dashboard tips
 						console.log("Dashboard tips");
@@ -75,7 +74,7 @@ const HelpWidget: React.FC = () => {
 					<Button
 						size="lg"
 						className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-200"
-						aria-label={t("help.helpCenter")}
+						aria-label="Ohjekeskus"
 					>
 						<HelpCircle className="h-6 w-6" />
 					</Button>
@@ -86,7 +85,7 @@ const HelpWidget: React.FC = () => {
 					side="top"
 				>
 					<DropdownMenuLabel className="text-center">
-						{t("help.helpCenter")}
+						Ohjekeskus
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					
@@ -114,7 +113,7 @@ const HelpWidget: React.FC = () => {
 						className="flex items-center gap-2 cursor-pointer"
 					>
 						<BookOpen className="h-4 w-4" />
-						{t("help.readGuides")}
+						Lue oppaat
 					</DropdownMenuItem>
 					
 					<DropdownMenuItem
@@ -125,7 +124,7 @@ const HelpWidget: React.FC = () => {
 						className="flex items-center gap-2 cursor-pointer"
 					>
 						<MessageCircle className="h-4 w-4" />
-						{t("help.contactSupport")}
+						Ota yhteyttä tukeen
 					</DropdownMenuItem>
 					
 					<DropdownMenuItem
@@ -136,7 +135,7 @@ const HelpWidget: React.FC = () => {
 						className="flex items-center gap-2 cursor-pointer"
 					>
 						<ExternalLink className="h-4 w-4" />
-						{t("help.faq")}
+						Usein kysytyt kysymykset
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
