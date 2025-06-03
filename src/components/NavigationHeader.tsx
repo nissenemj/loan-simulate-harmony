@@ -37,6 +37,12 @@ import {
 	PieChart,
 	DollarSign,
 } from "lucide-react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { toast } from "@/components/ui/use-toast";
 import VelkavapausLogo from "./VelkavapausLogo";
@@ -207,204 +213,243 @@ const NavigationHeader = () => {
 	};
 
 	return (
-		<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b">
-			<div className="container flex h-16 items-center justify-between px-4">
-				<div
-					className="flex items-center cursor-pointer"
-					onClick={() => navigate("/")}
-				>
-					<VelkavapausLogo />
-				</div>
+		<TooltipProvider>
+			<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b">
+				<div className="container flex h-16 items-center justify-between px-4">
+					<div
+						className="flex items-center cursor-pointer"
+						onClick={() => navigate("/")}
+					>
+						<VelkavapausLogo />
+					</div>
 
-				{isMobile ? (
-					<Sheet open={open} onOpenChange={setOpen}>
-						<SheetTrigger asChild>
-							<Button variant="ghost" size="sm" className="px-2 -mr-2">
-								<Menu className="h-5 w-5" />
-								<span className="sr-only">{t("navigation.menu")}</span>
-							</Button>
-						</SheetTrigger>
-						<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
-							<div className="border-b px-6 py-4">
-								<SheetTitle>{t("app.title")}</SheetTitle>
-							</div>
-							<nav className="flex flex-col gap-1 p-4">
-								{mainNavItems.map((item) =>
-									item.children ? (
-										<div key={item.href} className="space-y-1">
-											<div className="px-3 py-2 text-sm font-medium flex items-center">
+					{isMobile ? (
+						<Sheet open={open} onOpenChange={setOpen}>
+							<SheetTrigger asChild>
+								<Button variant="ghost" size="sm" className="px-2 -mr-2">
+									<Menu className="h-5 w-5" />
+									<span className="sr-only">{t("navigation.menu")}</span>
+								</Button>
+							</SheetTrigger>
+							<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
+								<div className="border-b px-6 py-4">
+									<SheetTitle>{t("app.title")}</SheetTitle>
+								</div>
+								<nav className="flex flex-col gap-1 p-4">
+									{mainNavItems.map((item) =>
+										item.children ? (
+											<div key={item.href} className="space-y-1">
+												<div className="px-3 py-2 text-sm font-medium flex items-center">
+													{item.icon && (
+														<span className="mr-2">{item.icon}</span>
+													)}
+													{item.label}
+												</div>
+												<div className="pl-4 space-y-1">
+													{item.children.map((child: any) => (
+														<Button
+															key={child.href}
+															variant={
+																isActive(child.href) ? "secondary" : "ghost"
+															}
+															className="w-full justify-start text-sm"
+															onClick={() => handleNavigation(child.href)}
+														>
+															{child.label}
+														</Button>
+													))}
+												</div>
+											</div>
+										) : (
+											<Button
+												key={item.href}
+												variant={isActive(item.href) ? "secondary" : "ghost"}
+												className="w-full justify-start"
+												onClick={() => handleNavigation(item.href)}
+											>
 												{item.icon && <span className="mr-2">{item.icon}</span>}
 												{item.label}
-											</div>
-											<div className="pl-4 space-y-1">
-												{item.children.map((child: any) => (
-													<Button
-														key={child.href}
-														variant={
-															isActive(child.href) ? "secondary" : "ghost"
-														}
-														className="w-full justify-start text-sm"
-														onClick={() => handleNavigation(child.href)}
-													>
-														{child.label}
-													</Button>
-												))}
-											</div>
-										</div>
+											</Button>
+										)
+									)}
+								</nav>
+								<div className="border-t p-4 space-y-4">
+									<div className="flex items-center justify-between gap-2">
+										<LanguageSwitcher />
+										<ModeToggle />
+									</div>
+									{user ? (
+										<>
+											<Button
+												variant="default"
+												onClick={() => handleNavigation("/dashboard")}
+												className="w-full"
+											>
+												<PieChart className="h-4 w-4 mr-2" />
+												{t("navigation.dashboard")}
+											</Button>
+											<Button
+												variant="outline"
+												onClick={() => handleNavigation("/settings")}
+												className="w-full"
+											>
+												<Settings className="h-4 w-4 mr-2" />
+												{t("navigation.settings")}
+											</Button>
+											<Button
+												variant="destructive"
+												onClick={handleLogout}
+												className="w-full"
+											>
+												<LogOut className="h-4 w-4 mr-2" />
+												{t("auth.logout")}
+											</Button>
+										</>
 									) : (
+										<div className="space-y-2">
+											<Button
+												variant="default"
+												onClick={() => handleNavigation("/auth")}
+												className="w-full"
+											>
+												<LogIn className="h-4 w-4 mr-2" />
+												{t("auth.login")}
+											</Button>
+											<Button
+												variant="outline"
+												onClick={() => handleNavigation("/auth?tab=register")}
+												className="w-full"
+											>
+												<UserPlus className="h-4 w-4 mr-2" />
+												{t("auth.signUp")}
+											</Button>
+										</div>
+									)}
+								</div>
+							</SheetContent>
+						</Sheet>
+					) : (
+						<div className="flex flex-1 items-center justify-between">
+							<nav className="flex items-center space-x-1 mx-4">
+								<Tooltip>
+									<TooltipTrigger asChild>
 										<Button
-											key={item.href}
-											variant={isActive(item.href) ? "secondary" : "ghost"}
-											className="w-full justify-start"
-											onClick={() => handleNavigation(item.href)}
+											variant={isActive("/") ? "secondary" : "ghost"}
+											onClick={() => handleNavigation("/")}
+											className="hidden md:flex"
 										>
-											{item.icon && <span className="mr-2">{item.icon}</span>}
-											{item.label}
+											<Home className="h-4 w-4 mr-1" />
+											{t("navigation.home")}
 										</Button>
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>{t("navigation.tooltips.home")}</p>
+									</TooltipContent>
+								</Tooltip>
+
+								{mainNavItems.map((item) =>
+									item.children ? (
+										<div key={item.href}>{renderDropdownMenu(item)}</div>
+									) : (
+										<Tooltip key={item.href}>
+											<TooltipTrigger asChild>
+												<Button
+													variant={isActive(item.href) ? "secondary" : "ghost"}
+													onClick={() => handleNavigation(item.href)}
+												>
+													{item.icon && (
+														<span className="mr-1">{item.icon}</span>
+													)}
+													{item.label}
+												</Button>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													{t(`navigation.tooltips.${item.label.toLowerCase()}`)}
+												</p>
+											</TooltipContent>
+										</Tooltip>
 									)
 								)}
 							</nav>
-							<div className="border-t p-4 space-y-4">
-								<div className="flex items-center justify-between gap-2">
-									<LanguageSwitcher />
-									<ModeToggle />
-								</div>
+
+							<div className="flex items-center gap-2">
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<div>
+											<LanguageSwitcher />
+										</div>
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>{t("navigation.tooltips.language")}</p>
+									</TooltipContent>
+								</Tooltip>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<div>
+											<ModeToggle />
+										</div>
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>{t("navigation.tooltips.theme")}</p>
+									</TooltipContent>
+								</Tooltip>
+
 								{user ? (
-									<>
-										<Button
-											variant="default"
-											onClick={() => handleNavigation("/dashboard")}
-											className="w-full"
-										>
-											<PieChart className="h-4 w-4 mr-2" />
-											{t("navigation.dashboard")}
-										</Button>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button variant="outline" size="sm" className="h-9">
+												<User className="h-4 w-4 mr-2" />
+												{user.email}
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end" className="w-56">
+											<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+											<DropdownMenuSeparator />
+											<DropdownMenuItem
+												onClick={() => handleNavigation("/dashboard")}
+											>
+												<PieChart className="h-4 w-4 mr-2" />
+												{t("navigation.dashboard")}
+											</DropdownMenuItem>
+											<DropdownMenuItem
+												onClick={() => handleNavigation("/settings")}
+											>
+												<Settings className="h-4 w-4 mr-2" />
+												{t("navigation.settings")}
+											</DropdownMenuItem>
+											<DropdownMenuSeparator />
+											<DropdownMenuItem onClick={handleLogout}>
+												<LogOut className="h-4 w-4 mr-2" />
+												{t("auth.logout")}
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								) : (
+									<div className="flex items-center gap-2">
 										<Button
 											variant="outline"
-											onClick={() => handleNavigation("/settings")}
-											className="w-full"
-										>
-											<Settings className="h-4 w-4 mr-2" />
-											{t("navigation.settings")}
-										</Button>
-										<Button
-											variant="destructive"
-											onClick={handleLogout}
-											className="w-full"
-										>
-											<LogOut className="h-4 w-4 mr-2" />
-											{t("auth.logout")}
-										</Button>
-									</>
-								) : (
-									<div className="space-y-2">
-										<Button
-											variant="default"
+											size="sm"
 											onClick={() => handleNavigation("/auth")}
-											className="w-full"
 										>
-											<LogIn className="h-4 w-4 mr-2" />
+											<LogIn className="h-4 w-4 mr-1" />
 											{t("auth.login")}
 										</Button>
 										<Button
-											variant="outline"
+											variant="default"
+											size="sm"
 											onClick={() => handleNavigation("/auth?tab=register")}
-											className="w-full"
 										>
-											<UserPlus className="h-4 w-4 mr-2" />
 											{t("auth.signUp")}
 										</Button>
 									</div>
 								)}
 							</div>
-						</SheetContent>
-					</Sheet>
-				) : (
-					<div className="flex flex-1 items-center justify-between">
-						<nav className="flex items-center space-x-1 mx-4">
-							<Button
-								variant={isActive("/") ? "secondary" : "ghost"}
-								onClick={() => handleNavigation("/")}
-								className="hidden md:flex"
-							>
-								<Home className="h-4 w-4 mr-1" />
-								{t("navigation.home")}
-							</Button>
-
-							{mainNavItems.map((item) =>
-								item.children ? (
-									<div key={item.href}>{renderDropdownMenu(item)}</div>
-								) : (
-									<Button
-										key={item.href}
-										variant={isActive(item.href) ? "secondary" : "ghost"}
-										onClick={() => handleNavigation(item.href)}
-									>
-										{item.icon && <span className="mr-1">{item.icon}</span>}
-										{item.label}
-									</Button>
-								)
-							)}
-						</nav>
-
-						<div className="flex items-center gap-2">
-							<LanguageSwitcher />
-							<ModeToggle />
-
-							{user ? (
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button variant="outline" size="sm" className="h-9">
-											<User className="h-4 w-4 mr-2" />
-											{user.email}
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent align="end" className="w-56">
-										<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem
-											onClick={() => handleNavigation("/dashboard")}
-										>
-											<PieChart className="h-4 w-4 mr-2" />
-											{t("navigation.dashboard")}
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => handleNavigation("/settings")}
-										>
-											<Settings className="h-4 w-4 mr-2" />
-											{t("navigation.settings")}
-										</DropdownMenuItem>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem onClick={handleLogout}>
-											<LogOut className="h-4 w-4 mr-2" />
-											{t("auth.logout")}
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							) : (
-								<div className="flex items-center gap-2">
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() => handleNavigation("/auth")}
-									>
-										<LogIn className="h-4 w-4 mr-1" />
-										{t("auth.login")}
-									</Button>
-									<Button
-										variant="default"
-										size="sm"
-										onClick={() => handleNavigation("/auth?tab=register")}
-									>
-										{t("auth.signUp")}
-									</Button>
-								</div>
-							)}
 						</div>
-					</div>
-				)}
-			</div>
-		</header>
+					)}
+				</div>
+			</header>
+		</TooltipProvider>
 	);
 };
 

@@ -12,6 +12,7 @@ import { ErrorProvider } from "./contexts/ErrorContext";
 import { HelmetProvider } from "react-helmet-async";
 import NavigationHeader from "./components/NavigationHeader";
 import Footer from "./components/Footer";
+import HelpWidget from "./components/HelpWidget";
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Suspense, lazy } from "react";
@@ -127,6 +128,7 @@ function App() {
 										</Suspense>
 									</main>
 									<Footer />
+									<HelpWidget />
 									<Toaster />
 								</div>
 							</ErrorProvider>

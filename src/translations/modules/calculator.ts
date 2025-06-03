@@ -92,6 +92,18 @@ export const calculator = {
 		considerationCredit: "Your credit score may impact available rates.",
 		considerationCollateral: "Some options may require collateral.",
 		considerationBehavior: "Address spending habits to avoid rebuilding debt.",
+		fieldTooltips: {
+			debtName:
+				"Give your debt a recognizable name (e.g., 'Credit Card', 'Student Loan')",
+			balance: "The current amount you owe on this debt",
+			interestRate: "The annual percentage rate (APR) for this debt",
+			minimumPayment:
+				"The smallest amount your lender requires you to pay each month",
+			monthlyBudget:
+				"The total amount you can afford to pay toward all debts each month",
+			extraPayment:
+				"Additional amount beyond minimum payments to accelerate payoff",
+		},
 	},
 	fi: {
 		debtPayoffCalculator: "Velanmaksuaikalaskuri",
@@ -187,5 +199,18 @@ export const calculator = {
 		considerationCollateral: "Jotkin vaihtoehdot saattavat vaatia vakuuksia.",
 		considerationBehavior:
 			"Kiinnitä huomiota kulutustottumuksiin välttääksesi velkaantumisen uudelleen.",
+		fieldTooltips: {
+			debtName:
+				"Anna velkasi tunnistettava nimi (esim. 'Luottokortti', 'Opintolaina')",
+			balance: "Nykyinen velkasumma, jonka olet velkaa",
+			interestRate:
+				"Vuotuinen korkoprosentti (todellinen vuosikorko) tälle velalle",
+			minimumPayment:
+				"Pienin summa, jonka lainanantajasi vaatii maksamaan kuukausittain",
+			monthlyBudget:
+				"Kokonaissumma, jonka voit käyttää kaikkien velkojesi maksuun kuukausittain",
+			extraPayment:
+				"Lisäsumma vähimmäismaksujen lisäksi maksamisen nopeuttamiseksi",
+		},
 	},
 };
