@@ -115,7 +115,7 @@ const Auth = () => {
 									<Input
 										id="email"
 										type="email"
-										placeholder="your.email@example.com"
+										placeholder={t("auth.emailPlaceholder")}
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										required
@@ -159,7 +159,7 @@ const Auth = () => {
 									<Input
 										id="signup-email"
 										type="email"
-										placeholder="your.email@example.com"
+										placeholder={t("auth.emailPlaceholder")}
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										required
