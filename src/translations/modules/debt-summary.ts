@@ -1,5 +1,3 @@
-
-
 // Debt summary related translations
 
 export const debtSummary = {
@@ -42,7 +40,7 @@ export const debtSummary = {
 			totalMonthlyInterest: "Kuukausittaiset korot yhteensä",
 			totalLifetimeInterest: "Kokonaiskorot",
 			totalBalance: "Kokonaissaldo",
-			totalAmountPaid: "Maksettu yhteensä",
+			totalAmountPaid: "Maksettava kokonaissumma",
 			monthlyPayment: "Kuukausimaksu",
 			averageInterestRate: "Keskimääräinen korkoprosentti",
 			estimatedPayoffTime: "Arvioitu maksuaika",
@@ -66,4 +64,3 @@ export const debtSummary = {
 		},
 	},
 };
-
