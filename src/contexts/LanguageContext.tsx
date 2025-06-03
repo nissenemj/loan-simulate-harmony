@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, ReactNode } from "react";
 
 type LanguageContextType = {
@@ -25,11 +24,36 @@ const translations: Record<string, string> = {
   "auth.logout": "Kirjaudu ulos",
   "auth.dashboard": "Hallintapaneeli",
   
-  // Dashboard
+  // Dashboard - velkayhteenveto
   "dashboard.title": "Hallintapaneeli",
   "dashboard.welcome": "Tervetuloa",
   "dashboard.welcomeSubtitle": "Hallitse velkojasi ja seuraa edistymistäsi",
   "dashboard.guest": "vieras",
+  "dashboard.totalDebt": "Kokonaisvelka",
+  "dashboard.estimatedDebtFreeDate": "Arvioitu velattomuuspäivä",
+  "dashboard.minimumMonthlyPayments": "Kuukausittaiset vähimmäismaksut",
+  "dashboard.estimatedInterestCost": "Arvioitu korkokulut",
+  "dashboard.totalToPayOff": "Yhteensä maksettava",
+  "dashboard.perMonth": "kuukaudessa",
+  "dashboard.notCalculated": "Ei laskettu",
+  "dashboard.viewDetailedBreakdown": "Näytä yksityiskohtainen erittely",
+  
+  // Visualisoinnit
+  "visualization.debtBreakdown": "Velkojen erittely",
+  "visualization.distributionDescription": "Kuinka velkasi jakautuvat",
+  "visualization.totalDebt": "Kokonaisvelka",
+  "visualization.totalInterestPaid": "Maksetut korot yhteensä",
+  "visualization.principalPayment": "Pääoman takaisinmaksu",
+  "visualization.noDebtsToVisualize": "Ei velkoja visualisoitavaksi",
+  
+  // Tooltips
+  "tooltips.totalDebt": "Kaikkien velkojesi yhteenlaskettu määrä",
+  "tooltips.debtFreeDate": "Arvioitu päivämäärä, jolloin kaikki velat on maksettu",
+  "tooltips.minimumPayments": "Kaikkien velkojesi vähimmäismaksujen summa kuukaudessa",
+  "tooltips.interestCost": "Arvioitu kokonaismäärä korkoja, jotka maksat velkojen takaisinmaksun aikana",
+  "tooltips.totalToPayOff": "Kokonaissumma, jonka maksat velkojen ja korkojen takaisinmaksuun",
+  
+  // Dashboard
   "dashboard.debtBreakdown": "Velkojen erittely",
   "dashboard.allDebts": "Kaikki velat",
   "dashboard.loans": "Lainat",
