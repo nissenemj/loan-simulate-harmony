@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, Sector } from 'recharts';
 import { useCurrencyFormatter } from '@/utils/formatting';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -13,7 +12,6 @@ interface DebtBreakdownChartProps {
 }
 
 export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartProps) {
-  const { t } = useTranslation();
   const currencyFormatter = useCurrencyFormatter();
   const isMobile = useIsMobile();
   
@@ -94,18 +92,18 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
     <Card className="w-full">
       <CardHeader className="md:flex-row md:items-center md:justify-between">
         <div>
-          <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
-          <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
+          <CardTitle>Velkojen erittely</CardTitle>
+          <CardDescription>Kuinka velkasi jakautuvat</CardDescription>
         </div>
         {totalBalance > 0 && (
           <div className="text-right mt-2 md:mt-0">
-            <div className="text-sm text-muted-foreground">{t('visualization.totalDebt')}</div>
+            <div className="text-sm text-muted-foreground">Kokonaisvelka</div>
             <div className="text-xl font-bold">{currencyFormatter.format(totalBalance)}</div>
           </div>
         )}
       </CardHeader>
       <CardContent>
-        <div className="h-64 md:h-80" aria-label={t('visualization.debtBreakdown')} role="img">
+        <div className="h-64 md:h-80" aria-label="Velkojen erittely" role="img">
           <ResponsiveContainer width="100%" height="100%">
             {pieData.length > 0 ? (
               <PieChart>
@@ -160,7 +158,7 @@ export function DebtBreakdownChart({ debts, paymentPlan }: DebtBreakdownChartPro
               </PieChart>
             ) : (
               <div className="flex items-center justify-center h-full text-muted-foreground">
-                {t('visualization.noDebtsToVisualize')}
+                Ei velkoja visualisoitavaksi
               </div>
             )}
           </ResponsiveContainer>

@@ -1,7 +1,7 @@
+
 import React from 'react';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { DebtBreakdownChart } from '@/components/calculator/DebtBreakdownChart'; 
 import { PaymentBreakdownChart } from '@/components/calculator/PaymentBreakdownChart';
@@ -18,7 +18,6 @@ interface DebtVisualizationProps {
  * Provides different visualization options for debt data
  */
 const DebtVisualization = ({ debts, paymentPlan }: DebtVisualizationProps) => {
-  const { t } = useTranslation();
   
   // Check if we have valid debts to display
   const hasValidDebts = debts && debts.length > 0 && debts.some(debt => debt.balance > 0);
@@ -27,13 +26,13 @@ const DebtVisualization = ({ debts, paymentPlan }: DebtVisualizationProps) => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t('visualization.debtBreakdown')}</CardTitle>
-          <CardDescription>{t('visualization.distributionDescription')}</CardDescription>
+          <CardTitle>Velkojen erittely</CardTitle>
+          <CardDescription>Kuinka velkasi jakautuvat</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert>
             <Info className="h-4 w-4" />
-            <AlertDescription>{t('visualization.noDebtsToVisualize')}</AlertDescription>
+            <AlertDescription>Ei velkoja visualisoitavaksi</AlertDescription>
           </Alert>
         </CardContent>
       </Card>

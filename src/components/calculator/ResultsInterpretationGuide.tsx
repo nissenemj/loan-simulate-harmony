@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronUp, HelpCircle, TrendingDown, Calendar, DollarSign, PiggyBank } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { PaymentPlan } from '@/utils/calculator/types';
 
 interface ResultsInterpretationGuideProps {
@@ -16,7 +15,6 @@ const ResultsInterpretationGuide: React.FC<ResultsInterpretationGuideProps> = ({
   paymentPlan,
   className
 }) => {
-  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   
   if (!paymentPlan) return null;
@@ -31,25 +29,25 @@ const ResultsInterpretationGuide: React.FC<ResultsInterpretationGuideProps> = ({
       icon: DollarSign,
       key: 'totalInterest',
       value: `€${paymentPlan.totalInterestPaid.toLocaleString('fi-FI', { maximumFractionDigits: 0 })}`,
-      description: t('guidance.resultsGuide.totalInterest')
+      description: "Korot yhteensä - kuinka paljon maksat korkoja kaiken kaikkiaan"
     },
     {
       icon: Calendar,
       key: 'payoffDate',
-      value: `${paymentPlan.totalMonths} ${t('calculator.months')}`,
-      description: t('guidance.resultsGuide.payoffDate')
+      value: `${paymentPlan.totalMonths} kuukautta`,
+      description: "Takaisinmaksuaika - kuinka kauan kestää päästä veloista eroon"
     },
     {
       icon: TrendingDown,
       key: 'totalPaid',
       value: `€${(paymentPlan.totalInterestPaid + totalOriginalDebt).toLocaleString('fi-FI', { maximumFractionDigits: 0 })}`,
-      description: t('guidance.resultsGuide.totalPaid')
+      description: "Maksettu yhteensä - kokonaissumma pääoma + korot"
     },
     {
       icon: PiggyBank,
       key: 'monthlyPayment',
       value: `€${paymentPlan.monthlyPayment.toLocaleString('fi-FI', { maximumFractionDigits: 0 })}`,
-      description: t('guidance.resultsGuide.monthlyPayment')
+      description: "Kuukausimaksu - paljonko maksat kuukaudessa yhteensä"
     }
   ];
   
@@ -61,7 +59,7 @@ const ResultsInterpretationGuide: React.FC<ResultsInterpretationGuideProps> = ({
             <CardTitle className="flex items-center justify-between text-lg">
               <div className="flex items-center gap-2">
                 <HelpCircle className="h-5 w-5 text-primary" />
-                {t('guidance.resultsGuide.howToRead')}
+                Miten lukea tuloksia
               </div>
               <Button variant="ghost" size="sm">
                 {isOpen ? (

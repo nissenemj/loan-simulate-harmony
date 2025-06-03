@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
@@ -26,7 +25,6 @@ import { ErrorProvider } from '@/contexts/ErrorContext';
 import BreadcrumbNav from '@/components/BreadcrumbNav';
 
 const DebtStrategies = () => {
-  const { t } = useTranslation();
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const [debts, setDebts] = useState<Debt[]>(() => {
@@ -68,9 +66,9 @@ const DebtStrategies = () => {
   // Handle calculation errors
   const handleCalculationError = (error: any) => {
     if (error.message && error.message.includes("maximum number of months")) {
-      setCalculationError(t('debtStrategies.errorMaxMonths'));
+      setCalculationError("Takaisinmaksu kestäisi liian kauan nykyisellä budjetilla. Kokeile suurempaa kuukausittaista budjettia.");
     } else {
-      setCalculationError(error.message || t('debtStrategies.errorInCalculation'));
+      setCalculationError(error.message || "Virhe laskennassa. Tarkista syöttötiedot.");
     }
   };
   
@@ -78,7 +76,7 @@ const DebtStrategies = () => {
     <ErrorProvider>
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <Helmet>
-          <title>{t('debtStrategies.pageTitle')} | {t('app.title')}</title>
+          <title>Velkastrategiat | Velkavapaus</title>
         </Helmet>
         
         <div className="space-y-6">
@@ -86,9 +84,9 @@ const DebtStrategies = () => {
           <UnderConstructionBanner />
           
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">{t('debtStrategies.pageTitle')}</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Velkastrategiat</h1>
             <p className="text-muted-foreground mt-2">
-              {t('debtStrategies.pageDescription')}
+              Vertaa eri takaisinmaksustrategioita ja löydä sinulle paras tapa päästä eroon veloista
             </p>
           </div>
           
@@ -96,7 +94,7 @@ const DebtStrategies = () => {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                {t('debtStrategies.noDebtAlert')}
+                Lisää ensin velkoja laskurissa aloittaaksesi takaisinmaksusuunnitelman.
               </AlertDescription>
             </Alert>
           ) : (
@@ -116,19 +114,19 @@ const DebtStrategies = () => {
                 <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
                   <TabsTrigger value="calculator" className="flex items-center gap-2">
                     <Calculator className="h-4 w-4" />
-                    {t('debtStrategies.calculatorTab')}
+                    Laskuri
                   </TabsTrigger>
                   <TabsTrigger value="timeline" className="flex items-center gap-2">
                     <LineChart className="h-4 w-4" />
-                    {t('debtStrategies.timelineTab')}
+                    Aikajana
                   </TabsTrigger>
                   <TabsTrigger value="extraPayment" className="flex items-center gap-2">
                     <Coins className="h-4 w-4" />
-                    {t('debtStrategies.extraPaymentTab')}
+                    Lisämaksut
                   </TabsTrigger>
                   <TabsTrigger value="consolidation" className="flex items-center gap-2">
                     <TrendingDown className="h-4 w-4" />
-                    {t('debtStrategies.consolidationTab')}
+                    Yhdistäminen
                   </TabsTrigger>
                 </TabsList>
                 
@@ -151,7 +149,7 @@ const DebtStrategies = () => {
                     <Alert>
                       <Info className="h-4 w-4" />
                       <AlertDescription>
-                        {t('debtStrategies.calculateFirst')}
+                        Laske ensin takaisinmaksusuunnitelma Laskuri-välilehdellä nähdäksesi aikajanar.
                       </AlertDescription>
                     </Alert>
                   )}

@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Lightbulb, Wand2 } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Debt } from '@/utils/calculator/types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,7 +15,6 @@ const ExampleDataButton: React.FC<ExampleDataButtonProps> = ({
   onFillExample,
   className
 }) => {
-  const { t } = useLanguage();
   
   const handleFillExample = () => {
     const exampleDebts: Debt[] = [
@@ -55,7 +53,7 @@ const ExampleDataButton: React.FC<ExampleDataButtonProps> = ({
         <Lightbulb className="h-4 w-4 text-primary" />
         <AlertDescription className="flex items-center justify-between">
           <span className="text-sm">
-            {t('guidance.exampleData.clearAndEnterOwn')}
+            Voit tyhjentää kentät ja syöttää omat tietosi tai kokeilla esimerkkitiedoilla:
           </span>
           <Button
             variant="outline"
@@ -64,7 +62,7 @@ const ExampleDataButton: React.FC<ExampleDataButtonProps> = ({
             className="ml-4 h-8"
           >
             <Wand2 className="mr-2 h-3 w-3" />
-            {t('guidance.exampleData.fillWithExample')}
+            Täytä esimerkkitiedoilla
           </Button>
         </AlertDescription>
       </Alert>

@@ -21,10 +21,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Calculator, LineChart, TrendingDown, Coins } from 'lucide-react';
 import { useError } from '@/contexts/ErrorContext';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
-import { useTranslation } from '@/contexts/LanguageContext';
 
 export function DebtStrategies() {
-  const { t } = useTranslation();
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const [debts, setDebts] = useState<Debt[]>(() => {
@@ -67,10 +65,10 @@ export function DebtStrategies() {
   // Handle calculation errors
   const handleCalculationError = (error: any) => {
     if (error.message && error.message.includes("maximum number of months")) {
-      setCalculationError(t('debtStrategies.errorMaxMonths'));
+      setCalculationError("Takaisinmaksu kestäisi liian kauan nykyisellä budjetilla. Kokeile suurempaa kuukausittaista budjettia.");
     } else {
-      setCalculationError(error.message || t('debtStrategies.errorInCalculation'));
-      captureError(error, t('debtStrategies.errorInCalculation'));
+      setCalculationError(error.message || "Virhe laskennassa. Tarkista syöttötiedot.");
+      captureError(error, "Virhe laskennassa. Tarkista syöttötiedot.");
     }
   };
   
@@ -82,7 +80,7 @@ export function DebtStrategies() {
         <Alert>
           <Info className="h-4 w-4" />
           <AlertDescription>
-            {t('debtStrategies.noDebtAlert')}
+            Lisää ensin velkoja laskurissa aloittaaksesi takaisinmaksusuunnitelman.
           </AlertDescription>
         </Alert>
       ) : (
@@ -102,19 +100,19 @@ export function DebtStrategies() {
             <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6">
               <TabsTrigger value="calculator" className="flex items-center gap-2">
                 <Calculator className="h-4 w-4" />
-                {t('debtStrategies.calculatorTab')}
+                Laskuri
               </TabsTrigger>
               <TabsTrigger value="timeline" className="flex items-center gap-2">
                 <LineChart className="h-4 w-4" />
-                {t('debtStrategies.timelineTab')}
+                Aikajana
               </TabsTrigger>
               <TabsTrigger value="extraPayment" className="flex items-center gap-2">
                 <Coins className="h-4 w-4" />
-                {t('debtStrategies.extraPaymentTab')}
+                Lisämaksut
               </TabsTrigger>
               <TabsTrigger value="consolidation" className="flex items-center gap-2">
                 <TrendingDown className="h-4 w-4" />
-                {t('debtStrategies.consolidationTab')}
+                Yhdistäminen
               </TabsTrigger>
             </TabsList>
             
@@ -137,7 +135,7 @@ export function DebtStrategies() {
                 <Alert>
                   <Info className="h-4 w-4" />
                   <AlertDescription>
-                    {t('debtStrategies.calculateFirst')}
+                    Laske ensin takaisinmaksusuunnitelma Laskuri-välilehdellä nähdäksesi aikajanar.
                   </AlertDescription>
                 </Alert>
               )}

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 
 interface ProgressIndicatorProps {
@@ -16,19 +15,18 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   totalSteps = 3,
   className
 }) => {
-  const { t } = useLanguage();
   
   const steps = [
-    { id: 1, label: t('guidance.progress.step1') },
-    { id: 2, label: t('guidance.progress.step2') },
-    { id: 3, label: t('guidance.progress.step3') }
+    { id: 1, label: "Syötä velkasi" },
+    { id: 2, label: "Valitse strategia ja budjetti" },
+    { id: 3, label: "Tarkista tulokset" }
   ];
   
   return (
     <Card className={cn("p-4 bg-muted/30", className)}>
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-muted-foreground">
-          {t('guidance.progress.currentStep')}
+          Nykyinen vaihe
         </span>
         <span className="text-sm font-medium">
           {currentStep}/{totalSteps}

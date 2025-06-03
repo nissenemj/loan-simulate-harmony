@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, ReactNode } from "react";
 
 type LanguageContextType = {
@@ -6,7 +7,7 @@ type LanguageContextType = {
   t: (key: string, params?: Record<string, string | number>) => string;
 };
 
-// Suomenkieliset käännökset
+// Suomenkieliset käännökset - kaikki avaimet korvattu suorilla teksteillä
 const translations: Record<string, string> = {
   // Navigaatio
   "app.name": "Velkavapaus",
@@ -88,6 +89,61 @@ const translations: Record<string, string> = {
   "dashboard.save": "Tallenna",
   "dashboard.strategySaved": "Strategia tallennettu onnistuneesti",
   
+  // Laskuri
+  "calculator.months": "kuukautta",
+  "calculator.enterDebts": "Syötä velkasi",
+  "calculator.debtName": "Velan nimi",
+  "calculator.balance": "Saldo",
+  "calculator.interestRate": "Korkoprosentti",
+  "calculator.minimumPayment": "Vähimmäismaksu",
+  "calculator.addDebt": "Lisää velka",
+  "calculator.removeDebt": "Poista velka",
+  "calculator.monthlyBudget": "Kuukausittainen budjetti",
+  "calculator.calculate": "Laske",
+  "calculator.calculating": "Lasketaan...",
+  "calculator.results": "Tulokset",
+  "calculator.payoffTime": "Takaisinmaksuaika",
+  "calculator.totalInterest": "Korot yhteensä",
+  "calculator.totalPaid": "Maksettu yhteensä",
+  "calculator.strategy": "Strategia",
+  
+  // Velkastrategiat
+  "debtStrategies.pageTitle": "Velkastrategiat",
+  "debtStrategies.pageDescription": "Vertaa eri takaisinmaksustrategioita ja löydä sinulle paras tapa päästä eroon veloista",
+  "debtStrategies.calculatorTab": "Laskuri",
+  "debtStrategies.timelineTab": "Aikajana",
+  "debtStrategies.extraPaymentTab": "Lisämaksut",
+  "debtStrategies.consolidationTab": "Yhdistäminen",
+  "debtStrategies.noDebtAlert": "Lisää ensin velkoja laskurissa aloittaaksesi takaisinmaksusuunnitelman.",
+  "debtStrategies.calculateFirst": "Laske ensin takaisinmaksusuunnitelma Laskuri-välilehdellä nähdäksesi aikajanar.",
+  "debtStrategies.errorMaxMonths": "Takaisinmaksu kestäisi liian kauan nykyisellä budjetilla. Kokeile suurempaa kuukausittaista budjettia.",
+  "debtStrategies.errorInCalculation": "Virhe laskennassa. Tarkista syöttötiedot.",
+  
+  // Takaisinmaksustrategiat
+  "repayment.chooseStrategy": "Valitse takaisinmaksustrategia",
+  "repayment.avalancheMethod": "Lumivyörystrategia",
+  "repayment.avalancheDescription": "Maksa ensin korkoimmat velat - säästää rahaa pitkällä aikavälillä",
+  "repayment.avalancheBenefit1": "Vähemmän korkoja yhteensä",
+  "repayment.avalancheBenefit2": "Tehokkain tapa säästää rahaa",
+  "repayment.snowballMethod": "Lumipallostrategia", 
+  "repayment.snowballDescription": "Maksa ensin pienimmät velat - lisää motivaatiota nopeilla voitoilla",
+  "repayment.snowballBenefit1": "Nopeat voitot lisäävät motivaatiota",
+  "repayment.snowballBenefit2": "Helpompi pysyä mukana",
+  "repayment.benefits": "Edut",
+  
+  // Ohjaus ja vinkit
+  "guidance.progress.currentStep": "Nykyinen vaihe",
+  "guidance.progress.step1": "Syötä velkasi",
+  "guidance.progress.step2": "Valitse strategia ja budjetti",
+  "guidance.progress.step3": "Tarkista tulokset",
+  "guidance.exampleData.clearAndEnterOwn": "Voit tyhjentää kentät ja syöttää omat tietosi tai kokeilla esimerkkitiedoilla:",
+  "guidance.exampleData.fillWithExample": "Täytä esimerkkitiedoilla",
+  "guidance.resultsGuide.howToRead": "Miten lukea tuloksia",
+  "guidance.resultsGuide.totalInterest": "Korot yhteensä - kuinka paljon maksat korkoja kaiken kaikkiaan",
+  "guidance.resultsGuide.payoffDate": "Takaisinmaksuaika - kuinka kauan kestää päästä veloista eroon",
+  "guidance.resultsGuide.totalPaid": "Maksettu yhteensä - kokonaissumma pääoma + korot",
+  "guidance.resultsGuide.monthlyPayment": "Kuukausimaksu - paljonko maksat kuukaudessa yhteensä",
+  
   // Yleiset
   "common.cancel": "Peruuta",
   "common.close": "Sulje",
@@ -95,10 +151,18 @@ const translations: Record<string, string> = {
   "common.edit": "Muokkaa",
   "common.delete": "Poista",
   "common.confirm": "Vahvista",
+  "common.yes": "Kyllä",
+  "common.no": "Ei",
+  "common.loading": "Ladataan...",
+  "common.error": "Virhe",
+  "common.success": "Onnistui",
   
   // Virheet
   "errors.nameRequired": "Nimi on pakollinen",
   "errors.saveFailed": "Tallentaminen epäonnistui",
+  "errors.invalidInput": "Virheellinen syöte",
+  "errors.required": "Pakollinen kenttä",
+  "errors.positiveNumber": "Syötä positiivinen luku",
   
   // Ohjeet
   "help.helpCenter": "Ohjekeskus",
