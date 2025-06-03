@@ -1,4 +1,3 @@
-
 // Loan-related translations
 
 export const loans = {
@@ -41,8 +40,11 @@ export const loans = {
 				annuity: "Annuity",
 				equalPrincipal: "Equal Principal",
 				fixedInstallment: "Fixed Installment",
-				customPayment: "Custom Payment"
-			}
+				customPayment: "Custom Payment",
+			},
+			name: "Name",
+			balance: "Balance",
+			minimumPayment: "Minimum Payment",
 		},
 	},
 	fi: {
@@ -78,14 +80,18 @@ export const loans = {
 			activeLoan: "Aktiivinen",
 			inactiveLoan: "Passiivinen",
 			table: {
-				noLoans: "Lainoja ei ole vielä lisätty. Lisää ensimmäinen lainasi aloittaaksesi.",
+				noLoans:
+					"Lainoja ei ole vielä lisätty. Lisää ensimmäinen lainasi aloittaaksesi.",
 			},
 			types: {
 				annuity: "Tasaerä",
 				equalPrincipal: "Tasalyhennys",
 				fixedInstallment: "Kiinteä erä",
-				customPayment: "Mukautettu maksu"
-			}
+				customPayment: "Mukautettu maksu",
+			},
+			name: "Nimi",
+			balance: "Saldo",
+			minimumPayment: "Vähimmäismaksu",
 		},
 	},
 };
