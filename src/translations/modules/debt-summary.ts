@@ -1,5 +1,6 @@
 
 
+
 // Debt summary related translations
 
 export const debtSummary = {
@@ -34,7 +35,8 @@ export const debtSummary = {
 			tableSummary: "Summary of all loans with payment details",
 			noLoansMessage: "No loans to display",
 			backButton: "Back",
-			summaryTab: "Summary"
+			summaryTab: "Summary",
+			planTab: "Repayment Plan"
 		},
 	},
 	fi: {
@@ -68,8 +70,10 @@ export const debtSummary = {
 			tableSummary: "Yhteenveto kaikista lainoista maksutietoineen",
 			noLoansMessage: "Ei lainoja näytettävänä",
 			backButton: "Takaisin",
-			summaryTab: "Yhteenveto"
+			summaryTab: "Yhteenveto",
+			planTab: "Takaisinmaksusuunnitelma"
 		},
 	},
 };
+
 
