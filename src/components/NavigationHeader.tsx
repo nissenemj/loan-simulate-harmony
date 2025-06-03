@@ -54,14 +54,14 @@ const NavigationHeader = () => {
 			await logout();
 			setOpen(false);
 			toast({
-				title: "Logged out successfully",
-				description: "You have been logged out of your account.",
+				title: t("notifications.logoutSuccess"),
+				description: t("notifications.logoutSuccessDescription"),
 			});
 		} catch (error) {
 			console.error("Logout error:", error);
 			toast({
-				title: "Logout failed",
-				description: "There was a problem logging out. Please try again.",
+				title: t("notifications.logoutFailed"),
+				description: t("notifications.logoutFailedDescription"),
 				variant: "destructive",
 			});
 		}
@@ -74,9 +74,8 @@ const NavigationHeader = () => {
 		} catch (error) {
 			console.error("Navigation error:", error);
 			toast({
-				title: "Navigation error",
-				description:
-					"There was a problem navigating to the page. Please try again.",
+				title: t("notifications.navigationError"),
+				description: t("notifications.navigationErrorDescription"),
 				variant: "destructive",
 			});
 		}

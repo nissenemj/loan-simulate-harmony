@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Create a custom event for consent changes
 const consentChangeEvent = new Event("consentChange");
@@ -19,6 +20,7 @@ const CookieConsentBanner = () => {
 	});
 	const navigate = useNavigate();
 	const { toast } = useToast();
+	const { t } = useLanguage();
 
 	useEffect(() => {
 		// Check if consent has been saved
@@ -59,8 +61,8 @@ const CookieConsentBanner = () => {
 		window.dispatchEvent(consentChangeEvent);
 
 		toast({
-			title: "Evästeasetukset tallennettu",
-			description: "Kiitos! Evästeasetuksesi on tallennettu.",
+			title: t("cookieBanner.saved"),
+			description: t("cookieBanner.savedDescription"),
 		});
 
 		// If user has denied marketing cookies, we should reload the page
@@ -84,21 +86,22 @@ const CookieConsentBanner = () => {
 				{/* Mobile view - Compact layout */}
 				<div className="md:hidden">
 					<div className="flex justify-between items-start mb-3">
-						<h3 className="font-semibold text-base">Evästeiden käyttö</h3>
+						<h3 className="font-semibold text-base">
+							{t("cookieBanner.title")}
+						</h3>
 						<Button
 							variant="ghost"
 							size="icon"
 							className="shrink-0 -mt-1 -mr-1 h-8 w-8"
 							onClick={() => setShowBanner(false)}
-							aria-label="Sulje evästeikkuna"
+							aria-label={t("cookieBanner.close")}
 						>
 							<X className="h-4 w-4" />
 						</Button>
 					</div>
 
 					<p className="text-xs text-muted-foreground mb-3">
-						Käytämme evästeitä parantaaksemme käyttökokemustasi ja
-						analysoidaksemme liikennettä.
+						{t("cookieBanner.description")}
 					</p>
 
 					{showSettings && (
@@ -207,7 +210,9 @@ const CookieConsentBanner = () => {
 							className="text-xs h-9"
 							onClick={toggleSettings}
 						>
-							{showSettings ? "Piilota asetukset" : "Mukautetut asetukset"}
+							{showSettings
+								? t("cookieBanner.hideSettings")
+								: t("cookieBanner.customSettings")}
 						</Button>
 						{showSettings ? (
 							<Button
@@ -215,23 +220,23 @@ const CookieConsentBanner = () => {
 								className="text-xs h-9"
 								onClick={acceptSelected}
 							>
-								Tallenna valinnat
+								{t("cookieBanner.saveChoices")}
 							</Button>
 						) : (
 							<Button size="sm" className="text-xs h-9" onClick={acceptAll}>
-								Hyväksy kaikki
+								{t("cookieBanner.acceptAll")}
 							</Button>
 						)}
 					</div>
 
 					<div className="text-xs text-muted-foreground mt-2">
-						Lisätietoja{" "}
+						{t("cookieBanner.moreInfo")}{" "}
 						<Button
 							variant="link"
 							className="p-0 h-auto text-xs"
 							onClick={() => navigate("/cookie-policy")}
 						>
-							evästekäytännöstämme
+							{t("cookieBanner.cookiePolicy")}
 						</Button>
 						.
 					</div>
@@ -241,7 +246,9 @@ const CookieConsentBanner = () => {
 				<div className="hidden md:block">
 					<div className="flex justify-between items-start">
 						<div className="flex-1 pr-4">
-							<h3 className="font-semibold text-lg mb-2">Evästeiden käyttö</h3>
+							<h3 className="font-semibold text-lg mb-2">
+								{t("cookieBanner.title")}
+							</h3>
 							<p className="text-sm text-muted-foreground mb-4">
 								Käytämme evästeitä parantaaksemme käyttökokemustasi,
 								analysoidaksemme liikennettä ja mukauttaaksemme sisältöä.
@@ -371,12 +378,16 @@ const CookieConsentBanner = () => {
 
 					<div className="flex flex-wrap gap-2 mt-4 justify-end">
 						<Button variant="outline" onClick={toggleSettings}>
-							{showSettings ? "Piilota asetukset" : "Mukautetut asetukset"}
+							{showSettings
+								? t("cookieBanner.hideSettings")
+								: t("cookieBanner.customSettings")}
 						</Button>
 						{showSettings ? (
-							<Button onClick={acceptSelected}>Tallenna valinnat</Button>
+							<Button onClick={acceptSelected}>
+								{t("cookieBanner.saveChoices")}
+							</Button>
 						) : (
-							<Button onClick={acceptAll}>Hyväksy kaikki</Button>
+							<Button onClick={acceptAll}>{t("cookieBanner.acceptAll")}</Button>
 						)}
 					</div>
 				</div>
