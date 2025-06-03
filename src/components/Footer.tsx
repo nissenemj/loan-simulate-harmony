@@ -1,10 +1,10 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import CookieSettingsButton from "./CookieSettingsButton";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 
 const Footer = () => {
@@ -68,16 +68,6 @@ const Footer = () => {
 									<Link to="/calculator">{t("footer.product.features")}</Link>
 								</Button>
 							</li>
-							{/* Pricing link - commented out for future use */}
-							{/* <li>
-								<Button
-									variant="link"
-									className="p-0 h-auto text-muted-foreground hover:text-foreground"
-									asChild
-								>
-									<Link to="/pricing">{t("footer.product.pricing")}</Link>
-								</Button>
-							</li> */}
 							<li>
 								<Button
 									variant="link"
@@ -168,7 +158,7 @@ const Footer = () => {
 					</div>
 				</div>
 
-				{/* Social Media and Language Selector */}
+				{/* Social Media */}
 				<div className="flex flex-col md:flex-row justify-between items-center border-t pt-8">
 					<div className="flex space-x-4 mb-4 md:mb-0">
 						{socialLinks.map((link, index) => (
@@ -184,7 +174,6 @@ const Footer = () => {
 					</div>
 
 					<div className="flex flex-col md:flex-row items-center gap-4">
-						<LanguageSwitcher />
 						<p className="text-sm text-muted-foreground">
 							© {currentYear} {t("app.title")}. {t("footer.copyright")}
 						</p>
