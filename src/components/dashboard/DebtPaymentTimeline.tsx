@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
 	AreaChart,
@@ -75,7 +74,7 @@ const DebtPaymentTimeline = ({
 		// Generate the timeline data - limit to 24 data points for readability
 		const dataPoints = Math.min(monthsDiff, 24);
 		const interval = Math.max(1, Math.floor(monthsDiff / dataPoints));
-		
+
 		return Array.from({ length: dataPoints }, (_, index) => {
 			const month = index * interval;
 			return {
@@ -85,7 +84,10 @@ const DebtPaymentTimeline = ({
 				// For interest, we track the cumulative interest paid
 				interest: monthlyInterest * month,
 				// Add a formatted month label for the x-axis
-				monthLabel: month === 0 ? t("visualization.start") : `${month} ${t("visualization.months")}`,
+				monthLabel:
+					month === 0
+						? t("visualization.start")
+						: `${month} ${t("visualization.months")}`,
 			};
 		});
 	};
@@ -93,72 +95,93 @@ const DebtPaymentTimeline = ({
 	const data = generateTimelineData();
 
 	return (
-		<Card className="w-full h-[350px]">
-			<CardHeader className="flex flex-row items-center justify-between">
-				<div>
-					<CardTitle>{t("visualization.paymentTimeline")}</CardTitle>
+		<Card className="w-full h-full min-h-[350px] flex flex-col">
+			<CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4">
+				<div className="min-w-0 flex-1">
+					<CardTitle className="break-words text-base sm:text-lg">
+						{t("visualization.paymentTimeline")}
+					</CardTitle>
 				</div>
 				<Button
 					variant="outline"
 					size="sm"
+					className="flex-shrink-0 w-full sm:w-auto"
 					onClick={() => navigate("/debt-summary?tab=repayment-plan")}
 				>
-					{t("dashboard.viewRepaymentPlan")}
-					<ArrowRight className="ml-2 h-4 w-4" />
+					<span className="truncate">{t("dashboard.viewRepaymentPlan")}</span>
+					<ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
 				</Button>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="flex-1 p-4">
 				{data.length === 0 ? (
 					<div className="flex items-center justify-center h-[200px]">
-						<p className="text-muted-foreground">
+						<p className="text-muted-foreground text-center break-words">
 							{t("visualization.noDataAvailable")}
 						</p>
 					</div>
 				) : (
-					<ResponsiveContainer width="100%" height={250}>
-						<AreaChart
-							data={data}
-							margin={{ top: 10, right: 30, left: 10, bottom: 30 }}
-						>
-							<CartesianGrid strokeDasharray="3 3" opacity={0.6} />
-							<XAxis 
-								dataKey="monthLabel"
-								tick={{ fontSize: 12 }}
-								angle={-45}
-								textAnchor="end"
-								height={60}
-							/>
-							<YAxis 
-								tickFormatter={(value) => formatCurrency(value)} 
-								width={80}
-								tick={{ fontSize: 12 }}
-							/>
-							<Tooltip
-								formatter={(value: number) => formatCurrency(value)}
-								labelFormatter={(label) => label}
-								contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}
-							/>
-							<Legend wrapperStyle={{ paddingTop: 20 }} />
-							<Area
-								type="monotone"
-								dataKey="principal"
-								stroke="#0088FE"
-								fill="#0088FE"
-								fillOpacity={0.6}
-								name={t("visualization.principalPayment")}
-								strokeWidth={2}
-							/>
-							<Area
-								type="monotone"
-								dataKey="interest"
-								stroke="#FF8042"
-								fill="#FF8042"
-								fillOpacity={0.6}
-								name={t("visualization.interestPayment")}
-								strokeWidth={2}
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
+					<div className="w-full h-[250px] min-h-[200px]">
+						<ResponsiveContainer width="100%" height="100%">
+							<AreaChart
+								data={data}
+								margin={{
+									top: 10,
+									right: 10,
+									left: 10,
+									bottom: 40,
+								}}
+							>
+								<CartesianGrid strokeDasharray="3 3" opacity={0.6} />
+								<XAxis
+									dataKey="monthLabel"
+									tick={{ fontSize: 10 }}
+									angle={-45}
+									textAnchor="end"
+									height={50}
+									interval="preserveStartEnd"
+								/>
+								<YAxis
+									tickFormatter={(value) => formatCurrency(value)}
+									width={60}
+									tick={{ fontSize: 10 }}
+								/>
+								<Tooltip
+									formatter={(value: number) => formatCurrency(value)}
+									labelFormatter={(label) => label}
+									contentStyle={{
+										backgroundColor: "rgba(255, 255, 255, 0.95)",
+										borderRadius: "8px",
+										boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+										fontSize: "12px",
+									}}
+								/>
+								<Legend
+									wrapperStyle={{
+										paddingTop: 10,
+										fontSize: "12px",
+									}}
+								/>
+								<Area
+									type="monotone"
+									dataKey="principal"
+									stroke="#0088FE"
+									fill="#0088FE"
+									fillOpacity={0.6}
+									name={t("visualization.principalPayment")}
+									strokeWidth={2}
+								/>
+								<Area
+									type="monotone"
+									dataKey="interest"
+									stroke="#FF8042"
+									fill="#FF8042"
+									fillOpacity={0.6}
+									name={t("visualization.interestPayment")}
+									strokeWidth={2}
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
+					</div>
 				)}
 			</CardContent>
 		</Card>
