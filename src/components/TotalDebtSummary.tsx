@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Loan, calculateLoan, formatCurrency } from "@/utils/loanCalculations";
 import {
@@ -30,8 +31,6 @@ export default function TotalDebtSummary({
 	isDemo = false,
 	totalDebtBalance,
 }: TotalDebtSummaryProps) {
-	const { t } = useLanguage();
-
 	// Calculate loan totals
 	let totalLoanMonthlyPayment = 0;
 	let totalLoanMonthlyInterest = 0;
@@ -97,7 +96,7 @@ export default function TotalDebtSummary({
 				<div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300">
 					<AlertCircle size={16} />
 					<p className="text-sm font-medium">
-						{t("debtSummary.demoDataMessage")}
+						Tämä on esimerkkitietoja - muokkaa omilla tiedoillasi
 					</p>
 				</div>
 			)}
@@ -105,57 +104,55 @@ export default function TotalDebtSummary({
 			<CardHeader className="pb-2">
 				<CardTitle className="text-xl font-semibold flex items-center gap-2">
 					<DollarSign className="h-5 w-5 text-primary" />
-					{t("debtSummary.title")}
+					Velkojen yhteenveto
 				</CardTitle>
 			</CardHeader>
 
 			<CardContent className="p-4 sm:p-6">
 				<div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
 					<DebtMetricCard
-						title={t("debtSummary.totalMonthlyPayment")}
+						title="Kuukausittaiset maksut yhteensä"
 						value={totalMonthlyPayment}
 						icon={<Calendar className="h-5 w-5 text-primary" />}
 						note={
 							totalLoanMonthlyFee > 0
-								? t("debtSummary.includesFees") +
-								  ": " +
-								  formatCurrency(totalLoanMonthlyFee)
+								? "Sisältää kulut: " + formatCurrency(totalLoanMonthlyFee)
 								: undefined
 						}
 					/>
 
 					<DebtMetricCard
-						title={t("debtSummary.totalMonthlyInterest")}
+						title="Kuukausittaiset korot"
 						value={totalMonthlyInterest}
 						icon={<Percent className="h-5 w-5 text-primary" />}
 					/>
 
 					<DebtMetricCard
-						title={t("debtSummary.totalLifetimeInterest")}
+						title="Korot elinaikana yhteensä"
 						value={totalInterestEstimate}
 						icon={<Calendar className="h-5 w-5 text-primary" />}
 						isInfinite={totalInterestEstimate === Infinity}
-						infiniteText={t("debtSummary.neverPaidOff")}
+						infiniteText="Ei koskaan maksettu pois"
 					/>
 
 					<DebtMetricCard
-						title={t("debtSummary.totalBalance")}
+						title="Velkasaldo yhteensä"
 						value={totalBalance}
 						icon={<CreditCardIcon className="h-5 w-5 text-primary" />}
 					/>
 
 					<DebtMetricCard
-						title={t("debtSummary.totalAmountPaid")}
+						title="Maksettu yhteensä"
 						value={totalAmountPaid}
 						icon={<Calculator className="h-5 w-5 text-primary" />}
 						isInfinite={totalAmountPaid === Infinity}
-						infiniteText={t("debtSummary.neverPaidOff")}
-						note={t("debtSummary.includingInterestAndFees")}
+						infiniteText="Ei koskaan maksettu pois"
+						note="Sisältää korot ja kulut"
 					/>
 				</div>
 
 				<div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-muted/50 rounded-lg text-muted-foreground text-xs sm:text-sm">
-					<p className="break-words">{t("debtSummary.summaryExplanation")}</p>
+					<p className="break-words">Tämä yhteenveto näyttää nykyisen velkatilanteesi kokonaiskuvan. Luvut perustuvat syöttämiisi tietoihin ja nykyisiin maksuehtoihin.</p>
 				</div>
 			</CardContent>
 		</Card>
