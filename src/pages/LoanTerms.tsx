@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -18,43 +19,43 @@ const LoanTerms: React.FC = () => {
   const terms = [
     {
       id: 'interest-rate',
-      title: t('loanTerms.interestRate.title'),
-      content: t('loanTerms.interestRate.description')
+      title: 'Korko',
+      content: 'Korko on hinta, jonka maksat rahan lainaamisesta. Se ilmaistaan prosentteina vuodessa ja vaikuttaa merkittävästi lainan kokonaiskustannuksiin.'
     },
     {
       id: 'annuity',
-      title: t('loanTerms.annuity.title'),
-      content: t('loanTerms.annuity.description')
+      title: 'Annuiteetti',
+      content: 'Annuiteetti on tasaerälaina, jossa kuukausierä pysyy samana koko laina-ajan. Alkuvaiheessa suurempi osa erästä menee korkoihin ja loppuvaiheessa pääomaan.'
     },
     {
       id: 'principal',
-      title: t('loanTerms.principal.title'),
-      content: t('loanTerms.principal.description')
+      title: 'Pääoma',
+      content: 'Pääoma on alkuperäinen lainasumma, jonka olet lainannut. Kuukausierissäsi osa menee pääoman lyhennykseen ja osa korkoihin.'
     },
     {
       id: 'euribor',
-      title: t('loanTerms.euribor.title'),
-      content: t('loanTerms.euribor.description')
+      title: 'Euribor',
+      content: 'Euribor on eurooppalainen pankkien välinen viitekorko, johon monet vaihtuvakorkoisen lainat perustuvat. Lainakorko muodostuu Euriborista plus pankin marginaalista.'
     },
     {
       id: 'total-interest',
-      title: t('loanTerms.totalInterest.title'),
-      content: t('loanTerms.totalInterest.description')
+      title: 'Kokonaiskorko',
+      content: 'Kokonaiskorko on kaikkien laina-aikana maksamiesi korkojen summa. Se riippuu lainan määrästä, korosta ja maksuajasta.'
     },
     {
       id: 'term-years',
-      title: t('loanTerms.termYears.title'),
-      content: t('loanTerms.termYears.description')
+      title: 'Laina-aika',
+      content: 'Laina-aika on ajanjakso, jonka kuluessa laina maksetaan takaisin. Pidempi laina-aika tarkoittaa pienempiä kuukauseriä mutta suurempia kokonaiskorkoja.'
     },
     {
       id: 'equal-principal',
-      title: t('loanTerms.equalPrincipal.title'),
-      content: t('loanTerms.equalPrincipal.description')
+      title: 'Tasalyhennys',
+      content: 'Tasalyhennyksessä pääoman lyhennys on joka kuukausi sama, mutta kokonaiserä pienenee ajan myötä korkojen vähentyessä.'
     },
     {
       id: 'fixed-installment',
-      title: t('loanTerms.fixedInstallment.title'),
-      content: t('loanTerms.fixedInstallment.description')
+      title: 'Kiinteä erä',
+      content: 'Kiinteässä erässä kuukausierä pysyy samana koko laina-ajan. Tämä helpottaa talouden suunnittelua ja budjetointia.'
     }
   ];
 
@@ -83,7 +84,7 @@ const LoanTerms: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{t('loanTerms.pageTitle')} | Velkavapaus.fi</title>
+        <title>Lainaehdot ja rahoitustermit | Velkavapaus.fi</title>
         <meta name="description" content="Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä. Opi mitä tarkoittaa Euribor, kuinka lainan pääoma toimii ja paljon muuta." />
         <meta name="keywords" content="lainaehdot, korko, annuiteetti, euribor, lainan pääoma, lainan maksuaika, tasalyhennys, tasaerä" />
         
@@ -91,7 +92,7 @@ const LoanTerms: React.FC = () => {
         <link rel="canonical" href="https://velkavapaus.fi/terms" />
         
         {/* Open Graph */}
-        <meta property="og:title" content={`${t('loanTerms.pageTitle')} | Velkavapaus.fi`} />
+        <meta property="og:title" content="Lainaehdot ja rahoitustermit | Velkavapaus.fi" />
         <meta property="og:description" content="Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä. Opi mitä tarkoittaa Euribor, kuinka lainan pääoma toimii ja paljon muuta." />
         <meta property="og:url" content="https://velkavapaus.fi/terms" />
         <meta property="og:type" content="article" />
@@ -105,7 +106,7 @@ const LoanTerms: React.FC = () => {
             {
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "${t('loanTerms.pageTitle')}",
+              "name": "Lainaehdot ja rahoitustermit",
               "description": "Ymmärrä rahoitustermejä kuten korko ja annuiteetti selkeällä kielellä.",
               "url": "https://velkavapaus.fi/terms",
               "breadcrumb": {
@@ -120,7 +121,7 @@ const LoanTerms: React.FC = () => {
                   {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "${t('loanTerms.pageTitle')}",
+                    "name": "Lainaehdot",
                     "item": "https://velkavapaus.fi/terms"
                   }
                 ]
@@ -137,11 +138,11 @@ const LoanTerms: React.FC = () => {
               variant="outline" 
               size="icon" 
               onClick={() => navigate(-1)}
-              aria-label={t('loanTerms.backButton')}
+              aria-label="Takaisin"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-3xl font-bold">{t('loanTerms.pageTitle')}</h1>
+            <h1 className="text-3xl font-bold">Lainaehdot ja rahoitustermit</h1>
           </div>
         </div>
         
@@ -149,28 +150,28 @@ const LoanTerms: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex flex-col gap-4">
               <p className="text-muted-foreground">
-                {t('loanTerms.introduction')} <span className="font-medium">Understanding financial terminology helps you make better decisions</span> about your loans.
+                Tutustu tärkeimpiin rahoitustermeihin ja ymmärrä paremmin lainojesi ehtoja. <span className="font-medium">Rahoitusterminologian ymmärtäminen auttaa sinua tekemään parempia päätöksiä</span> lainoistasi.
               </p>
               
               <div className="flex flex-wrap gap-3 text-sm">
                 <Link to="/" className="inline-flex items-center text-primary hover:underline">
                   <Home className="h-3 w-3 mr-1" />
-                  {t('tabs.loans')}
+                  Lainat
                 </Link>
                 <span>•</span>
                 <Link to="/terms#interest-rate" className="text-primary hover:underline">
-                  {t('loanTerms.interestRate.title')}
+                  Korko
                 </Link>
                 <span>•</span>
                 <Link to="/terms#euribor" className="text-primary hover:underline">
-                  {t('loanTerms.euribor.title')}
+                  Euribor
                 </Link>
               </div>
 
               <div className="relative mt-2">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder={t('loanTerms.searchPlaceholder')}
+                  placeholder="Etsi termejä..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-9"
@@ -197,7 +198,7 @@ const LoanTerms: React.FC = () => {
                   <div className="mt-4 pt-3 border-t">
                     <p className="text-sm text-primary">
                       <Link to="/" className="hover:underline">
-                        {t('loanTerms.tryCalculator')}
+                        Kokeile laskuria
                       </Link>
                     </p>
                   </div>
@@ -207,26 +208,26 @@ const LoanTerms: React.FC = () => {
           </Accordion>
         ) : (
           <div className="text-center p-8">
-            <p className="text-muted-foreground">{t('loanTerms.noResults')}</p>
+            <p className="text-muted-foreground">Hakusanallasi ei löytynyt tuloksia.</p>
           </div>
         )}
         
         <div className="mt-10 pt-6 border-t">
-          <h2 className="text-xl font-semibold mb-3">{t('loanTerms.relatedTools')}</h2>
+          <h2 className="text-xl font-semibold mb-3">Liittyvät työkalut</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <Link to="/" className="block">
-                  <h3 className="font-medium">{t('loanTerms.loanCalculator')}</h3>
-                  <p className="text-sm text-muted-foreground">{t('loanTerms.loanCalculatorDesc')}</p>
+                  <h3 className="font-medium">Lainalaskuri</h3>
+                  <p className="text-sm text-muted-foreground">Laske lainasi kuukausierä ja kokonaiskulut</p>
                 </Link>
               </CardContent>
             </Card>
             <Card className="hover:shadow-md transition-shadow">
               <CardContent className="p-4">
                 <Link to="/" className="block">
-                  <h3 className="font-medium">{t('loanTerms.bestLoanOffers')}</h3>
-                  <p className="text-sm text-muted-foreground">{t('loanTerms.bestLoanOffersDesc')}</p>
+                  <h3 className="font-medium">Parhaat lainatarjoukset</h3>
+                  <p className="text-sm text-muted-foreground">Vertaile eri lainanantajien tarjouksia</p>
                 </Link>
               </CardContent>
             </Card>
