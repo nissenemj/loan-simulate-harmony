@@ -1,3 +1,4 @@
+
 // Repayment-related translations
 
 export const repayment = {
@@ -51,6 +52,7 @@ export const repayment = {
 			summaryTab: "Summary",
 			planTab: "Repayment Plan",
 			budget: "Budget",
+			budgetPlaceholder: "Enter your monthly budget",
 			avalancheStrategy: "Avalanche Strategy",
 			snowballStrategy: "Snowball Strategy",
 			equalStrategy: "Equal Strategy",
@@ -115,6 +117,7 @@ export const repayment = {
 			summaryTab: "Yhteenveto",
 			planTab: "Takaisinmaksusuunnitelma",
 			budget: "Budjetti",
+			budgetPlaceholder: "Syötä kuukausittainen budjettisi",
 			avalancheStrategy: "Lumivyörystrategia",
 			snowballStrategy: "Lumipallostrategia",
 			equalStrategy: "Tasainen strategia",
