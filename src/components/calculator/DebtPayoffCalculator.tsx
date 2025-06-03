@@ -22,6 +22,8 @@ import ProgressIndicator from './ProgressIndicator';
 import ExampleDataButton from './ExampleDataButton';
 import EnhancedStrategySelector from './EnhancedStrategySelector';
 import ResultsInterpretationGuide from './ResultsInterpretationGuide';
+import GuidedTour from '../onboarding/GuidedTour';
+import ExtraPaymentImpact from './ExtraPaymentImpact';
 
 interface DebtPayoffCalculatorProps {
   initialDebts: Debt[];
@@ -41,6 +43,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const [payoffPlan, setPayoffPlan] = useState<PaymentPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const [showTour, setShowTour] = useState(false);
 
   const totalDebt = useMemo(() => debts.reduce((sum, debt) => sum + debt.balance, 0), [debts]);
   const totalMinPayment = useMemo(() => debts.reduce((sum, debt) => sum + debt.minimumPayment, 0), [debts]);
@@ -173,8 +176,14 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     setStrategy(newStrategy as PrioritizationMethod);
   }, []);
 
+  const handleTourComplete = useCallback(() => {
+    setShowTour(false);
+  }, []);
+
   return (
     <div className="space-y-6">
+      <GuidedTour onComplete={handleTourComplete} forceShow={showTour} />
+      
       <ProgressIndicator currentStep={currentStep} />
       
       <Card>
@@ -311,6 +320,14 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                     method={strategy}
                   />
                 </div>
+                
+                {monthlyBudget > totalMinPayment && (
+                  <ExtraPaymentImpact
+                    extraAmount={monthlyBudget - totalMinPayment}
+                    timeSaved={payoffPlan ? Math.round(payoffPlan.totalMonths * 0.1) : 0}
+                    interestSaved={payoffPlan ? Math.round(payoffPlan.totalInterestPaid * 0.1) : 0}
+                  />
+                )}
                 
                 <div className="flex justify-end">
                   <Button 

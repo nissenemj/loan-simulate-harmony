@@ -1,4 +1,5 @@
 
+
 import { common } from "./modules/common";
 import { calculator } from "./modules/calculator";
 import { repayment } from "./modules/repayment";
@@ -13,6 +14,7 @@ import { alerts } from "./modules/alerts";
 import { calculatorEnhancements } from "./modules/calculator-enhancements";
 import { tooltips } from "./modules/tooltips";
 import { guidance } from "./modules/guidance";
+import { tour } from "./modules/tour";
 
 // English translations
 export const en = {
@@ -30,6 +32,7 @@ export const en = {
 	...calculatorEnhancements.en,
 	...tooltips.en,
 	...guidance.en,
+	...tour.en,
 };
 
 // Finnish translations
@@ -48,4 +51,6 @@ export const fi = {
 	...calculatorEnhancements.fi,
 	...tooltips.fi,
 	...guidance.fi,
+	...tour.fi,
 };
+
