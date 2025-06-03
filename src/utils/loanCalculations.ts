@@ -1,3 +1,4 @@
+
 export type LoanType = "annuity" | "equal-principal" | "fixed-installment" | "custom-payment";
 export type InterestType = "fixed" | "variable-euribor";
 
@@ -5,6 +6,7 @@ export interface Loan {
   id: string;
   name: string;
   amount: number;
+  currentBalance?: number; // Added currentBalance property
   interestRate: number;
   termYears: number;
   repaymentType: LoanType;
