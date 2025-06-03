@@ -1,7 +1,6 @@
 
 import { CreditCard, calculateCreditCardSummary, formatUtilizationRate } from "@/utils/creditCardCalculations";
 import { formatCurrency } from "@/utils/loanCalculations";
-import { useLanguage } from "@/contexts/LanguageContext";
 import AnimatedNumber from "@/components/AnimatedNumber";
 
 import {
@@ -16,7 +15,6 @@ interface CreditCardSummaryProps {
 }
 
 export default function CreditCardSummary({ creditCards }: CreditCardSummaryProps) {
-  const { t } = useLanguage();
   const activeCreditCards = creditCards.filter(card => card.isActive);
   
   if (activeCreditCards.length === 0) {
@@ -28,27 +26,27 @@ export default function CreditCardSummary({ creditCards }: CreditCardSummaryProp
   // Define summary items
   const summaryItems = [
     {
-      label: t("creditCard.summary.totalBalance"),
+      label: "Saldo yhteensä",
       value: summary.totalBalance,
       formatter: formatCurrency,
     },
     {
-      label: t("creditCard.summary.totalMinPayment"),
+      label: "Vähimmäismaksu yhteensä",
       value: summary.totalMinPayment,
       formatter: formatCurrency,
     },
     {
-      label: t("creditCard.summary.totalMonthlyInterest"),
+      label: "Kuukausikorko yhteensä",
       value: summary.totalMonthlyInterest,
       formatter: formatCurrency,
     },
     {
-      label: t("creditCard.summary.totalLimit"),
+      label: "Luottoraja yhteensä",
       value: summary.totalLimit,
       formatter: formatCurrency,
     },
     {
-      label: t("creditCard.summary.totalUtilization"),
+      label: "Käyttöaste yhteensä",
       value: summary.totalUtilization,
       formatter: formatUtilizationRate,
     },
@@ -57,7 +55,7 @@ export default function CreditCardSummary({ creditCards }: CreditCardSummaryProp
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl text-left">{t("creditCard.summary.title")}</CardTitle>
+        <CardTitle className="text-xl text-left">Luottokorttiyhteenveto</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

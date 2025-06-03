@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Loan, calculateLoan, formatCurrency } from "@/utils/loanCalculations";
-import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Table,
   TableBody,
@@ -21,8 +20,6 @@ interface LoanSummaryTableProps {
 }
 
 export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryTableProps) {
-  const { t } = useLanguage();
-
   // Calculate totals
   let totalMonthlyPayment = 0;
   let totalMonthlyInterest = 0;
@@ -49,20 +46,20 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
       {isDemo && (
         <div className="bg-amber-50 border-b border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 p-3 flex items-center gap-2 text-amber-800 dark:text-amber-300" role="alert" aria-live="polite">
           <AlertCircle size={16} aria-hidden="true" />
-          <p className="text-sm font-medium">{t("debtSummary.demoDataMessage")}</p>
+          <p className="text-sm font-medium">Esimerkkitiedot käytössä - lisää omat tietosi saadaksesi tarkkoja tuloksia</p>
         </div>
       )}
       
       <div className="overflow-x-auto">
         <Table>
-          <caption className="sr-only">{t("debtSummary.tableSummary")}</caption>
+          <caption className="sr-only">Lainojen yhteenveto taulukko</caption>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("debtSummary.loanName")}</TableHead>
-              <TableHead>{t("debtSummary.monthlyPayment")}</TableHead>
-              <TableHead>{t("debtSummary.monthlyInterest")}</TableHead>
-              <TableHead>{t("debtSummary.totalInterestEstimate")}</TableHead>
-              <TableHead>{t("debtSummary.totalAmountPaid")}</TableHead>
+              <TableHead>Lainan nimi</TableHead>
+              <TableHead>Kuukausierä</TableHead>
+              <TableHead>Kuukausikorko</TableHead>
+              <TableHead>Korot yhteensä</TableHead>
+              <TableHead>Maksettu yhteensä</TableHead>
             </TableRow>
           </TableHeader>
           
@@ -70,7 +67,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
             {loanData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-8">
-                  {t("debtSummary.noLoansMessage")}
+                  Ei lainoja lisätty
                 </TableCell>
               </TableRow>
             ) : (
@@ -109,7 +106,7 @@ export default function LoanSummaryTable({ loans, isDemo = false }: LoanSummaryT
           {loanData.length > 0 && (
             <TableFooter>
               <TableRow>
-                <TableCell className="font-bold">{t("debtSummary.totalLoans")}</TableCell>
+                <TableCell className="font-bold">Lainat yhteensä</TableCell>
                 <TableCell className="font-bold">
                   <AnimatedNumber
                     value={totalMonthlyPayment}

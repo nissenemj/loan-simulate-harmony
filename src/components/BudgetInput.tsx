@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { PrioritizationMethod } from '@/utils/repayment';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -21,7 +20,6 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
   defaultBudget = 500,
   method = 'avalanche'
 }) => {
-  const { t } = useLanguage();
   const [budget, setBudget] = useState<number | string>(defaultBudget);
   const [prioritization, setPrioritization] = useState<PrioritizationMethod>(method);
   const isMobile = useIsMobile();
@@ -44,15 +42,15 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
       <CardHeader className="space-y-1">
         <CardTitle className="flex items-center gap-2 text-wrap">
           <CalculatorIcon className="h-5 w-5 text-primary shrink-0" />
-          <span className="break-words">{t("repayment.title")}</span>
+          <span className="break-words">Takaisinmaksusuunnitelma</span>
         </CardTitle>
         <CardDescription className="text-wrap break-words">
-          {t("repayment.enterBudgetPrompt")}
+          Syötä kuukausittainen budjettisi velkojen maksamiseen
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="budget">{t("repayment.budget")}</Label>
+          <Label htmlFor="budget">Kuukausittainen budjetti</Label>
           <div className="relative">
             <span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">€</span>
             <Input
@@ -61,50 +59,56 @@ const BudgetInput: React.FC<BudgetInputProps> = ({
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               className="pl-8"
-              placeholder={t("repayment.budgetPlaceholder")}
+              placeholder="500"
               min="0"
               step="10"
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label>{t("repayment.strategy")}</Label>
-          <RadioGroup 
-            value={prioritization} 
+        <div className="space-y-3">
+          <Label>Takaisinmaksustrategia</Label>
+          <RadioGroup
+            value={prioritization}
             onValueChange={(value) => setPrioritization(value as PrioritizationMethod)}
-            className="space-y-2"
+            className="space-y-3"
           >
-            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+            <div className="flex items-start space-x-3 p-3 border rounded-lg">
               <RadioGroupItem value="avalanche" id="avalanche" className="mt-1" />
-              <Label htmlFor="avalanche" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("repayment.avalancheStrategy")}</span>
-                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.avalancheDesc")}</span>
-              </Label>
+              <div className="flex-1">
+                <Label htmlFor="avalanche" className="flex items-center gap-2 cursor-pointer">
+                  <TrendingUp className="h-4 w-4 text-blue-500" />
+                  Lumivyörystrategia
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Maksa ensin korkoimmat velat. Säästää eniten rahaa.
+                </p>
+              </div>
             </div>
-            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
+
+            <div className="flex items-start space-x-3 p-3 border rounded-lg">
               <RadioGroupItem value="snowball" id="snowball" className="mt-1" />
-              <Label htmlFor="snowball" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("repayment.snowballStrategy")}</span>
-                <span className="text-xs text-muted-foreground text-wrap break-words">{t("repayment.snowballDesc")}</span>
-              </Label>
-            </div>
-            <div className="flex items-start space-x-2 rounded-md border p-3 hover:bg-secondary/50 transition-colors">
-              <RadioGroupItem value="equal" id="equal" className="mt-1" />
-              <Label htmlFor="equal" className="flex flex-col cursor-pointer w-full">
-                <span className="font-medium text-wrap break-words">{t("repayment.equalStrategy")}</span>
-                <span className="text-xs text-muted-foreground text-wrap break-words">
-                  {t("repayment.equalDesc")}
-                </span>
-              </Label>
+              <div className="flex-1">
+                <Label htmlFor="snowball" className="flex items-center gap-2 cursor-pointer">
+                  <CoinsIcon className="h-4 w-4 text-green-500" />
+                  Lumipallostrategia
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Maksa ensin pienimmät velat. Motivoi nopeilla voitoilla.
+                </p>
+              </div>
             </div>
           </RadioGroup>
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleCalculate} className="w-full">
-          <CalculatorIcon className="mr-2 h-4 w-4" />
-          {t("repayment.calculateNow")}
+        <Button 
+          onClick={handleCalculate} 
+          className="w-full" 
+          size={isMobile ? "sm" : "default"}
+        >
+          Laske takaisinmaksusuunnitelma
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>
