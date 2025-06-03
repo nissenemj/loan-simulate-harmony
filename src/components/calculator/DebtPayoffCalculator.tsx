@@ -226,14 +226,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                       
                       <EnhancedFormField
                         id={`debt-balance-${index}`}
-                        label={
-                          <GlossaryTooltip 
-                            term="Saldo" 
-                            definition="Tällä hetkellä velkaa oleva rahasumma"
-                          >
-                            <span>Saldo</span>
-                          </GlossaryTooltip>
-                        }
+                        label="Saldo"
                         type="number"
                         value={debt.balance}
                         onChange={(e) => handleUpdateDebt(debt.id, 'balance', Number(e.target.value) || 0)}
@@ -246,14 +239,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                       
                       <EnhancedFormField
                         id={`debt-interest-${index}`}
-                        label={
-                          <GlossaryTooltip 
-                            term="Korkoprosentti" 
-                            definition="Lainatusta rahasta veloitettava vuosittainen prosenttiosuus"
-                          >
-                            <span>Korkoprosentti (%)</span>
-                          </GlossaryTooltip>
-                        }
+                        label="Korkoprosentti (%)"
                         type="number"
                         value={debt.interestRate}
                         onChange={(e) => handleUpdateDebt(debt.id, 'interestRate', Number(e.target.value) || 0)}
@@ -266,14 +252,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                       
                       <EnhancedFormField
                         id={`debt-payment-${index}`}
-                        label={
-                          <GlossaryTooltip 
-                            term="Vähimmäismaksu" 
-                            definition="Pienin summa, joka sinun täytyy maksaa kuukausittain"
-                          >
-                            <span>Vähimmäismaksu (€)</span>
-                          </GlossaryTooltip>
-                        }
+                        label="Vähimmäismaksu (€)"
                         type="number"
                         value={debt.minimumPayment}
                         onChange={(e) => handleUpdateDebt(debt.id, 'minimumPayment', Number(e.target.value) || 0)}

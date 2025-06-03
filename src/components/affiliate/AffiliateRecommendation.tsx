@@ -1,26 +1,54 @@
+
 import React from 'react';
 import { AffiliateRecommendation as RecommendationType } from '@/utils/affiliateData';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+
 interface AffiliateRecommendationProps {
   recommendation: RecommendationType;
 }
+
 const AffiliateRecommendation: React.FC<AffiliateRecommendationProps> = ({
   recommendation
 }) => {
-  const {
-    t,
-    language
-  } = useLanguage();
+  const { t } = useLanguage();
 
-  // Use the localized title and description based on the current language
-  const title = language === 'en' && recommendation.titleEn ? recommendation.titleEn : recommendation.title;
-  const description = language === 'en' && recommendation.descriptionEn ? recommendation.descriptionEn : recommendation.description;
+  // Käytetään aina suomenkielisiä tekstejä
+  const title = recommendation.title;
+  const description = recommendation.description;
 
-  // Get the button text based on language
-  const buttonText = recommendation.links[0]?.title || t("common.learnMore") || "Lue lisää";
-  return <div className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
-      
-    </div>;
+  // Nappin teksti
+  const buttonText = recommendation.links[0]?.title || "Lue lisää";
+  
+  return (
+    <div className="border rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+      <div className="p-6">
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground mb-4">{description}</p>
+        
+        {recommendation.links.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {recommendation.links.map((link, index) => (
+              <Button
+                key={index}
+                variant={index === 0 ? "default" : "outline"}
+                size="sm"
+                asChild
+              >
+                <a 
+                  href={link.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  {link.title}
+                </a>
+              </Button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
+
 export default AffiliateRecommendation;

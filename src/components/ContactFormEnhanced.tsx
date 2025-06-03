@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -15,15 +16,43 @@ import {
 	FormFieldGroup,
 	SplitFormFields,
 } from "@/components/ui/form-field-group";
-import {
-	combineValidators,
-	createRequiredValidator,
-	createEmailValidator,
-	createMinLengthValidator,
-	useValidationMessages,
-} from "@/utils/formValidation";
 import { Send, Loader2, User, Mail, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
+
+// Yksinkertaiset validaattorit suoraan komponentissa
+const createRequiredValidator = (errorMessage: string = "Tämä kenttä on pakollinen") => {
+  return (value: string) => {
+    const isValid = value.trim().length > 0;
+    return { isValid, message: isValid ? undefined : errorMessage };
+  };
+};
+
+const createEmailValidator = (errorMessage: string = "Syötä kelvollinen sähköpostiosoite") => {
+  return (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(value);
+    return { isValid, message: isValid ? undefined : errorMessage };
+  };
+};
+
+const createMinLengthValidator = (minLength: number, errorMessage: string) => {
+  return (value: string) => {
+    const isValid = value.trim().length >= minLength;
+    return { isValid, message: isValid ? undefined : errorMessage };
+  };
+};
+
+const combineValidators = (...validators: ((value: string) => { isValid: boolean; message?: string })[]) => {
+  return (value: string) => {
+    for (const validator of validators) {
+      const result = validator(value);
+      if (!result.isValid) {
+        return result;
+      }
+    }
+    return { isValid: true };
+  };
+};
 
 interface ContactFormEnhancedProps {
 	className?: string;
@@ -33,7 +62,6 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 	className,
 }) => {
 	const { t } = useLanguage();
-	const validationMessages = useValidationMessages();
 
 	const [formData, setFormData] = useState({
 		firstName: "",
@@ -49,18 +77,18 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 
 	// Validation functions
 	const nameValidator = combineValidators(
-		createRequiredValidator(validationMessages.required),
-		createMinLengthValidator(2, validationMessages.minLength(2))
+		createRequiredValidator("Nimi on pakollinen"),
+		createMinLengthValidator(2, "Nimen täytyy olla vähintään 2 merkkiä")
 	);
 
 	const emailValidator = combineValidators(
-		createRequiredValidator(validationMessages.required),
-		createEmailValidator(validationMessages.email)
+		createRequiredValidator("Sähköposti on pakollinen"),
+		createEmailValidator("Syötä kelvollinen sähköpostiosoite")
 	);
 
 	const messageValidator = combineValidators(
-		createRequiredValidator(validationMessages.required),
-		createMinLengthValidator(10, validationMessages.minLength(10))
+		createRequiredValidator("Viesti on pakollinen"),
+		createMinLengthValidator(10, "Viestin täytyy olla vähintään 10 merkkiä")
 	);
 
 	const handleChange = (
@@ -76,20 +104,19 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 		// Validate first name
 		const firstNameResult = nameValidator(formData.firstName);
 		if (!firstNameResult.isValid) {
-			newErrors.firstName =
-				firstNameResult.message || validationMessages.required;
+			newErrors.firstName = firstNameResult.message || "Nimi on pakollinen";
 		}
 
 		// Validate email
 		const emailResult = emailValidator(formData.email);
 		if (!emailResult.isValid) {
-			newErrors.email = emailResult.message || validationMessages.email;
+			newErrors.email = emailResult.message || "Sähköposti on pakollinen";
 		}
 
 		// Validate message
 		const messageResult = messageValidator(formData.message);
 		if (!messageResult.isValid) {
-			newErrors.message = messageResult.message || validationMessages.required;
+			newErrors.message = messageResult.message || "Viesti on pakollinen";
 		}
 
 		setErrors(newErrors);
@@ -100,9 +127,7 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 		e.preventDefault();
 
 		if (!validateForm()) {
-			toast.error(
-				t("contact.form.validationError") || "Please fix the errors in the form"
-			);
+			toast.error("Korjaa lomakkeen virheet");
 			return;
 		}
 
@@ -112,9 +137,7 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 			// Simulate API call
 			await new Promise((resolve) => setTimeout(resolve, 1500));
 
-			toast.success(
-				t("contact.form.success") || "Your message has been sent successfully!"
-			);
+			toast.success("Viestisi on lähetetty onnistuneesti!");
 
 			// Reset form
 			setFormData({
@@ -127,10 +150,7 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 			});
 		} catch (error) {
 			console.error("Error submitting form:", error);
-			toast.error(
-				t("contact.form.error") ||
-					"There was an error sending your message. Please try again."
-			);
+			toast.error("Viestin lähettämisessä tapahtui virhe. Yritä uudelleen.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -139,23 +159,17 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 	return (
 		<Card className={className}>
 			<CardHeader>
-				<CardTitle>{t("contact.form.title") || "Contact Us"}</CardTitle>
+				<CardTitle>Ota yhteyttä</CardTitle>
 				<CardDescription>
-					{t("contact.form.description") ||
-						"Fill out the form below to send us a message."}
+					Täytä alla oleva lomake lähettääksesi meille viestin.
 				</CardDescription>
 			</CardHeader>
 
 			<form onSubmit={handleSubmit}>
 				<CardContent className="space-y-6">
 					<FormFieldGroup
-						title={
-							t("contact.form.personalInfoTitle") || "Personal Information"
-						}
-						description={
-							t("contact.form.personalInfoDescription") ||
-							"Tell us a bit about yourself"
-						}
+						title="Henkilötiedot"
+						description="Kerro meille hieman itsestäsi"
 					>
 						<SplitFormFields
 							columns={2}
@@ -163,9 +177,8 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 								{
 									id: "contact-first-name",
 									name: "firstName",
-									label: t("contact.form.firstName") || "First Name",
-									placeholder:
-										t("contact.form.firstNamePlaceholder") || "Your first name",
+									label: "Etunimi",
+									placeholder: "Etunimi",
 									value: formData.firstName,
 									onChange: handleChange,
 									validation: nameValidator,
@@ -174,9 +187,8 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 								{
 									id: "contact-last-name",
 									name: "lastName",
-									label: t("contact.form.lastName") || "Last Name",
-									placeholder:
-										t("contact.form.lastNamePlaceholder") || "Your last name",
+									label: "Sukunimi",
+									placeholder: "Sukunimi",
 									value: formData.lastName,
 									onChange: handleChange,
 								},
@@ -190,25 +202,20 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 									id: "contact-email",
 									name: "email",
 									type: "email",
-									label: t("contact.form.email") || "Email",
-									placeholder:
-										t("contact.form.emailPlaceholder") ||
-										"your.email@example.com",
+									label: "Sähköposti",
+									placeholder: "sähköposti@esimerkki.fi",
 									value: formData.email,
 									onChange: handleChange,
 									validation: emailValidator,
 									required: true,
-									helpText:
-										t("contact.form.emailHelp") ||
-										"We'll never share your email with anyone else.",
+									helpText: "Emme jaa sähköpostiosoitettasi kenellekään.",
 								},
 								{
 									id: "contact-phone",
 									name: "phone",
 									type: "tel",
-									label: t("contact.form.phone") || "Phone",
-									placeholder:
-										t("contact.form.phonePlaceholder") || "+358 XX XXX XXXX",
+									label: "Puhelin",
+									placeholder: "+358 XX XXX XXXX",
 									value: formData.phone,
 									onChange: handleChange,
 								},
@@ -217,34 +224,27 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 					</FormFieldGroup>
 
 					<FormFieldGroup
-						title={t("contact.form.messageTitle") || "Your Message"}
-						description={
-							t("contact.form.messageDescription") || "How can we help you?"
-						}
+						title="Viestisi"
+						description="Miten voimme auttaa sinua?"
 					>
 						<EnhancedFormField
 							id="contact-subject"
 							name="subject"
-							label={t("contact.form.subject") || "Subject"}
-							placeholder={
-								t("contact.form.subjectPlaceholder") ||
-								"What is this regarding?"
-							}
+							label="Aihe"
+							placeholder="Mistä asiasta on kyse?"
 							value={formData.subject}
 							onChange={handleChange}
 						/>
 
 						<div className="space-y-2">
 							<label htmlFor="contact-message" className="text-sm font-medium">
-								{t("contact.form.message") || "Message"}
+								Viesti
 								<span className="text-destructive">*</span>
 							</label>
 							<Textarea
 								id="contact-message"
 								name="message"
-								placeholder={
-									t("contact.form.messagePlaceholder") || "Your message..."
-								}
+								placeholder="Viestisi..."
 								value={formData.message}
 								onChange={handleChange}
 								className={
@@ -269,12 +269,12 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 						{isSubmitting ? (
 							<>
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								{t("contact.form.sending") || "Sending..."}
+								Lähetetään...
 							</>
 						) : (
 							<>
 								<Send className="mr-2 h-4 w-4" />
-								{t("contact.form.submit") || "Send Message"}
+								Lähetä viesti
 							</>
 						)}
 					</Button>
