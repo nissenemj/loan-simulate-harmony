@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -37,6 +38,17 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
 
   const totalDebt = useMemo(() => debts.reduce((sum, debt) => sum + debt.balance, 0), [debts]);
   const totalMinPayment = useMemo(() => debts.reduce((sum, debt) => sum + debt.minimumPayment, 0), [debts]);
+
+  // Helper function to format numbers with max one decimal place
+  const formatNumber = (num: number) => {
+    return num % 1 === 0 ? num.toString() : num.toFixed(1);
+  };
+
+  // Helper function to format currency with max one decimal place
+  const formatCurrency = (num: number) => {
+    const formatted = num % 1 === 0 ? num.toString() : num.toFixed(1);
+    return `€${parseFloat(formatted).toLocaleString('fi-FI')}`;
+  };
 
   const handleAddDebt = useCallback(() => {
     const newDebt: Debt = {
@@ -268,7 +280,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                       <BanknoteIcon className="h-4 w-4 mr-2" />
                       {t('debtStrategies.totalDebt')}
                     </span>
-                    <span className="text-2xl font-bold mt-1">€{totalDebt.toLocaleString('fi-FI')}</span>
+                    <span className="text-2xl font-bold mt-1">{formatCurrency(totalDebt)}</span>
                   </div>
                   
                   <div className="flex flex-col p-4 bg-card rounded-md border">
@@ -276,7 +288,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                       <CalendarIcon className="h-4 w-4 mr-2" />
                       {t('debtStrategies.timeToPayoff')}
                     </span>
-                    <span className="text-2xl font-bold mt-1">{payoffPlan.totalMonths} {t('form.months')}</span>
+                    <span className="text-2xl font-bold mt-1">{formatNumber(payoffPlan.totalMonths)} {t('form.months')}</span>
                   </div>
                   
                   <div className="flex flex-col p-4 bg-card rounded-md border">
@@ -284,24 +296,24 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                       <PercentIcon className="h-4 w-4 mr-2" />
                       {t('debtStrategies.interestPaid')}
                     </span>
-                    <span className="text-2xl font-bold mt-1">€{payoffPlan.totalInterestPaid.toLocaleString('fi-FI')}</span>
+                    <span className="text-2xl font-bold mt-1">{formatCurrency(payoffPlan.totalInterestPaid)}</span>
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-4 mt-4">
                   <div>
                     <span className="text-sm text-muted-foreground">{t('debtStrategies.minPayment')}</span>
-                    <p className="font-medium">€{totalMinPayment.toLocaleString('fi-FI')}</p>
+                    <p className="font-medium">{formatCurrency(totalMinPayment)}</p>
                   </div>
                   
                   <div>
                     <span className="text-sm text-muted-foreground">{t('debtStrategies.additionalPayment')}</span>
-                    <p className="font-medium">€{(monthlyBudget - totalMinPayment).toLocaleString('fi-FI')}</p>
+                    <p className="font-medium">{formatCurrency(monthlyBudget - totalMinPayment)}</p>
                   </div>
                   
                   <div>
                     <span className="text-sm text-muted-foreground">{t('debtStrategies.totalMonthly')}</span>
-                    <p className="font-medium">€{monthlyBudget.toLocaleString('fi-FI')}</p>
+                    <p className="font-medium">{formatCurrency(monthlyBudget)}</p>
                   </div>
                 </div>
               </div>
