@@ -1,10 +1,11 @@
-
 // Calculator-related translations
 export const calculator = {
 	en: {
 		debtPayoffCalculator: "Debt Payoff Calculator",
 		debtPayoffTimeline: "Debt Payoff Timeline",
 		extraPaymentImpact: "Extra Payment Impact",
+		extraPaymentDescription:
+			"See how extra payments can accelerate your debt payoff",
 		debtConsolidation: "Debt Consolidation",
 		addYourDebts: "Add Your Debts",
 		debtName: "Debt Name",
@@ -96,6 +97,8 @@ export const calculator = {
 		debtPayoffCalculator: "Velanmaksuaikalaskuri",
 		debtPayoffTimeline: "Velanmaksuaikataulu",
 		extraPaymentImpact: "Lisämaksun vaikutus",
+		extraPaymentDescription:
+			"Katso miten lisämaksut voivat nopeuttaa velkojesi maksamista",
 		debtConsolidation: "Velkojen yhdistäminen",
 		addYourDebts: "Lisää velkasi",
 		debtName: "Velan nimi",
