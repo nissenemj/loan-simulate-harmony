@@ -1,455 +1,207 @@
-import { useState } from "react";
+
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useIsMobile } from "@/hooks/use-mobile";
-import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "@/components/ModeToggle";
-import {
-	Menu,
-	User,
-	ChevronDown,
-	Calculator,
-	BarChart3,
-	BookOpen,
-	Mail,
-	Home,
-	LogIn,
-	UserPlus,
-	LogOut,
-	Settings,
-	CreditCard,
-	PieChart,
-	DollarSign,
-} from "lucide-react";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
-import LanguageSwitcher from "./LanguageSwitcher";
-import { toast } from "@/components/ui/use-toast";
-import VelkavapausLogo from "./VelkavapausLogo";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Menu, User, LogOut, Settings, Calculator } from "lucide-react";
 
-const NavigationHeader = () => {
-	const [open, setOpen] = useState(false);
-	const { user, logout } = useAuth();
+const NavigationHeader: React.FC = () => {
 	const { t } = useLanguage();
-	const isMobile = useIsMobile();
+	const { user, logout } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
 	const handleLogout = async () => {
 		try {
 			await logout();
-			setOpen(false);
-			toast({
-				title: t("notifications.logoutSuccess"),
-				description: t("notifications.logoutSuccessDescription"),
-			});
+			navigate("/");
 		} catch (error) {
 			console.error("Logout error:", error);
-			toast({
-				title: t("notifications.logoutFailed"),
-				description: t("notifications.logoutFailedDescription"),
-				variant: "destructive",
-			});
 		}
 	};
 
-	const handleNavigation = (path: string) => {
-		try {
-			navigate(path);
-			if (open) setOpen(false);
-		} catch (error) {
-			console.error("Navigation error:", error);
-			toast({
-				title: t("notifications.navigationError"),
-				description: t("notifications.navigationErrorDescription"),
-				variant: "destructive",
-			});
-		}
+	const handleLinkClick = () => {
+		setIsSheetOpen(false);
 	};
-
-	// Define navigation items based on user authentication status
-	const mainNavItems = user
-		? [
-				// Dashboard link removed from main nav to avoid duplication with user dropdown
-				{
-					href: "/calculator",
-					label: t("navigation.calculator"),
-					icon: <Calculator className="h-4 w-4" />,
-				},
-				{
-					href: "#",
-					label: t("navigation.strategies"),
-					icon: <BarChart3 className="h-4 w-4" />,
-					children: [
-						{
-							href: "/debt-strategies",
-							label: t("navigation.debtStrategies"),
-							description: t("navigation.debtStrategiesDescription"),
-						},
-						{
-							href: "/debt-summary",
-							label: t("navigation.debtSummary"),
-							description: t("navigation.debtSummaryDescription"),
-						},
-					],
-				},
-				{
-					href: "/blog",
-					label: t("navigation.blog"),
-					icon: <BookOpen className="h-4 w-4" />,
-				},
-				{
-					href: "/contact",
-					label: t("navigation.contact"),
-					icon: <Mail className="h-4 w-4" />,
-				},
-		  ]
-		: [
-				{
-					href: "#",
-					label: t("navigation.features"),
-					icon: <DollarSign className="h-4 w-4" />,
-					children: [
-						{
-							href: "/calculator",
-							label: t("navigation.calculator"),
-							description: t("navigation.calculatorDescription"),
-						},
-						{
-							href: "/debt-summary",
-							label: t("navigation.debtSummary"),
-							description: t("navigation.debtSummaryDescription"),
-						},
-					],
-				},
-				{
-					href: "/debt-strategies",
-					label: t("navigation.strategies"),
-					icon: <BarChart3 className="h-4 w-4" />,
-				},
-				// Placeholder for future pricing page
-				// {
-				// 	href: "/pricing",
-				// 	label: t("navigation.pricing"),
-				// 	icon: <CreditCard className="h-4 w-4" />
-				// },
-				{
-					href: "/blog",
-					label: t("navigation.blog"),
-					icon: <BookOpen className="h-4 w-4" />,
-				},
-				{
-					href: "/contact",
-					label: t("navigation.contact"),
-					icon: <Mail className="h-4 w-4" />,
-				},
-		  ];
 
 	const isActive = (path: string) => {
-		if (path === "/") {
-			return location.pathname === "/";
-		}
-		if (path === "#") {
-			return false;
-		}
-		return (
-			location.pathname === path ||
-			(path !== "/" && location.pathname.startsWith(`${path}/`))
-		);
+		return location.pathname === path;
 	};
 
-	// Function to render dropdown menu for navigation items with children
-	const renderDropdownMenu = (item: any) => {
-		return (
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button
-						variant={isActive(item.href) ? "secondary" : "ghost"}
-						className="flex items-center gap-1"
-					>
-						{item.icon && <span className="mr-1">{item.icon}</span>}
-						{item.label}
-						<ChevronDown className="h-4 w-4 opacity-50" />
-					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent align="center" className="w-56">
-					{item.children.map((child: any) => (
-						<DropdownMenuItem
-							key={child.href}
-							onClick={() => handleNavigation(child.href)}
-							className="flex flex-col items-start"
-						>
-							<div className="font-medium">{child.label}</div>
-							{child.description && (
-								<div className="text-xs text-muted-foreground">
-									{child.description}
-								</div>
-							)}
-						</DropdownMenuItem>
-					))}
-				</DropdownMenuContent>
-			</DropdownMenu>
-		);
-	};
+	const navItems = [
+		{ href: "/", label: t("navigation.home") },
+		{ href: "/calculator", label: t("navigation.calculator") },
+		{ href: "/debt-strategies", label: t("navigation.strategies") },
+		{ href: "/blog", label: t("navigation.blog") },
+		{ href: "/contact", label: t("navigation.contact") },
+	];
+
+	const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
+		<>
+			{navItems.map((item) => (
+				<Link
+					key={item.href}
+					to={item.href}
+					onClick={mobile ? handleLinkClick : undefined}
+					className={`transition-colors hover:text-primary ${
+						isActive(item.href)
+							? "text-primary font-medium"
+							: "text-muted-foreground"
+					} ${mobile ? "block py-2" : ""}`}
+				>
+					{item.label}
+				</Link>
+			))}
+		</>
+	);
 
 	return (
-		<TooltipProvider>
-			<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b">
-				<div className="container flex h-16 items-center justify-between px-4">
-					<div
-						className="flex items-center cursor-pointer"
-						onClick={() => navigate("/")}
-					>
-						<VelkavapausLogo />
-					</div>
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+			<div className="container flex h-16 items-center justify-between">
+				{/* Logo */}
+				<Link to="/" className="flex items-center space-x-2">
+					<span className="text-xl font-bold text-primary">
+						{t("app.name")}
+					</span>
+				</Link>
 
-					{isMobile ? (
-						<Sheet open={open} onOpenChange={setOpen}>
-							<SheetTrigger asChild>
-								<Button variant="ghost" size="sm" className="px-2 -mr-2">
-									<Menu className="h-5 w-5" />
-									<span className="sr-only">{t("navigation.menu")}</span>
+				{/* Desktop Navigation */}
+				<nav className="hidden md:flex items-center space-x-6">
+					<NavItems />
+				</nav>
+
+				{/* Desktop Actions */}
+				<div className="hidden md:flex items-center space-x-4">
+					<ThemeToggle />
+					
+					{user ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" className="relative h-8 w-8 rounded-full">
+									<Avatar className="h-8 w-8">
+										<AvatarFallback>
+											{user.email?.charAt(0).toUpperCase()}
+										</AvatarFallback>
+									</Avatar>
 								</Button>
-							</SheetTrigger>
-							<SheetContent side="left" className="w-[85vw] max-w-xs p-0">
-								<div className="border-b px-6 py-4">
-									<SheetTitle>{t("app.title")}</SheetTitle>
-								</div>
-								<nav className="flex flex-col gap-1 p-4">
-									{mainNavItems.map((item) =>
-										item.children ? (
-											<div key={item.href} className="space-y-1">
-												<div className="px-3 py-2 text-sm font-medium flex items-center">
-													{item.icon && (
-														<span className="mr-2">{item.icon}</span>
-													)}
-													{item.label}
-												</div>
-												<div className="pl-4 space-y-1">
-													{item.children.map((child: any) => (
-														<Button
-															key={child.href}
-															variant={
-																isActive(child.href) ? "secondary" : "ghost"
-															}
-															className="w-full justify-start text-sm"
-															onClick={() => handleNavigation(child.href)}
-														>
-															{child.label}
-														</Button>
-													))}
-												</div>
-											</div>
-										) : (
-											<Button
-												key={item.href}
-												variant={isActive(item.href) ? "secondary" : "ghost"}
-												className="w-full justify-start"
-												onClick={() => handleNavigation(item.href)}
-											>
-												{item.icon && <span className="mr-2">{item.icon}</span>}
-												{item.label}
-											</Button>
-										)
-									)}
-								</nav>
-								<div className="border-t p-4 space-y-4">
-									<div className="flex items-center justify-between gap-2">
-										<LanguageSwitcher />
-										<ModeToggle />
-									</div>
-									{user ? (
-										<>
-											<Button
-												variant="default"
-												onClick={() => handleNavigation("/dashboard")}
-												className="w-full"
-											>
-												<PieChart className="h-4 w-4 mr-2" />
-												{t("navigation.dashboard")}
-											</Button>
-											<Button
-												variant="outline"
-												onClick={() => handleNavigation("/settings")}
-												className="w-full"
-											>
-												<Settings className="h-4 w-4 mr-2" />
-												{t("navigation.settings")}
-											</Button>
-											<Button
-												variant="destructive"
-												onClick={handleLogout}
-												className="w-full"
-											>
-												<LogOut className="h-4 w-4 mr-2" />
-												{t("auth.logout")}
-											</Button>
-										</>
-									) : (
-										<div className="space-y-2">
-											<Button
-												variant="default"
-												onClick={() => handleNavigation("/auth")}
-												className="w-full"
-											>
-												<LogIn className="h-4 w-4 mr-2" />
-												{t("auth.login")}
-											</Button>
-											<Button
-												variant="outline"
-												onClick={() => handleNavigation("/auth?tab=register")}
-												className="w-full"
-											>
-												<UserPlus className="h-4 w-4 mr-2" />
-												{t("auth.signUp")}
-											</Button>
-										</div>
-									)}
-								</div>
-							</SheetContent>
-						</Sheet>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="w-56" align="end" forceMount>
+								<DropdownMenuItem
+									onClick={() => navigate("/dashboard")}
+									className="cursor-pointer"
+								>
+									<User className="mr-2 h-4 w-4" />
+									<span>{t("auth.dashboard")}</span>
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() => navigate("/settings")}
+									className="cursor-pointer"
+								>
+									<Settings className="mr-2 h-4 w-4" />
+									<span>{t("navigation.settings")}</span>
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+									<LogOut className="mr-2 h-4 w-4" />
+									<span>{t("auth.logout")}</span>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					) : (
-						<div className="flex flex-1 items-center justify-between">
-							<nav className="flex items-center space-x-1 mx-4">
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<Button
-											variant={isActive("/") ? "secondary" : "ghost"}
-											onClick={() => handleNavigation("/")}
-											className="hidden md:flex"
-										>
-											<Home className="h-4 w-4 mr-1" />
-											{t("navigation.home")}
-										</Button>
-									</TooltipTrigger>
-									<TooltipContent>
-										<p>{t("navigation.tooltips.home")}</p>
-									</TooltipContent>
-								</Tooltip>
-
-								{mainNavItems.map((item) =>
-									item.children ? (
-										<div key={item.href}>{renderDropdownMenu(item)}</div>
-									) : (
-										<Tooltip key={item.href}>
-											<TooltipTrigger asChild>
-												<Button
-													variant={isActive(item.href) ? "secondary" : "ghost"}
-													onClick={() => handleNavigation(item.href)}
-												>
-													{item.icon && (
-														<span className="mr-1">{item.icon}</span>
-													)}
-													{item.label}
-												</Button>
-											</TooltipTrigger>
-											<TooltipContent>
-												<p>
-													{t(`navigation.tooltips.${item.label.toLowerCase()}`)}
-												</p>
-											</TooltipContent>
-										</Tooltip>
-									)
-								)}
-							</nav>
-
-							<div className="flex items-center gap-2">
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<div>
-											<LanguageSwitcher />
-										</div>
-									</TooltipTrigger>
-									<TooltipContent>
-										<p>{t("navigation.tooltips.language")}</p>
-									</TooltipContent>
-								</Tooltip>
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<div>
-											<ModeToggle />
-										</div>
-									</TooltipTrigger>
-									<TooltipContent>
-										<p>{t("navigation.tooltips.theme")}</p>
-									</TooltipContent>
-								</Tooltip>
-
-								{user ? (
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Button variant="outline" size="sm" className="h-9">
-												<User className="h-4 w-4 mr-2" />
-												{user.email}
-											</Button>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end" className="w-56">
-											<DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-											<DropdownMenuSeparator />
-											<DropdownMenuItem
-												onClick={() => handleNavigation("/dashboard")}
-											>
-												<PieChart className="h-4 w-4 mr-2" />
-												{t("navigation.dashboard")}
-											</DropdownMenuItem>
-											<DropdownMenuItem
-												onClick={() => handleNavigation("/settings")}
-											>
-												<Settings className="h-4 w-4 mr-2" />
-												{t("navigation.settings")}
-											</DropdownMenuItem>
-											<DropdownMenuSeparator />
-											<DropdownMenuItem onClick={handleLogout}>
-												<LogOut className="h-4 w-4 mr-2" />
-												{t("auth.logout")}
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
-								) : (
-									<div className="flex items-center gap-2">
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleNavigation("/auth")}
-										>
-											<LogIn className="h-4 w-4 mr-1" />
-											{t("auth.login")}
-										</Button>
-										<Button
-											variant="default"
-											size="sm"
-											onClick={() => handleNavigation("/auth?tab=register")}
-										>
-											{t("auth.signUp")}
-										</Button>
-									</div>
-								)}
-							</div>
-						</div>
+						<Button asChild>
+							<Link to="/auth">{t("auth.login")}</Link>
+						</Button>
 					)}
 				</div>
-			</header>
-		</TooltipProvider>
+
+				{/* Mobile Navigation */}
+				<div className="md:hidden flex items-center space-x-2">
+					<ThemeToggle />
+					<Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+						<SheetTrigger asChild>
+							<Button variant="ghost" size="icon">
+								<Menu className="h-5 w-5" />
+								<span className="sr-only">{t("navigation.menu")}</span>
+							</Button>
+						</SheetTrigger>
+						<SheetContent side="right" className="w-[280px]">
+							<div className="flex flex-col space-y-4 mt-6">
+								<Link
+									to="/"
+									onClick={handleLinkClick}
+									className="text-lg font-semibold"
+								>
+									{t("app.name")}
+								</Link>
+								
+								<nav className="flex flex-col space-y-3">
+									<NavItems mobile />
+								</nav>
+
+								<div className="pt-4 border-t">
+									{user ? (
+										<div className="space-y-3">
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => {
+													navigate("/dashboard");
+													handleLinkClick();
+												}}
+											>
+												<User className="mr-2 h-4 w-4" />
+												{t("auth.dashboard")}
+											</Button>
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => {
+													navigate("/settings");
+													handleLinkClick();
+												}}
+											>
+												<Settings className="mr-2 h-4 w-4" />
+												{t("navigation.settings")}
+											</Button>
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={handleLogout}
+											>
+												<LogOut className="mr-2 h-4 w-4" />
+												{t("auth.logout")}
+											</Button>
+										</div>
+									) : (
+										<Button
+											className="w-full"
+											onClick={() => {
+												navigate("/auth");
+												handleLinkClick();
+											}}
+										>
+											{t("auth.login")}
+										</Button>
+									)}
+								</div>
+							</div>
+						</SheetContent>
+					</Sheet>
+				</div>
+			</div>
+		</header>
 	);
 };
 

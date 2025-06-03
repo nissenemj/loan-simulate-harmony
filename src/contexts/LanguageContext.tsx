@@ -1,3 +1,4 @@
+
 import React, {
 	createContext,
 	useState,
@@ -23,8 +24,6 @@ type LanguageContextType = {
 	t: (key: string, params?: Record<string, string | number>) => string;
 };
 
-// We're now using the flattenTranslations function from languageConsistencyCheck.ts
-
 // Precompute flattened translations
 const enTranslations = flattenTranslations(en);
 const fiTranslations = flattenTranslations(fi);
@@ -44,54 +43,29 @@ const LanguageContext = createContext<LanguageContextType>({
 });
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-	// Default to Finnish if there's no stored preference
-	const [language, setLanguage] = useState<"en" | "fi">("fi");
-	const [translations, setTranslations] =
-		useState<Translations>(fiTranslations);
-	const [locale, setLocale] = useState("fi-FI");
+	// Aseta suomi oletuskieleksi pysyvästi
+	const [language] = useState<"en" | "fi">("fi");
+	const [translations] = useState<Translations>(fiTranslations);
+	const [locale] = useState("fi-FI");
 
 	useEffect(() => {
-		// Check for saved language preference
-		const savedLanguage = localStorage.getItem("language") as "en" | "fi";
-		if (savedLanguage) {
-			handleSetLanguage(savedLanguage);
-		}
+		// Aseta document kieli suomeksi
+		document.documentElement.lang = "fi";
 	}, []);
 
-	const handleSetLanguage = (lang: "en" | "fi") => {
-		setLanguage(lang);
-
-		// Use the appropriate flattened translations
-		const translationsToUse = lang === "en" ? enTranslations : fiTranslations;
-		setTranslations(translationsToUse);
-		setLocale(lang === "en" ? "en-US" : "fi-FI");
-		localStorage.setItem("language", lang);
-
-		// Update document language for accessibility
-		document.documentElement.lang = lang;
-
-		// Debug log to help troubleshooting
-		console.log(`Language changed to ${lang}`, {
-			translationsSize: Object.keys(translationsToUse).length,
-		});
+	// Poistettu kielenvaihtofunktionaliteetti - käytetään vain suomea
+	const handleSetLanguage = () => {
+		// Ei mitään - kieli pysyy aina suomena
 	};
 
 	const t = (key: string, params?: Record<string, string | number>): string => {
-		let translation = translations[key];
+		let translation = fiTranslations[key];
 
 		if (translation === undefined) {
-			// Fallback to English if Finnish translation is missing
-			if (language === "fi" && enTranslations[key]) {
-				translation = enTranslations[key];
-				console.warn(
-					`Missing Finnish translation for key: ${key}, using English fallback`
-				);
-			} else {
-				console.warn(`Translation key missing: ${key}`);
-				// Return only the last part of the key for a more user-friendly fallback
-				const parts = key.split(".");
-				return parts[parts.length - 1];
-			}
+			console.warn(`Translation key missing: ${key}`);
+			// Return only the last part of the key for a more user-friendly fallback
+			const parts = key.split(".");
+			return parts[parts.length - 1];
 		}
 
 		// If we have parameters, replace them in the translation string
