@@ -1,4 +1,5 @@
 
+
 // Repayment-related translations
 
 export const repayment = {
@@ -24,7 +25,7 @@ export const repayment = {
       monthlyAllocation: "Monthly Payment Allocation",
       allocationDescription: "How your monthly budget will be allocated across debts",
       debtName: "Debt Name",
-      minPayment: "Min Payment",
+      minPayment: "Minimum Payment",
       extraPayment: "Extra Payment",
       totalPayment: "Total Payment",
       total: "Total",
@@ -95,3 +96,4 @@ export const repayment = {
     }
   }
 };
+

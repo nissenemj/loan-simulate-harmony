@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -50,6 +49,11 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
     return `€${parseFloat(formatted).toLocaleString('fi-FI')}`;
   };
 
+  // Helper function to format input values to one decimal place when needed
+  const formatInputValue = (value: number) => {
+    return value % 1 === 0 ? value : parseFloat(value.toFixed(1));
+  };
+
   const handleAddDebt = useCallback(() => {
     const newDebt: Debt = {
       id: `debt-${Date.now()}`,
@@ -69,6 +73,10 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
   const handleUpdateDebt = useCallback((id: string, field: keyof Debt, value: any) => {
     setDebts(debts.map(debt => {
       if (debt.id === id) {
+        // Format numeric values to one decimal place if needed
+        if (typeof value === 'number' && (field === 'balance' || field === 'interestRate' || field === 'minimumPayment')) {
+          value = formatInputValue(value);
+        }
         return { ...debt, [field]: value };
       }
       return debt;
@@ -182,7 +190,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                             className="pl-8"
                             placeholder="0"
                             min="0"
-                            step="100"
+                            step="0.1"
                           />
                         </div>
                       </div>
@@ -216,7 +224,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({ initialDebt
                             className="pl-8"
                             placeholder="0"
                             min="0"
-                            step="10"
+                            step="0.1"
                           />
                         </div>
                       </div>
