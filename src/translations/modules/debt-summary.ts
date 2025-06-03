@@ -1,4 +1,5 @@
 
+
 // Debt summary related translations
 
 export const debtSummary = {
@@ -24,7 +25,13 @@ export const debtSummary = {
 			neverPaidOff: "Never paid off",
 			includingInterestAndFees: "Including interest and fees",
 			summaryExplanation: "This summary shows your total debt obligations and estimated costs. Values are calculated based on current balances and payment schedules.",
-			demoDataMessage: "This is demo data for illustration purposes"
+			demoDataMessage: "This is demo data for illustration purposes",
+			loanName: "Loan Name",
+			monthlyInterest: "Monthly Interest",
+			totalInterestEstimate: "Total Interest Estimate",
+			totalLoans: "Total",
+			tableSummary: "Summary of all loans with payment details",
+			noLoansMessage: "No loans to display"
 		},
 	},
 	fi: {
@@ -49,7 +56,14 @@ export const debtSummary = {
 			neverPaidOff: "Ei koskaan maksettu pois",
 			includingInterestAndFees: "Sisältäen korot ja maksut",
 			summaryExplanation: "Tämä yhteenveto näyttää velkasitoumuksesi ja arvioidut kustannukset. Arvot lasketaan nykyisten saldojen ja maksuaikataulujen perusteella.",
-			demoDataMessage: "Tämä on demo-dataa havainnollistamiseen"
+			demoDataMessage: "Tämä on demo-dataa havainnollistamiseen",
+			loanName: "Lainan nimi",
+			monthlyInterest: "Kuukausittaiset korot",
+			totalInterestEstimate: "Kokonaiskorot arvio",
+			totalLoans: "Yhteensä",
+			tableSummary: "Yhteenveto kaikista lainoista maksutietoineen",
+			noLoansMessage: "Ei lainoja näytettävänä"
 		},
 	},
 };
+
