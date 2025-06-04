@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 // Create a custom event for consent changes
 const consentChangeEvent = new Event("consentChange");
@@ -20,7 +20,6 @@ const CookieConsentBanner = () => {
 	});
 	const navigate = useNavigate();
 	const { toast } = useToast();
-	const { t } = useLanguage();
 
 	useEffect(() => {
 		// Check if consent has been saved
@@ -61,8 +60,8 @@ const CookieConsentBanner = () => {
 		window.dispatchEvent(consentChangeEvent);
 
 		toast({
-			title: t("cookieBanner.saved"),
-			description: t("cookieBanner.savedDescription"),
+			title: "Evästeasetukset tallennettu",
+			description: "Kiitos! Evästeasetuksesi on tallennettu.",
 		});
 
 		// If user has denied marketing cookies, we should reload the page
@@ -87,21 +86,21 @@ const CookieConsentBanner = () => {
 				<div className="md:hidden">
 					<div className="flex justify-between items-start mb-3">
 						<h3 className="font-semibold text-base">
-							{t("cookieBanner.title")}
+							Evästeiden käyttö
 						</h3>
 						<Button
 							variant="ghost"
 							size="icon"
 							className="shrink-0 -mt-1 -mr-1 h-8 w-8"
 							onClick={() => setShowBanner(false)}
-							aria-label={t("cookieBanner.close")}
+							aria-label="Sulje"
 						>
 							<X className="h-4 w-4" />
 						</Button>
 					</div>
 
 					<p className="text-xs text-muted-foreground mb-3">
-						{t("cookieBanner.description")}
+						Käytämme evästeitä parantaaksemme käyttökokemustasi. Voit valita mitä evästeitä sallitaan.
 					</p>
 
 					{showSettings && (
@@ -211,8 +210,8 @@ const CookieConsentBanner = () => {
 							onClick={toggleSettings}
 						>
 							{showSettings
-								? t("cookieBanner.hideSettings")
-								: t("cookieBanner.customSettings")}
+								? "Piilota asetukset"
+								: "Mukautetut asetukset"}
 						</Button>
 						{showSettings ? (
 							<Button
@@ -220,23 +219,23 @@ const CookieConsentBanner = () => {
 								className="text-xs h-9"
 								onClick={acceptSelected}
 							>
-								{t("cookieBanner.saveChoices")}
+								Tallenna valinnat
 							</Button>
 						) : (
 							<Button size="sm" className="text-xs h-9" onClick={acceptAll}>
-								{t("cookieBanner.acceptAll")}
+								Hyväksy kaikki
 							</Button>
 						)}
 					</div>
 
 					<div className="text-xs text-muted-foreground mt-2">
-						{t("cookieBanner.moreInfo")}{" "}
+						Lisätietoja{" "}
 						<Button
 							variant="link"
 							className="p-0 h-auto text-xs"
 							onClick={() => navigate("/cookie-policy")}
 						>
-							{t("cookieBanner.cookiePolicy")}
+							evästekäytännössä
 						</Button>
 						.
 					</div>
@@ -247,148 +246,115 @@ const CookieConsentBanner = () => {
 					<div className="flex justify-between items-start">
 						<div className="flex-1 pr-4">
 							<h3 className="font-semibold text-lg mb-2">
-								{t("cookieBanner.title")}
+								Evästeiden käyttö
 							</h3>
 							<p className="text-sm text-muted-foreground mb-4">
-								Käytämme evästeitä parantaaksemme käyttökokemustasi,
-								analysoidaksemme liikennettä ja mukauttaaksemme sisältöä.
-								Valitse, mitä evästeitä sallit.
+								Käytämme evästeitä parantaaksemme käyttökokemustasi ja analysoidaksemme sivuston käyttöä. 
+								Voit valita mitä evästeitä sallitaan.
 							</p>
 
 							{showSettings && (
-								<div className="space-y-4 mb-4 border rounded-md p-4 bg-muted/40">
-									<div className="flex items-center space-x-2">
+								<div className="space-y-4 mb-4 p-4 border rounded-md bg-muted/40">
+									<div className="flex items-center space-x-3">
 										<Checkbox id="essential" checked disabled />
-										<div className="grid gap-0.5">
-											<label
-												htmlFor="essential"
-												className="text-sm font-medium"
-											>
+										<div className="flex-1">
+											<label htmlFor="essential" className="text-sm font-medium">
 												Välttämättömät evästeet
 											</label>
 											<p className="text-xs text-muted-foreground">
-												Tarvitaan sovelluksen toiminnan varmistamiseksi. Ei voi
-												poistaa käytöstä.
+												Tarvitaan sovelluksen perustoimintoihin.
 											</p>
 										</div>
 									</div>
 
-									<div className="flex items-center space-x-2">
-										<Checkbox
-											id="analytics"
+									<div className="flex items-center space-x-3">
+										<Checkbox 
+											id="analytics" 
 											checked={preferences.analytics}
-											onCheckedChange={(checked) =>
-												setPreferences({
-													...preferences,
-													analytics: checked === true,
-												})
-											}
+											onCheckedChange={(checked) => 
+												setPreferences({...preferences, analytics: checked === true})}
 										/>
-										<div className="grid gap-0.5">
-											<label
-												htmlFor="analytics"
-												className="text-sm font-medium"
-											>
+										<div className="flex-1">
+											<label htmlFor="analytics" className="text-sm font-medium">
 												Analytiikkaevästeet
 											</label>
 											<p className="text-xs text-muted-foreground">
-												Auttavat meitä ymmärtämään, miten käytät sovellusta,
-												jotta voimme parantaa sitä.
+												Auttavat meitä ymmärtämään sivuston käyttöä.
 											</p>
 										</div>
 									</div>
 
-									<div className="flex items-center space-x-2">
-										<Checkbox
-											id="preferences"
+									<div className="flex items-center space-x-3">
+										<Checkbox 
+											id="preferences" 
 											checked={preferences.preferences}
-											onCheckedChange={(checked) =>
-												setPreferences({
-													...preferences,
-													preferences: checked === true,
-												})
-											}
+											onCheckedChange={(checked) => 
+												setPreferences({...preferences, preferences: checked === true})}
 										/>
-										<div className="grid gap-0.5">
-											<label
-												htmlFor="preferences"
-												className="text-sm font-medium"
-											>
+										<div className="flex-1">
+											<label htmlFor="preferences" className="text-sm font-medium">
 												Mieltymysevästeet
 											</label>
 											<p className="text-xs text-muted-foreground">
-												Tallentavat asetuksesi, kuten kielivalinnat ja
-												teema-asetukset.
+												Tallentavat asetuksesi ja mieltymyksesi.
 											</p>
 										</div>
 									</div>
 
-									<div className="flex items-center space-x-2">
-										<Checkbox
-											id="marketing"
+									<div className="flex items-center space-x-3">
+										<Checkbox 
+											id="marketing" 
 											checked={preferences.marketing}
-											onCheckedChange={(checked) =>
-												setPreferences({
-													...preferences,
-													marketing: checked === true,
-												})
-											}
+											onCheckedChange={(checked) => 
+												setPreferences({...preferences, marketing: checked === true})}
 										/>
-										<div className="grid gap-0.5">
-											<label
-												htmlFor="marketing"
-												className="text-sm font-medium"
-											>
+										<div className="flex-1">
+											<label htmlFor="marketing" className="text-sm font-medium">
 												Markkinointievästeet
 											</label>
 											<p className="text-xs text-muted-foreground">
-												Käytetään mainontaa varten, mukaan lukien Google AdSense
-												-mainokset. Nämä evästeet voivat kerätä tietoja
-												kiinnostuksen kohteistasi tarjotakseen personoituja
-												mainoksia.
+												Käytetään kohdennettuun mainontaan.
 											</p>
 										</div>
 									</div>
 								</div>
 							)}
-
-							<div className="text-sm text-muted-foreground">
-								Lisätietoja{" "}
-								<Button
-									variant="link"
-									className="p-0 h-auto"
-									onClick={() => navigate("/cookie-policy")}
-								>
-									evästekäytännöstämme
-								</Button>
-								.
-							</div>
 						</div>
 
 						<Button
 							variant="ghost"
 							size="icon"
-							className="shrink-0"
 							onClick={() => setShowBanner(false)}
-							aria-label="Sulje evästeikkuna"
+							aria-label="Sulje evästeilmoitus"
 						>
 							<X className="h-4 w-4" />
 						</Button>
 					</div>
 
-					<div className="flex flex-wrap gap-2 mt-4 justify-end">
-						<Button variant="outline" onClick={toggleSettings}>
-							{showSettings
-								? t("cookieBanner.hideSettings")
-								: t("cookieBanner.customSettings")}
+					<div className="flex flex-wrap gap-2">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={toggleSettings}
+						>
+							{showSettings ? "Piilota asetukset" : "Mukautetut asetukset"}
 						</Button>
 						{showSettings ? (
-							<Button onClick={acceptSelected}>
-								{t("cookieBanner.saveChoices")}
+							<Button size="sm" onClick={acceptSelected}>
+								Tallenna valinnat
 							</Button>
 						) : (
-							<Button onClick={acceptAll}>{t("cookieBanner.acceptAll")}</Button>
+							<Button size="sm" onClick={acceptAll}>
+								Hyväksy kaikki
+							</Button>
 						)}
+						<Button
+							variant="link"
+							size="sm"
+							onClick={() => navigate("/cookie-policy")}
+						>
+							Lisätietoja evästeistä
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -1,6 +1,5 @@
 
 import React, { useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Helmet } from "react-helmet-async";
 import H5PContent from "@/components/course/H5PContent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,7 +37,6 @@ interface CourseData {
 }
 
 const CoursePage: React.FC = () => {
-	const { t } = useLanguage();
 	const { user } = useAuth();
 	const [selectedTab, setSelectedTab] = useState("module1");
 
@@ -46,26 +44,26 @@ const CoursePage: React.FC = () => {
 	const defaultData: CourseData = {
 		modules: {
 			module1: {
-				title: t(`course.modules.module1.title`),
-				description: t(`course.modules.module1.description`),
-				intro: t(`course.modules.module1.intro`),
+				title: "Budjetoinnin perusteet",
+				description: "Opi budjetoinnin perusteet ja hallitse talouttasi paremmin",
+				intro: "Tässä moduulissa opit budjetoinnin perusteet ja miten hallita talouttasi tehokkaasti.",
 				contentId: "",
 				embedUrl:
 					"https://velkavapausfi.h5p.com/content/1292556501858479547/embed",
 				height: "637px",
 			},
 			module2: {
-				title: t(`course.modules.module2.title`),
-				description: t(`course.modules.module2.description`),
-				intro: t(`course.modules.module2.intro`),
+				title: "Velanhallinta",
+				description: "Strategioita velkojen hallintaan ja takaisinmaksuun",
+				intro: "Opi erilaisia strategioita velkojen hallintaan ja tehokkaaseen takaisinmaksuun.",
 				contentId: "43",
 				embedUrl: "",
 				height: "500px",
 			},
 			module3: {
-				title: t(`course.modules.module3.title`),
-				description: t(`course.modules.module3.description`),
-				intro: t(`course.modules.module3.intro`),
+				title: "Säästäminen ja sijoittaminen",
+				description: "Opas säästämiseen ja vastuulliseen sijoittamiseen",
+				intro: "Tutustu säästämisen ja sijoittamisen perusteisiin turvallisesti.",
 				contentId: "44",
 				embedUrl: "",
 				height: "500px",
@@ -87,18 +85,16 @@ const CoursePage: React.FC = () => {
 	return (
 		<div className="container mx-auto px-4 py-6 md:py-8">
 			<Helmet>
-				<title>
-					{t("course.title")} | {t("app.title")}
-				</title>
-				<meta name="description" content={t("course.description")} />
+				<title>Talouskurssi | Velkavapaus</title>
+				<meta name="description" content="Ilmainen talouskurssi velanhallintaan ja budjetointiin" />
 			</Helmet>
 
 			<div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8">
 				<div>
 					<h1 className="text-2xl md:text-3xl font-bold mb-4">
-						{t("course.title")}
+						Talouskurssi
 					</h1>
-					<p className="text-lg">{t("course.description")}</p>
+					<p className="text-lg">Ilmainen talouskurssi velanhallintaan ja budjetointiin</p>
 				</div>
 				
 				{isAdmin && (
@@ -106,7 +102,7 @@ const CoursePage: React.FC = () => {
 						<Link to="/courses/admin">
 							<Button variant="outline" size="sm" className="flex items-center gap-2">
 								<PenSquare className="h-4 w-4" />
-								{t("course.admin.manageButton")}
+								Hallinnoi kurssia
 							</Button>
 						</Link>
 					</div>
@@ -115,8 +111,8 @@ const CoursePage: React.FC = () => {
 
 			<Alert className="mb-8">
 				<Info className="h-4 w-4" />
-				<AlertTitle>{t("course.howToUseTitle")}</AlertTitle>
-				<AlertDescription>{t("course.howToUseDescription")}</AlertDescription>
+				<AlertTitle>Käyttöohjeet</AlertTitle>
+				<AlertDescription>Valitse yllä olevista välilehdistä haluamasi moduuli. Jokainen moduuli sisältää interaktiivisia harjoituksia ja oppimateriaalia.</AlertDescription>
 			</Alert>
 
 			<Tabs value={selectedTab} onValueChange={handleTabChange} className="mb-8">
@@ -221,9 +217,9 @@ const CoursePage: React.FC = () => {
 
 			<div className="bg-muted p-4 sm:p-6 rounded-lg mt-8">
 				<h2 className="text-xl md:text-2xl font-semibold mb-4">
-					{t("course.furtherLearning")}
+					Jatko-oppiminen
 				</h2>
-				<p className="mb-4">{t("course.furtherLearningDescription")}</p>
+				<p className="mb-4">Kun olet suorittanut kurssin, voit jatkaa oppimistasi näillä lisäresursseilla ja työkaluilla.</p>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
 					{/* Add some related resources or links here */}
 				</div>

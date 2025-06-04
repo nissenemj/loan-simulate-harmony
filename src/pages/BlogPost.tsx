@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,6 @@ interface BlogPost {
 
 const BlogPost = () => {
   const { postId } = useParams<{ postId: string }>();
-  const { t, language } = useLanguage();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,7 +94,7 @@ const BlogPost = () => {
   
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat(language === 'fi' ? 'fi-FI' : 'en-US', {
+    return new Intl.DateTimeFormat('fi-FI', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -106,8 +104,8 @@ const BlogPost = () => {
   const handleShareClick = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url)
-      .then(() => toast.success(t("blog.copiedToClipboard")))
-      .catch(() => toast.error(t("blog.copyFailed")));
+      .then(() => toast.success("Linkki kopioitu leikepöydälle"))
+      .catch(() => toast.error("Linkin kopiointi epäonnistui"));
   };
   
   if (loading) {
@@ -117,7 +115,7 @@ const BlogPost = () => {
           <CardContent className="flex flex-col items-center justify-center pt-6">
             <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
             <p className="mt-4 text-center text-muted-foreground">
-              {language === 'fi' ? 'Ladataan artikkelia...' : 'Loading article...'}
+              Ladataan artikkelia...
             </p>
           </CardContent>
         </Card>
@@ -129,21 +127,21 @@ const BlogPost = () => {
     return (
       <>
         <Helmet>
-          <title>{t("blog.postNotFound")} | {t("blog.pageTitle")}</title>
+          <title>Artikkelia ei löytynyt | Blogi</title>
         </Helmet>
         
         <main className="container max-w-4xl mx-auto py-8 px-4 md:px-6">
           <Card className="w-full p-8 text-left">
             <CardContent className="pt-6 space-y-6">
               <h1 className="text-3xl font-bold">
-                {t("blog.postNotFound")}
+                Artikkelia ei löytynyt
               </h1>
               <p className="text-muted-foreground">
-                {t("blog.postNotFoundDesc")}
+                Hakemaasi artikkelia ei löytynyt. Se on ehkä poistettu tai siirretty.
               </p>
               <Button onClick={() => navigate("/blog")}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                {t("blog.backToBlog")}
+                Takaisin blogiin
               </Button>
             </CardContent>
           </Card>
@@ -157,10 +155,10 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
-        <title>{post?.title || t("blog.postNotFound")} | {t("blog.pageTitle")}</title>
+        <title>{post?.title || "Artikkelia ei löytynyt"} | Blogi</title>
         <meta 
           name="description" 
-          content={post?.content.substring(0, 160) + '...' || t("blog.postNotFoundDesc")} 
+          content={post?.content.substring(0, 160) + '...' || "Artikkelia ei löytynyt"} 
         />
         {post?.category && (
           <meta name="keywords" content={`${post.category}, velanhoito, budjetointi, taloudenhallinta, velkavapaus`} />
@@ -172,7 +170,7 @@ const BlogPost = () => {
         <div className="mb-8 text-left">
           <Link to="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            {t("blog.backToBlog")}
+            Takaisin blogiin
           </Link>
           
           <AdminLink />
@@ -214,7 +212,7 @@ const BlogPost = () => {
             
             <Button variant="outline" size="sm" onClick={handleShareClick}>
               <Share2 className="h-4 w-4 mr-2" />
-              {t("blog.shareArticle")}
+              Jaa artikkeli
             </Button>
           </div>
         </div>
@@ -246,7 +244,7 @@ const BlogPost = () => {
           <div className="mt-12 text-left">
             <Separator className="my-8" />
             
-            <h2 className="text-2xl font-bold mb-6">{t("blog.relatedPosts")}</h2>
+            <h2 className="text-2xl font-bold mb-6">Aiheeseen liittyvät artikkelit</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedPosts.map(relatedPost => (

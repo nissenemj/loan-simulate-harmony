@@ -54,7 +54,7 @@ export default function CreditCardSummaryTable({
   const totalBalance = activeCreditCards.reduce((sum, card) => sum + card.balance, 0);
   const totalMinPayment = activeCreditCards.reduce((sum, card) => sum + card.minPayment, 0);
   const totalMonthlyInterest = activeCreditCards.reduce((sum, card) => 
-    sum + calculateMonthlyInterest(card), 0
+    sum + calculateMonthlyInterest(card.balance, card.apr), 0
   );
 
   return (
@@ -75,7 +75,7 @@ export default function CreditCardSummaryTable({
           </TableHeader>
           <TableBody>
             {activeCreditCards.map((card) => {
-              const monthlyInterest = calculateMonthlyInterest(card);
+              const monthlyInterest = calculateMonthlyInterest(card.balance, card.apr);
               const utilizationRate = card.limit > 0 ? (card.balance / card.limit) * 100 : 0;
               
               return (

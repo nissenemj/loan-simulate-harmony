@@ -1,8 +1,8 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,6 @@ const Auth = () => {
 	const [loading, setLoading] = useState(false);
 	const { toast } = useToast();
 	const navigate = useNavigate();
-	const { t } = useLanguage();
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -39,8 +38,8 @@ const Auth = () => {
 			if (error) throw error;
 
 			toast({
-				title: t("auth.loginSuccess"),
-				description: t("auth.welcomeBack"),
+				title: "Kirjautuminen onnistui",
+				description: "Tervetuloa takaisin!",
 			});
 
 			// Check if there's an intended path stored
@@ -54,7 +53,7 @@ const Auth = () => {
 		} catch (error: any) {
 			console.error("Login error:", error);
 			toast({
-				title: t("auth.loginError"),
+				title: "Kirjautumisvirhe",
 				description: error.message,
 				variant: "destructive",
 			});
@@ -76,12 +75,12 @@ const Auth = () => {
 			if (error) throw error;
 
 			toast({
-				title: t("auth.signupSuccess"),
-				description: t("auth.checkEmail"),
+				title: "Rekisteröityminen onnistui",
+				description: "Tarkista sähköpostisi vahvistaaksesi tilisi.",
 			});
 		} catch (error: any) {
 			toast({
-				title: t("auth.signupError"),
+				title: "Rekisteröitymisvirhe",
 				description: error.message,
 				variant: "destructive",
 			});
@@ -94,14 +93,14 @@ const Auth = () => {
 		<div className="container mx-auto flex items-center justify-center min-h-[80vh]">
 			<Card className="w-full max-w-md">
 				<CardHeader>
-					<CardTitle className="text-2xl">{t("auth.welcome")}</CardTitle>
-					<CardDescription>{t("auth.description")}</CardDescription>
+					<CardTitle className="text-2xl">Tervetuloa</CardTitle>
+					<CardDescription>Kirjaudu sisään tai luo uusi tili</CardDescription>
 				</CardHeader>
 
 				<Tabs defaultValue="login" className="w-full">
 					<TabsList className="grid w-full grid-cols-2">
-						<TabsTrigger value="login">{t("auth.login")}</TabsTrigger>
-						<TabsTrigger value="signup">{t("auth.signUp")}</TabsTrigger>
+						<TabsTrigger value="login">Kirjaudu</TabsTrigger>
+						<TabsTrigger value="signup">Rekisteröidy</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="login">
@@ -110,23 +109,23 @@ const Auth = () => {
 								<div className="space-y-2">
 									<Label htmlFor="email" className="flex items-center">
 										<Mail className="h-4 w-4 mr-2" />
-										{t("auth.email")}
+										Sähköposti
 									</Label>
 									<Input
 										id="email"
 										type="email"
-										placeholder={t("auth.emailPlaceholder")}
+										placeholder="nimi@esimerkki.fi"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										required
 										className="border rounded-md"
-										aria-label={t("auth.email")}
+										aria-label="Sähköposti"
 									/>
 								</div>
 								<div className="space-y-2">
 									<Label htmlFor="password" className="flex items-center">
 										<Lock className="h-4 w-4 mr-2" />
-										{t("auth.password")}
+										Salasana
 									</Label>
 									<Input
 										id="password"
@@ -135,13 +134,13 @@ const Auth = () => {
 										onChange={(e) => setPassword(e.target.value)}
 										required
 										className="border rounded-md"
-										aria-label={t("auth.password")}
+										aria-label="Salasana"
 									/>
 								</div>
 							</CardContent>
 							<CardFooter>
 								<Button type="submit" className="w-full" disabled={loading}>
-									{loading ? t("auth.loggingIn") : t("auth.login")}
+									{loading ? "Kirjaudutaan..." : "Kirjaudu"}
 									<ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</CardFooter>
@@ -154,17 +153,17 @@ const Auth = () => {
 								<div className="space-y-2">
 									<Label htmlFor="signup-email" className="flex items-center">
 										<Mail className="h-4 w-4 mr-2" />
-										{t("auth.email")}
+										Sähköposti
 									</Label>
 									<Input
 										id="signup-email"
 										type="email"
-										placeholder={t("auth.emailPlaceholder")}
+										placeholder="nimi@esimerkki.fi"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										required
 										className="border rounded-md"
-										aria-label={t("auth.email")}
+										aria-label="Sähköposti"
 									/>
 								</div>
 								<div className="space-y-2">
@@ -173,7 +172,7 @@ const Auth = () => {
 										className="flex items-center"
 									>
 										<Lock className="h-4 w-4 mr-2" />
-										{t("auth.password")}
+										Salasana
 									</Label>
 									<Input
 										id="signup-password"
@@ -182,13 +181,13 @@ const Auth = () => {
 										onChange={(e) => setPassword(e.target.value)}
 										required
 										className="border rounded-md"
-										aria-label={t("auth.password")}
+										aria-label="Salasana"
 									/>
 								</div>
 							</CardContent>
 							<CardFooter>
 								<Button type="submit" className="w-full" disabled={loading}>
-									{loading ? t("auth.signingUp") : t("auth.signUp")}
+									{loading ? "Rekisteröidään..." : "Rekisteröidy"}
 									<ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</CardFooter>

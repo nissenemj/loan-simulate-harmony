@@ -29,6 +29,34 @@ const formatUtilizationRate = (rate: number): string => {
   return (rate * 100).toFixed(1) + '%';
 };
 
+// Simple payoff time formatter since we removed the translation function
+const formatPayoffTimeSimple = (months: number | null): string => {
+  if (months === null) {
+    return "Ei koskaan maksettu pois";
+  }
+
+  if (months === 0) {
+    return "Maksettu";
+  }
+
+  if (months === 1) {
+    return "1 kuukausi";
+  }
+
+  if (months < 12) {
+    return `${months} kuukautta`;
+  }
+
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (remainingMonths === 0) {
+    return `${years} ${years === 1 ? 'vuosi' : 'vuotta'}`;
+  }
+
+  return `${years} vuotta ${remainingMonths} kuukautta`;
+};
+
 export default function CreditCardTable({ creditCards, onToggleActive }: CreditCardTableProps) {
   const handleToggleActive = (id: string, isActive: boolean) => {
     onToggleActive(id, isActive);
@@ -115,7 +143,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                         Ei koskaan maksettu pois
                       </span>
                     ) : (
-                      formatPayoffTime(calculation.payoffMonths)
+                      formatPayoffTimeSimple(calculation.payoffMonths)
                     )}
                   </TableCell>
                   <TableCell>
