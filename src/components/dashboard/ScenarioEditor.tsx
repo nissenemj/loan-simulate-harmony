@@ -10,7 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useScenarioEditor } from '@/hooks/use-scenario-editor';
 import type { Scenario } from '@/types/scenarios';
 
@@ -27,7 +26,6 @@ export function ScenarioEditor({
   estimatedMonths,
   estimatedInterest
 }: ScenarioEditorProps) {
-  const { t } = useLanguage();
   const {
     editFormData,
     setEditFormData,
@@ -42,14 +40,14 @@ export function ScenarioEditor({
         <div className="space-y-2">
           <div className="flex justify-between">
             <Label htmlFor="interestRateAdjustment" className="flex items-center">
-              {t('dashboard.interestRateChange')}
+              Koron muutos
               <TooltipProvider>
                 <UITooltip>
                   <TooltipTrigger asChild>
                     <Info className="h-3 w-3 inline ml-1 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-xs">
-                    <p>{t('dashboard.interestRateChangeTooltip')}</p>
+                    <p>Säädä korkotasoa nähdäksesi vaikutuksen velkojen maksuun</p>
                   </TooltipContent>
                 </UITooltip>
               </TooltipProvider>
@@ -86,10 +84,10 @@ export function ScenarioEditor({
 
         {(estimatedMonths !== undefined && estimatedInterest !== undefined) && (
           <div className="mt-4 p-3 bg-muted rounded-md">
-            <h4 className="text-sm font-medium mb-2">{t('dashboard.estimatedImpact')}</h4>
+            <h4 className="text-sm font-medium mb-2">Arvioitu vaikutus</h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span>{t('visualization.monthsToPayoff')}</span>
+                <span>Kuukausia maksamiseen</span>
                 <div className="flex items-center">
                   <span>{estimatedMonths}</span>
                   {previousValues.months && (
@@ -112,7 +110,7 @@ export function ScenarioEditor({
                 </div>
               </div>
               <div className="flex justify-between">
-                <span>{t('visualization.totalInterestPaid')}</span>
+                <span>Maksetut korot yhteensä</span>
                 <div className="flex items-center">
                   <span>{currencyFormatter.format(estimatedInterest)}</span>
                   {previousValues.interest && (
@@ -139,7 +137,7 @@ export function ScenarioEditor({
         )}
 
         <div className="mt-4">
-          <h4 className="text-sm font-medium mb-2">{t('dashboard.presets')}</h4>
+          <h4 className="text-sm font-medium mb-2">Valmiit skenaariot</h4>
           <div className="flex flex-wrap gap-2">
             {presetScenarios.map((preset, index) => (
               <Button

@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
 	PieChart,
@@ -8,7 +9,6 @@ import {
 	Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency } from "@/utils/loanCalculations";
 
 interface DebtBreakdownPieProps {
@@ -22,16 +22,14 @@ const DebtBreakdownPie = ({
 	totalMinPayments,
 	totalAmountToPay,
 }: DebtBreakdownPieProps) => {
-	const { t } = useLanguage();
-
 	const data = [
 		{
-			name: t("visualization.totalInterestPaid"),
+			name: "Maksetut korot yhteensä",
 			value: totalAmountToPay - totalDebt,
 			color: "#FF8042",
 		},
 		{
-			name: t("visualization.principalPayment"),
+			name: "Pääoman maksu",
 			value: totalDebt,
 			color: "#0088FE",
 		},
@@ -43,7 +41,7 @@ const DebtBreakdownPie = ({
 	return (
 		<Card className="w-full h-[300px]">
 			<CardHeader>
-				<CardTitle>{t("visualization.debtBreakdown")}</CardTitle>
+				<CardTitle>Velkojen jakautuminen</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<ResponsiveContainer width="100%" height={200}>

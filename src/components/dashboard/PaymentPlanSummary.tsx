@@ -1,5 +1,5 @@
+
 import React from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import {
 	Card,
 	CardHeader,
@@ -29,7 +29,6 @@ const PaymentPlanSummary = ({
 	extraBudget,
 	highestInterestDebt,
 }: PaymentPlanSummaryProps) => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 
 	return (
@@ -38,18 +37,18 @@ const PaymentPlanSummary = ({
 				<CardTitle className="flex items-center flex-wrap gap-2">
 					<PiggyBank className="h-5 w-5 text-primary flex-shrink-0" />
 					<span className="break-words">
-						{t("dashboard.paymentPlanSummary")}
+						Maksusuunnitelman yhteenveto
 					</span>
 				</CardTitle>
 				<CardDescription className="break-words">
-					{t("dashboard.paymentPlanDescription")}
+					Katsaus kuukausittaiseen budjettiisi ja maksustrategiaasi
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-4">
 				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					<div className="bg-muted rounded-lg p-3 sm:p-4 space-y-2 min-h-[80px] flex flex-col justify-between">
 						<h4 className="text-xs sm:text-sm font-medium text-muted-foreground break-words">
-							{t("dashboard.monthlyBudget")}
+							Kuukausittainen budjetti
 						</h4>
 						<p className="text-lg sm:text-xl lg:text-2xl font-bold break-all">
 							{formatCurrency(monthlyBudget)}
@@ -58,7 +57,7 @@ const PaymentPlanSummary = ({
 
 					<div className="bg-muted rounded-lg p-3 sm:p-4 space-y-2 min-h-[80px] flex flex-col justify-between">
 						<h4 className="text-xs sm:text-sm font-medium text-muted-foreground break-words">
-							{t("dashboard.minimumPayments")}
+							Vähimmäismaksut
 						</h4>
 						<p className="text-lg sm:text-xl lg:text-2xl font-bold break-all">
 							{formatCurrency(totalMinPayments)}
@@ -67,7 +66,7 @@ const PaymentPlanSummary = ({
 
 					<div className="bg-muted rounded-lg p-3 sm:p-4 space-y-2 min-h-[80px] flex flex-col justify-between">
 						<h4 className="text-xs sm:text-sm font-medium text-muted-foreground break-words">
-							{t("dashboard.extraBudget")}
+							Ylimääräinen budjetti
 						</h4>
 						<p className="text-lg sm:text-xl lg:text-2xl font-bold text-green-600 dark:text-green-500 break-all">
 							{formatCurrency(extraBudget)}
@@ -79,18 +78,16 @@ const PaymentPlanSummary = ({
 					<div className="mt-6 p-4 border border-primary/20 bg-primary/5 rounded-lg">
 						<h4 className="flex items-center text-primary font-medium">
 							<TrendingUp className="mr-2 h-4 w-4" />
-							{t("dashboard.prioritizedDebt")}
+							Priorisoitu velka
 						</h4>
 						<p className="mt-1">
 							<span className="font-medium">{highestInterestDebt.name}</span> -{" "}
 							{highestInterestDebt.rate.toFixed(2)}%{" "}
-							{t("dashboard.interestRate")}
+							korko
 						</p>
 						{extraBudget > 0 && (
 							<p className="text-sm mt-2">
-								{t("dashboard.allocatingExtra", {
-									amount: formatCurrency(extraBudget),
-								})}
+								Kohdistetaan ylimääräistä {formatCurrency(extraBudget)} tähän velkaan
 							</p>
 						)}
 					</div>
@@ -101,7 +98,7 @@ const PaymentPlanSummary = ({
 					variant="outline"
 					onClick={() => navigate("/debt-summary?tab=repayment-plan")}
 				>
-					{t("dashboard.viewFullPlan")}
+					Näytä koko suunnitelma
 					<ArrowRight className="ml-2 h-4 w-4" />
 				</Button>
 			</CardFooter>

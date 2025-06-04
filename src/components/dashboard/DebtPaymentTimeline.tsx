@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
 	AreaChart,
@@ -10,7 +11,6 @@ import {
 	Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { formatCurrency } from "@/utils/loanCalculations";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -27,7 +27,6 @@ const DebtPaymentTimeline = ({
 	totalAmountToPay,
 	debtFreeDate,
 }: DebtPaymentTimelineProps) => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 
 	const generateTimelineData = () => {
@@ -86,8 +85,8 @@ const DebtPaymentTimeline = ({
 				// Add a formatted month label for the x-axis
 				monthLabel:
 					month === 0
-						? t("visualization.start")
-						: `${month} ${t("visualization.months")}`,
+						? "Alku"
+						: `${month} kk`,
 			};
 		});
 	};
@@ -99,7 +98,7 @@ const DebtPaymentTimeline = ({
 			<CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4">
 				<div className="min-w-0 flex-1">
 					<CardTitle className="break-words text-base sm:text-lg">
-						{t("visualization.paymentTimeline")}
+						Maksuaikataulu
 					</CardTitle>
 				</div>
 				<Button
@@ -108,7 +107,7 @@ const DebtPaymentTimeline = ({
 					className="flex-shrink-0 w-full sm:w-auto"
 					onClick={() => navigate("/debt-summary?tab=repayment-plan")}
 				>
-					<span className="truncate">{t("dashboard.viewRepaymentPlan")}</span>
+					<span className="truncate">Näytä takaisinmaksusuunnitelma</span>
 					<ArrowRight className="ml-2 h-4 w-4 flex-shrink-0" />
 				</Button>
 			</CardHeader>
@@ -116,7 +115,7 @@ const DebtPaymentTimeline = ({
 				{data.length === 0 ? (
 					<div className="flex items-center justify-center h-[200px]">
 						<p className="text-muted-foreground text-center break-words">
-							{t("visualization.noDataAvailable")}
+							Ei tietoja saatavilla
 						</p>
 					</div>
 				) : (
@@ -167,7 +166,7 @@ const DebtPaymentTimeline = ({
 									stroke="#0088FE"
 									fill="#0088FE"
 									fillOpacity={0.6}
-									name={t("visualization.principalPayment")}
+									name="Pääoman maksu"
 									strokeWidth={2}
 								/>
 								<Area
@@ -176,7 +175,7 @@ const DebtPaymentTimeline = ({
 									stroke="#FF8042"
 									fill="#FF8042"
 									fillOpacity={0.6}
-									name={t("visualization.interestPayment")}
+									name="Koronmaksu"
 									strokeWidth={2}
 								/>
 							</AreaChart>

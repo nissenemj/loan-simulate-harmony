@@ -1,6 +1,5 @@
 
 import React, { useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -61,8 +60,6 @@ interface ContactFormEnhancedProps {
 const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 	className,
 }) => {
-	const { t } = useLanguage();
-
 	const [formData, setFormData] = useState({
 		firstName: "",
 		lastName: "",
@@ -127,17 +124,21 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 		e.preventDefault();
 
 		if (!validateForm()) {
-			toast.error("Korjaa lomakkeen virheet");
+			toast("Tarkista lomakkeen tiedot", {
+				description: "Joitakin kenttiä puuttuu tai ne sisältävät virheitä.",
+			});
 			return;
 		}
 
 		setIsSubmitting(true);
 
 		try {
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 1500));
+			// Simuloidaan lähettämistä
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 
-			toast.success("Viestisi on lähetetty onnistuneesti!");
+			toast("Viesti lähetetty!", {
+				description: "Otamme sinuun yhteyttä pian.",
+			});
 
 			// Reset form
 			setFormData({
@@ -148,9 +149,11 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 				subject: "",
 				message: "",
 			});
+			setErrors({});
 		} catch (error) {
-			console.error("Error submitting form:", error);
-			toast.error("Viestin lähettämisessä tapahtui virhe. Yritä uudelleen.");
+			toast("Virhe viestin lähetyksessä", {
+				description: "Yritä uudelleen myöhemmin.",
+			});
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -158,105 +161,107 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 
 	return (
 		<Card className={className}>
-			<CardHeader>
-				<CardTitle>Ota yhteyttä</CardTitle>
+			<CardHeader className="text-center">
+				<CardTitle className="flex items-center justify-center gap-2">
+					<MessageSquare className="h-5 w-5" />
+					Ota yhteyttä
+				</CardTitle>
 				<CardDescription>
-					Täytä alla oleva lomake lähettääksesi meille viestin.
+					Lähetä meille viesti, niin vastaamme sinulle mahdollisimman pian.
 				</CardDescription>
 			</CardHeader>
 
 			<form onSubmit={handleSubmit}>
 				<CardContent className="space-y-6">
-					<FormFieldGroup
-						title="Henkilötiedot"
-						description="Kerro meille hieman itsestäsi"
-					>
-						<SplitFormFields
-							columns={2}
-							fields={[
-								{
-									id: "contact-first-name",
-									name: "firstName",
-									label: "Etunimi",
-									placeholder: "Etunimi",
-									value: formData.firstName,
-									onChange: handleChange,
-									validation: nameValidator,
-									required: true,
-								},
-								{
-									id: "contact-last-name",
-									name: "lastName",
-									label: "Sukunimi",
-									placeholder: "Sukunimi",
-									value: formData.lastName,
-									onChange: handleChange,
-								},
-							]}
-						/>
+					<FormFieldGroup>
+						<SplitFormFields>
+							<EnhancedFormField
+								type="text"
+								name="firstName"
+								label="Etunimi"
+								placeholder="Syötä etunimesi"
+								value={formData.firstName}
+								onChange={handleChange}
+								icon={<User className="h-4 w-4" />}
+								error={errors.firstName}
+								disabled={isSubmitting}
+								aria-label="Etunimi"
+							/>
+							<EnhancedFormField
+								type="text"
+								name="lastName"
+								label="Sukunimi"
+								placeholder="Syötä sukunimesi"
+								value={formData.lastName}
+								onChange={handleChange}
+								disabled={isSubmitting}
+								aria-label="Sukunimi"
+							/>
+						</SplitFormFields>
+					</FormFieldGroup>
 
-						<SplitFormFields
-							columns={2}
-							fields={[
-								{
-									id: "contact-email",
-									name: "email",
-									type: "email",
-									label: "Sähköposti",
-									placeholder: "sähköposti@esimerkki.fi",
-									value: formData.email,
-									onChange: handleChange,
-									validation: emailValidator,
-									required: true,
-									helpText: "Emme jaa sähköpostiosoitettasi kenellekään.",
-								},
-								{
-									id: "contact-phone",
-									name: "phone",
-									type: "tel",
-									label: "Puhelin",
-									placeholder: "+358 XX XXX XXXX",
-									value: formData.phone,
-									onChange: handleChange,
-								},
-							]}
+					<FormFieldGroup>
+						<EnhancedFormField
+							type="email"
+							name="email"
+							label="Sähköposti"
+							placeholder="nimi@esimerkki.fi"
+							value={formData.email}
+							onChange={handleChange}
+							icon={<Mail className="h-4 w-4" />}
+							error={errors.email}
+							disabled={isSubmitting}
+							required
+							aria-label="Sähköpostiosoite"
 						/>
 					</FormFieldGroup>
 
-					<FormFieldGroup
-						title="Viestisi"
-						description="Miten voimme auttaa sinua?"
-					>
+					<FormFieldGroup>
 						<EnhancedFormField
-							id="contact-subject"
+							type="tel"
+							name="phone"
+							label="Puhelinnumero (valinnainen)"
+							placeholder="+358 40 123 4567"
+							value={formData.phone}
+							onChange={handleChange}
+							disabled={isSubmitting}
+							aria-label="Puhelinnumero"
+						/>
+					</FormFieldGroup>
+
+					<FormFieldGroup>
+						<EnhancedFormField
+							type="text"
 							name="subject"
-							label="Aihe"
-							placeholder="Mistä asiasta on kyse?"
+							label="Aihe (valinnainen)"
+							placeholder="Mistä haluat keskustella?"
 							value={formData.subject}
 							onChange={handleChange}
+							disabled={isSubmitting}
+							aria-label="Viestin aihe"
 						/>
+					</FormFieldGroup>
 
+					<FormFieldGroup>
 						<div className="space-y-2">
-							<label htmlFor="contact-message" className="text-sm font-medium">
+							<label htmlFor="message" className="text-sm font-medium">
 								Viesti
-								<span className="text-destructive">*</span>
 							</label>
 							<Textarea
-								id="contact-message"
+								id="message"
 								name="message"
-								placeholder="Viestisi..."
+								placeholder="Kerro meille, miten voimme auttaa sinua..."
 								value={formData.message}
 								onChange={handleChange}
-								className={
-									errors.message
-										? "border-destructive focus-visible:ring-destructive"
-										: ""
-								}
-								rows={5}
+								disabled={isSubmitting}
+								className={`min-h-[120px] resize-none ${
+									errors.message ? "border-destructive" : ""
+								}`}
 								required
+								aria-label="Viestisi"
 							/>
 							{errors.message && (
-								<p className="text-sm font-medium text-destructive">
+								<p className="text-sm text-destructive" role="alert">
 									{errors.message}
 								</p>
 							)}
@@ -265,7 +270,12 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 				</CardContent>
 
 				<CardFooter>
-					<Button type="submit" className="w-full" disabled={isSubmitting}>
+					<Button
+						type="submit"
+						className="w-full"
+						disabled={isSubmitting}
+						aria-label="Lähetä viesti"
+					>
 						{isSubmitting ? (
 							<>
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />

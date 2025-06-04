@@ -82,7 +82,7 @@ export default function CreditCardSummaryTable({
                     <AnimatedNumber value={card.balance} formatter={formatCurrency} />
                   </TableCell>
                   <TableCell className="text-right">{formatCurrency(card.limit)}</TableCell>
-                  <TableCell className="text-right">{card.interestRate.toFixed(2)}%</TableCell>
+                  <TableCell className="text-right">{card.apr.toFixed(2)}%</TableCell>
                   <TableCell className="text-right">
                     <AnimatedNumber value={card.minPayment} formatter={formatCurrency} />
                   </TableCell>

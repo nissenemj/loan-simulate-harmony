@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Dialog,
   DialogContent,
@@ -17,39 +16,37 @@ interface ScenarioGuideProps {
 }
 
 const ScenarioGuide = ({ isOpen, onClose }: ScenarioGuideProps) => {
-  const { t } = useLanguage();
-  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{t('dashboard.scenarioGuideTitle')}</DialogTitle>
+          <DialogTitle>Skenaarioiden opas</DialogTitle>
           <DialogDescription>
-            {t('dashboard.scenarioGuideIntro')}
+            Tutustu erilaisiin velkojen maksustrategioihin ja niiden vaikutuksiin
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <h4 className="font-medium">{t('scenarios.current')}</h4>
+            <h4 className="font-medium">Nykyinen tilanne</h4>
             <p className="text-sm text-muted-foreground">
-              {t('dashboard.currentScenarioExplained')}
+              Nykyinen tilanne perustuu syöttämiisi tietoihin ja maksuehtoihin
             </p>
           </div>
           <div className="space-y-2">
-            <h4 className="font-medium">{t('scenarios.optimistic')}</h4>
+            <h4 className="font-medium">Optimistinen skenaario</h4>
             <p className="text-sm text-muted-foreground">
-              {t('dashboard.optimisticScenarioExplained')}
+              Parempi tilanne, jossa korot laskevat tai maksukyky paranee
             </p>
           </div>
           <div className="space-y-2">
-            <h4 className="font-medium">{t('scenarios.pessimistic')}</h4>
+            <h4 className="font-medium">Pessimistinen skenaario</h4>
             <p className="text-sm text-muted-foreground">
-              {t('dashboard.pessimisticScenarioExplained')}
+              Haastavampi tilanne, jossa korot nousevat tai maksukyky heikkenee
             </p>
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={onClose}>{t('common.close')}</Button>
+          <Button onClick={onClose}>Sulje</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

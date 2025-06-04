@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DollarSign, BadgePercent, CreditCard } from 'lucide-react';
 import TotalDebtSummary from '@/components/TotalDebtSummary';
@@ -15,25 +14,23 @@ interface DebtBreakdownTabsProps {
 }
 
 const DebtBreakdownTabs = ({ activeLoans, activeCards }: DebtBreakdownTabsProps) => {
-  const { t } = useLanguage();
-  
   return (
     <div>
-      <h2 className="text-2xl font-bold tracking-tight mb-4">{t('dashboard.debtBreakdown')}</h2>
+      <h2 className="text-2xl font-bold tracking-tight mb-4">Velkojen erittely</h2>
       
       <Tabs defaultValue="all" className="space-y-4">
         <TabsList>
           <TabsTrigger value="all">
             <DollarSign className="mr-2 h-4 w-4" />
-            {t('dashboard.allDebts')}
+            Kaikki velat
           </TabsTrigger>
           <TabsTrigger value="loans">
             <BadgePercent className="mr-2 h-4 w-4" />
-            {t('dashboard.loans')}
+            Lainat
           </TabsTrigger>
           <TabsTrigger value="credit-cards">
             <CreditCard className="mr-2 h-4 w-4" />
-            {t('dashboard.creditCards')}
+            Luottokortit
           </TabsTrigger>
         </TabsList>
         

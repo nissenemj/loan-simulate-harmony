@@ -9,7 +9,6 @@ import {
 } from "@/utils/creditCardCalculations";
 import { formatCurrency, formatPercentage } from "@/utils/loanCalculations";
 import { Check, X } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 import {
   Table,
@@ -28,17 +27,14 @@ interface CreditCardTableProps {
 }
 
 export default function CreditCardTable({ creditCards, onToggleActive }: CreditCardTableProps) {
-  const { t } = useLanguage();
-
   const handleToggleActive = (id: string, isActive: boolean) => {
     onToggleActive(id, isActive);
     
     const card = creditCards.find(card => card.id === id);
     if (card) {
-      // Fix: Replace template strings with concatenation since the t function doesn't support template parameters
       toast(isActive ? 
-        t("toast.cardActivated") + ": " + card.name : 
-        t("toast.cardDeactivated") + ": " + card.name
+        "Kortti aktivoitu: " + card.name : 
+        "Kortti poistettu käytöstä: " + card.name
       );
     }
   };
@@ -48,21 +44,21 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[200px]">{t("creditCard.table.name")}</TableHead>
-            <TableHead>{t("creditCard.table.balance")}</TableHead>
-            <TableHead>{t("creditCard.table.apr")}</TableHead>
-            <TableHead>{t("creditCard.table.minPayment")}</TableHead>
-            <TableHead>{t("creditCard.table.monthlyInterest")}</TableHead>
-            <TableHead>{t("creditCard.table.payoffTime")}</TableHead>
-            <TableHead>{t("creditCard.table.utilizationRate")}</TableHead>
-            <TableHead className="text-right">{t("form.labels.isActive")}</TableHead>
+            <TableHead className="w-[200px]">Kortin nimi</TableHead>
+            <TableHead>Saldo</TableHead>
+            <TableHead>Vuosikorko</TableHead>
+            <TableHead>Vähimmäismaksu</TableHead>
+            <TableHead>Kuukausikorko</TableHead>
+            <TableHead>Maksuaika</TableHead>
+            <TableHead>Käyttöaste</TableHead>
+            <TableHead className="text-right">Aktiivinen</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {creditCards.length === 0 ? (
             <TableRow>
               <TableCell colSpan={8} className="text-center py-8">
-                {t("creditCard.table.noCardsAdded")}
+                Ei lisättyjä luottokortteja
               </TableCell>
             </TableRow>
           ) : (
@@ -90,7 +86,7 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                         <Check className="w-3 h-3 mr-1" />
-                        {t("creditCard.form.fullPayment")}
+                        Täysi maksu
                       </span>
                     ) : (
                       <AnimatedNumber
@@ -108,15 +104,15 @@ export default function CreditCardTable({ creditCards, onToggleActive }: CreditC
                   <TableCell>
                     {card.fullPayment ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                        1 {t("form.months.month")}
+                        1 kuukausi
                       </span>
                     ) : calculation.payoffMonths === null ? (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
                         <X className="w-3 h-3 mr-1" />
-                        {t("loan.customPaymentTermEstimateNever")}
+                        Ei koskaan maksettu pois
                       </span>
                     ) : (
-                      formatPayoffTime(calculation.payoffMonths, t)
+                      formatPayoffTime(calculation.payoffMonths)
                     )}
                   </TableCell>
                   <TableCell>

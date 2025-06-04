@@ -1,5 +1,5 @@
+
 import React from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { formatCurrency } from "@/utils/loanCalculations";
 import { CreditCard, DollarSign, Calendar } from "lucide-react";
@@ -21,7 +21,6 @@ const DebtSummaryCard = ({
 	totalMinPayments,
 	totalAmountToPay,
 }: DebtSummaryCardProps) => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 
 	// Format currency values
@@ -42,21 +41,21 @@ const DebtSummaryCard = ({
 							<div className="flex items-center space-x-2 flex-wrap">
 								<DollarSign className="h-5 w-5 text-primary flex-shrink-0" />
 								<span className="text-muted-foreground font-medium text-sm sm:text-base break-words">
-									{t("dashboard.totalDebt")}
+									Kokonaisvelka
 								</span>
-								<HelpTooltip content={t("tooltips.totalDebt")} />
+								<HelpTooltip content="Kaikkien aktiivisten velkojesi yhteenlaskettu määrä" />
 							</div>
 							<span className="text-xl sm:text-2xl md:text-3xl font-bold mt-2 break-all">
 								{formattedTotalDebt}
 							</span>
 							<div className="flex mt-2 items-start flex-col sm:flex-row sm:items-center sm:space-x-2">
 								<span className="text-xs sm:text-sm text-muted-foreground break-words">
-									{t("dashboard.estimatedInterestCost")}:
+									Arvioitu korkokustannus:
 								</span>
 								<span className="text-xs sm:text-sm font-medium break-all">
 									{formattedInterestCost}
 								</span>
-								<HelpTooltip content={t("tooltips.interestCost")} />
+								<HelpTooltip content="Kokonaissumma, jonka maksat korkoja nykyisillä ehdoilla" />
 							</div>
 						</div>
 
@@ -64,21 +63,21 @@ const DebtSummaryCard = ({
 							<div className="flex items-center space-x-2 flex-wrap">
 								<Calendar className="h-5 w-5 text-primary flex-shrink-0" />
 								<span className="text-muted-foreground font-medium text-sm sm:text-base break-words">
-									{t("dashboard.estimatedDebtFreeDate")}
+									Arvioitu velaton päivämäärä
 								</span>
-								<HelpTooltip content={t("tooltips.debtFreeDate")} />
+								<HelpTooltip content="Arvioitu päivämäärä, jolloin olet velaton nykyisillä maksuilla" />
 							</div>
 							<span className="text-xl sm:text-2xl md:text-3xl font-bold mt-2 break-words">
-								{debtFreeDate || t("dashboard.notCalculated")}
+								{debtFreeDate || "Ei laskettu"}
 							</span>
 							<div className="flex mt-2 items-start flex-col sm:flex-row sm:items-center sm:space-x-2">
 								<span className="text-xs sm:text-sm text-muted-foreground break-words">
-									{t("dashboard.totalToPayOff")}:
+									Maksettava yhteensä:
 								</span>
 								<span className="text-xs sm:text-sm font-medium break-all">
 									{formattedTotalPay}
 								</span>
-								<HelpTooltip content={t("tooltips.totalToPayOff")} />
+								<HelpTooltip content="Kokonaissumma, jonka maksat (pääoma + korot)" />
 							</div>
 						</div>
 
@@ -86,16 +85,16 @@ const DebtSummaryCard = ({
 							<div className="flex items-center space-x-2 flex-wrap">
 								<CreditCard className="h-5 w-5 text-primary flex-shrink-0" />
 								<span className="text-muted-foreground font-medium text-sm sm:text-base break-words">
-									{t("dashboard.minimumMonthlyPayments")}
+									Kuukausittaiset vähimmäismaksut
 								</span>
-								<HelpTooltip content={t("tooltips.minimumPayments")} />
+								<HelpTooltip content="Kaikkien velkojesi vähimmäismaksujen summa kuukaudessa" />
 							</div>
 							<span className="text-xl sm:text-2xl md:text-3xl font-bold mt-2 break-all">
 								{formattedMinPayments}
 							</span>
 							<div className="flex mt-2 items-start flex-col sm:flex-row sm:items-center sm:space-x-2">
 								<span className="text-xs sm:text-sm text-muted-foreground break-words">
-									{t("dashboard.perMonth")}
+									kuukaudessa
 								</span>
 							</div>
 						</div>
@@ -108,7 +107,7 @@ const DebtSummaryCard = ({
 						className="w-full"
 						onClick={() => navigate("/debt-summary")}
 					>
-						{t("dashboard.viewDetailedBreakdown")}
+						Näytä yksityiskohtainen erittely
 					</Button>
 				</CardFooter>
 			</Card>
