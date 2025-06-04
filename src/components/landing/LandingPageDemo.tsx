@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
 	Card,
@@ -11,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Debt, PaymentStrategy } from "@/utils/calculator/types";
 import { calculatePaymentPlan } from "@/utils/calculator/debtCalculator";
 import { ArrowRight, Calculator, Lightbulb, Clock, Coins } from "lucide-react";
@@ -32,7 +32,6 @@ import { useCurrencyFormatter } from "@/utils/formatting";
  * A simplified debt calculator demo for the landing page
  */
 const LandingPageDemo = () => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 	const isMobile = useIsMobile();
 	const currencyFormatter = useCurrencyFormatter();
@@ -41,7 +40,7 @@ const LandingPageDemo = () => {
 	const defaultDebts: Debt[] = [
 		{
 			id: "demo-debt-1",
-			name: t("landing.demo.creditCardDebt"),
+			name: "Luottokorttivelan",
 			balance: 5000,
 			interestRate: 18,
 			minimumPayment: 150,
@@ -49,7 +48,7 @@ const LandingPageDemo = () => {
 		},
 		{
 			id: "demo-debt-2",
-			name: t("landing.demo.personalLoan"),
+			name: "Henkilökohtainen laina",
 			balance: 10000,
 			interestRate: 8,
 			minimumPayment: 200,
@@ -122,7 +121,7 @@ const LandingPageDemo = () => {
 			const chartData = currentStrategy.monthlyPlans
 				.slice(0, Math.min(12, currentStrategy.monthlyPlans.length))
 				.map((plan, index) => ({
-					name: `${t("calculator.month")} ${plan.month + 1}`,
+					name: `Kuukausi ${plan.month + 1}`,
 					balance: plan.totalRemainingBalance,
 					payment: plan.totalPaid,
 				}));
@@ -194,13 +193,13 @@ const LandingPageDemo = () => {
 				<div className="text-center mb-10">
 					<div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm mb-3">
 						<Calculator className="h-4 w-4 mr-2" />
-						{t("landing.demo.badge") || "Kokeile nyt"}
+						Kokeile nyt
 					</div>
 					<h2 className="text-3xl md:text-4xl font-bold mb-3">
-						{t("landing.demo.title")}
+						Velkavapauslaskuri
 					</h2>
 					<p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-						{t("landing.demo.subtitle")}
+						Testaa erilaisia takaisinmaksustrategioita ja näe kuinka paljon säästät
 					</p>
 				</div>
 
@@ -208,10 +207,10 @@ const LandingPageDemo = () => {
 					<CardHeader className="border-b bg-muted/30 dark:bg-muted/10">
 						<CardTitle className="text-xl md:text-2xl flex items-center">
 							<Calculator className="h-5 w-5 mr-2 text-primary" />
-							{t("landing.demo.calculatorTitle")}
+							Velkavapauslaskuri
 						</CardTitle>
 						<CardDescription className="text-base">
-							{t("landing.demo.calculatorDescription")}
+							Syötä velkasi ja katso kuinka nopeasti pääset niistä eroon
 						</CardDescription>
 					</CardHeader>
 
@@ -219,7 +218,7 @@ const LandingPageDemo = () => {
 						{/* Debt inputs */}
 						<div className="space-y-4">
 							<h3 className="text-lg font-medium">
-								{t("landing.demo.debtInputsTitle")}
+								Syötä velkasi
 							</h3>
 
 							{debts.map((debt, index) => (
@@ -229,7 +228,7 @@ const LandingPageDemo = () => {
 								>
 									<div>
 										<Label htmlFor={`demo-debt-name-${index}`}>
-											{t("loan.name")}
+											Nimi
 										</Label>
 										<Input
 											id={`demo-debt-name-${index}`}
@@ -242,7 +241,7 @@ const LandingPageDemo = () => {
 
 									<div>
 										<Label htmlFor={`demo-debt-balance-${index}`}>
-											{t("loan.balance")}
+											Saldo
 										</Label>
 										<div className="relative">
 											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">
@@ -268,7 +267,7 @@ const LandingPageDemo = () => {
 
 									<div>
 										<Label htmlFor={`demo-debt-interest-${index}`}>
-											{t("loan.interestRate")}
+											Korko
 										</Label>
 										<div className="relative">
 											<Input
@@ -295,7 +294,7 @@ const LandingPageDemo = () => {
 
 									<div>
 										<Label htmlFor={`demo-debt-payment-${index}`}>
-											{t("repayment.minPayment")}
+											Vähimmäismaksu
 										</Label>
 										<div className="relative">
 											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">
@@ -326,10 +325,10 @@ const LandingPageDemo = () => {
 						<div className="space-y-4">
 							<div>
 								<h3 className="text-lg font-medium mb-2">
-									{t("landing.demo.extraPaymentTitle")}
+									Ylimääräinen kuukausimaksu
 								</h3>
 								<p className="text-sm text-muted-foreground mb-4">
-									{t("landing.demo.extraPaymentDescription")}
+									Kuinka paljon ylimääräistä voit maksaa kuukaudessa?
 								</p>
 
 								<div className="grid grid-cols-1 md:grid-cols-[1fr,200px] gap-4 items-center">
@@ -364,10 +363,10 @@ const LandingPageDemo = () => {
 						{/* Strategy selection */}
 						<div className="space-y-4">
 							<h3 className="text-lg font-medium mb-2">
-								{t("landing.demo.strategyTitle")}
+								Valitse strategia
 							</h3>
 							<p className="text-sm text-muted-foreground mb-4">
-								{t("landing.demo.strategyDescription")}
+								Kumpi strategia sopii sinulle paremmin?
 							</p>
 
 							<Tabs
@@ -376,10 +375,10 @@ const LandingPageDemo = () => {
 							>
 								<TabsList className="grid grid-cols-2 w-full max-w-md mx-auto">
 									<TabsTrigger value="avalanche">
-										{t("repayment.avalancheMethod")}
+										Lumivyöry
 									</TabsTrigger>
 									<TabsTrigger value="snowball">
-										{t("repayment.snowballMethod")}
+										Lumipallo
 									</TabsTrigger>
 								</TabsList>
 
@@ -388,7 +387,7 @@ const LandingPageDemo = () => {
 										<div className="flex items-start gap-2">
 											<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
 											<p className="text-sm">
-												{t("landing.demo.avalancheDescription")}
+												Maksa ensin korkeamman koron velat. Säästää eniten rahaa pitkällä aikavälillä.
 											</p>
 										</div>
 									</div>
@@ -399,7 +398,7 @@ const LandingPageDemo = () => {
 										<div className="flex items-start gap-2">
 											<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
 											<p className="text-sm">
-												{t("landing.demo.snowballDescription")}
+												Maksa ensin pienemmät velat. Antaa motivaatiota nähdä velkoja häviävän nopeasti.
 											</p>
 										</div>
 									</div>
@@ -413,7 +412,7 @@ const LandingPageDemo = () => {
 								<div className="border-t pt-6">
 									<h3 className="text-xl font-semibold mb-6 flex items-center">
 										<Lightbulb className="h-5 w-5 mr-2 text-primary" />
-										{t("landing.demo.resultsTitle")}
+										Tulokset
 									</h3>
 
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -427,14 +426,14 @@ const LandingPageDemo = () => {
 													</div>
 													<div>
 														<h4 className="font-medium text-lg">
-															{t("landing.demo.timeSavingsTitle")}
+															Aikasäästö
 														</h4>
 														<div className="mt-2 space-y-1">
 															<p className="text-3xl font-bold">
-																{monthsSaved} {t("landing.demo.months")}
+																{monthsSaved} kuukautta
 															</p>
 															<p className="text-sm text-muted-foreground">
-																{t("landing.demo.timeSavingsDescription")}
+																verrattuna vähimmäismaksuihin
 															</p>
 														</div>
 													</div>
@@ -452,14 +451,14 @@ const LandingPageDemo = () => {
 													</div>
 													<div>
 														<h4 className="font-medium text-lg">
-															{t("landing.demo.interestSavingsTitle")}
+															Rahallinen säästö
 														</h4>
 														<div className="mt-2 space-y-1">
 															<p className="text-3xl font-bold">
 																{currencyFormatter.format(interestSaved)}
 															</p>
 															<p className="text-sm text-muted-foreground">
-																{t("landing.demo.interestSavingsDescription")}
+																säästöä korkokuluissa
 															</p>
 														</div>
 													</div>
@@ -475,16 +474,8 @@ const LandingPageDemo = () => {
 												<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
 												<p className="text-sm">
 													{strategy === "avalanche"
-														? t("landing.demo.avalancheComparisonNote", {
-																months: monthsDiff,
-																interest:
-																	currencyFormatter.format(interestDiff),
-														  })
-														: t("landing.demo.snowballComparisonNote", {
-																months: monthsDiff,
-																interest:
-																	currencyFormatter.format(interestDiff),
-														  })}
+														? `Lumivyörymetodi säästää ${monthsDiff} kuukautta ja ${currencyFormatter.format(interestDiff)} verrattuna lumipallomethod.`
+														: `Lumipallomethod vie ${monthsDiff} kuukautta pidempään ja maksaa ${currencyFormatter.format(interestDiff)} enemmän kuin lumivyörymetodi.`}
 												</p>
 											</div>
 										</div>
@@ -494,7 +485,7 @@ const LandingPageDemo = () => {
 								{/* Chart visualization */}
 								<div className="border-t pt-6">
 									<h3 className="text-lg font-medium mb-4">
-										{t("landing.demo.visualizationTitle")}
+										Velkasaldon kehitys
 									</h3>
 
 									<div className="h-64 md:h-80">
@@ -528,7 +519,7 @@ const LandingPageDemo = () => {
 												/>
 												<Bar
 													dataKey="balance"
-													name={t("landing.demo.remainingBalance")}
+													name="Jäljellä oleva saldo"
 													fill="#8884d8"
 												/>
 											</BarChart>
@@ -540,10 +531,10 @@ const LandingPageDemo = () => {
 								<div className="border-t pt-8 text-center">
 									<div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 shadow-md">
 										<h3 className="text-xl font-semibold mb-3">
-											{t("landing.demo.ctaTitle")}
+											Aloita velkavapausmatka
 										</h3>
 										<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-											{t("landing.demo.ctaDescription")}
+											Rekisteröidy ilmaiseksi ja saa täydellinen velkavapaussuunnitelma henkilökohtaisilla neuvoilla.
 										</p>
 
 										<Button
@@ -551,7 +542,7 @@ const LandingPageDemo = () => {
 											className="bg-primary text-white hover:bg-primary/90 transition-colors dark:bg-brand-primary dark:hover:bg-brand-primary-light h-12 px-6 text-base"
 											onClick={handleCTAClick}
 										>
-											{t("landing.demo.ctaButton")}
+											Aloita ilmaiseksi
 											<ArrowRight className="ml-2 h-5 w-5" />
 										</Button>
 									</div>

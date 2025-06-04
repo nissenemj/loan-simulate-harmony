@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 import { CreditCard } from "@/utils/creditCardCalculations";
 import { CreditCard as CreditCardIcon, DollarSign, Percent } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 import {
   Form,
@@ -27,27 +26,26 @@ interface CreditCardFormProps {
 }
 
 export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps) {
-  const { t } = useLanguage();
   
   // Define the validation schema
   const formSchema = z.object({
     name: z.string().min(1, {
-      message: t("form.creditCard.validation.nameRequired"),
+      message: "Kortin nimi on pakollinen",
     }),
     balance: z.coerce.number().positive({
-      message: t("form.creditCard.validation.invalidAmount"),
+      message: "Virheellinen summa",
     }),
     limit: z.coerce.number().positive({
-      message: t("form.creditCard.validation.invalidAmount"),
+      message: "Virheellinen summa",
     }),
     apr: z.coerce.number().positive({
-      message: t("form.creditCard.validation.invalidRate"),
+      message: "Virheellinen korko",
     }),
     minPayment: z.coerce.number().min(0, {
-      message: t("form.creditCard.validation.invalidAmount"),
+      message: "Virheellinen summa",
     }),
     minPaymentPercent: z.coerce.number().min(0, {
-      message: t("form.creditCard.validation.invalidRate"),
+      message: "Virheellinen korko",
     }),
     fullPayment: z.boolean().default(false),
   });
@@ -97,7 +95,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
     onAddCreditCard(newCreditCard);
     
     // Fix toast error: update to use a single parameter with formatted string
-    toast(t("toast.cardAdded"));
+    toast("Luottokortti lisätty");
     
     // Reset the form
     form.reset({
@@ -114,7 +112,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
   return (
     <Card className="bg-card dark:bg-secondary dark:border-bg-highlight">
       <CardHeader>
-        <CardTitle className="text-xl text-left">{t("form.creditCard.title")}</CardTitle>
+        <CardTitle className="text-xl text-left">Lisää luottokortti</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -126,14 +124,14 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.name")}</FormLabel>
+                    <FormLabel>Kortin nimi</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
                           <CreditCardIcon className="h-4 w-4" />
                         </div>
                         <Input 
-                          placeholder={t("form.creditCard.form.placeholderName")} 
+                          placeholder="Esim. Nordea Mastercard" 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           {...field} 
                         />
@@ -150,7 +148,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="balance"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.balance")}</FormLabel>
+                    <FormLabel>Saldo</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -158,7 +156,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("form.creditCard.form.placeholderBalance")} 
+                          placeholder="5000" 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
@@ -176,7 +174,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="limit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.limit")}</FormLabel>
+                    <FormLabel>Luottoraja</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -184,7 +182,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("form.creditCard.form.placeholderCreditLimit")} 
+                          placeholder="10000" 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight" 
                           step="0.01"
                           {...field} 
@@ -202,7 +200,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="apr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.apr")}</FormLabel>
+                    <FormLabel>Vuosikorko (%)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -210,7 +208,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("form.creditCard.form.placeholderApr")} 
+                          placeholder="18.0" 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight"
                           step="0.01" 
                           {...field} 
@@ -228,7 +226,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPaymentPercent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.minPaymentPercent")}</FormLabel>
+                    <FormLabel>Vähimmäismaksu (%)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -255,7 +253,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                 name="minPayment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.creditCard.form.minPayment")}</FormLabel>
+                    <FormLabel>Vähimmäismaksu (€)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
@@ -263,7 +261,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                         </div>
                         <Input 
                           type="number" 
-                          placeholder={t("form.creditCard.form.placeholderMinPayment")} 
+                          placeholder="150" 
                           className="pl-10 dark:bg-bg-elevated dark:border-bg-highlight bg-gray-50" 
                           step="0.01"
                           disabled={true}
@@ -273,7 +271,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                       </div>
                     </FormControl>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {t("form.creditCard.form.autoCalculated")}
+                      Lasketaan automaattisesti prosenttiosuuden perusteella
                     </p>
                     <FormMessage />
                   </FormItem>
@@ -295,7 +293,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    {t("form.creditCard.form.fullPayment")}
+                    Maksa koko saldo kerralla
                   </FormLabel>
                 </FormItem>
               )}
@@ -305,7 +303,7 @@ export default function CreditCardForm({ onAddCreditCard }: CreditCardFormProps)
               type="submit" 
               className="w-full bg-brand-primary hover:bg-brand-primary-light text-white dark:bg-brand-primary dark:hover:bg-brand-primary-light"
             >
-              {t("form.creditCard.form.submit")}
+              Lisää luottokortti
             </Button>
           </form>
         </Form>

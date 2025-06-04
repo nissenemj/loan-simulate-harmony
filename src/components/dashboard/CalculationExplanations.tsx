@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Card,
   CardHeader, 
@@ -33,17 +32,16 @@ interface CalculationExplanationsProps {
 }
 
 const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
-  const { t } = useLanguage();
   
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Calculator className="mr-2 h-5 w-5" />
-          {t('calculator.howItWorks') || 'How the Calculator Works'}
+          Kuinka laskuri toimii
         </CardTitle>
         <CardDescription>
-          {t('calculator.explanation') || 'Detailed explanations of calculations and assumptions used in the loan simulator'}
+          Yksityiskohtaiset selitykset laskennoista ja oletuksista
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -52,75 +50,71 @@ const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
             <AccordionTrigger>
               <div className="flex items-center">
                 <DollarSign className="mr-2 h-4 w-4" />
-                {t('calculator.loanCalculations') || 'Loan Calculations'}
+                Lainalaskennat
               </div>
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.annuityLoan') || 'Annuity Loan'}</h4>
+                <h4 className="font-medium">Annuiteettilaina</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.annuityExplanation') || 
-                    'Annuity loans have equal monthly payments throughout the loan term. The formula used is:'}
+                  Annuiteettilainoissa kuukausierä pysyy samana koko laina-ajan. Käytetty kaava:
                 </p>
                 <div className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-                  MP = P * [r(1+r)^n] / [(1+r)^n - 1]
+                  KE = P * [r(1+r)^n] / [(1+r)^n - 1]
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.where') || 'Where'}:
-                  <br />MP = {t('calculator.monthlyPayment') || 'Monthly Payment'}
-                  <br />P = {t('calculator.principalAmount') || 'Principal (Loan Amount)'}
-                  <br />r = {t('calculator.monthlyInterestRate') || 'Monthly Interest Rate (Annual Rate / 12 / 100)'}
-                  <br />n = {t('calculator.totalNumberOfPayments') || 'Total Number of Payments (Term in Years * 12)'}
+                  Missä:
+                  <br />KE = Kuukausierä
+                  <br />P = Pääoma (lainasumma)
+                  <br />r = Kuukausikorko (vuosikorko / 12 / 100)
+                  <br />n = Erien kokonaismäärä (laina-aika vuosissa * 12)
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.equalPrincipalLoan') || 'Equal Principal Loan'}</h4>
+                <h4 className="font-medium">Tasalyhennyslaina</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.equalPrincipalExplanation') || 
-                    'In equal principal loans, the principal payment remains constant, while the interest payment decreases. The monthly payment is calculated as:'}
+                  Tasalyhennyslainassa lyhennys pysyy samana, mutta korkomaksu pienenee. Kuukausierä lasketaan:
                 </p>
                 <div className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-                  Principal = P / n
+                  Lyhennys = P / n
                   <br />
-                  Interest = Outstanding Balance * r
+                  Korko = Jäljellä oleva pääoma * r
                   <br />
-                  Monthly Payment = Principal + Interest
+                  Kuukausierä = Lyhennys + Korko
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.note') || 'Note'}: {t('calculator.monthlyPaymentDecreases') || 'Monthly payment decreases over time as the outstanding balance reduces.'}
+                  Huom: Kuukausierä pienenee ajan myötä pääoman vähentyessä.
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.fixedInstallmentLoan') || 'Fixed Installment Loan'}</h4>
+                <h4 className="font-medium">Kiinteä erä</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.fixedInstallmentExplanation') || 
-                    'Similar to annuity loans but may have different compounding periods. We use the standard annuity formula for calculations.'}
+                  Samanlainen kuin annuiteettilaina mutta voi olla eri koronlaskentajaksoja. Käytämme tavallista annuiteettikaavaa.
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.customPaymentLoan') || 'Custom Payment Loan'}</h4>
+                <h4 className="font-medium">Oma maksu</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.customPaymentExplanation') || 
-                    'For custom payment loans, we calculate how long it will take to pay off the loan with your specified payment amount.'}
+                  Omassa maksussa lasketaan, kuinka kauan lainan takaisinmaksu kestää määrittämälläsi kuukausierällä.
                 </p>
                 <div className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-                  Interest Payment = Outstanding Balance * r
+                  Korkomaksu = Jäljellä oleva pääoma * r
                   <br />
-                  Principal Payment = Monthly Payment - Interest Payment
+                  Lyhennysmaksu = Kuukausierä - Korkomaksu
                   <br />
-                  New Balance = Previous Balance - Principal Payment
+                  Uusi saldo = Edellinen saldo - Lyhennysmaksu
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.noteCustomPayment') || 'Note'}: {t('calculator.customPaymentWarning') || 'If your custom payment is less than the monthly interest, the loan will never be paid off.'}
+                  Huom: Jos kuukausierä on pienempi kuin kuukausikorko, lainaa ei koskaan makseta pois.
                 </p>
               </div>
             </AccordionContent>
@@ -130,37 +124,35 @@ const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
             <AccordionTrigger>
               <div className="flex items-center">
                 <CreditCard className="mr-2 h-4 w-4" />
-                {t('calculator.creditCardCalculations') || 'Credit Card Calculations'}
+                Luottokorttilaskennat
               </div>
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.minimumPayment') || 'Minimum Payment'}</h4>
+                <h4 className="font-medium">Vähimmäismaksu</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.minimumPaymentExplanation') || 
-                    'Credit card minimum payments are calculated using either a fixed amount or a percentage of the balance, whichever is greater:'}
+                  Luottokortin vähimmäismaksut lasketaan käyttäen joko kiinteää summaa tai prosenttiosuutta saldosta, kumpi on suurempi:
                 </p>
                 <div className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-                  Minimum Payment = MAX(Fixed Minimum, Balance * Minimum Payment Percentage)
+                  Vähimmäismaksu = MAX(Kiinteä vähimmäis, Saldo * Vähimmäisprosentti)
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.noteMinimumPayment') || 'Note'}: {t('calculator.minimumPaymentWarning') || 'Paying only the minimum will result in high interest costs and a long repayment period.'}
+                  Huom: Vain vähimmäismaksun maksaminen johtaa korkeisiin korkokuluihin ja pitkään takaisinmaksuaikaan.
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.totalPaymentEstimate') || 'Total Payment Estimate'}</h4>
+                <h4 className="font-medium">Kokonaismaksun arvio</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.totalPaymentEstimateExplanation') || 
-                    'We estimate the total payment needed to repay a credit card as:'}
+                  Arvioimme luottokortin takaisinmaksuun tarvittavan kokonaismaksun:
                 </p>
                 <div className="bg-muted p-3 rounded-md text-sm font-mono overflow-x-auto">
-                  Total Payment = Balance + (Balance * APR/100 * EstimatedYears)
+                  Kokonaismaksu = Saldo + (Saldo * Vuosikorko/100 * Arvioidut vuodet)
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.noteEstimate') || 'Note'}: {t('calculator.estimateExplanation') || 'This is a simplified estimate. Actual payments will vary based on your payment schedule.'}
+                  Huom: Tämä on yksinkertaistettu arvio. Todelliset maksut vaihtelevat maksuaikataulun mukaan.
                 </p>
               </div>
             </AccordionContent>
@@ -170,58 +162,55 @@ const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
             <AccordionTrigger>
               <div className="flex items-center">
                 <Percent className="mr-2 h-4 w-4" />
-                {t('calculator.repaymentStrategies') || 'Repayment Strategies'}
+                Takaisinmaksustrategiat
               </div>
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">{t('repayment.avalancheStrategy') || 'Avalanche Method'}</h4>
+                <h4 className="font-medium">Lumivyörymetodi</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.avalancheExplanation') || 
-                    'The Avalanche method prioritizes debts with the highest interest rates first:'}
+                  Lumivyörymetodi priorisoi korkeimman koron velat ensin:
                 </p>
                 <ol className="list-decimal list-inside text-sm space-y-1">
-                  <li>{t('calculator.avalancheStep1') || 'Make minimum payments on all debts'}</li>
-                  <li>{t('calculator.avalancheStep2') || 'Put extra money toward the debt with the highest interest rate'}</li>
-                  <li>{t('calculator.avalancheStep3') || 'After paying off the highest-rate debt, move to the next highest'}</li>
+                  <li>Maksa vähimmäismaksut kaikista veloista</li>
+                  <li>Laita ylimääräiset rahat korkeimman koron velkaan</li>
+                  <li>Korkeimman koron velan maksamisen jälkeen siirry seuraavaan korkeimpaan</li>
                 </ol>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.avalancheBenefit') || 'Benefit'}: {t('calculator.avalancheBenefitExplanation') || 'Minimizes the total interest paid over the life of all debts.'}
+                  Etu: Minimoi kaikkien velkojen elinkaaren aikana maksetut korot.
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('repayment.snowballStrategy') || 'Snowball Method'}</h4>
+                <h4 className="font-medium">Lumipallomethod</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.snowballExplanation') || 
-                    'The Snowball method prioritizes debts with the smallest balances first:'}
+                  Lumipallomethod priorisoi pienimmän saldon velat ensin:
                 </p>
                 <ol className="list-decimal list-inside text-sm space-y-1">
-                  <li>{t('calculator.snowballStep1') || 'Make minimum payments on all debts'}</li>
-                  <li>{t('calculator.snowballStep2') || 'Put extra money toward the debt with the smallest balance'}</li>
-                  <li>{t('calculator.snowballStep3') || 'After paying off the smallest debt, move to the next smallest'}</li>
+                  <li>Maksa vähimmäismaksut kaikista veloista</li>
+                  <li>Laita ylimääräiset rahat pienimmän saldon velkaan</li>
+                  <li>Pienimmän velan maksamisen jälkeen siirry seuraavaan pienimpään</li>
                 </ol>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.snowballBenefit') || 'Benefit'}: {t('calculator.snowballBenefitExplanation') || 'Provides psychological wins by eliminating individual debts faster.'}
+                  Etu: Tarjoaa psykologisia voittoja poistamalla yksittäiset velat nopeammin.
                 </p>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('dashboard.equalDistribution') || 'Equal Distribution'}</h4>
+                <h4 className="font-medium">Tasainen jakaminen</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.equalDistributionExplanation') || 
-                    'The Equal Distribution method distributes extra payments proportionally across all debts:'}
+                  Tasainen jakaminen jakaa ylimääräiset maksut suhteellisesti kaikkiin velkoihin:
                 </p>
                 <ol className="list-decimal list-inside text-sm space-y-1">
-                  <li>{t('calculator.equalStep1') || 'Make minimum payments on all debts'}</li>
-                  <li>{t('calculator.equalStep2') || 'Distribute extra money proportionally based on balance size'}</li>
+                  <li>Maksa vähimmäismaksut kaikista veloista</li>
+                  <li>Jaa ylimääräiset rahat suhteellisesti saldon koon mukaan</li>
                 </ol>
                 <p className="text-xs text-muted-foreground">
-                  {t('calculator.equalBenefit') || 'Benefit'}: {t('calculator.equalBenefitExplanation') || 'Reduces all debts simultaneously, which some may find psychologically satisfying.'}
+                  Etu: Vähentää kaikkia velkoja samanaikaisesti, mikä voi olla psykologisesti tyydyttävää.
                 </p>
               </div>
             </AccordionContent>
@@ -231,38 +220,36 @@ const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
             <AccordionTrigger>
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4" />
-                {t('calculator.timelineCalculations') || 'Timeline Calculations'}
+                Aikataulun laskennat
               </div>
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.debtFreeDate') || 'Debt-Free Date Estimation'}</h4>
+                <h4 className="font-medium">Velattoman päivämäärän arvio</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.debtFreeDateExplanation') || 
-                    'We calculate the debt-free date by simulating monthly payments until all debts are paid off:'}
+                  Laskemme velattoman päivämäärän simuloimalla kuukausimaksuja kunnes kaikki velat on maksettu:
                 </p>
                 <ol className="list-decimal list-inside text-sm space-y-1">
-                  <li>{t('calculator.debtFreeDateStep1') || 'Apply the selected repayment strategy (Avalanche, Snowball, or Equal)'}</li>
-                  <li>{t('calculator.debtFreeDateStep2') || 'Calculate interest and apply payments each month'}</li>
-                  <li>{t('calculator.debtFreeDateStep3') || 'Count the number of months until the balance reaches zero'}</li>
-                  <li>{t('calculator.debtFreeDateStep4') || 'Add this number of months to the current date'}</li>
+                  <li>Sovella valittua takaisinmaksustrategiaa (Lumivyöry, Lumipallo tai Tasainen)</li>
+                  <li>Laske korot ja sovella maksuja joka kuukausi</li>
+                  <li>Laske kuukausien määrä kunnes saldo saavuttaa nollan</li>
+                  <li>Lisää tämä kuukausien määrä nykyiseen päivämäärään</li>
                 </ol>
               </div>
               
               <Separator />
               
               <div className="space-y-2">
-                <h4 className="font-medium">{t('calculator.assumptions') || 'Assumptions & Limitations'}</h4>
+                <h4 className="font-medium">Oletukset ja rajoitukset</h4>
                 <p className="text-sm text-muted-foreground">
-                  {t('calculator.assumptionsExplanation') || 
-                    'Be aware of these assumptions in our calculations:'}
+                  Huomioi nämä oletukset laskennoissa:
                 </p>
                 <ul className="list-disc list-inside text-sm space-y-1">
-                  <li>{t('calculator.assumption1') || 'Interest rates remain constant unless changed in scenarios'}</li>
-                  <li>{t('calculator.assumption2') || 'Monthly payments are made consistently'}</li>
-                  <li>{t('calculator.assumption3') || 'No new debt is added'}</li>
-                  <li>{t('calculator.assumption4') || 'Credit card minimum payments are recalculated as the balance decreases'}</li>
-                  <li>{t('calculator.assumption5') || 'Compound interest is calculated using standard formulas'}</li>
+                  <li>Korot pysyvät vakioina ellei skenaarioissa muuteta</li>
+                  <li>Kuukausimaksut maksetaan johdonmukaisesti</li>
+                  <li>Uusia velkoja ei lisätä</li>
+                  <li>Luottokorttien vähimmäismaksut lasketaan uudelleen saldon pienentyessä</li>
+                  <li>Korkoa korolle lasketaan tavallisilla kaavoilla</li>
                 </ul>
               </div>
             </AccordionContent>
@@ -271,7 +258,7 @@ const CalculationExplanations = ({ onClose }: CalculationExplanationsProps) => {
       </CardContent>
       {onClose && (
         <CardFooter>
-          <Button onClick={onClose}>{t('common.close') || 'Close'}</Button>
+          <Button onClick={onClose}>Sulje</Button>
         </CardFooter>
       )}
     </Card>

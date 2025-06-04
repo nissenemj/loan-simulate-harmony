@@ -1,5 +1,5 @@
+
 import React, { useEffect, useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import {
 	Card,
 	CardHeader,
@@ -52,7 +52,6 @@ const DebtFreeTimeline = ({
 	activeLoans,
 	monthlyBudget,
 }: DebtFreeTimelineProps) => {
-	const { t } = useLanguage();
 	const navigate = useNavigate();
 	const [savedStrategies, setSavedStrategies] = useState<
 		SavedRepaymentStrategy[]
@@ -148,7 +147,7 @@ const DebtFreeTimeline = ({
 
 	// Format date as locale string
 	const formatDate = (date: Date | null): string => {
-		if (!date) return t("debtStrategies.errorMaxMonths");
+		if (!date) return "Liian pitkä aika tai ei mahdollista";
 		return date.toLocaleDateString("fi-FI");
 	};
 
@@ -157,11 +156,11 @@ const DebtFreeTimeline = ({
 		if (strategy) {
 			setActiveStrategy(strategy);
 			setActiveStrategyId(strategy.id);
-			toast.success(t("dashboard.strategySelected", { name: strategy.name }));
+			toast.success(`Strategia valittu: ${strategy.name}`);
 		} else {
 			setActiveStrategy(null);
 			setActiveStrategyId(null);
-			toast.info(t("dashboard.strategyCleared"));
+			toast.info("Strategia poistettu");
 		}
 	};
 
@@ -171,7 +170,7 @@ const DebtFreeTimeline = ({
 				<div className="flex justify-between items-center">
 					<CardTitle className="flex items-center">
 						<Calendar className="mr-2 h-5 w-5 text-primary" />
-						{t("dashboard.debtFreeTimeline")}
+						Velkavapausaikataulu
 					</CardTitle>
 
 					{savedStrategies.length > 0 && (
@@ -181,13 +180,13 @@ const DebtFreeTimeline = ({
 									<Bookmark className="mr-2 h-4 w-4" />
 									{activeStrategy
 										? activeStrategy.name
-										: t("dashboard.selectStrategy")}
+										: "Valitse strategia"}
 									<ChevronDown className="ml-2 h-4 w-4" />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuLabel>
-									{t("dashboard.savedStrategies")}
+									Tallennetut strategiat
 								</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								{savedStrategies.map((strategy) => (
@@ -198,7 +197,7 @@ const DebtFreeTimeline = ({
 											activeStrategy?.id === strategy.id ? "bg-accent" : ""
 										}
 									>
-										{strategy.name} ({t(`dashboard.${strategy.method}Strategy`)}
+										{strategy.name} ({strategy.method === 'avalanche' ? 'Lumivyöry' : strategy.method === 'snowball' ? 'Lumipallo' : 'Tasainen'}
 										)
 									</DropdownMenuItem>
 								))}
@@ -206,7 +205,7 @@ const DebtFreeTimeline = ({
 									<>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem onClick={() => selectStrategy(null)}>
-											{t("dashboard.clearStrategy")}
+											Poista strategia
 										</DropdownMenuItem>
 									</>
 								)}
@@ -214,7 +213,7 @@ const DebtFreeTimeline = ({
 						</DropdownMenu>
 					)}
 				</div>
-				<CardDescription>{t("dashboard.timelineDescription")}</CardDescription>
+				<CardDescription>Arvioitu aikataulu velkojen takaisinmaksulle</CardDescription>
 			</CardHeader>
 			<CardContent>
 				{hasDebts ? (
@@ -224,9 +223,9 @@ const DebtFreeTimeline = ({
 						<div className="relative mb-12">
 							<div className="absolute left-1/2 -translate-x-1/2 -mt-8 w-4 h-4 rounded-full bg-primary"></div>
 							<div className="ml-[calc(50%+1.5rem)] pl-4 -mt-1">
-								<h4 className="font-medium">{t("dashboard.now")}</h4>
+								<h4 className="font-medium">Nyt</h4>
 								<p className="text-sm text-muted-foreground">
-									{t("dashboard.currentDebt")}: {formatCurrency(totalDebt)}
+									Nykyiset velat: {formatCurrency(totalDebt)}
 								</p>
 							</div>
 						</div>
@@ -236,10 +235,10 @@ const DebtFreeTimeline = ({
 								<div className="absolute left-1/2 -translate-x-1/2 -mt-8 w-4 h-4 rounded-full bg-primary/70"></div>
 								<div className="ml-[calc(50%+1.5rem)] pl-4 -mt-1">
 									<h4 className="font-medium">
-										{t("dashboard.creditCardsFree")}
+										Luottokortit maksettu
 									</h4>
 									<p className="text-sm text-muted-foreground">
-										{t("dashboard.projectDate")}:{" "}
+										Arvioitu päivämäärä:{" "}
 										{formatDate(creditCardFreeDate)}
 									</p>
 								</div>
@@ -249,9 +248,9 @@ const DebtFreeTimeline = ({
 						<div className="relative">
 							<div className="absolute left-1/2 -translate-x-1/2 -mt-8 w-4 h-4 rounded-full bg-green-600"></div>
 							<div className="ml-[calc(50%+1.5rem)] pl-4 -mt-1">
-								<h4 className="font-medium">{t("dashboard.debtFree")}</h4>
+								<h4 className="font-medium">Velkavapaa</h4>
 								<p className="text-sm text-muted-foreground">
-									{t("dashboard.projectDate")}: {formatDate(debtFreeDate)}
+									Arvioitu päivämäärä: {formatDate(debtFreeDate)}
 								</p>
 							</div>
 						</div>
@@ -259,21 +258,21 @@ const DebtFreeTimeline = ({
 				) : (
 					<div className="flex flex-col items-center justify-center py-6 text-center">
 						<p className="text-muted-foreground">
-							{t("dashboard.noDebtToDisplay")}
+							Ei velkoja näytettäväksi
 						</p>
 					</div>
 				)}
 			</CardContent>
 			<CardFooter className="flex justify-between">
 				<div className="text-sm text-muted-foreground">
-					{t("dashboard.timelineExplanation")}.{" "}
-					{t("dashboard.paymentFlowExplanation")}.
+					Aikataulu perustuu nykyisiin maksuihin ja valittuun strategiaan.{" "}
+					Maksut kohdistetaan strategian mukaisesti.
 				</div>
 				<Button
 					variant="outline"
 					onClick={() => navigate("/debt-summary?tab=repayment-plan")}
 				>
-					{t("dashboard.goToRepaymentPlan")}
+					Siirry takaisinmaksusuunnitelmaan
 					<ArrowRight className="ml-2 h-4 w-4" />
 				</Button>
 			</CardFooter>
