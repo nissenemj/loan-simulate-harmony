@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { 
   CreditCard, 
   calculateCreditCard, 
-  formatUtilizationRate, 
   formatPayoffTime 
 } from "@/utils/creditCardCalculations";
 import { formatCurrency, formatPercentage } from "@/utils/loanCalculations";
@@ -25,6 +24,10 @@ interface CreditCardTableProps {
   creditCards: CreditCard[];
   onToggleActive: (id: string, isActive: boolean) => void;
 }
+
+const formatUtilizationRate = (rate: number): string => {
+  return (rate * 100).toFixed(1) + '%';
+};
 
 export default function CreditCardTable({ creditCards, onToggleActive }: CreditCardTableProps) {
   const handleToggleActive = (id: string, isActive: boolean) => {

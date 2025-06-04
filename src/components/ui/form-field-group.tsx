@@ -1,6 +1,6 @@
+
 import React from "react";
 import { cn } from "@/lib/utils";
-import { EnhancedFormField, EnhancedFormFieldProps } from "./enhanced-form-field";
 
 export interface FormFieldGroupProps {
   className?: string;
@@ -19,7 +19,7 @@ export function FormFieldGroup({
   description,
 }: FormFieldGroupProps) {
   return (
-    <div className={cn("space-y-4 p-4 rounded-lg border bg-muted/20", className)}>
+    <div className={cn("space-y-4", className)}>
       {title && (
         <div className="space-y-1">
           <h3 className="text-lg font-medium">{title}</h3>
@@ -37,19 +37,7 @@ export function FormFieldGroup({
 
 export interface SplitFormFieldsProps {
   className?: string;
-  fields: {
-    id: string;
-    name: string;
-    label: string;
-    type?: string;
-    placeholder?: string;
-    required?: boolean;
-    validation?: (value: string) => { isValid: boolean; message?: string };
-    helpText?: string;
-    className?: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }[];
+  children: React.ReactNode;
   columns?: 1 | 2 | 3 | 4;
 }
 
@@ -58,7 +46,7 @@ export interface SplitFormFieldsProps {
  */
 export function SplitFormFields({
   className,
-  fields,
+  children,
   columns = 2,
 }: SplitFormFieldsProps) {
   const gridCols = {
@@ -70,22 +58,7 @@ export function SplitFormFields({
 
   return (
     <div className={cn("grid gap-4", gridCols[columns], className)}>
-      {fields.map((field) => (
-        <EnhancedFormField
-          key={field.id}
-          id={field.id}
-          name={field.name}
-          label={field.label}
-          type={field.type || "text"}
-          placeholder={field.placeholder}
-          required={field.required}
-          validation={field.validation}
-          helpText={field.helpText}
-          className={field.className}
-          value={field.value}
-          onChange={field.onChange}
-        />
-      ))}
+      {children}
     </div>
   );
 }

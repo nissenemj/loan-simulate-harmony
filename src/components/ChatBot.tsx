@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { BookOpen, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -31,14 +30,11 @@ const ChatBot: React.FC = () => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const { language } = useLanguage();
   const isMobile = useIsMobile();
 
   // Initial welcome message
   useEffect(() => {
-    const welcomeMessage = language === 'fi' 
-      ? "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa."
-      : "Hello! I'm VelkaAI, your financial assistant. I can help with personal finance and debt management questions. Please note that I cannot provide investment advice according to Finnish legislation.";
+    const welcomeMessage = "Hei! Olen VelkaAI, taloudellinen apurisi. Voin auttaa sinua henkilökohtaisen talouden ja velanhallinnan kysymyksissä. Huomioithan, että en voi antaa sijoitusneuvontaa.";
     
     setMessages([{ role: 'assistant', content: welcomeMessage }]);
     
@@ -46,7 +42,7 @@ const ChatBot: React.FC = () => {
     if (questionCount >= MAX_QUESTIONS) {
       setLimitReached(true);
     }
-  }, [language, questionCount]);
+  }, [questionCount]);
 
   // Auto-scroll to the bottom when new messages arrive
   useEffect(() => {
@@ -77,7 +73,7 @@ const ChatBot: React.FC = () => {
     try {
       const chatHistory = messages
         .filter(msg => msg.role === 'user' || msg.role === 'assistant')
-        .slice(-4); // Keep conversation context manageable
+        .slice(-4);
       
       const { data, error } = await supabase.functions.invoke('financial-advisor', {
         body: {
@@ -93,7 +89,6 @@ const ChatBot: React.FC = () => {
         const assistantMessage: Message = { role: 'assistant', content: data.response };
         setMessages(prev => [...prev, assistantMessage]);
         
-        // Increment question count and check if limit was reached
         const newCount = questionCount + 1;
         setQuestionCount(newCount);
         
@@ -106,19 +101,14 @@ const ChatBot: React.FC = () => {
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
-        title: language === 'fi' ? 'Virhe' : 'Error',
-        description: language === 'fi' 
-          ? 'Viestin lähettäminen epäonnistui. Yritä uudelleen myöhemmin.' 
-          : 'Failed to send message. Please try again later.',
+        title: 'Virhe',
+        description: 'Viestin lähettäminen epäonnistui. Yritä uudelleen myöhemmin.',
         variant: 'destructive'
       });
       
-      // Add error message for user
       const errorMessage: Message = { 
         role: 'assistant', 
-        content: language === 'fi' 
-          ? 'Pahoittelut, en voinut käsitellä viestiä. Voinko auttaa sinua jotenkin muuten?' 
-          : 'Sorry, I couldn\'t process your message. Can I help you with something else?' 
+        content: 'Pahoittelut, en voinut käsitellä viestiä. Voinko auttaa sinua jotenkin muuten?'
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -134,9 +124,7 @@ const ChatBot: React.FC = () => {
   };
 
   const renderLimitMessage = () => {
-    const limitMessage = language === 'fi'
-      ? `Olet käyttänyt kaikki ${MAX_QUESTIONS} kysymystäsi. Palaa myöhemmin uudelleen.`
-      : `You have used all your ${MAX_QUESTIONS} questions. Please come back later.`;
+    const limitMessage = `Olet käyttänyt kaikki ${MAX_QUESTIONS} kysymystäsi. Palaa myöhemmin uudelleen.`;
     
     return (
       <div className="p-3 text-center text-sm text-muted-foreground bg-muted rounded-md">
@@ -172,7 +160,7 @@ const ChatBot: React.FC = () => {
               <div className="flex justify-start">
                 <div className="max-w-[85%] rounded-lg p-3 bg-muted flex items-center space-x-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>{language === 'fi' ? 'Ajattelee...' : 'Thinking...'}</span>
+                  <span>Ajattelee...</span>
                 </div>
               </div>
             )}
@@ -190,7 +178,7 @@ const ChatBot: React.FC = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={language === 'fi' ? 'Kirjoita viesti...' : 'Type a message...'}
+              placeholder="Kirjoita viesti..."
               className="flex-1"
               disabled={isLoading}
             />
@@ -198,7 +186,7 @@ const ChatBot: React.FC = () => {
               size="icon"
               onClick={handleSendMessage}
               disabled={!inputValue.trim() || isLoading}
-              aria-label={language === 'fi' ? 'Lähetä viesti' : 'Send message'}
+              aria-label="Lähetä viesti"
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -209,33 +197,29 @@ const ChatBot: React.FC = () => {
           </div>
         )}
         <div className="mt-2 text-xs text-muted-foreground text-center">
-          {language === 'fi' 
-            ? `Kysymyksiä käytetty: ${questionCount}/${MAX_QUESTIONS}` 
-            : `Questions used: ${questionCount}/${MAX_QUESTIONS}`}
+          Kysymyksiä käytetty: {questionCount}/{MAX_QUESTIONS}
         </div>
       </div>
     </>
   );
 
-  // Chat button (visible on all devices)
   return (
     <>
       <Button
         onClick={toggleChat}
         className={`fixed bottom-6 right-6 rounded-full p-3 h-14 w-14 shadow-lg z-50 ${isMobile ? 'h-12 w-12' : ''}`}
-        aria-label={language === 'fi' ? 'Avaa keskustelu' : 'Open chat'}
+        aria-label="Avaa keskustelu"
       >
         {isOpen ? <X size={isMobile ? 20 : 24} /> : <MessageSquare size={isMobile ? 20 : 24} />}
       </Button>
 
-      {/* Use Sheet for desktop */}
       {isOpen && !isMobile && (
         <Card className="fixed bottom-24 right-6 w-96 h-[480px] shadow-xl z-50 flex flex-col animate-fade-in">
           <CardHeader className="flex flex-row items-center justify-between bg-primary text-primary-foreground rounded-t-lg p-4">
             <div className="flex items-center space-x-2">
               <BookOpen size={20} />
               <CardTitle className="text-lg font-medium">
-                {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+                Talousapuri
               </CardTitle>
             </div>
             <Button 
@@ -243,7 +227,7 @@ const ChatBot: React.FC = () => {
               size="icon" 
               onClick={toggleChat} 
               className="text-primary-foreground hover:bg-primary/80"
-              aria-label={language === 'fi' ? 'Sulje keskustelu' : 'Close chat'}
+              aria-label="Sulje keskustelu"
             >
               <X size={20} />
             </Button>
@@ -253,7 +237,6 @@ const ChatBot: React.FC = () => {
         </Card>
       )}
 
-      {/* Use Drawer for mobile - much better UX */}
       {isOpen && isMobile && (
         <Drawer open={isOpen} onOpenChange={setIsOpen}>
           <DrawerContent className="max-h-[85vh] flex flex-col">
@@ -262,7 +245,7 @@ const ChatBot: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <BookOpen size={20} />
                   <DrawerTitle className="text-lg font-medium">
-                    {language === 'fi' ? 'Talousapuri' : 'Financial Assistant'}
+                    Talousapuri
                   </DrawerTitle>
                 </div>
                 <Button 
@@ -270,7 +253,7 @@ const ChatBot: React.FC = () => {
                   size="icon" 
                   onClick={toggleChat} 
                   className="text-primary-foreground hover:bg-primary/80"
-                  aria-label={language === 'fi' ? 'Sulje keskustelu' : 'Close chat'}
+                  aria-label="Sulje keskustelu"
                 >
                   <X size={18} />
                 </Button>

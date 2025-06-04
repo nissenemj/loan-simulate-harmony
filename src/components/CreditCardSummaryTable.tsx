@@ -4,8 +4,7 @@ import {
   CreditCard, 
   calculateCreditCard, 
   calculateMonthlyInterest,
-  calculateTotalInterest,
-  formatUtilizationRate
+  calculateTotalInterest
 } from "@/utils/creditCardCalculations";
 import { formatCurrency } from "@/utils/loanCalculations";
 import {
@@ -27,6 +26,10 @@ interface CreditCardSummaryTableProps {
   isDemo?: boolean;
   onPayoffCreditCard?: (id: string) => void;
 }
+
+const formatUtilizationRate = (rate: number): string => {
+  return (rate * 100).toFixed(1) + '%';
+};
 
 export default function CreditCardSummaryTable({ 
   creditCards,

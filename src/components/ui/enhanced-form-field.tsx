@@ -26,6 +26,8 @@ export interface EnhancedFormFieldProps extends React.InputHTMLAttributes<HTMLIn
   labelClassName?: string;
   required?: boolean;
   showRequiredIndicator?: boolean;
+  icon?: React.ReactNode;
+  error?: string;
 }
 
 export function EnhancedFormField({
@@ -38,6 +40,8 @@ export function EnhancedFormField({
   labelClassName,
   required,
   showRequiredIndicator = true,
+  icon,
+  error,
   className,
   ...props
 }: EnhancedFormFieldProps) {
@@ -85,8 +89,8 @@ export function EnhancedFormField({
     props.onFocus?.(e);
   };
   
-  const showError = touched && !validationState.isValid;
-  const errorText = showError ? (validationState.message || errorMessage) : null;
+  const showError = touched && (!validationState.isValid || error);
+  const errorText = showError ? (error || validationState.message || errorMessage) : null;
   
   return (
     <div className={cn("space-y-2", wrapperClassName)}>
@@ -120,11 +124,18 @@ export function EnhancedFormField({
       </div>
       
       <div className="relative">
+        {icon && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            {icon}
+          </div>
+        )}
+        
         <Input
           {...props}
           value={props.value !== undefined ? props.value : value}
           className={cn(
             "h-11 md:h-10 text-base md:text-sm transition-colors",
+            icon && "pl-10",
             showValidationIcon && "pr-10",
             touched && validationState.isValid && "border-green-500 focus-visible:ring-green-500",
             showError && "border-red-500 focus-visible:ring-red-500",
@@ -140,7 +151,7 @@ export function EnhancedFormField({
         
         {touched && showValidationIcon && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            {validationState.isValid ? (
+            {validationState.isValid && !error ? (
               <Check className="h-4 w-4 text-green-500" />
             ) : (
               <AlertCircle className="h-4 w-4 text-red-500" />
