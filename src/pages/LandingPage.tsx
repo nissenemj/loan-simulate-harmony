@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator, TrendingDown, Shield, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import LandingPageDemo from '@/components/landing/LandingPageDemo';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,6 +46,9 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Demo Calculator Section */}
+      <LandingPageDemo />
 
       {/* Features Section */}
       <section className="py-20">
