@@ -1,4 +1,3 @@
-
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 // Optimized helper function to calculate monthly interest
@@ -84,14 +83,41 @@ export function calculatePaymentPlan(
         return 0;
       });
 
-    // Process each active debt with new logic that distributes all available payment
+    // Process each active debt with graceful handling of insufficient budget
     for (const debt of activeDebts) {
       const interestAmount = calculateMonthlyInterest(debt.remainingBalance, debt.interestRate);
       const requiredPayment = Math.min(debt.minimumPayment, debt.remainingBalance + interestAmount);
       
+      // Gracefully handle insufficient available payment
       if (availablePayment < requiredPayment) {
-        // Guard, ettei maksujen summa mene negatiiviseksi
-        throw new Error('Available payment became negative');
+        // Use whatever payment is available, even if it's less than required
+        const paymentAmount = Math.max(0, availablePayment);
+        const interestPortion = Math.min(interestAmount, paymentAmount);
+        const principalPortion = Math.max(0, paymentAmount - interestPortion);
+        
+        // Calculate new balance - unpaid interest gets added to balance
+        const unpaidInterest = Math.max(0, interestAmount - paymentAmount);
+        const newBalance = Math.max(0, debt.remainingBalance + unpaidInterest - principalPortion);
+
+        if (paymentAmount > 0) {
+          monthlyPlan.payments.push({
+            debtId: debt.id,
+            amount: paymentAmount,
+            interestPaid: interestPortion,
+            principalPaid: principalPortion,
+            remainingBalance: newBalance
+          });
+
+          // Update totals
+          monthlyPlan.totalPaid += paymentAmount;
+          monthlyPlan.totalInterestPaid += interestPortion;
+          monthlyPlan.totalPrincipalPaid += principalPortion;
+        }
+
+        monthlyPlan.totalRemainingBalance += newBalance;
+        debt.remainingBalance = newBalance;
+        availablePayment = 0; // All payment has been used
+        continue;
       }
 
       let paymentAmount = requiredPayment;

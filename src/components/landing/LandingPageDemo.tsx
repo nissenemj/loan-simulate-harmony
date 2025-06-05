@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
 	Card,
@@ -87,9 +86,75 @@ const LandingPageDemo = () => {
 			);
 			const totalPayment = minimumPaymentSum + extraPayment;
 
-			// Validate that total payment is greater than minimum payment
-			if (totalPayment <= minimumPaymentSum && extraPayment === 0) {
-				// Set fallback data when no extra payment
+			// Always calculate both strategies, even with zero extra payment
+			let avalanchePlan = null;
+			let snowballPlan = null;
+
+			try {
+				// Calculate for avalanche strategy
+				avalanchePlan = calculatePaymentPlan(
+					debts,
+					totalPayment,
+					"avalanche"
+				);
+			} catch (error) {
+				console.error("Error calculating avalanche plan:", error);
+			}
+
+			try {
+				// Calculate for snowball strategy
+				snowballPlan = calculatePaymentPlan(
+					debts,
+					totalPayment,
+					"snowball"
+				);
+			} catch (error) {
+				console.error("Error calculating snowball plan:", error);
+			}
+
+			// Set results
+			setResults({
+				avalanche: avalanchePlan ? {
+					months: avalanchePlan.totalMonths,
+					interest: avalanchePlan.totalInterestPaid,
+				} : null,
+				snowball: snowballPlan ? {
+					months: snowballPlan.totalMonths,
+					interest: snowballPlan.totalInterestPaid,
+				} : null,
+			});
+
+			// Prepare chart data based on current strategy
+			const currentStrategyPlan = 
+				strategy === "avalanche" ? avalanchePlan : snowballPlan;
+
+			if (currentStrategyPlan && currentStrategyPlan.monthlyPlans.length > 0) {
+				// Create chart data showing remaining balance over time (12 months max for demo)
+				const maxMonths = Math.min(12, currentStrategyPlan.monthlyPlans.length);
+				const totalInitialBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
+				
+				const chartDataPoints = [];
+				
+				// Add starting point
+				chartDataPoints.push({
+					month: "Kuukausi 1",
+					balance: totalInitialBalance,
+				});
+
+				// Add monthly progress
+				for (let i = 0; i < maxMonths - 1; i++) {
+					const plan = currentStrategyPlan.monthlyPlans[i];
+					if (plan) {
+						chartDataPoints.push({
+							month: `Kuukausi ${i + 2}`,
+							balance: Math.round(plan.totalRemainingBalance),
+						});
+					}
+				}
+
+				setChartData(chartDataPoints);
+			} else {
+				// Use fallback data only for chart when calculations fail
 				setChartData([
 					{ month: "Kuukausi 1", balance: 15000 },
 					{ month: "Kuukausi 2", balance: 14650 },
@@ -104,63 +169,7 @@ const LandingPageDemo = () => {
 					{ month: "Kuukausi 11", balance: 11050 },
 					{ month: "Kuukausi 12", balance: 10600 },
 				]);
-				return;
 			}
-
-			// Calculate for avalanche strategy
-			const avalanchePlan = calculatePaymentPlan(
-				debts,
-				totalPayment,
-				"avalanche"
-			);
-
-			// Calculate for snowball strategy
-			const snowballPlan = calculatePaymentPlan(
-				debts,
-				totalPayment,
-				"snowball"
-			);
-
-			// Set results
-			setResults({
-				avalanche: {
-					months: avalanchePlan.totalMonths,
-					interest: avalanchePlan.totalInterestPaid,
-				},
-				snowball: {
-					months: snowballPlan.totalMonths,
-					interest: snowballPlan.totalInterestPaid,
-				},
-			});
-
-			// Prepare chart data based on current strategy
-			const currentStrategy =
-				strategy === "avalanche" ? avalanchePlan : snowballPlan;
-
-			// Create chart data showing remaining balance over time (12 months max for demo)
-			const maxMonths = Math.min(12, currentStrategy.monthlyPlans.length);
-			const totalInitialBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
-			
-			const chartDataPoints = [];
-			
-			// Add starting point
-			chartDataPoints.push({
-				month: "Kuukausi 1",
-				balance: totalInitialBalance,
-			});
-
-			// Add monthly progress
-			for (let i = 0; i < maxMonths - 1; i++) {
-				const plan = currentStrategy.monthlyPlans[i];
-				if (plan) {
-					chartDataPoints.push({
-						month: `Kuukausi ${i + 2}`,
-						balance: Math.round(plan.totalRemainingBalance),
-					});
-				}
-			}
-
-			setChartData(chartDataPoints);
 		} catch (error) {
 			console.error("Error calculating demo results:", error);
 			// Set fallback data if calculation fails
