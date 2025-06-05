@@ -104,9 +104,8 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
   // Sort by payoff time
   debtPayoffData.sort((a, b) => a.months - b.months);
 
-  // Calculate monthly budget from the plan data - use available budget or estimate from timeline
-  const monthlyBudget = plan.availableBudget || 
-    (plan.timeline.length > 0 ? plan.timeline[0].totalPayment : 0);
+  // Calculate monthly budget from the plan timeline data
+  const monthlyBudget = plan.timeline.length > 0 ? plan.timeline[0].totalPaid : 0;
 
   return (
     <div className={cn("space-y-6", className)}>
