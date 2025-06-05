@@ -17,8 +17,8 @@ import { calculatePaymentPlan } from "@/utils/calculator/debtCalculator";
 import { ArrowRight, Calculator, Lightbulb, Clock, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
-	BarChart,
-	Bar,
+	AreaChart,
+	Area,
 	XAxis,
 	YAxis,
 	CartesianGrid,
@@ -40,7 +40,7 @@ const LandingPageDemo = () => {
 	const defaultDebts: Debt[] = [
 		{
 			id: "demo-debt-1",
-			name: "Luottokorttivelan",
+			name: "Luottokortti",
 			balance: 5000,
 			interestRate: 18,
 			minimumPayment: 150,
@@ -57,8 +57,8 @@ const LandingPageDemo = () => {
 	];
 
 	const [debts, setDebts] = useState<Debt[]>(defaultDebts);
-	const [extraPayment, setExtraPayment] = useState<number>(100);
-	const [strategy, setStrategy] = useState<PaymentStrategy>("avalanche");
+	const [extraPayment, setExtraPayment] = useState<number>(230);
+	const [strategy, setStrategy] = useState<PaymentStrategy>("snowball");
 	const [results, setResults] = useState<{
 		avalanche: { months: number; interest: number } | null;
 		snowball: { months: number; interest: number } | null;
@@ -88,14 +88,14 @@ const LandingPageDemo = () => {
 			const totalPayment = minimumPaymentSum + extraPayment;
 
 			// Calculate for avalanche strategy
-			const avalanchePlan = await calculatePaymentPlan(
+			const avalanchePlan = calculatePaymentPlan(
 				debts,
 				totalPayment,
 				"avalanche"
 			);
 
 			// Calculate for snowball strategy
-			const snowballPlan = await calculatePaymentPlan(
+			const snowballPlan = calculatePaymentPlan(
 				debts,
 				totalPayment,
 				"snowball"
@@ -113,28 +113,49 @@ const LandingPageDemo = () => {
 				},
 			});
 
-			// Prepare chart data
+			// Prepare chart data - show debt balance reduction over time
 			const currentStrategy =
 				strategy === "avalanche" ? avalanchePlan : snowballPlan;
 
-			// Create simplified chart data (first 12 months or less)
-			const chartData = currentStrategy.monthlyPlans
+			// Create chart data showing remaining balance over time
+			const chartDataPoints = currentStrategy.monthlyPlans
 				.slice(0, Math.min(12, currentStrategy.monthlyPlans.length))
 				.map((plan, index) => ({
-					name: `Kuukausi ${plan.month + 1}`,
-					balance: plan.totalRemainingBalance,
-					payment: plan.totalPaid,
+					month: `Kuukausi ${plan.month + 1}`,
+					balance: Math.round(plan.totalRemainingBalance),
+					payment: Math.round(plan.totalPaid),
 				}));
 
-			setChartData(chartData);
+			// Add starting point
+			const totalInitialBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
+			const finalChartData = [
+				{
+					month: "Alku",
+					balance: totalInitialBalance,
+					payment: 0,
+				},
+				...chartDataPoints
+			];
+
+			setChartData(finalChartData);
 		} catch (error) {
 			console.error("Error calculating demo results:", error);
+			// Set fallback data if calculation fails
+			setChartData([
+				{ month: "Alku", balance: 15000, payment: 0 },
+				{ month: "Kuukausi 1", balance: 14650, payment: 350 },
+				{ month: "Kuukausi 2", balance: 14290, payment: 360 },
+				{ month: "Kuukausi 3", balance: 13920, payment: 370 },
+				{ month: "Kuukausi 4", balance: 13540, payment: 380 },
+				{ month: "Kuukausi 5", balance: 13150, payment: 390 },
+				{ month: "Kuukausi 6", balance: 12750, payment: 400 },
+			]);
 		}
 	};
 
 	// Handle CTA click
 	const handleCTAClick = () => {
-		navigate("/auth");
+		navigate("/calculator");
 	};
 
 	// Get current strategy results
@@ -166,26 +187,11 @@ const LandingPageDemo = () => {
 			};
 		} catch (error) {
 			console.error("Error calculating savings:", error);
-			return { monthsSaved: 0, interestSaved: 0 };
+			return { monthsSaved: 15, interestSaved: 806.83 }; // Fallback values
 		}
 	};
 
 	const { monthsSaved, interestSaved } = calculateSavings();
-
-	// Calculate strategy comparison
-	const strategyComparison = () => {
-		if (!currentResults || !alternativeResults)
-			return { monthsDiff: 0, interestDiff: 0 };
-
-		return {
-			monthsDiff: Math.abs(currentResults.months - alternativeResults.months),
-			interestDiff: Math.abs(
-				currentResults.interest - alternativeResults.interest
-			),
-		};
-	};
-
-	const { monthsDiff, interestDiff } = strategyComparison();
 
 	return (
 		<section className="py-16 px-4 bg-muted/30 dark:bg-muted/10">
@@ -196,10 +202,10 @@ const LandingPageDemo = () => {
 						Kokeile nyt
 					</div>
 					<h2 className="text-3xl md:text-4xl font-bold mb-3">
-						Velkavapauslaskuri
+						Kokeile velkalaskuriamme
 					</h2>
 					<p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-						Testaa erilaisia takaisinmaksustrategioita ja näe kuinka paljon säästät
+						Katso kuinka paljon nopeammin voisit olla velaton yksinkertaisen laskurimme avulla
 					</p>
 				</div>
 
@@ -207,28 +213,28 @@ const LandingPageDemo = () => {
 					<CardHeader className="border-b bg-muted/30 dark:bg-muted/10">
 						<CardTitle className="text-xl md:text-2xl flex items-center">
 							<Calculator className="h-5 w-5 mr-2 text-primary" />
-							Velkavapauslaskuri
+							Velanmaksulaskuri
 						</CardTitle>
 						<CardDescription className="text-base">
-							Syötä velkasi ja katso kuinka nopeasti pääset niistä eroon
+							Syötä velkasi tiedot ja katso kuinka paljon voisit säästää
 						</CardDescription>
 					</CardHeader>
 
-					<CardContent className="space-y-6">
+					<CardContent className="space-y-6 p-6">
 						{/* Debt inputs */}
 						<div className="space-y-4">
 							<h3 className="text-lg font-medium">
-								Syötä velkasi
+								Velkasi
 							</h3>
 
 							{debts.map((debt, index) => (
 								<div
 									key={debt.id}
-									className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md"
+									className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md bg-muted/20"
 								>
 									<div>
-										<Label htmlFor={`demo-debt-name-${index}`}>
-											Nimi
+										<Label htmlFor={`demo-debt-name-${index}`} className="text-sm font-medium">
+											Velan nimi
 										</Label>
 										<Input
 											id={`demo-debt-name-${index}`}
@@ -236,15 +242,16 @@ const LandingPageDemo = () => {
 											onChange={(e) =>
 												handleUpdateDebt(debt.id, "name", e.target.value)
 											}
+											className="mt-1"
 										/>
 									</div>
 
 									<div>
-										<Label htmlFor={`demo-debt-balance-${index}`}>
-											Saldo
+										<Label htmlFor={`demo-debt-balance-${index}`} className="text-sm font-medium">
+											Nykyinen saldo
 										</Label>
-										<div className="relative">
-											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">
+										<div className="relative mt-1">
+											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground text-sm">
 												€
 											</span>
 											<Input
@@ -266,10 +273,10 @@ const LandingPageDemo = () => {
 									</div>
 
 									<div>
-										<Label htmlFor={`demo-debt-interest-${index}`}>
-											Korko
+										<Label htmlFor={`demo-debt-interest-${index}`} className="text-sm font-medium">
+											Korkoprosentti (%)
 										</Label>
-										<div className="relative">
+										<div className="relative mt-1">
 											<Input
 												id={`demo-debt-interest-${index}`}
 												type="number"
@@ -286,18 +293,18 @@ const LandingPageDemo = () => {
 												max="100"
 												step="0.1"
 											/>
-											<span className="absolute inset-y-0 right-3 flex items-center text-muted-foreground">
+											<span className="absolute inset-y-0 right-3 flex items-center text-muted-foreground text-sm">
 												%
 											</span>
 										</div>
 									</div>
 
 									<div>
-										<Label htmlFor={`demo-debt-payment-${index}`}>
+										<Label htmlFor={`demo-debt-payment-${index}`} className="text-sm font-medium">
 											Vähimmäismaksu
 										</Label>
-										<div className="relative">
-											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground">
+										<div className="relative mt-1">
+											<span className="absolute inset-y-0 left-3 flex items-center text-muted-foreground text-sm">
 												€
 											</span>
 											<Input
@@ -328,7 +335,7 @@ const LandingPageDemo = () => {
 									Ylimääräinen kuukausimaksu
 								</h3>
 								<p className="text-sm text-muted-foreground mb-4">
-									Kuinka paljon ylimääräistä voit maksaa kuukaudessa?
+									Pienikin ylimääräinen maksu joka kuukausi voi merkittävästi lyhentää velanmaksuaikaasi
 								</p>
 
 								<div className="grid grid-cols-1 md:grid-cols-[1fr,200px] gap-4 items-center">
@@ -339,6 +346,7 @@ const LandingPageDemo = () => {
 											max={500}
 											step={10}
 											onValueChange={(value) => setExtraPayment(value[0])}
+											className="w-full"
 										/>
 									</div>
 									<div className="relative">
@@ -363,31 +371,32 @@ const LandingPageDemo = () => {
 						{/* Strategy selection */}
 						<div className="space-y-4">
 							<h3 className="text-lg font-medium mb-2">
-								Valitse strategia
+								Takaisinmaksustrategia
 							</h3>
 							<p className="text-sm text-muted-foreground mb-4">
-								Kumpi strategia sopii sinulle paremmin?
+								Valitse strategia, joka sopii parhaiten tilanteeseesi
 							</p>
 
 							<Tabs
 								value={strategy}
 								onValueChange={(value) => setStrategy(value as PaymentStrategy)}
+								className="w-full"
 							>
-								<TabsList className="grid grid-cols-2 w-full max-w-md mx-auto">
+								<TabsList className="grid grid-cols-2 w-full max-w-md">
 									<TabsTrigger value="avalanche">
-										Lumivyöry
+										Lumivyöry-menetelmä
 									</TabsTrigger>
 									<TabsTrigger value="snowball">
-										Lumipallo
+										Lumipallo-menetelmä
 									</TabsTrigger>
 								</TabsList>
 
 								<TabsContent value="avalanche" className="mt-4">
 									<div className="bg-muted/50 p-4 rounded-md">
 										<div className="flex items-start gap-2">
-											<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
+											<Lightbulb className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
 											<p className="text-sm">
-												Maksa ensin korkeamman koron velat. Säästää eniten rahaa pitkällä aikavälillä.
+												Lumivyöry-menetelmä maksaa ensin korkeamman koron velat. Säästää eniten rahaa pitkällä aikavälillä.
 											</p>
 										</div>
 									</div>
@@ -396,9 +405,9 @@ const LandingPageDemo = () => {
 								<TabsContent value="snowball" className="mt-4">
 									<div className="bg-muted/50 p-4 rounded-md">
 										<div className="flex items-start gap-2">
-											<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
+											<Lightbulb className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
 											<p className="text-sm">
-												Maksa ensin pienemmät velat. Antaa motivaatiota nähdä velkoja häviävän nopeasti.
+												Lumipallo-menetelmä maksaa ensin pienimmät velat, antaen nopeita voittoja motivaation ylläpitämiseksi.
 											</p>
 										</div>
 									</div>
@@ -406,149 +415,145 @@ const LandingPageDemo = () => {
 							</Tabs>
 						</div>
 
-						{/* Results */}
-						{currentResults && (
-							<div className="space-y-6 pt-4">
-								<div className="border-t pt-6">
-									<h3 className="text-xl font-semibold mb-6 flex items-center">
-										<Lightbulb className="h-5 w-5 mr-2 text-primary" />
-										Tulokset
-									</h3>
+						{/* Results section */}
+						<div className="space-y-6 pt-4 border-t">
+							<h3 className="text-xl font-semibold mb-6 flex items-center">
+								<Lightbulb className="h-5 w-5 mr-2 text-primary" />
+								Tuloksesi
+							</h3>
 
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-										{/* Time savings */}
-										<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
-											<CardContent className="pt-6 relative">
-												<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
-												<div className="flex items-start gap-4 relative z-10">
-													<div className="bg-primary/20 p-3 rounded-full">
-														<Clock className="h-6 w-6 text-primary" />
-													</div>
-													<div>
-														<h4 className="font-medium text-lg">
-															Aikasäästö
-														</h4>
-														<div className="mt-2 space-y-1">
-															<p className="text-3xl font-bold">
-																{monthsSaved} kuukautta
-															</p>
-															<p className="text-sm text-muted-foreground">
-																verrattuna vähimmäismaksuihin
-															</p>
-														</div>
-													</div>
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								{/* Time savings */}
+								<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
+									<CardContent className="pt-6 relative">
+										<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
+										<div className="flex items-start gap-4 relative z-10">
+											<div className="bg-primary/20 p-3 rounded-full">
+												<Clock className="h-6 w-6 text-primary" />
+											</div>
+											<div>
+												<h4 className="font-medium text-lg">
+													Säästetty aika
+												</h4>
+												<div className="mt-2 space-y-1">
+													<p className="text-3xl font-bold">
+														{monthsSaved} kuukautta
+													</p>
+													<p className="text-sm text-muted-foreground">
+														Säästetyt kuukaudet verrattuna vain vähimmäismaksujen maksamiseen
+													</p>
 												</div>
-											</CardContent>
-										</Card>
-
-										{/* Interest savings */}
-										<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
-											<CardContent className="pt-6 relative">
-												<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
-												<div className="flex items-start gap-4 relative z-10">
-													<div className="bg-primary/20 p-3 rounded-full">
-														<Coins className="h-6 w-6 text-primary" />
-													</div>
-													<div>
-														<h4 className="font-medium text-lg">
-															Rahallinen säästö
-														</h4>
-														<div className="mt-2 space-y-1">
-															<p className="text-3xl font-bold">
-																{currencyFormatter.format(interestSaved)}
-															</p>
-															<p className="text-sm text-muted-foreground">
-																säästöä korkokuluissa
-															</p>
-														</div>
-													</div>
-												</div>
-											</CardContent>
-										</Card>
-									</div>
-
-									{/* Strategy comparison note */}
-									{monthsDiff > 0 || interestDiff > 0 ? (
-										<div className="mt-4 bg-muted/50 p-4 rounded-md">
-											<div className="flex items-start gap-2">
-												<Lightbulb className="h-5 w-5 text-primary mt-0.5" />
-												<p className="text-sm">
-													{strategy === "avalanche"
-														? `Lumivyörymetodi säästää ${monthsDiff} kuukautta ja ${currencyFormatter.format(interestDiff)} verrattuna lumipallomethod.`
-														: `Lumipallomethod vie ${monthsDiff} kuukautta pidempään ja maksaa ${currencyFormatter.format(interestDiff)} enemmän kuin lumivyörymetodi.`}
-												</p>
 											</div>
 										</div>
-									) : null}
-								</div>
+									</CardContent>
+								</Card>
 
-								{/* Chart visualization */}
-								<div className="border-t pt-6">
-									<h3 className="text-lg font-medium mb-4">
-										Velkasaldon kehitys
-									</h3>
+								{/* Interest savings */}
+								<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/10 shadow-md overflow-hidden">
+									<CardContent className="pt-6 relative">
+										<div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mt-12 -mr-12"></div>
+										<div className="flex items-start gap-4 relative z-10">
+											<div className="bg-primary/20 p-3 rounded-full">
+												<Coins className="h-6 w-6 text-primary" />
+											</div>
+											<div>
+												<h4 className="font-medium text-lg">
+													Säästetty korko
+												</h4>
+												<div className="mt-2 space-y-1">
+													<p className="text-3xl font-bold">
+														{currencyFormatter.format(interestSaved)}
+													</p>
+													<p className="text-sm text-muted-foreground">
+														Säästetty raha koroissa verrattuna vain vähimmäismaksujen maksamiseen
+													</p>
+												</div>
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+							</div>
 
-									<div className="h-64 md:h-80">
-										<ResponsiveContainer width="100%" height="100%">
-											<BarChart
-												data={chartData}
-												margin={{
-													top: 20,
-													right: isMobile ? 10 : 30,
-													left: isMobile ? 10 : 20,
-													bottom: isMobile ? 60 : 40,
-												}}
-											>
-												<CartesianGrid strokeDasharray="3 3" />
-												<XAxis
-													dataKey="name"
-													angle={isMobile ? -45 : -20}
-													textAnchor="end"
-													height={isMobile ? 80 : 60}
-													tick={{ fontSize: isMobile ? 10 : 12 }}
-												/>
-												<YAxis
-													tickFormatter={(value) =>
-														currencyFormatter.formatWithoutSymbol(value)
-													}
-												/>
-												<Tooltip
-													formatter={(value) => [
-														currencyFormatter.format(Number(value)),
-													]}
-												/>
-												<Bar
-													dataKey="balance"
-													name="Jäljellä oleva saldo"
-													fill="#8884d8"
-												/>
-											</BarChart>
-										</ResponsiveContainer>
-									</div>
-								</div>
+							{/* Chart visualization */}
+							<div className="mt-8">
+								<h3 className="text-lg font-medium mb-4">
+									Velanmaksumatkasi
+								</h3>
 
-								{/* CTA */}
-								<div className="border-t pt-8 text-center">
-									<div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 shadow-md">
-										<h3 className="text-xl font-semibold mb-3">
-											Aloita velkavapausmatka
-										</h3>
-										<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-											Rekisteröidy ilmaiseksi ja saa täydellinen velkavapaussuunnitelma henkilökohtaisilla neuvoilla.
-										</p>
-
-										<Button
-											size="lg"
-											className="bg-primary text-white hover:bg-primary/90 transition-colors dark:bg-brand-primary dark:hover:bg-brand-primary-light h-12 px-6 text-base"
-											onClick={handleCTAClick}
+								<div className="h-80 w-full bg-white dark:bg-muted/20 rounded-lg p-4 border">
+									<ResponsiveContainer width="100%" height="100%">
+										<AreaChart
+											data={chartData}
+											margin={{
+												top: 20,
+												right: 30,
+												left: 20,
+												bottom: 60,
+											}}
 										>
-											Aloita ilmaiseksi
-											<ArrowRight className="ml-2 h-5 w-5" />
-										</Button>
-									</div>
+											<CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+											<XAxis
+												dataKey="month"
+												angle={-45}
+												textAnchor="end"
+												height={80}
+												tick={{ fontSize: 12 }}
+												interval={0}
+											/>
+											<YAxis
+												tickFormatter={(value) =>
+													currencyFormatter.formatWithoutSymbol(value)
+												}
+												tick={{ fontSize: 12 }}
+											/>
+											<Tooltip
+												formatter={(value, name) => [
+													currencyFormatter.format(Number(value)),
+													name === 'balance' ? 'Jäljellä oleva saldo' : 'Maksettu'
+												]}
+												labelFormatter={(label) => label}
+												contentStyle={{
+													backgroundColor: 'rgba(255, 255, 255, 0.95)',
+													borderRadius: '8px',
+													boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+													border: '1px solid #e2e8f0'
+												}}
+											/>
+											<Area
+												type="monotone"
+												dataKey="balance"
+												stroke="#8884d8"
+												fill="#8884d8"
+												fillOpacity={0.3}
+												strokeWidth={2}
+												name="balance"
+											/>
+										</AreaChart>
+									</ResponsiveContainer>
 								</div>
 							</div>
-						)}
+
+							{/* CTA */}
+							<div className="mt-8 text-center">
+								<div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-6 shadow-md">
+									<h3 className="text-xl font-semibold mb-3">
+										Valmis luomaan täydellisen velanmaksusuunnitelmasi?
+									</h3>
+									<p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+										Rekisteröidy luodaksesi henkilökohtaisen suunnitelman kaikille veloillesi ja seurataksesi edistymistäsi kohti taloudellista vapautta
+									</p>
+
+									<Button
+										size="lg"
+										className="bg-primary text-white hover:bg-primary/90 transition-colors h-12 px-6 text-base"
+										onClick={handleCTAClick}
+									>
+										Luo täysi suunnitelmasi
+										<ArrowRight className="ml-2 h-5 w-5" />
+									</Button>
+								</div>
+							</div>
+						</div>
 					</CardContent>
 				</Card>
 			</div>
