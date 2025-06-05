@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Loan, calculateLoan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
-import { LoanTable } from '@/components/LoanTable';
+import LoanTable from '@/components/LoanTable';
 import LoanForm from '@/components/LoanForm';
 import CreditCardForm from '@/components/CreditCardForm';
 import CreditCardTable from '@/components/CreditCardTable';

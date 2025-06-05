@@ -104,6 +104,10 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
   // Sort by payoff time
   debtPayoffData.sort((a, b) => a.months - b.months);
 
+  // Calculate monthly budget from the plan data - use available budget or estimate from timeline
+  const monthlyBudget = plan.availableBudget || 
+    (plan.timeline.length > 0 ? plan.timeline[0].totalPayment : 0);
+
   return (
     <div className={cn("space-y-6", className)}>
       {/* Summary Card */}
@@ -137,7 +141,7 @@ const RepaymentPlanVisualization: React.FC<RepaymentPlanVisualizationProps> = ({
               <TrendingDown className="h-8 w-8 text-primary mb-2" />
               <div className="text-sm font-medium text-muted-foreground">Kuukausimaksu</div>
               <div className="text-2xl font-bold">
-                {formatCurrency(plan.monthlyBudget)}
+                {formatCurrency(monthlyBudget)}
               </div>
             </div>
           </div>
