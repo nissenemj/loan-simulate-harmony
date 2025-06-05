@@ -21,7 +21,7 @@ export function calculatePaymentPlan(
     throw new Error('Total monthly payment must be at least the sum of all minimum payments');
   }
 
-  // Create optimized working copy of debts - changed from let to const
+  // Create optimized working copy of debts
   const workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
     id: debt.id,
     minimumPayment: debt.minimumPayment,
@@ -267,7 +267,7 @@ export function calculateConsolidationOptions(
 }
 
 /**
- * Compare different payment scenarios
+ * Compare different payment scenarios with improved error handling
  * 
  * @param debts - Array of debt objects
  * @param scenarios - Array of payment scenarios to compare
@@ -298,6 +298,22 @@ export function compareScenarios(
   return scenarios.map(scenario => {
     const totalMonthlyPayment = minimumPaymentSum + scenario.additionalMonthlyPayment;
     
+    // Add validation to ensure payment is sufficient
+    if (totalMonthlyPayment < minimumPaymentSum) {
+      console.warn(`Scenario ${scenario.name} has insufficient payment: ${totalMonthlyPayment} < ${minimumPaymentSum}`);
+      return {
+        scenarioId: scenario.id,
+        scenarioName: scenario.name,
+        totalMonths: baselineScenario.totalMonths,
+        totalInterestPaid: baselineScenario.totalInterestPaid,
+        totalPaid: baselineScenario.totalPaid,
+        payoffDate: baselineScenario.payoffDate,
+        monthsSaved: 0,
+        interestSaved: 0,
+        moneySaved: 0
+      };
+    }
+    
     try {
       const scenarioPlan = calculatePaymentPlan(
         debts,
@@ -319,14 +335,14 @@ export function compareScenarios(
       };
     } catch (error) {
       console.error(`Error calculating scenario ${scenario.name}:`, error);
-      // Return a fallback object if calculation fails
+      // Return baseline values if calculation fails
       return {
         scenarioId: scenario.id,
         scenarioName: scenario.name,
-        totalMonths: 0,
-        totalInterestPaid: 0,
-        totalPaid: 0,
-        payoffDate: new Date().toISOString().split('T')[0],
+        totalMonths: baselineScenario.totalMonths,
+        totalInterestPaid: baselineScenario.totalInterestPaid,
+        totalPaid: baselineScenario.totalPaid,
+        payoffDate: baselineScenario.payoffDate,
         monthsSaved: 0,
         interestSaved: 0,
         moneySaved: 0
