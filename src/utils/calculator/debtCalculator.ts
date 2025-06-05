@@ -1,3 +1,4 @@
+
 import { Debt, PaymentStrategy, PaymentPlan, MonthlyPaymentPlan, DebtPayment } from './types';
 
 // Optimized helper function to calculate monthly interest
@@ -24,6 +25,7 @@ export function calculatePaymentPlan(
   // Create optimized working copy of debts
   const workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
     id: debt.id,
+    name: debt.name,
     minimumPayment: debt.minimumPayment,
     interestRate: debt.interestRate,
     remainingBalance: debt.balance
@@ -53,7 +55,34 @@ export function calculatePaymentPlan(
     };
 
     let availablePayment = totalMonthlyPayment;
-    const activeDebts = workingDebts.filter(debt => debt.remainingBalance > 0);
+    
+    // Re-sort debts each month based on current balances for proper snowball/avalanche strategy
+    const activeDebts = workingDebts
+      .filter(debt => debt.remainingBalance > 0)
+      .sort((a, b) => {
+        if (strategy === 'avalanche') {
+          // Primary sort: Highest interest rate first
+          const interestDiff = b.interestRate - a.interestRate;
+          if (Math.abs(interestDiff) > 0.0001) {
+            return interestDiff;
+          }
+          // Secondary sort: Smallest balance when interest rates are equal
+          return a.remainingBalance - b.remainingBalance;
+        } else if (strategy === 'snowball') {
+          // Primary sort: Smallest balance first
+          const balanceDiff = a.remainingBalance - b.remainingBalance;
+          if (Math.abs(balanceDiff) > 0.01) {
+            return balanceDiff;
+          }
+          // Secondary sort: Highest interest rate when balances are very close
+          return b.interestRate - a.interestRate;
+        } else if (strategy === 'custom' && customOrder) {
+          const indexA = customOrder.indexOf(a.id);
+          const indexB = customOrder.indexOf(b.id);
+          return indexA - indexB;
+        }
+        return 0;
+      });
 
     // Process each active debt with new logic that distributes all available payment
     for (const debt of activeDebts) {
@@ -68,8 +97,8 @@ export function calculatePaymentPlan(
       let paymentAmount = requiredPayment;
       availablePayment -= requiredPayment;
 
-      // Käytä jäljellä oleva budjetti nykyiseen velkaan
-      if (availablePayment > 0) {
+      // For highest priority debt (first in sorted list), use any remaining budget
+      if (debt === activeDebts[0] && availablePayment > 0) {
         const maxExtraPayment = debt.remainingBalance + interestAmount - requiredPayment;
         const extraPayment = Math.min(availablePayment, maxExtraPayment);
         paymentAmount += extraPayment;
