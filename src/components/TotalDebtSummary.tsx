@@ -5,7 +5,6 @@ import {
 	CreditCard,
 	calculateCreditCard,
 } from "@/utils/creditCardCalculations";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	AlertCircle,
