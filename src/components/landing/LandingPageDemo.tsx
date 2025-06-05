@@ -87,6 +87,26 @@ const LandingPageDemo = () => {
 			);
 			const totalPayment = minimumPaymentSum + extraPayment;
 
+			// Validate that total payment is greater than minimum payment
+			if (totalPayment <= minimumPaymentSum && extraPayment === 0) {
+				// Set fallback data when no extra payment
+				setChartData([
+					{ month: "Kuukausi 1", balance: 15000 },
+					{ month: "Kuukausi 2", balance: 14650 },
+					{ month: "Kuukausi 3", balance: 14290 },
+					{ month: "Kuukausi 4", balance: 13920 },
+					{ month: "Kuukausi 5", balance: 13540 },
+					{ month: "Kuukausi 6", balance: 13150 },
+					{ month: "Kuukausi 7", balance: 12750 },
+					{ month: "Kuukausi 8", balance: 12340 },
+					{ month: "Kuukausi 9", balance: 11920 },
+					{ month: "Kuukausi 10", balance: 11490 },
+					{ month: "Kuukausi 11", balance: 11050 },
+					{ month: "Kuukausi 12", balance: 10600 },
+				]);
+				return;
+			}
+
 			// Calculate for avalanche strategy
 			const avalanchePlan = calculatePaymentPlan(
 				debts,
@@ -113,45 +133,50 @@ const LandingPageDemo = () => {
 				},
 			});
 
-			// Prepare chart data - show debt balance reduction over time as bars
+			// Prepare chart data based on current strategy
 			const currentStrategy =
 				strategy === "avalanche" ? avalanchePlan : snowballPlan;
 
 			// Create chart data showing remaining balance over time (12 months max for demo)
-			const chartDataPoints = currentStrategy.monthlyPlans
-				.slice(0, Math.min(12, currentStrategy.monthlyPlans.length))
-				.map((plan, index) => ({
-					month: `month ${plan.month + 1}`,
-					balance: Math.round(plan.totalRemainingBalance),
-				}));
-
-			// Add starting point
+			const maxMonths = Math.min(12, currentStrategy.monthlyPlans.length);
 			const totalInitialBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
-			const finalChartData = [
-				{
-					month: "month 1",
-					balance: totalInitialBalance,
-				},
-				...chartDataPoints.slice(1) // Skip first month from plan to avoid duplication
-			];
+			
+			const chartDataPoints = [];
+			
+			// Add starting point
+			chartDataPoints.push({
+				month: "Kuukausi 1",
+				balance: totalInitialBalance,
+			});
 
-			setChartData(finalChartData);
+			// Add monthly progress
+			for (let i = 0; i < maxMonths - 1; i++) {
+				const plan = currentStrategy.monthlyPlans[i];
+				if (plan) {
+					chartDataPoints.push({
+						month: `Kuukausi ${i + 2}`,
+						balance: Math.round(plan.totalRemainingBalance),
+					});
+				}
+			}
+
+			setChartData(chartDataPoints);
 		} catch (error) {
 			console.error("Error calculating demo results:", error);
 			// Set fallback data if calculation fails
 			setChartData([
-				{ month: "month 1", balance: 15000 },
-				{ month: "month 2", balance: 14650 },
-				{ month: "month 3", balance: 14290 },
-				{ month: "month 4", balance: 13920 },
-				{ month: "month 5", balance: 13540 },
-				{ month: "month 6", balance: 13150 },
-				{ month: "month 7", balance: 12750 },
-				{ month: "month 8", balance: 12340 },
-				{ month: "month 9", balance: 11920 },
-				{ month: "month 10", balance: 11490 },
-				{ month: "month 11", balance: 11050 },
-				{ month: "month 12", balance: 10600 },
+				{ month: "Kuukausi 1", balance: 15000 },
+				{ month: "Kuukausi 2", balance: 14650 },
+				{ month: "Kuukausi 3", balance: 14290 },
+				{ month: "Kuukausi 4", balance: 13920 },
+				{ month: "Kuukausi 5", balance: 13540 },
+				{ month: "Kuukausi 6", balance: 13150 },
+				{ month: "Kuukausi 7", balance: 12750 },
+				{ month: "Kuukausi 8", balance: 12340 },
+				{ month: "Kuukausi 9", balance: 11920 },
+				{ month: "Kuukausi 10", balance: 11490 },
+				{ month: "Kuukausi 11", balance: 11050 },
+				{ month: "Kuukausi 12", balance: 10600 },
 			]);
 		}
 	};
@@ -164,8 +189,6 @@ const LandingPageDemo = () => {
 	// Get current strategy results
 	const currentResults =
 		strategy === "avalanche" ? results.avalanche : results.snowball;
-	const alternativeResults =
-		strategy === "avalanche" ? results.snowball : results.avalanche;
 
 	// Calculate savings compared to minimum payments
 	const calculateSavings = () => {
@@ -184,9 +207,8 @@ const LandingPageDemo = () => {
 			);
 
 			return {
-				monthsSaved: minPaymentPlan.totalMonths - currentResults.months,
-				interestSaved:
-					minPaymentPlan.totalInterestPaid - currentResults.interest,
+				monthsSaved: Math.max(0, minPaymentPlan.totalMonths - currentResults.months),
+				interestSaved: Math.max(0, minPaymentPlan.totalInterestPaid - currentResults.interest),
 			};
 		} catch (error) {
 			console.error("Error calculating savings:", error);
