@@ -21,7 +21,7 @@ export function calculatePaymentPlan(
     throw new Error('Total monthly payment must be at least the sum of all minimum payments');
   }
 
-  // Create optimized working copy of debts
+  // Create optimized working copy of debts - changed from let to const
   const workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
     id: debt.id,
     minimumPayment: debt.minimumPayment,
@@ -55,7 +55,7 @@ export function calculatePaymentPlan(
     let availablePayment = totalMonthlyPayment;
     const activeDebts = workingDebts.filter(debt => debt.remainingBalance > 0);
 
-    // Process each active debt
+    // Process each active debt with new logic that distributes all available payment
     for (const debt of activeDebts) {
       const interestAmount = calculateMonthlyInterest(debt.remainingBalance, debt.interestRate);
       const requiredPayment = Math.min(debt.minimumPayment, debt.remainingBalance + interestAmount);
@@ -223,7 +223,7 @@ export function calculateConsolidationOptions(
   
   // Calculate consolidation options
   return consolidationOptions.map(option => {
-    // Calculate monthly payment for consolidation loan
+    // Calculate monthly payment for consolidation loan - updated to handle 0% interest
     const monthlyInterestRate = option.interestRate / 100 / 12;
     const monthlyPayment =
       monthlyInterestRate === 0

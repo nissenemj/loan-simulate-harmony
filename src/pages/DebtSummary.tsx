@@ -39,19 +39,19 @@ const DebtSummary: React.FC = () => {
         name: loan.name || 'Nimetön laina',
         type: 'loan' as const,
         balance: loan.amount,
-        originalAmount: loan.originalAmount,
+        originalAmount: loan.amount, // Use current amount as original
         interestRate: loan.interestRate,
-        minimumPayment: loan.monthlyPayment,
-        monthlyPayment: loan.monthlyPayment
+        minimumPayment: loan.minPayment || loan.amount * 0.02, // 2% default if no minPayment
+        monthlyPayment: loan.minPayment || loan.amount * 0.02
       })),
       ...creditCards.map(card => ({
         id: card.id,
         name: card.name || 'Nimetön luottokortti',
         type: 'credit-card' as const,
         balance: card.balance,
-        originalAmount: card.creditLimit,
-        interestRate: card.interestRate,
-        minimumPayment: card.minimumPayment
+        originalAmount: card.balance, // Use current balance as original
+        interestRate: card.apr,
+        minimumPayment: card.minPayment
       }))
     ];
     setDebts(combinedDebts);
