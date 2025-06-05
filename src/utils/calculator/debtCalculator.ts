@@ -78,7 +78,12 @@ export function calculatePaymentPlan(
 
       const interestPortion = Math.min(interestAmount, paymentAmount);
       const principalPortion = paymentAmount - interestPortion;
-      const newBalance = Math.max(0, debt.remainingBalance - principalPortion);
+      
+      // Fixed balance calculation: properly handle unpaid interest
+      const newBalance = Math.max(
+        0,
+        debt.remainingBalance + interestAmount - paymentAmount
+      );
 
       monthlyPlan.payments.push({
         debtId: debt.id,
