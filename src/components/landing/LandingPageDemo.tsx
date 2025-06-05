@@ -17,8 +17,8 @@ import { calculatePaymentPlan } from "@/utils/calculator/debtCalculator";
 import { ArrowRight, Calculator, Lightbulb, Clock, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
-	AreaChart,
-	Area,
+	BarChart,
+	Bar,
 	XAxis,
 	YAxis,
 	CartesianGrid,
@@ -113,28 +113,26 @@ const LandingPageDemo = () => {
 				},
 			});
 
-			// Prepare chart data - show debt balance reduction over time
+			// Prepare chart data - show debt balance reduction over time as bars
 			const currentStrategy =
 				strategy === "avalanche" ? avalanchePlan : snowballPlan;
 
-			// Create chart data showing remaining balance over time
+			// Create chart data showing remaining balance over time (12 months max for demo)
 			const chartDataPoints = currentStrategy.monthlyPlans
 				.slice(0, Math.min(12, currentStrategy.monthlyPlans.length))
 				.map((plan, index) => ({
-					month: `Kuukausi ${plan.month + 1}`,
+					month: `month ${plan.month + 1}`,
 					balance: Math.round(plan.totalRemainingBalance),
-					payment: Math.round(plan.totalPaid),
 				}));
 
 			// Add starting point
 			const totalInitialBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
 			const finalChartData = [
 				{
-					month: "Alku",
+					month: "month 1",
 					balance: totalInitialBalance,
-					payment: 0,
 				},
-				...chartDataPoints
+				...chartDataPoints.slice(1) // Skip first month from plan to avoid duplication
 			];
 
 			setChartData(finalChartData);
@@ -142,13 +140,18 @@ const LandingPageDemo = () => {
 			console.error("Error calculating demo results:", error);
 			// Set fallback data if calculation fails
 			setChartData([
-				{ month: "Alku", balance: 15000, payment: 0 },
-				{ month: "Kuukausi 1", balance: 14650, payment: 350 },
-				{ month: "Kuukausi 2", balance: 14290, payment: 360 },
-				{ month: "Kuukausi 3", balance: 13920, payment: 370 },
-				{ month: "Kuukausi 4", balance: 13540, payment: 380 },
-				{ month: "Kuukausi 5", balance: 13150, payment: 390 },
-				{ month: "Kuukausi 6", balance: 12750, payment: 400 },
+				{ month: "month 1", balance: 15000 },
+				{ month: "month 2", balance: 14650 },
+				{ month: "month 3", balance: 14290 },
+				{ month: "month 4", balance: 13920 },
+				{ month: "month 5", balance: 13540 },
+				{ month: "month 6", balance: 13150 },
+				{ month: "month 7", balance: 12750 },
+				{ month: "month 8", balance: 12340 },
+				{ month: "month 9", balance: 11920 },
+				{ month: "month 10", balance: 11490 },
+				{ month: "month 11", balance: 11050 },
+				{ month: "month 12", balance: 10600 },
 			]);
 		}
 	};
@@ -419,7 +422,7 @@ const LandingPageDemo = () => {
 						<div className="space-y-6 pt-4 border-t">
 							<h3 className="text-xl font-semibold mb-6 flex items-center">
 								<Lightbulb className="h-5 w-5 mr-2 text-primary" />
-								Tuloksesi
+								Tulokset
 							</h3>
 
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -482,7 +485,7 @@ const LandingPageDemo = () => {
 
 								<div className="h-80 w-full bg-white dark:bg-muted/20 rounded-lg p-4 border">
 									<ResponsiveContainer width="100%" height="100%">
-										<AreaChart
+										<BarChart
 											data={chartData}
 											margin={{
 												top: 20,
@@ -507,9 +510,9 @@ const LandingPageDemo = () => {
 												tick={{ fontSize: 12 }}
 											/>
 											<Tooltip
-												formatter={(value, name) => [
+												formatter={(value) => [
 													currencyFormatter.format(Number(value)),
-													name === 'balance' ? 'Jäljellä oleva saldo' : 'Maksettu'
+													'Jäljellä oleva saldo'
 												]}
 												labelFormatter={(label) => label}
 												contentStyle={{
@@ -519,16 +522,12 @@ const LandingPageDemo = () => {
 													border: '1px solid #e2e8f0'
 												}}
 											/>
-											<Area
-												type="monotone"
+											<Bar
 												dataKey="balance"
-												stroke="#8884d8"
 												fill="#8884d8"
-												fillOpacity={0.3}
-												strokeWidth={2}
-												name="balance"
+												radius={[4, 4, 0, 0]}
 											/>
-										</AreaChart>
+										</BarChart>
 									</ResponsiveContainer>
 								</div>
 							</div>
