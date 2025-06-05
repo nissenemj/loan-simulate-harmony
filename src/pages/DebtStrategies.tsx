@@ -28,30 +28,55 @@ const DebtStrategies = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
   const [creditCards, setCreditCards] = useLocalStorage<CreditCard[]>("creditCards", []);
   const [debts, setDebts] = useState<Debt[]>(() => {
-    // Convert loans and credit cards to Debt objects
+    // Convert loans and credit cards to Debt objects with proper validation
     const loanDebts: Debt[] = loans
-      .filter(loan => loan.isActive)
-      .map(loan => ({
-        id: loan.id,
-        name: loan.name,
-        balance: loan.amount,
-        interestRate: loan.interestRate,
-        minimumPayment: loan.minPayment || loan.amount * loan.interestRate / 100 / 12,
-        type: 'loan'
-      }));
+      .filter(loan => loan.isActive && loan.amount > 0)
+      .map(loan => {
+        // Calculate a reasonable minimum payment if not provided
+        const calculatedMinPayment = loan.minPayment || Math.max(
+          25, // Minimum €25
+          loan.amount * (loan.interestRate / 100 / 12) + (loan.amount * 0.01) // Interest + 1% of principal
+        );
+        
+        return {
+          id: loan.id,
+          name: loan.name,
+          balance: loan.amount,
+          interestRate: Math.max(0.1, loan.interestRate), // Ensure at least 0.1% interest
+          minimumPayment: Math.max(10, calculatedMinPayment), // Ensure at least €10 minimum payment
+          type: 'loan'
+        };
+      });
     
     const creditCardDebts: Debt[] = creditCards
-      .filter(card => card.isActive)
-      .map(card => ({
-        id: card.id,
-        name: card.name,
-        balance: card.balance,
-        interestRate: card.apr,
-        minimumPayment: Math.max(card.minPayment, card.balance * (card.minPaymentPercent / 100)),
-        type: 'credit-card'
-      }));
+      .filter(card => card.isActive && card.balance > 0)
+      .map(card => {
+        // Calculate minimum payment with fallback
+        const calculatedMinPayment = Math.max(
+          card.minPayment,
+          card.balance * Math.max(0.02, card.minPaymentPercent / 100), // At least 2% of balance
+          25 // Minimum €25
+        );
+        
+        return {
+          id: card.id,
+          name: card.name,
+          balance: card.balance,
+          interestRate: Math.max(1, card.apr), // Ensure at least 1% APR for credit cards
+          minimumPayment: calculatedMinPayment,
+          type: 'credit-card'
+        };
+      });
     
-    return [...loanDebts, ...creditCardDebts];
+    const allDebts = [...loanDebts, ...creditCardDebts];
+    
+    // Final validation - ensure all debts have valid values
+    return allDebts.filter(debt => 
+      debt.balance > 0 && 
+      debt.interestRate > 0 && 
+      debt.minimumPayment > 0 &&
+      debt.name.trim().length > 0
+    );
   });
   
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan | null>(null);
@@ -65,12 +90,20 @@ const DebtStrategies = () => {
   
   // Handle calculation errors
   const handleCalculationError = (error: any) => {
+    console.error('Calculation error:', error);
     if (error.message && error.message.includes("maximum number of months")) {
       setCalculationError("Takaisinmaksu kestäisi liian kauan nykyisellä budjetilla. Kokeile suurempaa kuukausittaista budjettia.");
+    } else if (error.message && error.message.includes("Available payment became negative")) {
+      setCalculationError("Budjetti ei riitä kaikkien velkojen vähimmäismaksuihin. Tarkista velkasi ja lisää budjettia.");
     } else {
       setCalculationError(error.message || "Virhe laskennassa. Tarkista syöttötiedot.");
     }
   };
+  
+  // Debug logging
+  console.log('Active debts for calculation:', debts);
+  const totalMinPayments = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
+  console.log('Total minimum payments:', totalMinPayments);
   
   return (
     <ErrorProvider>
@@ -90,15 +123,40 @@ const DebtStrategies = () => {
             </p>
           </div>
           
-          {(loans.length === 0 && creditCards.length === 0) ? (
+          {debts.length === 0 ? (
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Lisää ensin velkoja laskurissa aloittaaksesi takaisinmaksusuunnitelman.
+                Lisää ensin velkoja laskurissa aloittaaksesi takaisinmaksusuunnitelman. 
+                Varmista, että veloilla on positiiviset arvot saldolle, korolle ja vähimmäismaksulle.
               </AlertDescription>
             </Alert>
           ) : (
             <>
+              <div className="mb-4 p-4 bg-muted/50 rounded-lg">
+                <h3 className="font-semibold mb-2">Velkasi yhteenveto:</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Velkoja yhteensä:</span>
+                    <span className="ml-2 font-medium">{debts.length} kpl</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Kokonaissaldo:</span>
+                    <span className="ml-2 font-medium">
+                      {new Intl.NumberFormat('fi-FI', { style: 'currency', currency: 'EUR' })
+                        .format(debts.reduce((sum, debt) => sum + debt.balance, 0))}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Vähimmäismaksut yhteensä:</span>
+                    <span className="ml-2 font-medium">
+                      {new Intl.NumberFormat('fi-FI', { style: 'currency', currency: 'EUR' })
+                        .format(totalMinPayments)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
               <DebtVisualization debts={debts} paymentPlan={paymentPlan} />
               
               {calculationError && (
