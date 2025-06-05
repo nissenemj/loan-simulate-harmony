@@ -1,294 +1,132 @@
-import React, { useState, useEffect } from 'react';
+
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calculator, Info, TrendingUp, PieChart } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-interface LoanCalculation {
-  monthlyPayment: number;
-  totalInterest: number;
-  totalPayment: number;
-  yearlyBreakdown: {
-    year: number;
-    principalPaid: number;
-    interestPaid: number;
-    remainingBalance: number;
-  }[];
-}
-
-const calculateLoanDetails = (loanAmount: number, interestRate: number, loanTerm: number): LoanCalculation => {
-  const monthlyInterestRate = interestRate / 100 / 12;
-  const numberOfPayments = loanTerm * 12;
-
-  const monthlyPayment =
-    (loanAmount * monthlyInterestRate) /
-    (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
-
-  let remainingBalance = loanAmount;
-  let totalInterest = 0;
-  const yearlyBreakdown = [];
-
-  for (let year = 1; year <= loanTerm; year++) {
-    let principalPaid = 0;
-    let interestPaid = 0;
-
-    for (let month = 1; month <= 12; month++) {
-      const interestPayment = remainingBalance * monthlyInterestRate;
-      const principalPayment = monthlyPayment - interestPayment;
-
-      interestPaid += interestPayment;
-      principalPaid += principalPayment;
-      remainingBalance -= principalPayment;
-    }
-
-    totalInterest += interestPaid;
-    yearlyBreakdown.push({
-      year,
-      principalPaid,
-      interestPaid,
-      remainingBalance: Math.max(0, remainingBalance),
-    });
-  }
-
-  return {
-    monthlyPayment,
-    totalInterest,
-    totalPayment: monthlyPayment * numberOfPayments,
-    yearlyBreakdown,
-  };
-};
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText } from 'lucide-react';
 
 const LoanTerms: React.FC = () => {
-  const [loanAmount, setLoanAmount] = useState<number>(100000);
-  const [interestRate, setInterestRate] = useState<number>(3.5);
-  const [loanTerm, setLoanTerm] = useState<number>(20);
-  const [calculation, setCalculation] = useState<LoanCalculation | null>(null);
-
-  // Calculate loan details when inputs change
-  useEffect(() => {
-    if (loanAmount > 0 && interestRate >= 0 && loanTerm > 0) {
-      const result = calculateLoanDetails(loanAmount, interestRate, loanTerm);
-      setCalculation(result);
-    }
-  }, [loanAmount, interestRate, loanTerm]);
-
-  // Format currency
-  const const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fi-FI', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(amount);
-  };
-
-  // Prepare chart data for payment breakdown
-  const chartData = calculation?.yearlyBreakdown.slice(0, Math.min(10, calculation.yearlyBreakdown.length)).map(year => ({
-    year: `Vuosi ${year.year}`,
-    principal: year.principalPaid,
-    interest: year.interestPaid,
-    balance: year.remainingBalance
-  })) || [];
-
   return (
     <div className="container mx-auto py-8 px-4">
       <Helmet>
         <title>Lainaehdot | Velkavapaus.fi</title>
-        <meta name="description" content="Laske ja vertaile eri lainaehtoja löytääksesi sinulle sopivimman vaihtoehdon" />
+        <meta name="description" content="Velkavapaus.fi lainaehdot ja -säännöt" />
       </Helmet>
 
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Lainaehtojen vertailu</h1>
-          <p className="text-muted-foreground">
-            Laske ja vertaile eri lainaehtoja löytääksesi sinulle sopivimman vaihtoehdon
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Input Form */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calculator className="h-5 w-5" />
-                  Lainatiedot
-                </CardTitle>
-                <CardDescription>Syötä lainan perustiedot</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="loanAmount">Lainasumma (€)</Label>
-                  <Input
-                    id="loanAmount"
-                    type="number"
-                    min="1000"
-                    step="1000"
-                    value={loanAmount}
-                    onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="interestRate">Korko (%)</Label>
-                  <Input
-                    id="interestRate"
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    value={interestRate}
-                    onChange={(e) => setInterestRate(Number(e.target.value))}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="loanTerm">Laina-aika (vuotta)</Label>
-                  <Input
-                    id="loanTerm"
-                    type="number"
-                    min="1"
-                    max="30"
-                    value={loanTerm}
-                    onChange={(e) => setLoanTerm(Number(e.target.value))}
-                  />
-                </div>
-
-                <Alert>
-                  <Info className="h-4 w-4" />
-                  <AlertDescription>
-                    Las lainan kuukausierän, kokonaiskustannukset ja maksusuunnitelman
-                  </AlertDescription>
-                </Alert>
-              </CardContent>
-            </Card>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-center mb-8">
+          <div className="rounded-full bg-primary/10 p-3 mr-4">
+            <FileText className="h-8 w-8 text-primary" />
           </div>
-
-          {/* Results */}
-          <div className="lg:col-span-2">
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Laskelman yhteenveto</CardTitle>
-                <CardDescription>Lainan perustiedot ja kokonaiskustannukset</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="text-sm text-muted-foreground">Kuukausierä</div>
-                    <div className="text-2xl font-bold">{calculation ? formatCurrency(calculation.monthlyPayment) : '-'}</div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="text-sm text-muted-foreground">Korot yhteensä</div>
-                    <div className="text-2xl font-bold">{calculation ? formatCurrency(calculation.totalInterest) : '-'}</div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="text-sm text-muted-foreground">Kokonaismaksu</div>
-                    <div className="text-2xl font-bold">{calculation ? formatCurrency(calculation.totalPayment) : '-'}</div>
-                  </div>
-                </div>
-
-                <Tabs defaultValue="chart" className="space-y-4">
-                  <TabsList>
-                    <TabsTrigger value="chart">Kaavio</TabsTrigger>
-                    <TabsTrigger value="breakdown">Erittely</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="chart">
-                    <div className="h-80">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                          data={chartData}
-                          margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis 
-                            dataKey="year" 
-                            angle={-45}
-                            textAnchor="end"
-                            height={60}
-                          />
-                          <YAxis tickFormatter={(value) => formatCurrency(value).split(',')[0]} />
-                          <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                          <Bar dataKey="principal" name="Pääoma" fill="#4CAF50" stackId="a" />
-                          <Bar dataKey="interest" name="Korko" fill="#FF8042" stackId="a" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="breakdown">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2">Vuosi</th>
-                            <th className="text-right py-2">Pääoman maksu</th>
-                            <th className="text-right py-2">Korkomaksu</th>
-                            <th className="text-right py-2">Jäljellä oleva</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {calculation?.yearlyBreakdown.slice(0, 20).map(year => (
-                            <tr key={year.year} className="border-b">
-                              <td className="py-2">Vuosi {year.year}</td>
-                              <td className="text-right py-2">{formatCurrency(year.principalPaid)}</td>
-                              <td className="text-right py-2">{formatCurrency(year.interestPaid)}</td>
-                              <td className="text-right py-2">{formatCurrency(year.remainingBalance)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Vertaile eri laina-aikoja
-                </CardTitle>
-                <CardDescription>Näe eri laina-aikojen vaikutus maksusuunnitelmaan</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left py-2">Laina-aika</th>
-                        <th className="text-right py-2">Kuukausierä</th>
-                        <th className="text-right py-2">Korot yhteensä</th>
-                        <th className="text-right py-2">Kokonaismaksu</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[10, 15, 20, 25, 30].map(years => {
-                        const calc = calculateLoanDetails(loanAmount, interestRate, years);
-                        return (
-                          <tr 
-                            key={years} 
-                            className={`border-b ${years === loanTerm ? 'bg-muted/30' : ''}`}
-                          >
-                            <td className="py-2">{years} vuotta</td>
-                            <td className="text-right py-2">{formatCurrency(calc.monthlyPayment)}</td>
-                            <td className="text-right py-2">{formatCurrency(calc.totalInterest)}</td>
-                            <td className="text-right py-2">{formatCurrency(calc.totalPayment)}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+          <div>
+            <h1 className="text-3xl font-bold">Lainaehdot</h1>
+            <p className="text-muted-foreground">Päivitetty 1.1.2024</p>
           </div>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Velkavapaus.fi - Lainaehdot</CardTitle>
+            <CardDescription>
+              Nämä lainaehdot määrittelevät lainasopimuksia koskevat säännöt ja ehdot
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[500px] pr-4">
+              <div className="prose dark:prose-invert">
+                <h2>1. Johdanto</h2>
+                <p>
+                  Nämä lainaehdot koskevat Velkavapaus.fi -palvelun kautta tarjottavia lainapalveluita.
+                  Lainanantaja on kumppaniverkostomme jäsen ja lainanottaja hyväksyy nämä ehdot
+                  lainasopimusta tehdessään.
+                </p>
+
+                <h2>2. Lainan myöntäminen</h2>
+                <p>
+                  Lainan myöntäminen edellyttää luottotietojen tarkistusta ja riittävää maksukykyä.
+                  Lainanantaja pidättää oikeuden hylätä lainahakemus perustellusta syystä.
+                  Lainan ehdot määräytyvät hakijan luottokelpoisuuden ja lainan käyttötarkoituksen mukaan.
+                </p>
+
+                <h2>3. Korko ja kulut</h2>
+                <p>Lainasta peritään:</p>
+                <ul>
+                  <li>Vuosikorko, joka määräytyy markkinatilanteen ja luottokelpoisuuden mukaan</li>
+                  <li>Mahdollisia järjestelykuluja</li>
+                  <li>Viivästyskorko myöhästyneistä maksuista</li>
+                  <li>Muistutus- ja perintäkuluja</li>
+                </ul>
+
+                <h2>4. Takaisinmaksu</h2>
+                <p>
+                  Laina maksetaan takaisin sovitussa aikataulussa tasaerinä. Lyhennykset sisältävät
+                  sekä koron että pääoman maksua. Lainanottaja voi maksaa lainan ennenaikaisesti
+                  kokonaan tai osittain ilman erillistä rangaistusta.
+                </p>
+
+                <h2>5. Vakuudet</h2>
+                <p>
+                  Lainanantaja voi vaatia lainalle vakuuden luottokelpoisuuden tai lainamäärän mukaan.
+                  Vakuutena voi toimia kiinteistökiinnitys, takaus tai muu hyväksyttävä vakuus.
+                </p>
+
+                <h2>6. Lainanottajan velvollisuudet</h2>
+                <p>Lainanottaja sitoutuu:</p>
+                <ul>
+                  <li>Maksamaan lainan takaisin sovitun mukaisesti</li>
+                  <li>Ilmoittamaan välittömästi yhteystietojen muutoksista</li>
+                  <li>Ilmoittamaan taloudellisen tilanteen olennaisista muutoksista</li>
+                  <li>Säilyttämään mahdolliset vakuudet kunnossa</li>
+                </ul>
+
+                <h2>7. Laiminlyönti</h2>
+                <p>
+                  Jos lainanottaja laiminlyö maksunsa, lainanantajalla on oikeus:
+                </p>
+                <ul>
+                  <li>Periä viivästyskorkoa</li>
+                  <li>Vaatia koko jäljellä oleva laina heti takaisin maksettavaksi</li>
+                  <li>Realisoida vakuudet</li>
+                  <li>Ryhtyä muihin laillisiin perintätoimiin</li>
+                </ul>
+
+                <h2>8. Tietojen käsittely</h2>
+                <p>
+                  Lainanantaja käsittelee hakijan henkilötietoja luotonannon edellyttämässä laajuudessa
+                  tietosuojalainsäädännön mukaisesti. Tiedot voidaan tarkistaa luottotietorekistereistä
+                  ja merkitä niihin.
+                </p>
+
+                <h2>9. Muutokset ehtoihin</h2>
+                <p>
+                  Lainanantaja voi muuttaa näitä ehtoja ilmoittamalla siitä lainanottajalle vähintään
+                  kaksi kuukautta etukäteen. Jos lainanottaja ei hyväksy muutoksia, hänellä on oikeus
+                  irtisanoa sopimus.
+                </p>
+
+                <h2>10. Kuluttajansuoja</h2>
+                <p>
+                  Kuluttajalainoja koskevat Kuluttajansuojalain säännökset. Kuluttajalla on 14 päivän
+                  peruutusoikeus lainasopimuksen tekemisestä. Lainanantaja noudattaa vastuullisen
+                  luotonannon periaatteita.
+                </p>
+
+                <h2>11. Riidanratkaisu</h2>
+                <p>
+                  Mahdolliset erimielisyydet pyritään ratkaisemaan ensisijaisesti neuvotteluin.
+                  Kuluttajariita-asiat voidaan viedä Kuluttajariitalautakunnan käsiteltäväksi.
+                  Muut riidat ratkaistaan Suomen tuomioistuimissa.
+                </p>
+
+                <h2>12. Sovellettava laki</h2>
+                <p>
+                  Lainasopimukseen sovelletaan Suomen lakia. Lainanantaja noudattaa Finanssivalvonnan
+                  määräyksiä ja ohjeita.
+                </p>
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

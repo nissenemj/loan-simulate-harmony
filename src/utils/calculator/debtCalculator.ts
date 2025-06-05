@@ -22,7 +22,7 @@ export function calculatePaymentPlan(
   }
 
   // Create optimized working copy of debts
-  let workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
+  const workingDebts = sortDebtsByStrategy(debts, strategy, customOrder).map(debt => ({
     id: debt.id,
     minimumPayment: debt.minimumPayment,
     interestRate: debt.interestRate,
@@ -60,11 +60,16 @@ export function calculatePaymentPlan(
       const interestAmount = calculateMonthlyInterest(debt.remainingBalance, debt.interestRate);
       const requiredPayment = Math.min(debt.minimumPayment, debt.remainingBalance + interestAmount);
       
+      if (availablePayment < requiredPayment) {
+        // Guard, ettei maksujen summa mene negatiiviseksi
+        throw new Error('Available payment became negative');
+      }
+
       let paymentAmount = requiredPayment;
       availablePayment -= requiredPayment;
 
-      // Apply extra payment to highest priority debt
-      if (debt === activeDebts[0] && availablePayment > 0) {
+      // Käytä jäljellä oleva budjetti nykyiseen velkaan
+      if (availablePayment > 0) {
         const maxExtraPayment = debt.remainingBalance + interestAmount - requiredPayment;
         const extraPayment = Math.min(availablePayment, maxExtraPayment);
         paymentAmount += extraPayment;
@@ -220,9 +225,12 @@ export function calculateConsolidationOptions(
   return consolidationOptions.map(option => {
     // Calculate monthly payment for consolidation loan
     const monthlyInterestRate = option.interestRate / 100 / 12;
-    const monthlyPayment = totalBalance * monthlyInterestRate * 
-      Math.pow(1 + monthlyInterestRate, option.termMonths) / 
-      (Math.pow(1 + monthlyInterestRate, option.termMonths) - 1);
+    const monthlyPayment =
+      monthlyInterestRate === 0
+        ? totalBalance / option.termMonths
+        : totalBalance * monthlyInterestRate * 
+          Math.pow(1 + monthlyInterestRate, option.termMonths) / 
+          (Math.pow(1 + monthlyInterestRate, option.termMonths) - 1);
     
     // Calculate total interest paid
     const totalPaid = monthlyPayment * option.termMonths;
