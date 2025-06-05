@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -415,7 +414,7 @@ const LoanForm: React.FC<LoanFormProps> = ({
         <CardFooter className="flex gap-4 pt-0">
           <Button 
             type="submit" 
-            className="flex-1 bg-brand-primary hover:bg-brand-primary-light text-white dark:bg-brand-primary dark:hover:bg-brand-primary-light"
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             {isEditing ? (
               <>
