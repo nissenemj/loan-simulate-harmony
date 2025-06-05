@@ -1,179 +1,145 @@
 
-import React from "react";
-import { Helmet } from "react-helmet-async";
-import { useLanguage } from "@/contexts/LanguageContext";
-import NavigationHeader from "@/components/NavigationHeader";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import Footer from "@/components/Footer";
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Shield } from 'lucide-react';
 
-const PrivacyPolicy = () => {
-  const { t } = useLanguage();
-  const navigate = useNavigate();
-
+const PrivacyPolicy: React.FC = () => {
   return (
-    <>
+    <div className="container mx-auto py-8 px-4">
       <Helmet>
         <title>Tietosuojaseloste | Velkavapaus.fi</title>
-        <meta name="description" content="Tietosuojaseloste - Velkavapaus.fi" />
+        <meta name="description" content="Velkavapaus.fi tietosuojakäytännöt" />
       </Helmet>
 
-      <div className="min-h-screen bg-background flex flex-col">
-        <NavigationHeader />
-        
-        <div className="container mx-auto py-8 px-4 max-w-4xl flex-grow">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mb-6 flex items-center"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Takaisin
-          </Button>
-          
-          <h1 className="text-3xl font-bold mb-6">Tietosuojaseloste</h1>
-          <p className="text-muted-foreground mb-6">Voimassa alkaen: 1.5.2023</p>
-          
-          <Separator className="my-6" />
-          
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Johdanto</h2>
-            <p className="mb-4">
-              Me Velkavapaus.fi:ssä arvostamme yksityisyyttäsi ja olemme sitoutuneet suojelemaan henkilötietojasi. 
-              Tämä tietosuojaseloste kertoo, miten keräämme, käytämme ja suojaamme tietojasi käyttäessäsi sovellustamme.
-            </p>
-            <p className="mb-4">
-              Velkavapaus.fi on velkojenhallintasovellus, joka auttaa sinua suunnittelemaan velkojen takaisinmaksua 
-              ja saavuttamaan taloudellisia tavoitteitasi.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Keräämämme tiedot</h2>
-            <p className="mb-2">
-              Keräämme seuraavia tietoja, jotta voimme tarjota sinulle velkojenhallintapalvelun:
-            </p>
-            <h3 className="text-xl font-medium mt-6 mb-2">Henkilötiedot</h3>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Sähköpostiosoite (rekisteröitymisen yhteydessä)</li>
-              <li>Salasana (suojattu ja salattu)</li>
-            </ul>
-
-            <h3 className="text-xl font-medium mt-6 mb-2">Taloudelliset tiedot</h3>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Lisäämäsi velkatiedot (saldo, korko, minimaksut)</li>
-              <li>Sovelluksessa luomasi takaisinmaksusuunnitelmat</li>
-            </ul>
-
-            <h3 className="text-xl font-medium mt-6 mb-2">Käyttötiedot</h3>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Sovelluksen käyttöön liittyvät anonyymit tiedot analytiikkaa varten</li>
-              <li>Evästeet sovelluksen toiminnallisuuden varmistamiseksi</li>
-            </ul>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Tietojen käyttötarkoitukset</h2>
-            <p className="mb-2">
-              Käytämme keräämiämme tietoja seuraaviin tarkoituksiin:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Käyttäjätilin luomiseen ja hallintaan</li>
-              <li>Henkilökohtaisen velanmaksusuunnitelman luomiseen</li>
-              <li>Sovelluksen toiminnan ja käyttökokemuksen parantamiseen</li>
-              <li>Palvelun toimivuuden varmistamiseen</li>
-            </ul>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Tietojen jakaminen</h2>
-            <p className="mb-4">
-              Emme myy, vuokraa tai jaa henkilötietojasi kolmansille osapuolille. Taloustietojasi ei luovuteta muille tahoille.
-            </p>
-            <p className="mb-4">
-              Sivustomme voi sisältää affiliate-linkkejä yhteistyökumppaneidemme sivustoille. Kun napsautat näitä linkkejä, 
-              saatat siirtyä pois sivustoltamme. Näillä sivustoilla on omat tietosuojakäytäntönsä, joihin kannustamme tutustumaan.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Käyttäjän oikeudet</h2>
-            <p className="mb-4">
-              GDPR:n mukaisesti sinulla on seuraavat oikeudet:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Oikeus päästä tietoihisi ja saada niistä kopio</li>
-              <li>Oikeus virheellisten tietojen oikaisemiseen</li>
-              <li>Oikeus tietojesi poistamiseen</li>
-              <li>Oikeus tietojen siirrettävyyteen</li>
-              <li>Oikeus peruuttaa suostumuksesi tietojenkäsittelyyn</li>
-            </ul>
-            <p className="mb-4">
-              Voit käyttää näitä oikeuksia lähettämällä pyynnön sähköpostitse osoitteeseen support@velkavapaus.fi.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Tietoturva</h2>
-            <p className="mb-4">
-              Olemme toteuttaneet asianmukaiset tekniset ja organisatoriset toimenpiteet tietojesi suojaamiseksi. 
-              Näihin kuuluvat:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Tietojen salaus sekä tiedonsiirrossa että tietokannoissa</li>
-              <li>Säännölliset tietoturvatarkastukset</li>
-              <li>Rajatut käyttöoikeudet</li>
-            </ul>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Tietojen säilyttäminen</h2>
-            <p className="mb-4">
-              Säilytämme tietojasi niin kauan kuin sinulla on aktiivinen tili sovelluksessamme. 
-              Voit milloin tahansa poistaa tilisi, jolloin kaikki henkilökohtaiset tietosi poistetaan.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Evästeet</h2>
-            <p className="mb-4">
-              Velkavapaus.fi käyttää evästeitä sivuston toiminnallisuuden varmistamiseksi. 
-              Voit muokata evästeasetuksiasi selaimesi asetuksista.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Muutokset tietosuojaselosteeseen</h2>
-            <p className="mb-4">
-              Voimme päivittää tätä tietosuojaselostetta ajoittain heijastaaksemme muutoksia palveluissamme tai 
-              lainsäädännössä. Ilmoitamme merkittävistä muutoksista sovelluksessa, sähköpostitse tai muulla 
-              sopivalla tavalla.
-            </p>
-          </section>
-
-          <section className="mb-10">
-            <h2 className="text-2xl font-semibold mb-4">Yhteydenotto</h2>
-            <p className="mb-4">
-              Jos sinulla on kysyttävää tietosuojaselosteestamme tai tietojesi käsittelystä, ota yhteyttä: 
-            </p>
-            <p className="mb-4">
-              Sähköposti: <a href="mailto:support@velkavapaus.fi" className="text-primary hover:underline">support@velkavapaus.fi</a>
-            </p>
-          </section>
-
-          <Separator className="my-6" />
-          
-          <p className="text-center text-sm text-muted-foreground mt-8">
-            © {new Date().getFullYear()} Velkavapaus.fi. Kaikki oikeudet pidätetään.
-          </p>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-center mb-8">
+          <div className="rounded-full bg-primary/10 p-3 mr-4">
+            <Shield className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Tietosuojaseloste</h1>
+            <p className="text-muted-foreground">Päivitetty 1.1.2024</p>
+          </div>
         </div>
-        
-        <Footer />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Velkavapaus.fi - Tietosuojaseloste</CardTitle>
+            <CardDescription>
+              Tässä tietosuojaselosteessa kerromme, miten käsittelemme henkilötietojasi
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[500px] pr-4">
+              <div className="prose dark:prose-invert">
+                <h2>1. Rekisterinpitäjä</h2>
+                <p>
+                  Velkavapaus.fi<br />
+                  Sähköposti: info@velkavapaus.fi<br />
+                  Osoite: Velkatie 1, 00100 Helsinki
+                </p>
+
+                <h2>2. Mitä tietoja keräämme</h2>
+                <p>Keräämme seuraavia henkilötietoja:</p>
+                <ul>
+                  <li>Perustiedot: nimi, sähköpostiosoite</li>
+                  <li>Käyttäjätili: käyttäjätunnus, salasana (salattu)</li>
+                  <li>Taloudelliset tiedot: lainat, velat, maksusuunnitelmat</li>
+                  <li>Tekniset tiedot: IP-osoite, selaintiedot, laitteen tiedot</li>
+                  <li>Käyttäytymistiedot: verkkosivun käyttö, klikkaustiedot, vierailut sivustolla</li>
+                </ul>
+
+                <h2>3. Miksi käsittelemme tietojasi</h2>
+                <p>Käsittelemme henkilötietojasi seuraaviin tarkoituksiin:</p>
+                <ul>
+                  <li>Palvelun tarjoaminen: velkalaskurit ja -suunnitelmat</li>
+                  <li>Käyttäjätilin hallinta</li>
+                  <li>Palvelun kehittäminen ja tilastointi</li>
+                  <li>Asiakasviestintä ja tuki</li>
+                  <li>Lakisääteisten velvoitteiden täyttäminen</li>
+                </ul>
+
+                <h2>4. Käsittelyn oikeusperusteet</h2>
+                <p>Käsittelemme henkilötietojasi seuraavilla perusteilla:</p>
+                <ul>
+                  <li>Sopimuksen täyttäminen: kun käytät palveluitamme</li>
+                  <li>Suostumus: esim. markkinointiin</li>
+                  <li>Oikeutettu etu: asiakassuhteen hoitaminen, palvelun kehittäminen</li>
+                  <li>Lakisääteiset velvoitteet</li>
+                </ul>
+
+                <h2>5. Tietojen säilytysaika</h2>
+                <p>
+                  Säilytämme henkilötietojasi vain niin kauan kuin on tarpeen määriteltyjen
+                  käyttötarkoitusten toteuttamiseksi tai lakisääteisten velvoitteiden täyttämiseksi.
+                  Käyttäjätili ja siihen liittyvät tiedot säilytetään niin kauan kuin tili on aktiivinen.
+                  Voit milloin tahansa poistaa käyttäjätilisi, jolloin tietosi poistetaan järjestelmistämme.
+                </p>
+
+                <h2>6. Tietojen luovutukset ja siirrot</h2>
+                <p>
+                  Emme luovuta tietojasi kolmansille osapuolille ilman suostumustasi,
+                  paitsi jos laki niin velvoittaa. Voimme käyttää luotettavia palveluntarjoajia
+                  (kuten pilvipalveluita) tietojen käsittelyyn puolestamme.
+                </p>
+
+                <h2>7. Tietojen siirrot EU/ETA-alueen ulkopuolelle</h2>
+                <p>
+                  Emme siirrä tietojasi EU/ETA-alueen ulkopuolelle. Jos tällainen siirto tulee
+                  tarpeelliseksi, varmistamme riittävän tietosuojan tason käyttämällä asianmukaisia
+                  suojatoimia, kuten EU:n mallisopimuslausekkeita.
+                </p>
+
+                <h2>8. Tietojen suojaus</h2>
+                <p>
+                  Käytämme teknisiä ja organisatorisia toimenpiteitä tietojesi suojaamiseksi.
+                  Näihin kuuluvat mm. salausteknologiat, pääsynhallinta, koulutus ja tietoturvatestaus.
+                </p>
+
+                <h2>9. Sinun oikeutesi</h2>
+                <p>Sinulla on seuraavat oikeudet:</p>
+                <ul>
+                  <li>Oikeus saada pääsy tietoihin</li>
+                  <li>Oikeus tietojen oikaisemiseen</li>
+                  <li>Oikeus tietojen poistamiseen ("oikeus tulla unohdetuksi")</li>
+                  <li>Oikeus käsittelyn rajoittamiseen</li>
+                  <li>Oikeus siirtää tiedot järjestelmästä toiseen</li>
+                  <li>Oikeus vastustaa käsittelyä</li>
+                  <li>Oikeus peruuttaa suostumus</li>
+                </ul>
+
+                <h2>10. Evästeet</h2>
+                <p>
+                  Käytämme evästeitä ja muita vastaavia teknologioita parantaaksemme
+                  käyttäjäkokemusta ja kerätäksemme tilastotietoa sivuston käytöstä.
+                  Voit hallita evästeiden käyttöä selaimesi asetuksista.
+                </p>
+
+                <h2>11. Yhteydenotot</h2>
+                <p>
+                  Jos haluat käyttää oikeuksiasi tai sinulla on kysyttävää henkilötietojesi
+                  käsittelystä, ota yhteyttä: tietosuoja@velkavapaus.fi
+                </p>
+
+                <h2>12. Valitusoikeus</h2>
+                <p>
+                  Sinulla on oikeus tehdä valitus tietosuojavaltuutetulle, jos koet, että
+                  henkilötietojesi käsittelyssä on rikottu tietosuojalainsäädäntöä.
+                </p>
+
+                <h2>13. Muutokset tietosuojaselosteeseen</h2>
+                <p>
+                  Voimme päivittää tätä tietosuojaselostetta ajoittain. Merkitsemme
+                  muutokset päivämäärällä selosteen alkuun.
+                </p>
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import { PaymentPlan } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useCurrencyFormatter } from '@/utils/formatting';
@@ -13,7 +12,6 @@ interface PaymentBreakdownChartProps {
 }
 
 export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProps) {
-  const { t } = useTranslation();
   const currencyFormatter = useCurrencyFormatter();
   const isMobile = useIsMobile();
   
@@ -23,7 +21,7 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
     const monthlyData = paymentPlan.monthlyPlans
       .slice(0, Math.min(12, paymentPlan.monthlyPlans.length))
       .map((plan) => ({
-        name: `${t('calculator.month')} ${plan.month + 1}`, // +1 for human-readable month numbers
+        name: `Kuukausi ${plan.month + 1}`, // +1 for human-readable month numbers
         principal: plan.totalPrincipalPaid,
         interest: plan.totalInterestPaid,
       }));
@@ -42,7 +40,7 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
       // Include data point every 3 months or for the final month
       if (index % 3 === 0 || index === paymentPlan.monthlyPlans.length - 1) {
         cumulativeData.push({
-          name: `${t('calculator.month')} ${plan.month + 1}`, // +1 for human-readable month numbers
+          name: `Kuukausi ${plan.month + 1}`, // +1 for human-readable month numbers
           principal: cumulativePrincipal,
           interest: cumulativeInterest,
         });
@@ -50,23 +48,23 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
     });
     
     return { monthlyData, cumulativeData };
-  }, [paymentPlan, t]);
+  }, [paymentPlan]);
   
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('visualization.paymentBreakdown')}</CardTitle>
-        <CardDescription>{t('visualization.paymentBreakdownDescription')}</CardDescription>
+        <CardTitle>Maksujen erittely</CardTitle>
+        <CardDescription>Kuukausittaisten maksujen jakautuminen pääomaan ja korkoihin</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="monthly">
           <TabsList className="w-full justify-start mb-4">
-            <TabsTrigger value="monthly">{t('visualization.monthlyBreakdown')}</TabsTrigger>
-            <TabsTrigger value="cumulative">{t('visualization.cumulativeBreakdown')}</TabsTrigger>
+            <TabsTrigger value="monthly">Kuukausittain</TabsTrigger>
+            <TabsTrigger value="cumulative">Kumulatiivinen</TabsTrigger>
           </TabsList>
           
           <TabsContent value="monthly">
-            <div className="h-64 md:h-80" aria-label={t('visualization.monthlyBreakdown')} role="img">
+            <div className="h-64 md:h-80" aria-label="Kuukausittainen erittely" role="img">
               <ResponsiveContainer width="100%" height="100%">
                 {monthlyData.length > 0 ? (
                   <BarChart
@@ -107,20 +105,20 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
                     />
                     <Bar 
                       dataKey="principal" 
-                      name={t('visualization.principalPayment')} 
+                      name="Pääoman maksu" 
                       fill="#4CAF50"
-                      aria-label={t('visualization.principalPayment')}
+                      aria-label="Pääoman maksu"
                     />
                     <Bar 
                       dataKey="interest" 
-                      name={t('visualization.interestPayment')} 
+                      name="Korkomaksu" 
                       fill="#FF8042"
-                      aria-label={t('visualization.interestPayment')}
+                      aria-label="Korkomaksu"
                     />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    {t('visualization.noDataAvailable')}
+                    Ei dataa saatavilla
                   </div>
                 )}
               </ResponsiveContainer>
@@ -128,7 +126,7 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
           </TabsContent>
           
           <TabsContent value="cumulative">
-            <div className="h-64 md:h-80" aria-label={t('visualization.cumulativeBreakdown')} role="img">
+            <div className="h-64 md:h-80" aria-label="Kumulatiivinen erittely" role="img">
               <ResponsiveContainer width="100%" height="100%">
                 {cumulativeData.length > 0 ? (
                   <BarChart
@@ -169,20 +167,20 @@ export function PaymentBreakdownChart({ paymentPlan }: PaymentBreakdownChartProp
                     />
                     <Bar 
                       dataKey="principal" 
-                      name={t('visualization.cumulativePrincipal')} 
+                      name="Kumulatiivinen pääoma" 
                       fill="#4CAF50"
-                      aria-label={t('visualization.cumulativePrincipal')}
+                      aria-label="Kumulatiivinen pääoma"
                     />
                     <Bar 
                       dataKey="interest" 
-                      name={t('visualization.cumulativeInterest')} 
+                      name="Kumulatiiviset korot" 
                       fill="#FF8042"
-                      aria-label={t('visualization.cumulativeInterest')}
+                      aria-label="Kumulatiiviset korot"
                     />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    {t('visualization.noDataAvailable')}
+                    Ei dataa saatavilla
                   </div>
                 )}
               </ResponsiveContainer>

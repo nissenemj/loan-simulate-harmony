@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Debt, ExtraPaymentImpact } from '@/utils/calculator/types';
@@ -7,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Lightbulb, Clock, Coins, Calendar } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -21,7 +21,6 @@ interface ExtraPaymentCalculatorProps {
  * Allows users to see the impact of making an extra payment on a specific debt
  */
 const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
-  const { t } = useTranslation();
   const [selectedDebtId, setSelectedDebtId] = useState<string>('');
   const [extraPaymentAmount, setExtraPaymentAmount] = useState<number>(0);
   const [impact, setImpact] = useState<ExtraPaymentImpact | null>(null);
@@ -55,7 +54,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
       setImpact(result);
       setError(null);
     } catch (err: any) {
-      setError(err.message || 'Error calculating extra payment impact');
+      setError(err.message || 'Virhe laskennassa');
       setImpact(null);
     }
   }, [debts, selectedDebtId, extraPaymentAmount]);
@@ -79,12 +78,12 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
   // Prepare chart data
   const chartData = impact ? [
     {
-      name: t('calculator.withoutExtraPayment'),
+      name: 'Ilman ylimääräistä maksua',
       interestPaid: impact.originalTotalInterest,
       fill: '#8B5CF6'
     },
     {
-      name: t('calculator.withExtraPayment'),
+      name: 'Ylimääräisellä maksulla',
       interestPaid: impact.newTotalInterest,
       fill: '#22C55E'
     }
@@ -107,11 +106,11 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{t('calculator.extraPaymentImpact')}</CardTitle>
-          <CardDescription>{t('calculator.extraPaymentDescription')}</CardDescription>
+          <CardTitle>Ylimääräisen maksun vaikutus</CardTitle>
+          <CardDescription>Katso miten ylimääräinen maksu vaikuttaa velkoihisi</CardDescription>
         </CardHeader>
         <CardContent>
-          <p>{t('calculator.noDebtsAdded')}</p>
+          <p>Lisää ensin velkoja nähdäksesi ylimääräisen maksun vaikutuksen</p>
         </CardContent>
       </Card>
     );
@@ -122,9 +121,9 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Coins className="h-5 w-5 text-primary" />
-          {t('calculator.extraPaymentImpact')}
+          Ylimääräisen maksun vaikutus
         </CardTitle>
-        <CardDescription>{t('calculator.extraPaymentDescription')}</CardDescription>
+        <CardDescription>Katso miten ylimääräinen maksu vaikuttaa velkoihisi</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {error && (
@@ -135,13 +134,13 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="debtSelect">{t('calculator.selectDebt')}</Label>
+            <Label htmlFor="debtSelect">Valitse velka</Label>
             <Select
               value={selectedDebtId}
               onValueChange={setSelectedDebtId}
             >
               <SelectTrigger id="debtSelect">
-                <SelectValue placeholder={t('calculator.selectDebtPlaceholder')} />
+                <SelectValue placeholder="Valitse velka" />
               </SelectTrigger>
               <SelectContent>
                 {debts.map((debt) => (
@@ -154,7 +153,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="extraPayment">{t('calculator.extraPaymentAmount')}</Label>
+            <Label htmlFor="extraPayment">Ylimääräinen maksu (€)</Label>
             <Input
               id="extraPayment"
               type="number"
@@ -169,7 +168,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
         
         {impact && (
           <div className="mt-6">
-            <h4 className="font-semibold text-lg mb-4">{t('calculator.impactResults')}</h4>
+            <h4 className="font-semibold text-lg mb-4">Vaikutukset</h4>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <Card className="bg-muted/30">
@@ -177,9 +176,9 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
                   <div className="flex items-start">
                     <Clock className="h-8 w-8 mr-3 mt-1 text-blue-500" />
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('calculator.monthsSaved')}</p>
+                      <p className="text-sm text-muted-foreground">Säästetyt kuukaudet</p>
                       <p className="text-2xl font-bold">
-                        {impact.monthsSaved} {t('calculator.months')}
+                        {impact.monthsSaved} kuukautta
                       </p>
                     </div>
                   </div>
@@ -191,7 +190,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
                   <div className="flex items-start">
                     <Coins className="h-8 w-8 mr-3 mt-1 text-green-500" />
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('calculator.interestSaved')}</p>
+                      <p className="text-sm text-muted-foreground">Säästetyt korot</p>
                       <p className="text-2xl font-bold">
                         {formatCurrency(impact.interestSaved)}
                       </p>
@@ -205,7 +204,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
                   <div className="flex items-start">
                     <Calendar className="h-8 w-8 mr-3 mt-1 text-purple-500" />
                     <div>
-                      <p className="text-sm text-muted-foreground">{t('calculator.newPayoffDate')}</p>
+                      <p className="text-sm text-muted-foreground">Uusi maksettu päivä</p>
                       <p className="text-xl font-bold">
                         {formatDate(impact.newPayoffDate)}
                       </p>
@@ -226,7 +225,7 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip content={customBarTooltip} />
                   <Legend />
-                  <Bar dataKey="interestPaid" name={t('calculator.totalInterest')} />
+                  <Bar dataKey="interestPaid" name="Kokonaiskorot" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -234,9 +233,9 @@ const ExtraPaymentCalculator = ({ debts }: ExtraPaymentCalculatorProps) => {
             <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 p-4 rounded flex items-start">
               <Lightbulb className="h-5 w-5 mr-2 mt-1 flex-shrink-0" />
               <div>
-                <p className="font-semibold">{t('calculator.extraPaymentTip')}</p>
+                <p className="font-semibold">Vinkki ylimääräisistä maksuista</p>
                 <p className="mt-1">
-                  {t('calculator.extraPaymentTipDescription')}
+                  Pienetkin ylimääräiset maksut voivat säästää merkittävästi aikaa ja rahaa velkojen takaisinmaksussa.
                 </p>
               </div>
             </div>

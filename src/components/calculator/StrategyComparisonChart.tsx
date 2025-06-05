@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import { Debt } from '@/utils/calculator/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslation } from '@/contexts/LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { compareScenarios } from '@/utils/calculator/debtCalculator';
@@ -14,7 +13,6 @@ interface StrategyComparisonChartProps {
 }
 
 export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps) {
-  const { t } = useTranslation();
   const currencyFormatter = useCurrencyFormatter();
   const isMobile = useIsMobile();
   
@@ -28,25 +26,25 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
     const scenarios = [
       {
         id: 'min-avalanche',
-        name: isMobile ? 'Min + Avalanche' : t('visualization.minimumAvalanche'),
+        name: isMobile ? 'Min + Lumivyöry' : 'Vähimmäis + Lumivyöry',
         additionalMonthlyPayment: 0,
         strategy: 'avalanche' as const
       },
       {
         id: 'min-snowball',
-        name: isMobile ? 'Min + Snowball' : t('visualization.minimumSnowball'),
+        name: isMobile ? 'Min + Lumipallo' : 'Vähimmäis + Lumipallo',
         additionalMonthlyPayment: 0,
         strategy: 'snowball' as const
       },
       {
         id: 'extra100-avalanche',
-        name: isMobile ? '+100€ Avalanche' : t('visualization.extra100Avalanche'),
+        name: isMobile ? '+100€ Lumivyöry' : '+100€ Lumivyöry',
         additionalMonthlyPayment: 100,
         strategy: 'avalanche' as const
       },
       {
         id: 'extra100-snowball',
-        name: isMobile ? '+100€ Snowball' : t('visualization.extra100Snowball'),
+        name: isMobile ? '+100€ Lumipallo' : '+100€ Lumipallo',
         additionalMonthlyPayment: 100,
         strategy: 'snowball' as const
       }
@@ -72,7 +70,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
       console.error('Error comparing scenarios:', error);
       return { timeData: [], interestData: [] };
     }
-  }, [debts, t, isMobile]);
+  }, [debts, isMobile]);
 
   // Simple tick formatter for X-axis that only returns strings
   const formatXAxisTick = (value: string) => {
@@ -86,14 +84,14 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('visualization.strategyComparison')}</CardTitle>
-        <CardDescription>{t('visualization.strategyComparisonDescription')}</CardDescription>
+        <CardTitle>Strategioiden vertailu</CardTitle>
+        <CardDescription>Vertaile eri velkojen takaisinmaksustrategioita</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="time">
           <TabsList className="w-full justify-start mb-4">
-            <TabsTrigger value="time">{t('visualization.timeComparison')}</TabsTrigger>
-            <TabsTrigger value="interest">{t('visualization.interestComparison')}</TabsTrigger>
+            <TabsTrigger value="time">Ajan vertailu</TabsTrigger>
+            <TabsTrigger value="interest">Korkojen vertailu</TabsTrigger>
           </TabsList>
           
           <TabsContent value="time">
@@ -128,7 +126,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         fill: 'hsl(var(--foreground))'
                       }}
                       label={{ 
-                        value: t('visualization.monthsToPayoff'), 
+                        value: 'Kuukautta takaisinmaksuun', 
                         angle: -90, 
                         position: 'insideLeft',
                         offset: isMobile ? -60 : -80,
@@ -139,7 +137,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                       }}
                     />
                     <Tooltip 
-                      formatter={(value) => [`${value} ${t('visualization.months')}`, t('visualization.timeToPayoff')]}
+                      formatter={(value) => [`${value} kuukautta`, 'Takaisinmaksuaika']}
                       contentStyle={{
                         backgroundColor: 'hsl(var(--background))',
                         border: '1px solid hsl(var(--border))',
@@ -155,14 +153,14 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                     />
                     <Bar 
                       dataKey="months" 
-                      name={t('visualization.monthsToPayoff')} 
+                      name="Kuukautta takaisinmaksuun" 
                       fill="hsl(var(--primary))"
-                      aria-label={t('visualization.monthsToPayoff')}
+                      aria-label="Kuukautta takaisinmaksuun"
                     />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    {t('visualization.noDataAvailable')}
+                    Ei dataa saatavilla
                   </div>
                 )}
               </ResponsiveContainer>
@@ -201,7 +199,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                         fill: 'hsl(var(--foreground))'
                       }}
                       label={{ 
-                        value: t('visualization.totalInterestPaid'), 
+                        value: 'Kokonaiskorot maksettu', 
                         angle: -90, 
                         position: 'insideLeft',
                         offset: isMobile ? -60 : -80,
@@ -213,7 +211,7 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                       tickFormatter={(value) => currencyFormatter.formatWithoutSymbol(value)}
                     />
                     <Tooltip 
-                      formatter={(value) => [currencyFormatter.format(Number(value)), t('visualization.totalInterestPaid')]}
+                      formatter={(value) => [currencyFormatter.format(Number(value)), 'Kokonaiskorot maksettu']}
                       contentStyle={{
                         backgroundColor: 'hsl(var(--background))',
                         border: '1px solid hsl(var(--border))',
@@ -229,14 +227,14 @@ export function StrategyComparisonChart({ debts }: StrategyComparisonChartProps)
                     />
                     <Bar 
                       dataKey="interest" 
-                      name={t('visualization.totalInterestPaid')} 
+                      name="Kokonaiskorot maksettu" 
                       fill="hsl(var(--destructive))"
-                      aria-label={t('visualization.totalInterestPaid')}
+                      aria-label="Kokonaiskorot maksettu"
                     />
                   </BarChart>
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    {t('visualization.noDataAvailable')}
+                    Ei dataa saatavilla
                   </div>
                 )}
               </ResponsiveContainer>

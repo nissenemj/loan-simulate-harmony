@@ -1,11 +1,11 @@
+
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useCurrencyFormatter } from '@/utils/formatting';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
 import { Calendar, Coins, TrendingDown, Clock, ArrowDownToLine } from 'lucide-react';
 import { format } from 'date-fns';
-import { fi, enUS } from 'date-fns/locale';
+import { fi } from 'date-fns/locale';
 import { HelpTooltip } from '@/components/ui/help-tooltip';
 import { cn } from '@/lib/utils';
 
@@ -25,7 +25,6 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
   isCalculating,
   className
 }) => {
-  const { t, language } = useLanguage();
   const currencyFormatter = useCurrencyFormatter();
   
   // Calculate total minimum payment
@@ -49,9 +48,8 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
   const formattedDebtFreeDate = useMemo(() => {
     if (!debtFreeDate) return '';
     
-    const dateLocale = language === 'fi' ? fi : enUS;
-    return format(debtFreeDate, 'MMMM yyyy', { locale: dateLocale });
-  }, [debtFreeDate, language]);
+    return format(debtFreeDate, 'MMMM yyyy', { locale: fi });
+  }, [debtFreeDate]);
   
   // Calculate time saved compared to minimum payments
   const timeSaved = useMemo(() => {
@@ -113,7 +111,7 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
     <Card className={cn("bg-card/50 border border-border/50", className)}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {t('calculator.results')}
+          Tulokset
           {isCalculating && (
             <div className="ml-2 h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
           )}
@@ -126,8 +124,8 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-primary" />
               <h3 className="text-sm font-medium text-muted-foreground">
-                {t('calculator.debtFreeDate')}
-                <HelpTooltip content={t('calculator.debtFreeDateTooltip')} className="ml-1" />
+                Velkavapaus päivä
+                <HelpTooltip content="Päivä jolloin kaikki velkasi on maksettu" className="ml-1" />
               </h3>
             </div>
             <div className="text-2xl font-bold">
@@ -144,12 +142,12 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
                     {paymentPlan.strategy === 'avalanche' ? (
                       <span className="flex items-center gap-1">
                         <TrendingDown className="h-4 w-4" />
-                        {t('repayment.usingAvalancheMethod')}
+                        Lumivyöry strategia
                       </span>
                     ) : (
                       <span className="flex items-center gap-1">
                         <ArrowDownToLine className="h-4 w-4" />
-                        {t('repayment.usingSnowballMethod')}
+                        Lumipallo strategia
                       </span>
                     )}
                   </>
@@ -163,8 +161,8 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
             <div className="flex items-center gap-2">
               <Coins className="h-5 w-5 text-primary" />
               <h3 className="text-sm font-medium text-muted-foreground">
-                {t('calculator.totalInterestPaid')}
-                <HelpTooltip content={t('calculator.totalInterestPaidTooltip')} className="ml-1" />
+                Kokonaiskorot
+                <HelpTooltip content="Kuinka paljon maksat korkoja yhteensä" className="ml-1" />
               </h3>
             </div>
             <div className="text-2xl font-bold">
@@ -178,7 +176,7 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
               ) : (
                 paymentPlan && (
                   <>
-                    {t('calculator.totalMonths', { months: paymentPlan.totalMonths })}
+                    {paymentPlan.totalMonths} kuukaudessa
                   </>
                 )
               )}
@@ -191,14 +189,14 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-green-500" />
                 <h3 className="text-sm font-medium">
-                  {t('calculator.timeSaved')}
+                  Säästetty aika
                 </h3>
               </div>
               <div className="text-xl font-bold text-green-600 dark:text-green-400">
-                {t('calculator.monthsSaved', { months: timeSaved })}
+                {timeSaved} kuukautta
               </div>
               <p className="text-sm">
-                {t('calculator.timeSavedDescription')}
+                Verrattuna vähimmäismaksuihin
               </p>
             </div>
           )}
@@ -209,14 +207,14 @@ const RealTimeResults: React.FC<RealTimeResultsProps> = ({
               <div className="flex items-center gap-2">
                 <Coins className="h-5 w-5 text-green-500" />
                 <h3 className="text-sm font-medium">
-                  {t('calculator.interestSaved')}
+                  Säästetyt korot
                 </h3>
               </div>
               <div className="text-xl font-bold text-green-600 dark:text-green-400">
                 {currencyFormatter.format(interestSaved)}
               </div>
               <p className="text-sm">
-                {t('calculator.interestSavedDescription')}
+                Verrattuna vähimmäismaksuihin
               </p>
             </div>
           )}

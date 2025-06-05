@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
 	Debt,
@@ -12,7 +13,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { useTranslation } from "@/contexts/LanguageContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,6 @@ export function DebtPayoffTimeline({
 	additionalPayment = 0,
 	strategy = "avalanche",
 }: DebtPayoffTimelineProps) {
-	const { t } = useTranslation();
 	const [paymentPlan, setPaymentPlan] = useState<MonthlyPaymentPlan[] | null>(
 		null
 	);
@@ -87,7 +86,7 @@ export function DebtPayoffTimeline({
 			setCurrentMonth(0);
 			setError(null);
 		} catch (err: any) {
-			setError(err.message || "Error calculating payment plan");
+			setError(err.message || "Virhe laskennassa");
 			setPaymentPlan(null);
 		}
 	}, [debts, additionalPayment, strategy]);
@@ -167,13 +166,13 @@ export function DebtPayoffTimeline({
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle>{t("debtPayoff.timeline.title")}</CardTitle>
+					<CardTitle>Takaisinmaksuaikataulu</CardTitle>
 					<CardDescription>
-						{t("debtPayoff.timeline.description")}
+						Seuraa velkojesi takaisinmaksua kuukausi kuukaudelta
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<p>{t("debtPayoff.timeline.noData")}</p>
+					<p>Lisää ensin velkoja nähdäksesi aikataulun</p>
 				</CardContent>
 			</Card>
 		);
@@ -182,9 +181,9 @@ export function DebtPayoffTimeline({
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>{t("debtPayoff.timeline.title")}</CardTitle>
+				<CardTitle>Takaisinmaksuaikataulu</CardTitle>
 				<CardDescription>
-					{t("debtPayoff.timeline.description")}
+					Seuraa velkojesi takaisinmaksua kuukausi kuukaudelta
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-4">
@@ -198,15 +197,9 @@ export function DebtPayoffTimeline({
 					<>
 						<Tabs value={viewMode} onValueChange={(v) => setViewMode(v as any)}>
 							<TabsList className="grid grid-cols-3 w-[300px] mx-auto">
-								<TabsTrigger value="monthly">
-									{t("debtPayoff.timeline.viewMonthly")}
-								</TabsTrigger>
-								<TabsTrigger value="quarterly">
-									{t("debtPayoff.timeline.viewQuarterly")}
-								</TabsTrigger>
-								<TabsTrigger value="yearly">
-									{t("debtPayoff.timeline.viewYearly")}
-								</TabsTrigger>
+								<TabsTrigger value="monthly">Kuukausittain</TabsTrigger>
+								<TabsTrigger value="quarterly">Neljännesvuosittain</TabsTrigger>
+								<TabsTrigger value="yearly">Vuosittain</TabsTrigger>
 							</TabsList>
 						</Tabs>
 
@@ -242,7 +235,7 @@ export function DebtPayoffTimeline({
 											className="gap-1"
 										>
 											<ChevronLeft className="h-4 w-4" />
-											<span>{t("pagination.previous")}</span>
+											<span>Edellinen</span>
 										</Button>
 									</PaginationItem>
 
@@ -252,8 +245,7 @@ export function DebtPayoffTimeline({
 												{currentMonthData && formatDate(currentMonthData.date)}
 											</div>
 											<div className="text-sm text-muted-foreground">
-												{t("debtPayoff.timeline.month")} {currentMonth + 1}{" "}
-												{t("debtPayoff.timeline.of")} {totalMonths}
+												Kuukausi {currentMonth + 1} / {totalMonths}
 											</div>
 										</div>
 									</PaginationItem>
@@ -265,7 +257,7 @@ export function DebtPayoffTimeline({
 											disabled={currentMonth === totalMonths - 1}
 											className="gap-1"
 										>
-											<span>{t("pagination.next")}</span>
+											<span>Seuraava</span>
 											<ChevronRight className="h-4 w-4" />
 										</Button>
 									</PaginationItem>
@@ -299,7 +291,7 @@ export function DebtPayoffTimeline({
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									<div className="bg-muted/50 p-4 rounded-lg">
 										<div className="text-sm text-muted-foreground">
-											{t("debtPayoff.timeline.totalPaid")}
+											Maksettu yhteensä
 										</div>
 										<div className="text-2xl font-bold">
 											{formatCurrency(currentMonthData.totalPaid)}
@@ -308,7 +300,7 @@ export function DebtPayoffTimeline({
 
 									<div className="bg-muted/50 p-4 rounded-lg">
 										<div className="text-sm text-muted-foreground">
-											{t("debtPayoff.timeline.interestPaid")}
+											Korot maksettu
 										</div>
 										<div className="text-2xl font-bold">
 											{formatCurrency(currentMonthData.totalInterestPaid)}
@@ -317,7 +309,7 @@ export function DebtPayoffTimeline({
 
 									<div className="bg-muted/50 p-4 rounded-lg">
 										<div className="text-sm text-muted-foreground">
-											{t("debtPayoff.timeline.principalPaid")}
+											Pääoma maksettu
 										</div>
 										<div className="text-2xl font-bold">
 											{formatCurrency(currentMonthData.totalPrincipalPaid)}
@@ -327,27 +319,17 @@ export function DebtPayoffTimeline({
 
 								<div>
 									<h4 className="font-semibold mb-2">
-										{t("debtPayoff.timeline.totalDebtRemaining")}
+										Velkatilanne kuukaudessa
 									</h4>
 									<div className="overflow-x-auto">
 										<Table>
 											<TableHeader>
 												<TableRow>
-													<TableHead>
-														{t("debtPayoff.timeline.debtName")}
-													</TableHead>
-													<TableHead className="text-right">
-														{t("debtPayoff.timeline.payment")}
-													</TableHead>
-													<TableHead className="text-right">
-														{t("debtPayoff.timeline.interestPaid")}
-													</TableHead>
-													<TableHead className="text-right">
-														{t("debtPayoff.timeline.principalPaid")}
-													</TableHead>
-													<TableHead className="text-right">
-														{t("debtPayoff.timeline.remainingBalance")}
-													</TableHead>
+													<TableHead>Velka</TableHead>
+													<TableHead className="text-right">Maksu</TableHead>
+													<TableHead className="text-right">Korko</TableHead>
+													<TableHead className="text-right">Pääoma</TableHead>
+													<TableHead className="text-right">Jäljellä</TableHead>
 												</TableRow>
 											</TableHeader>
 											<TableBody>
@@ -372,7 +354,7 @@ export function DebtPayoffTimeline({
 															<TableCell className="text-right">
 																{payment.remainingBalance === 0 ? (
 																	<span className="text-green-600 font-semibold">
-																		{t("debtPayoff.timeline.paidOff")}
+																		Maksettu
 																	</span>
 																) : (
 																	formatCurrency(payment.remainingBalance)
@@ -383,7 +365,7 @@ export function DebtPayoffTimeline({
 												})}
 												<TableRow className="bg-muted/50">
 													<TableCell className="font-medium">
-														{t("calculator.total")}
+														Yhteensä
 													</TableCell>
 													<TableCell className="text-right font-medium">
 														{formatCurrency(currentMonthData.totalPaid)}
@@ -409,9 +391,7 @@ export function DebtPayoffTimeline({
 
 								{currentMonthData.debtsCompleted.length > 0 && (
 									<div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded">
-										<p className="font-semibold">
-											{t("calculator.debtsPaidOff")}
-										</p>
+										<p className="font-semibold">Maksetut velat</p>
 										<ul className="mt-1 list-disc pl-5">
 											{currentMonthData.debtsCompleted.map((debtId) => {
 												const debt = debts.find((d) => d.id === debtId);
@@ -423,11 +403,9 @@ export function DebtPayoffTimeline({
 
 								{currentMonth === totalMonths - 1 && (
 									<div className="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded">
-										<p className="font-semibold">
-											{t("debtPayoff.timeline.congratulations")}
-										</p>
+										<p className="font-semibold">Onnittelut!</p>
 										<p className="mt-1">
-											{t("debtPayoff.timeline.debtFreeMessage")}
+											Olet nyt velkavapaa! Kaikki velkasi on maksettu.
 										</p>
 									</div>
 								)}

@@ -1,486 +1,451 @@
 
-import React, { useState, useMemo, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-	Loan,
-	calculateLoan,
-	formatCurrency,
-	generateRecommendations,
-	calculateTotalMonthlyPayment,
-} from "@/utils/loanCalculations";
-import {
-	CreditCard,
-	calculateCreditCard,
-	formatPayoffTime,
-} from "@/utils/creditCardCalculations";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/button";
-import {
-	ArrowLeft,
-	CreditCard as CreditCardIcon,
-	Wallet,
-	AlertTriangle,
-	CalculatorIcon,
-} from "lucide-react";
-import LoanSummaryTable from "@/components/LoanSummaryTable";
-import CreditCardSummaryTable from "@/components/CreditCardSummaryTable";
-import TotalDebtSummary from "@/components/TotalDebtSummary";
-import SavingsImpact from "@/components/SavingsImpact";
-import BudgetInput from "@/components/BudgetInput";
-import RepaymentPlanVisualization from "@/components/RepaymentPlanVisualization";
-import DemoDataNotice from "@/components/DemoDataNotice";
-import {
-	combineDebts,
-	generateRepaymentPlan,
-	PrioritizationMethod,
-} from "@/utils/repayment";
-import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Loan } from '@/utils/loanCalculations';
+import { CreditCard } from '@/utils/creditCardCalculations';
+import { Button } from '@/components/ui/button';
+import { Calculator, FileText, Download, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { useAuth } from '@/contexts/AuthContext';
 
-interface DebtSummaryProps {
-	loans: Loan[];
-	creditCards: CreditCard[];
-	onPayoffLoan: (id: string) => void;
-	onPayoffCreditCard: (id: string) => void;
-	onClearLoans?: () => void;
-	onClearCreditCards?: () => void;
+interface DebtItem {
+  id: string;
+  name: string;
+  type: 'loan' | 'credit-card';
+  balance: number;
+  originalAmount?: number;
+  interestRate: number;
+  minimumPayment: number;
+  monthlyPayment?: number;
 }
 
-export default function DebtSummary({
-	loans,
-	creditCards,
-	onPayoffLoan,
-	onPayoffCreditCard,
-	onClearLoans,
-	onClearCreditCards,
-}: DebtSummaryProps) {
-	const { t } = useLanguage();
-	const navigate = useNavigate();
-	const location = useLocation();
-	const [budget, setBudget] = useState<number>(500);
-	const [method, setMethod] = useState<PrioritizationMethod>("avalanche");
-	const [repaymentPlan, setRepaymentPlan] = useState<ReturnType<
-		typeof generateRepaymentPlan
-	> | null>(null);
+const DebtSummary: React.FC = () => {
+  const { user } = useAuth();
+  const [loans] = useLocalStorage<Loan[]>('loans', []);
+  const [creditCards] = useLocalStorage<CreditCard[]>('creditCards', []);
+  const [debts, setDebts] = useState<DebtItem[]>([]);
 
-	const queryParams = new URLSearchParams(location.search);
-	const tabFromUrl = queryParams.get("tab");
-	const [activeTab, setActiveTab] = useState<string>(
-		tabFromUrl === "repayment-plan" ? "repayment-plan" : "summary"
-	);
+  // Combine loans and credit cards into a unified debt list
+  useEffect(() => {
+    const combinedDebts: DebtItem[] = [
+      ...loans.map(loan => ({
+        id: loan.id,
+        name: loan.name || 'Nimetön laina',
+        type: 'loan' as const,
+        balance: loan.amount,
+        originalAmount: loan.originalAmount,
+        interestRate: loan.interestRate,
+        minimumPayment: loan.monthlyPayment,
+        monthlyPayment: loan.monthlyPayment
+      })),
+      ...creditCards.map(card => ({
+        id: card.id,
+        name: card.name || 'Nimetön luottokortti',
+        type: 'credit-card' as const,
+        balance: card.balance,
+        originalAmount: card.creditLimit,
+        interestRate: card.interestRate,
+        minimumPayment: card.minimumPayment
+      }))
+    ];
+    setDebts(combinedDebts);
+  }, [loans, creditCards]);
 
-	useEffect(() => {
-		if (tabFromUrl === "repayment-plan") {
-			setActiveTab("repayment-plan");
-			if (!repaymentPlan) {
-				calculateRepaymentPlan(budget, method);
-			}
-		} else {
-			setActiveTab("summary");
-		}
-	}, [location, tabFromUrl]);
+  // Calculate summary statistics
+  const totalBalance = debts.reduce((sum, debt) => sum + debt.balance, 0);
+  const totalMinimumPayments = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
+  const averageInterestRate = debts.length > 0 
+    ? debts.reduce((sum, debt) => sum + debt.interestRate, 0) / debts.length 
+    : 0;
+  const highestInterestRate = debts.length > 0 
+    ? Math.max(...debts.map(debt => debt.interestRate)) 
+    : 0;
 
-	const activeLoans = loans.filter((loan) => loan.isActive);
-	const activeCards = creditCards.filter((card) => card.isActive);
+  // Categorize debts by interest rate
+  const highInterestDebts = debts.filter(debt => debt.interestRate > 15);
+  const mediumInterestDebts = debts.filter(debt => debt.interestRate >= 5 && debt.interestRate <= 15);
+  const lowInterestDebts = debts.filter(debt => debt.interestRate < 5);
 
-	const loansToDisplay =
-		activeLoans.length > 0 ? activeLoans : getSampleLoans();
-	const cardsToDisplay =
-		activeCards.length > 0 ? activeCards : getSampleCreditCards();
+  // Format currency
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fi-FI', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount);
+  };
 
-	const recommendationsObj = generateRecommendations(loansToDisplay);
-	const recommendations = [
-		...(recommendationsObj.topPriorityLoans.length > 0
-			? [
-					{
-						type: "topPriority",
-						loans: recommendationsObj.topPriorityLoans.map((loan) => loan.id),
-					},
-			  ]
-			: []),
-		...(recommendationsObj.highestInterestRateLoans.length > 0
-			? [
-					{
-						type: "highInterest",
-						loans: recommendationsObj.highestInterestRateLoans.map(
-							(loan) => loan.id
-						),
-					},
-			  ]
-			: []),
-		...(recommendationsObj.highestTotalInterestLoans.length > 0
-			? [
-					{
-						type: "highTotalInterest",
-						loans: recommendationsObj.highestTotalInterestLoans.map(
-							(loan) => loan.id
-						),
-					},
-			  ]
-			: []),
-	];
+  // Calculate debt-to-income ratio (placeholder - would need user income)
+  const monthlyIncome = 3000; // This would come from user input
+  const debtToIncomeRatio = totalMinimumPayments / monthlyIncome * 100;
 
-	const hasActiveDebts = activeLoans.length > 0 || activeCards.length > 0;
-	const isDemo = activeLoans.length === 0 && activeCards.length === 0;
+  // Export debt summary
+  const exportSummary = () => {
+    const summaryData = {
+      exportDate: new Date().toISOString(),
+      userEmail: user?.email,
+      totalDebts: debts.length,
+      totalBalance,
+      totalMinimumPayments,
+      averageInterestRate,
+      debts: debts.map(debt => ({
+        name: debt.name,
+        type: debt.type,
+        balance: debt.balance,
+        interestRate: debt.interestRate,
+        minimumPayment: debt.minimumPayment
+      }))
+    };
 
-	const { totalPayment: totalLoanPayment, totalInterest: totalLoanInterest } =
-		calculateTotalMonthlyPayment(loansToDisplay);
+    const blob = new Blob([JSON.stringify(summaryData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `velkatiiviste_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
-	let totalCardPayment = 0;
-	let totalCardInterest = 0;
+  if (debts.length === 0) {
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <Helmet>
+          <title>Velkatiiviste | Velkavapaus.fi</title>
+          <meta name="description" content="Katsaus velkatilanteesi ja analyysi velkojesi tilasta" />
+        </Helmet>
 
-	cardsToDisplay.forEach((card) => {
-		const calc = calculateCreditCard(card);
-		totalCardPayment += calc.effectivePayment;
-		totalCardInterest += calc.monthlyInterest;
-	});
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-4">Velkatiiviste</h1>
+            <p className="text-muted-foreground">
+              Katsaus velkatilanteesi ja analyysi velkojesi tilasta
+            </p>
+          </div>
 
-	const totalMonthlyPayment = totalLoanPayment + totalCardPayment;
-	const totalMonthlyInterest = totalLoanInterest + totalCardInterest;
+          <Card>
+            <CardContent className="text-center py-12">
+              <FileText className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2">Ei velkoja lisättynä</h3>
+              <p className="text-muted-foreground mb-4">
+                Lisää ensin lainoja tai luottokortteja nähdäksesi velkatiivistesi
+              </p>
+              <Button asChild>
+                <a href="/calculator">
+                  <Calculator className="h-4 w-4 mr-2" />
+                  Siirry velkalaskuriin
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
-	const totalLoanBalance = loansToDisplay.reduce(
-		(sum, loan) => sum + loan.amount,
-		0
-	);
-	const totalCardBalance = cardsToDisplay.reduce(
-		(sum, card) => sum + card.balance,
-		0
-	);
-	const totalDebtBalance = totalLoanBalance + totalCardBalance;
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <Helmet>
+        <title>Velkatiiviste | Velkavapaus.fi</title>
+        <meta name="description" content="Katsaus velkatilanteesi ja analyysi velkojesi tilasta" />
+      </Helmet>
 
-	useEffect(() => {
-		if (activeTab === "repayment-plan") {
-			calculateRepaymentPlan(budget, method);
-		}
-	}, [budget, method, activeTab]);
+      <div className="max-w-6xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">Velkatiiviste</h1>
+            <p className="text-muted-foreground">
+              Katsaus velkatilanteesi ja analyysi velkojesi tilasta
+            </p>
+          </div>
+          <Button onClick={exportSummary} variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Vie tiiviste
+          </Button>
+        </div>
 
-	const calculateRepaymentPlan = (
-		budgetAmount: number,
-		prioritizationMethod: PrioritizationMethod
-	) => {
-		setBudget(budgetAmount);
-		setMethod(prioritizationMethod);
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Kokonaisvelka</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(totalBalance)}</div>
+              <p className="text-xs text-muted-foreground">
+                {debts.length} velkaa yhteensä
+              </p>
+            </CardContent>
+          </Card>
 
-		const combinedDebts = combineDebts(activeLoans, activeCards);
-		const plan = generateRepaymentPlan(
-			combinedDebts,
-			budgetAmount,
-			prioritizationMethod
-		);
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Kuukausimaksut</CardTitle>
+              <Calculator className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{formatCurrency(totalMinimumPayments)}</div>
+              <p className="text-xs text-muted-foreground">
+                Vähimmäismaksut yhteensä
+              </p>
+            </CardContent>
+          </Card>
 
-		setRepaymentPlan(plan);
-		setActiveTab("repayment-plan");
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Keskikorko</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{averageInterestRate.toFixed(1)}%</div>
+              <p className="text-xs text-muted-foreground">
+                Korkein: {highestInterestRate.toFixed(1)}%
+              </p>
+            </CardContent>
+          </Card>
 
-		navigate("/debt-summary?tab=repayment-plan", { replace: true });
-	};
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Velka-tulosuhde</CardTitle>
+              <TrendingDown className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{debtToIncomeRatio.toFixed(1)}%</div>
+              <p className="text-xs text-muted-foreground">
+                Kuukausittaisista tuloista
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
-	const handleClearDemoData = () => {
-		// Clear demo data using the provided handlers
-		if (activeLoans.length === 0 && onClearLoans) {
-			onClearLoans();
-		}
-		if (activeCards.length === 0 && onClearCreditCards) {
-			onClearCreditCards();
-		}
-		toast.success(t("demoData.demoCleared"));
-	};
+        {/* Debt Analysis */}
+        {debtToIncomeRatio > 40 && (
+          <Alert className="mb-6">
+            <TrendingUp className="h-4 w-4" />
+            <AlertDescription>
+              <strong>Huomio:</strong> Velka-tulosuhteesi on korkea ({debtToIncomeRatio.toFixed(1)}%). 
+              Suositeltava taso on alle 40%. Harkitse velkojen yhdistämistä tai ylimääräisiä maksuja.
+            </AlertDescription>
+          </Alert>
+        )}
 
-	return (
-		<div className="container px-4 py-8 mx-auto">
-			<Helmet>
-				<title>
-					{t("debtSummary.pageTitle")} | {t("app.title")}
-				</title>
-				<meta name="description" content={t("debtSummary.metaDescription")} />
-			</Helmet>
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="overview">Yleiskatsaus</TabsTrigger>
+            <TabsTrigger value="analysis">Analyysi</TabsTrigger>
+            <TabsTrigger value="details">Yksityiskohdat</TabsTrigger>
+          </TabsList>
 
-			<div className="mb-8">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={() => navigate("/")}
-					className="mb-4"
-				>
-					<ArrowLeft className="mr-2 h-4 w-4" />
-					{t("debtSummary.backButton")}
-				</Button>
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Debt Breakdown by Type */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Velat tyypeittäin</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span>Lainat</span>
+                      <div className="text-right">
+                        <div className="font-semibold">
+                          {formatCurrency(loans.reduce((sum, loan) => sum + loan.amount, 0))}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {loans.length} kpl
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Luottokortit</span>
+                      <div className="text-right">
+                        <div className="font-semibold">
+                          {formatCurrency(creditCards.reduce((sum, card) => sum + card.balance, 0))}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {creditCards.length} kpl
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-					<div>
-						<h1 className="text-3xl font-bold tracking-tight mb-2">
-							{t("debtSummary.pageTitle")}
-						</h1>
-						<p className="text-muted-foreground">
-							{t("debtSummary.pageDescription")}
-						</p>
-					</div>
-				</div>
+              {/* Interest Rate Distribution */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Korot kategoriassa</CardTitle>
+                  <CardDescription>Velkojen jakautuminen korkotason mukaan</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Korkea korko (&gt;15%)</span>
+                      <span className="text-red-600 font-medium">{highInterestDebts.length} velkaa</span>
+                    </div>
+                    <Progress 
+                      value={(highInterestDebts.length / debts.length) * 100} 
+                      className="h-2"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Keskikorko (5-15%)</span>
+                      <span className="text-yellow-600 font-medium">{mediumInterestDebts.length} velkaa</span>
+                    </div>
+                    <Progress 
+                      value={(mediumInterestDebts.length / debts.length) * 100} 
+                      className="h-2"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Matala korko (&lt;5%)</span>
+                      <span className="text-green-600 font-medium">{lowInterestDebts.length} velkaa</span>
+                    </div>
+                    <Progress 
+                      value={(lowInterestDebts.length / debts.length) * 100} 
+                      className="h-2"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
-				{isDemo && (
-					<DemoDataNotice
-						className="mb-8"
-						onClearDemoData={handleClearDemoData}
-					/>
-				)}
+          <TabsContent value="analysis" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Velka-analyysi</CardTitle>
+                <CardDescription>Suosituksia velkatilanteesi parantamiseksi</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Priority Recommendations */}
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Prioriteettisuositukset</h4>
+                  
+                  {highInterestDebts.length > 0 && (
+                    <Alert>
+                      <TrendingUp className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>Korkean koron velat:</strong> Sinulla on {highInterestDebts.length} velkaa 
+                        yli 15% korolla. Keskity näiden maksuun ensimmäisenä säästääksesi korkokuluissa.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  
+                  {totalMinimumPayments / monthlyIncome > 0.2 && (
+                    <Alert>
+                      <Calculator className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>Kuukausimaksut:</strong> Vähimmäismaksusi vievät {(totalMinimumPayments / monthlyIncome * 100).toFixed(1)}% 
+                        tuloistasi. Harkitse ylimääräisiä maksuja tai velkojen yhdistämistä.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </div>
 
-				{hasActiveDebts && (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-						<div className="bg-card rounded-lg p-5 shadow-sm border">
-							<div className="flex items-center gap-2 mb-2">
-								<Wallet className="h-5 w-5 text-muted-foreground" />
-								<span className="text-sm font-medium text-muted-foreground">
-									{t("debtSummary.totalMonthlyPayment")}
-								</span>
-							</div>
-							<div className="text-2xl font-bold">
-								{formatCurrency(totalMonthlyPayment)}
-							</div>
-						</div>
+                {/* Potential Savings */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="bg-green-50 dark:bg-green-950/30">
+                    <CardContent className="p-4">
+                      <h5 className="font-semibold text-green-700 dark:text-green-300 mb-2">
+                        Lumivyöry strategia
+                      </h5>
+                      <p className="text-sm text-green-600 dark:text-green-400">
+                        Maksa korkeakorkoiset velat ensin. Säästät enemmän korkokuluissa.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-blue-50 dark:bg-blue-950/30">
+                    <CardContent className="p-4">
+                      <h5 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                        Lumipallo strategia
+                      </h5>
+                      <p className="text-sm text-blue-600 dark:text-blue-400">
+                        Maksa pienimmät velat ensin. Rakentaa motivaatiota ja vauhtia.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-						<div className="bg-card rounded-lg p-5 shadow-sm border">
-							<div className="flex items-center gap-2 mb-2">
-								<AlertTriangle className="h-5 w-5 text-muted-foreground" />
-								<span className="text-sm font-medium text-muted-foreground">
-									{t("debtSummary.totalMonthlyInterest")}
-								</span>
-							</div>
-							<div className="text-2xl font-bold">
-								{formatCurrency(totalMonthlyInterest)}
-							</div>
-						</div>
+          <TabsContent value="details" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Yksityiskohtainen velkaluettelo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Velka</TableHead>
+                        <TableHead>Tyyppi</TableHead>
+                        <TableHead className="text-right">Saldo</TableHead>
+                        <TableHead className="text-right">Korko</TableHead>
+                        <TableHead className="text-right">Vähimmäismaksu</TableHead>
+                        <TableHead className="text-right">Prioriteetti</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {debts
+                        .sort((a, b) => b.interestRate - a.interestRate)
+                        .map((debt, index) => (
+                        <TableRow key={debt.id}>
+                          <TableCell className="font-medium">{debt.name}</TableCell>
+                          <TableCell>
+                            <Badge variant={debt.type === 'loan' ? 'default' : 'secondary'}>
+                              {debt.type === 'loan' ? 'Laina' : 'Luottokortti'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right font-mono">
+                            {formatCurrency(debt.balance)}
+                          </TableCell>
+                          <TableCell className="text-right font-mono">
+                            <span className={
+                              debt.interestRate > 15 ? 'text-red-600' :
+                              debt.interestRate > 5 ? 'text-yellow-600' : 'text-green-600'
+                            }>
+                              {debt.interestRate.toFixed(1)}%
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-right font-mono">
+                            {formatCurrency(debt.minimumPayment)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Badge variant={
+                              index < 2 ? 'destructive' :
+                              index < debts.length / 2 ? 'default' : 'secondary'
+                            }>
+                              {index < 2 ? 'Korkea' :
+                               index < debts.length / 2 ? 'Keskitaso' : 'Matala'}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+};
 
-						<div className="bg-card rounded-lg p-5 shadow-sm border">
-							<div className="flex items-center gap-2 mb-2">
-								<Wallet className="h-5 w-5 text-muted-foreground" />
-								<span className="text-sm font-medium text-muted-foreground">
-									{t("debtSummary.totalBalance")}
-								</span>
-							</div>
-							<div className="text-2xl font-bold">
-								{formatCurrency(totalDebtBalance)}
-							</div>
-						</div>
-
-						<div className="bg-card rounded-lg p-5 shadow-sm border">
-							<div className="flex items-center gap-2 mb-2">
-								<CreditCardIcon className="h-5 w-5 text-muted-foreground" />
-								<span className="text-sm font-medium text-muted-foreground">
-									{t("creditCard.summary.totalLimit")}
-								</span>
-							</div>
-							<div className="text-2xl font-bold">
-								{formatCurrency(
-									cardsToDisplay.reduce((sum, card) => sum + card.limit, 0)
-								)}
-							</div>
-						</div>
-					</div>
-				)}
-
-				{activeLoans.length > 0 && recommendations.length > 0 && (
-					<div className="bg-card rounded-lg p-6 shadow-sm border mb-8">
-						<h2 className="text-xl font-bold mb-4">
-							{t("recommendations.title")}
-						</h2>
-						<div className="space-y-4">
-							{recommendations.map((rec, i) => (
-								<div key={i} className="bg-background rounded-md p-4 border">
-									<h3 className="font-semibold mb-1">
-										{t(`recommendations.${rec.type}`)}
-									</h3>
-									<p className="text-sm text-muted-foreground">
-										{rec.loans.length > 1
-											? t(`recommendations.${rec.type}TextPlural`)
-											: t(`recommendations.${rec.type}Text`)}
-									</p>
-									<div className="mt-2 flex flex-wrap gap-2">
-										{rec.loans.map((loanId) => {
-											const loan = loansToDisplay.find((l) => l.id === loanId);
-											return loan ? (
-												<span
-													key={loanId}
-													className="inline-block bg-secondary text-secondary-foreground rounded-full px-3 py-1 text-xs font-medium"
-												>
-													{loan.name} ({formatCurrency(loan.amount)})
-												</span>
-											) : null;
-										})}
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				)}
-			</div>
-
-			<Tabs
-				value={activeTab}
-				onValueChange={setActiveTab}
-				className="space-y-8"
-			>
-				<TabsList className="grid w-full grid-cols-2">
-					<TabsTrigger
-						value="summary"
-						onClick={() => navigate("/debt-summary", { replace: true })}
-					>
-						{t("repayment.summaryTab")}
-					</TabsTrigger>
-					<TabsTrigger
-						value="repayment-plan"
-						onClick={() =>
-							navigate("/debt-summary?tab=repayment-plan", { replace: true })
-						}
-					>
-						{t("repayment.planTab")}
-					</TabsTrigger>
-				</TabsList>
-
-				<TabsContent value="summary" className="space-y-8">
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-						<div className="md:col-span-2">
-							<section aria-labelledby="loans-heading">
-								<h2 id="loans-heading" className="text-2xl font-bold mb-4">
-									{t("debtSummary.loansSection")}
-								</h2>
-								<LoanSummaryTable
-									loans={loansToDisplay}
-									isDemo={activeLoans.length === 0}
-								/>
-								<div className="mt-4 p-4 bg-muted rounded-lg">
-									<div className="font-medium">
-										{t("debtSummary.totalLoans")}:{" "}
-										{formatCurrency(totalLoanBalance)}
-									</div>
-								</div>
-							</section>
-						</div>
-						<div>
-							<SavingsImpact
-								loans={loansToDisplay}
-								onPayoffLoan={onPayoffLoan}
-							/>
-						</div>
-					</div>
-
-					<section aria-labelledby="credit-cards-heading">
-						<h2 id="credit-cards-heading" className="text-2xl font-bold mb-4">
-							{t("debtSummary.creditCardsSection")}
-						</h2>
-						<CreditCardSummaryTable
-							creditCards={cardsToDisplay}
-							isDemo={activeCards.length === 0}
-							onPayoffCreditCard={onPayoffCreditCard}
-						/>
-						<div className="mt-4 p-4 bg-muted rounded-lg">
-							<div className="font-medium">
-								{t("debtSummary.totalCards")}:{" "}
-								{formatCurrency(totalCardBalance)}
-							</div>
-						</div>
-					</section>
-
-					<section aria-labelledby="total-summary-heading">
-						<h2 id="total-summary-heading" className="text-2xl font-bold mb-4">
-							{t("debtSummary.totalSummarySection")}
-						</h2>
-						<TotalDebtSummary
-							loans={loansToDisplay}
-							creditCards={cardsToDisplay}
-							isDemo={isDemo}
-							totalDebtBalance={totalDebtBalance}
-						/>
-					</section>
-				</TabsContent>
-
-				<TabsContent value="repayment-plan" className="space-y-8">
-					<div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-						<div className="md:col-span-1">
-							<BudgetInput
-								onCalculate={calculateRepaymentPlan}
-								defaultBudget={budget}
-								method={method}
-							/>
-						</div>
-						<div className="md:col-span-3">
-							{repaymentPlan ? (
-								<RepaymentPlanVisualization
-									plan={repaymentPlan}
-									debts={[...activeLoans, ...activeCards]}
-								/>
-							) : (
-								<div className="flex flex-col items-center justify-center h-full p-10 text-center bg-muted rounded-lg border">
-									<CalculatorIcon className="h-12 w-12 text-muted-foreground mb-4" />
-									<h3 className="text-lg font-medium mb-2">
-										{t("repayment.noPlanYet")}
-									</h3>
-									<p className="text-muted-foreground mb-4">
-										{t("repayment.enterBudgetPrompt")}
-									</p>
-									<Button
-										onClick={() => calculateRepaymentPlan(budget, method)}
-									>
-										<CalculatorIcon className="mr-2 h-4 w-4" />
-										{t("repayment.calculateNow")}
-									</Button>
-								</div>
-							)}
-						</div>
-					</div>
-				</TabsContent>
-			</Tabs>
-		</div>
-	);
-}
-
-function getSampleLoans(): Loan[] {
-	return [
-		{
-			id: "sample-loan-1",
-			name: "Sample Mortgage",
-			amount: 200000,
-			interestRate: 3.5,
-			termYears: 25,
-			repaymentType: "annuity",
-			interestType: "fixed",
-			isActive: true,
-		},
-		{
-			id: "sample-loan-2",
-			name: "Sample Car Loan",
-			amount: 15000,
-			interestRate: 4.2,
-			termYears: 5,
-			repaymentType: "annuity",
-			interestType: "fixed",
-			isActive: true,
-		},
-	];
-}
-
-function getSampleCreditCards(): CreditCard[] {
-	return [
-		{
-			id: "sample-card-1",
-			name: "Sample Visa",
-			balance: 2000,
-			limit: 5000,
-			apr: 19.9,
-			minPayment: 50,
-			minPaymentPercent: 2.5,
-			fullPayment: false,
-			isActive: true,
-		},
-		{
-			id: "sample-card-2",
-			name: "Sample Mastercard",
-			balance: 1500,
-			limit: 3000,
-			apr: 21.5,
-			minPayment: 35,
-			minPaymentPercent: 2.5,
-			fullPayment: false,
-			isActive: true,
-		},
-	];
-}
+export default DebtSummary;
