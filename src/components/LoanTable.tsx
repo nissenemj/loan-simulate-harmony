@@ -15,7 +15,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
   DialogContent,
@@ -54,6 +54,15 @@ const LoanTable: React.FC<LoanTableProps> = ({
         description: `${loan.name} ${isActive ? 'on nyt aktiivinen' : 'poistettu käytöstä'}`,
       });
     }
+  };
+
+  const handleEditClick = (loan: Loan) => {
+    console.log('Edit button clicked for loan:', loan);
+    onEditLoan(loan);
+    toast({
+      title: "Muokkaa lainaa",
+      description: `Avaa lainan ${loan.name} muokkauslomake`,
+    });
   };
 
   const confirmDelete = (loan: Loan) => {
@@ -206,7 +215,7 @@ const LoanTable: React.FC<LoanTableProps> = ({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => onEditLoan(loan)}
+                            onClick={() => handleEditClick(loan)}
                             className="hover:bg-accent"
                             aria-label={`Muokkaa lainaa ${loan.name}`}
                           >
