@@ -13,6 +13,7 @@ import LandingPage from './pages/LandingPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import CookiePolicy from './pages/CookiePolicy';
+import StrategiesPage from './pages/StrategiesPage';
 
 // Define routes
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/calculator',
     element: <Calculator />,
+  },
+  {
+    path: '/strategies',
+    element: <StrategiesPage />,
   },
   {
     path: '/debt-strategies',
