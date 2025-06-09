@@ -30,19 +30,36 @@ interface DebtPayoffCalculatorProps {
   onError: (error: Error) => void;
 }
 
-// Validointifunktiot
-const createRequiredValidator = (errorMessage: string = "Tämä kenttä on pakollinen") => {
+// Enhanced validation functions with better error messages
+const createRequiredValidator = (fieldName: string = "kenttä") => {
   return (value: string) => {
     const isValid = value.trim().length > 0;
-    return { isValid, message: isValid ? undefined : errorMessage };
+    return { 
+      isValid, 
+      message: isValid ? undefined : `${fieldName} on pakollinen` 
+    };
   };
 };
 
-const createPositiveNumberValidator = (errorMessage: string = "Syötä positiivinen luku") => {
+const createPositiveNumberValidator = (fieldName: string = "Arvo", minValue: number = 0) => {
   return (value: string) => {
     const num = Number(value);
-    const isValid = !isNaN(num) && num > 0;
-    return { isValid, message: isValid ? undefined : errorMessage };
+    const isValid = !isNaN(num) && num > minValue;
+    return { 
+      isValid, 
+      message: isValid ? undefined : `${fieldName} täytyy olla suurempi kuin ${minValue}€` 
+    };
+  };
+};
+
+const createInterestRateValidator = () => {
+  return (value: string) => {
+    const num = Number(value);
+    const isValid = !isNaN(num) && num >= 0 && num <= 100;
+    return { 
+      isValid, 
+      message: isValid ? undefined : "Korko täytyy olla 0-100% välillä" 
+    };
   };
 };
 
@@ -62,6 +79,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [showTour, setShowTour] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
 
   const totalDebt = useMemo(() => debts.reduce((sum, debt) => sum + debt.balance, 0), [debts]);
   const totalMinPayment = useMemo(() => debts.reduce((sum, debt) => sum + debt.minimumPayment, 0), [debts]);
@@ -74,6 +92,34 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
     return value % 1 === 0 ? value : parseFloat(value.toFixed(1));
   };
 
+  // Real-time validation
+  const validateDebt = useCallback((debt: Debt, index: number) => {
+    const errors: {[key: string]: string} = {};
+    const prefix = `debt-${index}`;
+
+    if (!debt.name.trim()) {
+      errors[`${prefix}-name`] = "Velan nimi on pakollinen";
+    }
+
+    if (debt.balance <= 0) {
+      errors[`${prefix}-balance`] = "Saldo täytyy olla suurempi kuin 0€";
+    }
+
+    if (debt.interestRate < 0 || debt.interestRate > 100) {
+      errors[`${prefix}-interest`] = "Korko täytyy olla 0-100% välillä";
+    }
+
+    if (debt.minimumPayment <= 0) {
+      errors[`${prefix}-payment`] = "Vähimmäismaksu täytyy olla suurempi kuin 0€";
+    }
+
+    if (debt.minimumPayment > debt.balance) {
+      errors[`${prefix}-payment`] = "Vähimmäismaksu ei voi olla suurempi kuin saldo";
+    }
+
+    return errors;
+  }, []);
+
   const handleAddDebt = useCallback(() => {
     const newDebt: Debt = {
       id: `debt-${Date.now()}`,
@@ -84,27 +130,57 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
       type: 'loan'
     };
     setDebts([...debts, newDebt]);
+    setCurrentStep(1);
   }, [debts]);
 
   const handleRemoveDebt = useCallback((id: string) => {
     setDebts(debts.filter(debt => debt.id !== id));
-  }, [debts]);
+    // Clear validation errors for removed debt
+    const newErrors = { ...validationErrors };
+    Object.keys(newErrors).forEach(key => {
+      if (key.includes(id)) {
+        delete newErrors[key];
+      }
+    });
+    setValidationErrors(newErrors);
+  }, [debts, validationErrors]);
 
   const handleUpdateDebt = useCallback((id: string, field: keyof Debt, value: any) => {
-    setDebts(debts.map(debt => {
+    const updatedDebts = debts.map(debt => {
       if (debt.id === id) {
         if (typeof value === 'number' && (field === 'balance' || field === 'interestRate' || field === 'minimumPayment')) {
           value = formatInputValue(value);
         }
-        return { ...debt, [field]: value };
+        const updatedDebt = { ...debt, [field]: value };
+        
+        // Real-time validation
+        const debtIndex = debts.findIndex(d => d.id === id);
+        const errors = validateDebt(updatedDebt, debtIndex);
+        
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          // Clear old errors for this debt
+          Object.keys(newErrors).forEach(key => {
+            if (key.startsWith(`debt-${debtIndex}-`)) {
+              delete newErrors[key];
+            }
+          });
+          // Add new errors
+          return { ...newErrors, ...errors };
+        });
+        
+        return updatedDebt;
       }
       return debt;
-    }));
-  }, [debts]);
+    });
+    
+    setDebts(updatedDebts);
+  }, [debts, validateDebt]);
 
   const handleFillExample = useCallback((exampleDebts: Debt[]) => {
     setDebts(exampleDebts);
     setCurrentStep(2);
+    setValidationErrors({}); // Clear validation errors
     toast({
       title: "Esimerkkitiedot lisätty",
       description: "Voit nyt muokata tietoja tai jatkaa laskentaan",
@@ -123,14 +199,18 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
       return;
     }
 
-    const invalidDebts = debts.filter(
-      debt => debt.balance <= 0 || debt.interestRate < 0 || debt.minimumPayment <= 0
-    );
-    
-    if (invalidDebts.length > 0) {
+    // Validate all debts
+    const allErrors: {[key: string]: string} = {};
+    debts.forEach((debt, index) => {
+      const errors = validateDebt(debt, index);
+      Object.assign(allErrors, errors);
+    });
+
+    if (Object.keys(allErrors).length > 0) {
+      setValidationErrors(allErrors);
       toast({
         title: "Virheelliset tiedot",
-        description: "Tarkista, että kaikissa veloissa on positiiviset arvot",
+        description: "Korjaa virheet ennen laskentaa",
         variant: 'destructive',
       });
       return;
@@ -139,7 +219,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
     if (monthlyBudget < totalMinPayment) {
       toast({
         title: "Riittämätön budjetti",
-        description: "Kuukausittainen budjetti on pienempi kuin vähimmäismaksujen summa",
+        description: `Kuukausittainen budjetti (${formatCurrency(monthlyBudget)}) on pienempi kuin vähimmäismaksujen summa (${formatCurrency(totalMinPayment)})`,
         variant: 'destructive',
       });
       return;
@@ -156,8 +236,8 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
       onSaveResults(plan);
       
       toast({
-        title: "Suunnitelma valmis",
-        description: "Takaisinmaksusuunnitelma on laskettu onnistuneesti",
+        title: "Suunnitelma valmis!",
+        description: `Velkavapaus ${plan.totalMonths} kuukaudessa`,
       });
     } catch (error) {
       console.error('Virhe laskennassa:', error);
@@ -172,7 +252,7 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
     } finally {
       setIsCalculating(false);
     }
-  }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, totalMinPayment]);
+  }, [debts, monthlyBudget, strategy, onSaveResults, onError, toast, totalMinPayment, validateDebt]);
 
   const handleBudgetChange = useCallback((budget: number, method: PrioritizationMethod) => {
     setMonthlyBudget(budget);
@@ -197,14 +277,26 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
       
       <Card>
         <CardHeader>
-          <CardTitle>Velkalaskuri</CardTitle>
-          <CardDescription>Syötä velkasi ja kuukausittainen budjettisi laskeaksesi takaisinmaksusuunnitelman</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <Calculator className="h-5 w-5" />
+            Velkalaskuri
+          </CardTitle>
+          <CardDescription>
+            Syötä velkasi ja kuukausittainen budjettisi laskeaksesi optimaalisen takaisinmaksusuunnitelman
+          </CardDescription>
         </CardHeader>
         
         <CardContent>
           <div className="space-y-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Sinun velkasi</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium">Sinun velkasi</h3>
+                {debts.length > 0 && (
+                  <div className="text-sm text-muted-foreground">
+                    Yhteensä: {formatCurrency(totalDebt)}
+                  </div>
+                )}
+              </div>
               
               {debts.length === 0 && (
                 <ExampleDataButton onFillExample={handleFillExample} />
@@ -213,41 +305,45 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
               {debts.length > 0 ? (
                 <div className="space-y-4">
                   {debts.map((debt, index) => (
-                    <div key={debt.id} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md">
+                    <div key={debt.id} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md bg-card">
                       <EnhancedFormField
                         id={`debt-name-${index}`}
                         label="Velan nimi"
                         value={debt.name}
                         onChange={(e) => handleUpdateDebt(debt.id, 'name', e.target.value)}
-                        placeholder={`Velka ${index + 1}`}
-                        helpText="Anna velalle tunnistettava nimi, kuten 'Visa-kortti' tai 'Autolaina'"
-                        validation={createRequiredValidator("Velan nimi on pakollinen")}
+                        placeholder={`Esim. Luottokortti, Autolaina`}
+                        helpText="Anna velalle tunnistettava nimi"
+                        validation={createRequiredValidator("Velan nimi")}
+                        error={validationErrors[`debt-${index}-name`]}
                       />
                       
                       <EnhancedFormField
                         id={`debt-balance-${index}`}
-                        label="Saldo"
+                        label="Nykyinen saldo (€)"
                         type="number"
                         value={debt.balance}
                         onChange={(e) => handleUpdateDebt(debt.id, 'balance', Number(e.target.value) || 0)}
                         placeholder="0"
                         min="0"
-                        step="0.1"
-                        helpText="Syötä nykyinen velkasumma, ei alkuperäinen lainasumma"
-                        validation={createPositiveNumberValidator("Saldo täytyy olla positiivinen")}
+                        step="0.01"
+                        helpText="Velan nykyinen jäljellä oleva määrä"
+                        validation={createPositiveNumberValidator("Saldo", 0)}
+                        error={validationErrors[`debt-${index}-balance`]}
                       />
                       
                       <EnhancedFormField
                         id={`debt-interest-${index}`}
-                        label="Korkoprosentti (%)"
+                        label="Vuosikorko (%)"
                         type="number"
                         value={debt.interestRate}
                         onChange={(e) => handleUpdateDebt(debt.id, 'interestRate', Number(e.target.value) || 0)}
                         placeholder="0"
                         min="0"
+                        max="100"
                         step="0.1"
-                        helpText="Tämä on todellinen vuosikorko - tarkista tiliotteistasi"
-                        validation={createPositiveNumberValidator("Korko täytyy olla positiivinen")}
+                        helpText="Velan todellinen vuosikorko (APR)"
+                        validation={createInterestRateValidator()}
+                        error={validationErrors[`debt-${index}-interest`]}
                       />
                       
                       <EnhancedFormField
@@ -258,9 +354,10 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                         onChange={(e) => handleUpdateDebt(debt.id, 'minimumPayment', Number(e.target.value) || 0)}
                         placeholder="0"
                         min="0"
-                        step="0.1"
-                        helpText="Lainanantajan vaatima vähimmäiskuukausimaksu"
-                        validation={createPositiveNumberValidator("Vähimmäismaksu täytyy olla positiivinen")}
+                        step="0.01"
+                        helpText="Lainanantajan vaatima kuukausittainen vähimmäismaksu"
+                        validation={createPositiveNumberValidator("Vähimmäismaksu", 0)}
+                        error={validationErrors[`debt-${index}-payment`]}
                       />
                       
                       <div className="flex items-end justify-end">
@@ -269,18 +366,46 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                           size="icon"
                           onClick={() => handleRemoveDebt(debt.id)}
                           className="h-10 w-10"
+                          title="Poista velka"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
                   ))}
+                  
+                  <div className="mt-4 p-3 bg-muted/30 rounded-lg">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Velkoja:</span>
+                        <p className="font-medium">{debts.length} kpl</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Kokonaissaldo:</span>
+                        <p className="font-medium">{formatCurrency(totalDebt)}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Vähimmäismaksut:</span>
+                        <p className="font-medium">{formatCurrency(totalMinPayment)}/kk</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Keskikorko:</span>
+                        <p className="font-medium">
+                          {totalDebt > 0 ? 
+                            ((debts.reduce((sum, debt) => sum + (debt.balance * debt.interestRate), 0) / totalDebt).toFixed(1)) + '%'
+                            : '0%'
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    Lisää velkasi aloittaaksesi takaisinmaksusuunnitelman laskemisen
+                    Lisää velkasi aloittaaksesi takaisinmaksusuunnitelman laskemisen. 
+                    Voit käyttää esimerkkitietoja tai syöttää omat tietosi.
                   </AlertDescription>
                 </Alert>
               )}
@@ -317,11 +442,12 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
                 <div className="flex justify-end">
                   <Button 
                     onClick={handleCalculate} 
-                    disabled={isCalculating}
+                    disabled={isCalculating || Object.keys(validationErrors).length > 0}
                     className="w-full md:w-auto"
+                    size="lg"
                   >
                     <Calculator className="mr-2 h-4 w-4" />
-                    {isCalculating ? 'Lasketaan...' : 'Laske suunnitelma'}
+                    {isCalculating ? 'Lasketaan...' : 'Laske takaisinmaksusuunnitelma'}
                   </Button>
                 </div>
               </>
@@ -329,49 +455,67 @@ const DebtPayoffCalculator: React.FC<DebtPayoffCalculatorProps> = ({
             
             {payoffPlan && (
               <>
-                <div className="border rounded-md p-4 bg-muted/50">
-                  <h3 className="text-lg font-medium mb-4">Yhteenveto</h3>
+                <div className="border rounded-md p-6 bg-gradient-to-r from-primary/5 to-secondary/5">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center">
+                    <CreditCard className="h-5 w-5 mr-2" />
+                    Takaisinmaksusuunnitelma
+                  </h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex flex-col p-4 bg-card rounded-md border">
-                      <span className="text-sm text-muted-foreground flex items-center">
-                        <BanknoteIcon className="h-4 w-4 mr-2" />
-                        Kokonaisvelka
-                      </span>
-                      <span className="text-2xl font-bold mt-1">{formatCurrency(totalDebt)}</span>
-                    </div>
-                    
-                    <div className="flex flex-col p-4 bg-card rounded-md border">
-                      <span className="text-sm text-muted-foreground flex items-center">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="flex flex-col p-4 bg-card rounded-lg border">
+                      <span className="text-sm text-muted-foreground flex items-center mb-2">
                         <CalendarIcon className="h-4 w-4 mr-2" />
                         Aika velattomuuteen
                       </span>
-                      <span className="text-2xl font-bold mt-1">{payoffPlan.totalMonths} kuukautta</span>
+                      <span className="text-2xl font-bold text-primary">
+                        {payoffPlan.totalMonths} kuukautta
+                      </span>
+                      <span className="text-sm text-muted-foreground mt-1">
+                        {Math.floor(payoffPlan.totalMonths / 12)} vuotta {payoffPlan.totalMonths % 12} kuukautta
+                      </span>
                     </div>
                     
-                    <div className="flex flex-col p-4 bg-card rounded-md border">
-                      <span className="text-sm text-muted-foreground flex items-center">
+                    <div className="flex flex-col p-4 bg-card rounded-lg border">
+                      <span className="text-sm text-muted-foreground flex items-center mb-2">
                         <PercentIcon className="h-4 w-4 mr-2" />
-                        Maksetut korot
+                        Maksetut korot yhteensä
                       </span>
-                      <span className="text-2xl font-bold mt-1">{formatCurrency(payoffPlan.totalInterestPaid)}</span>
+                      <span className="text-2xl font-bold text-destructive">
+                        {formatCurrency(payoffPlan.totalInterestPaid)}
+                      </span>
+                      <span className="text-sm text-muted-foreground mt-1">
+                        {((payoffPlan.totalInterestPaid / totalDebt) * 100).toFixed(1)}% alkuperäisestä
+                      </span>
+                    </div>
+                    
+                    <div className="flex flex-col p-4 bg-card rounded-lg border">
+                      <span className="text-sm text-muted-foreground flex items-center mb-2">
+                        <BanknoteIcon className="h-4 w-4 mr-2" />
+                        Maksetaan yhteensä
+                      </span>
+                      <span className="text-2xl font-bold">
+                        {formatCurrency(payoffPlan.totalPaid)}
+                      </span>
+                      <span className="text-sm text-muted-foreground mt-1">
+                        Pääoma + korot
+                      </span>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-3 gap-4 mt-4">
+                  <div className="grid grid-cols-3 gap-4 pt-4 border-t">
                     <div>
                       <span className="text-sm text-muted-foreground">Vähimmäismaksut</span>
-                      <p className="font-medium">{formatCurrency(totalMinPayment)}</p>
+                      <p className="font-medium">{formatCurrency(totalMinPayment)}/kk</p>
                     </div>
                     
                     <div>
                       <span className="text-sm text-muted-foreground">Lisämaksu</span>
-                      <p className="font-medium">{formatCurrency(monthlyBudget - totalMinPayment)}</p>
+                      <p className="font-medium text-primary">{formatCurrency(monthlyBudget - totalMinPayment)}/kk</p>
                     </div>
                     
                     <div>
-                      <span className="text-sm text-muted-foreground">Kuukausittain yhteensä</span>
-                      <p className="font-medium">{formatCurrency(monthlyBudget)}</p>
+                      <span className="text-sm text-muted-foreground">Velkavapaus</span>
+                      <p className="font-medium">{payoffPlan.payoffDate}</p>
                     </div>
                   </div>
                 </div>
