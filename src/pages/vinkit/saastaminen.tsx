@@ -85,10 +85,10 @@ const SaastaminenVinkit: React.FC = () => {
           title="Ruokaostokset: suunniteltu vs. suunnittelematon"
           headers={["", "Suunnittelematon", "Suunniteltu"]}
           rows={[
-            ["Kauppareissuja/vko", "4-5 kertaa", "1-2 kertaa"],
-            ["Heräteostoksia", "Paljon", "Vähän"],
-            ["Ruokahävikki", "Paljon", "Minimaalinen"],
-            ["Kustannus/vko", "~150 €", "~100 €"],
+            { label: "Kauppareissuja/vko", values: ["4-5 kertaa", "1-2 kertaa"] },
+            { label: "Heräteostoksia", values: ["Paljon", "Vähän"] },
+            { label: "Ruokahävikki", values: ["Paljon", "Minimaalinen"] },
+            { label: "Kustannus/vko", values: ["~150 €", "~100 €"] },
           ]}
         />
       </div>

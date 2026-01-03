@@ -61,10 +61,10 @@ const VelkojenMaksuVinkit: React.FC = () => {
           title="Lumivyöry vs. lumipallo"
           headers={["", "Lumivyöry", "Lumipallo"]}
           rows={[
-            ["Järjestys", "Korkein korko ensin", "Pienin velka ensin"],
-            ["Säästö koroissa", "Enemmän", "Vähemmän"],
-            ["Motivaatio", "Hitaampi alku", "Nopeat voitot"],
-            ["Kenelle sopii?", "Numeroihmisille", "Motivaation tarvitsijoille"],
+            { label: "Järjestys", values: ["Korkein korko ensin", "Pienin velka ensin"] },
+            { label: "Säästö koroissa", values: ["Enemmän", "Vähemmän"] },
+            { label: "Motivaatio", values: ["Hitaampi alku", "Nopeat voitot"] },
+            { label: "Kenelle sopii?", values: ["Numeroihmisille", "Motivaation tarvitsijoille"] },
           ]}
         />
       </div>
