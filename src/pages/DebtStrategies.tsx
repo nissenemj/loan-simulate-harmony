@@ -5,24 +5,25 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Loan } from '@/utils/loanCalculations';
 import { CreditCard } from '@/utils/creditCardCalculations';
 import { Debt, PaymentPlan } from '@/utils/calculator/types';
-import { 
+import {
   DebtPayoffCalculator,
   DebtPayoffTimeline,
   DebtConsolidationCalculator,
   ExtraPaymentCalculator,
   DebtVisualization
 } from '@/components/calculator';
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
 } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Info, Calculator, LineChart, TrendingDown, Coins } from 'lucide-react';
 import UnderConstructionBanner from '@/components/UnderConstructionBanner';
 import { ErrorProvider } from '@/contexts/ErrorContext';
 import BreadcrumbNav from '@/components/BreadcrumbNav';
+import CrisisHelp from '@/components/CrisisHelp';
 
 const DebtStrategies = () => {
   const [loans, setLoans] = useLocalStorage<Loan[]>("loans", []);
@@ -116,11 +117,34 @@ const DebtStrategies = () => {
           <BreadcrumbNav />
           <UnderConstructionBanner />
           
-          <div>
+          <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight">Velkastrategiat</h1>
-            <p className="text-muted-foreground mt-2">
-              Vertaa eri takaisinmaksustrategioita ja löydä sinulle paras tapa päästä eroon veloista
+            <p className="text-lg text-muted-foreground">
+              Täällä näet, miten voit maksaa velkasi nopeammin.
             </p>
+
+            {/* Strategioiden selitys selkokielellä */}
+            <div className="bg-muted/30 rounded-lg p-4 space-y-3">
+              <p className="font-medium">Kaksi tapaa maksaa velkoja:</p>
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div className="bg-white dark:bg-background rounded-lg p-3 border">
+                  <p className="font-semibold text-primary">🏔️ Lumivyöry</p>
+                  <p className="text-muted-foreground">
+                    Maksa ensin velka, jolla on <strong>korkein korko</strong>.
+                    <br />
+                    <span className="text-green-600 dark:text-green-400">→ Säästät eniten rahaa</span>
+                  </p>
+                </div>
+                <div className="bg-white dark:bg-background rounded-lg p-3 border">
+                  <p className="font-semibold text-primary">❄️ Lumipallo</p>
+                  <p className="text-muted-foreground">
+                    Maksa ensin velka, jolla on <strong>pienin summa</strong>.
+                    <br />
+                    <span className="text-green-600 dark:text-green-400">→ Pikavoittoja ja motivaatiota</span>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
           
           {debts.length === 0 ? (
@@ -221,6 +245,11 @@ const DebtStrategies = () => {
                   <DebtConsolidationCalculator debts={debts} />
                 </TabsContent>
               </Tabs>
+
+              {/* Kriisiapu */}
+              <div className="mt-12">
+                <CrisisHelp variant="default" />
+              </div>
             </>
           )}
         </div>

@@ -8,9 +8,10 @@ import LoanForm from '@/components/LoanForm';
 import CreditCardForm from '@/components/CreditCardForm';
 import CreditCardTable from '@/components/CreditCardTable';
 import TotalDebtSummary from '@/components/TotalDebtSummary';
+import CrisisHelp from '@/components/CrisisHelp';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Lock } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 
@@ -82,6 +83,20 @@ const IndexPage: React.FC = () => {
 
   return (
     <div className="container mx-auto py-10 space-y-6">
+      {/* Sivun otsikko ja ohjeistus */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-4">Velkalaskuri</h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
+          Lisää velkasi tiedot alle. Laskuri näyttää, kuinka kauan maksaminen kestää
+          ja kuinka paljon maksat korkoja.
+        </p>
+        {/* Tietosuojailmoitus */}
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3 max-w-md mx-auto">
+          <Lock className="h-4 w-4" />
+          <span>Tietojasi ei lähetetä mihinkään. Kaikki pysyy selaimessasi.</span>
+        </div>
+      </div>
+
       <TotalDebtSummary
         loans={loans}
         creditCards={creditCards}
@@ -115,6 +130,11 @@ const IndexPage: React.FC = () => {
           
         </TabsContent>
       </Tabs>
+
+      {/* Kriisiapu */}
+      <div className="mt-12">
+        <CrisisHelp variant="compact" />
+      </div>
     </div>
   );
 };

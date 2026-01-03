@@ -34,6 +34,28 @@ const DebtSummaryPage = lazy(() => import("./pages/DebtSummaryPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const FAQPage = lazy(() => import("./pages/FAQPage"));
 const Settings = lazy(() => import("./pages/Settings"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+
+// Oppaat (Guides)
+const OppaatIndex = lazy(() => import("./pages/oppaat/index"));
+const VelkajarjestelyOpas = lazy(() => import("./pages/oppaat/velkajarjestely"));
+
+// Vinkit (Tips)
+const VinkitIndex = lazy(() => import("./pages/vinkit/index"));
+const BudjetointiVinkit = lazy(() => import("./pages/vinkit/budjetointi"));
+const SaastaminenVinkit = lazy(() => import("./pages/vinkit/saastaminen"));
+const VelkojenMaksuVinkit = lazy(() => import("./pages/vinkit/velkojen-maksu"));
+
+// Tarinat (Stories)
+const TarinatIndex = lazy(() => import("./pages/tarinat/index"));
+const MariaTarina = lazy(() => import("./pages/tarinat/maria"));
+
+// Apua (Help)
+const ApuaIndex = lazy(() => import("./pages/apua/index"));
+const VelkaneuvontaSivu = lazy(() => import("./pages/apua/velkaneuvonta"));
+const KriisiapuSivu = lazy(() => import("./pages/apua/kriisiapu"));
 
 function App() {
 	return (
@@ -123,6 +145,24 @@ function App() {
 													</ProtectedRoute>
 												}
 											/>
+											<Route path="/privacy-policy" element={<PrivacyPolicy />} />
+											<Route path="/terms-of-service" element={<TermsOfService />} />
+											<Route path="/cookie-policy" element={<CookiePolicy />} />
+											{/* Oppaat (Guides) */}
+											<Route path="/oppaat" element={<OppaatIndex />} />
+											<Route path="/oppaat/velkajarjestely" element={<VelkajarjestelyOpas />} />
+											{/* Vinkit (Tips) */}
+											<Route path="/vinkit" element={<VinkitIndex />} />
+											<Route path="/vinkit/budjetointi" element={<BudjetointiVinkit />} />
+											<Route path="/vinkit/saastaminen" element={<SaastaminenVinkit />} />
+											<Route path="/vinkit/velkojen-maksu" element={<VelkojenMaksuVinkit />} />
+											{/* Tarinat (Stories) */}
+											<Route path="/tarinat" element={<TarinatIndex />} />
+											<Route path="/tarinat/maria" element={<MariaTarina />} />
+											{/* Apua (Help) */}
+											<Route path="/apua" element={<ApuaIndex />} />
+											<Route path="/apua/velkaneuvonta" element={<VelkaneuvontaSivu />} />
+											<Route path="/apua/kriisiapu" element={<KriisiapuSivu />} />
 										</Routes>
 									</Suspense>
 								</main>

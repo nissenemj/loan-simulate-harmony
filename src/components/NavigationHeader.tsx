@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, User, LogOut, Settings, Calculator } from "lucide-react";
+import { Menu, User, LogOut, Settings, Calculator, BookOpen, Lightbulb, Heart, HandHeart, ChevronDown } from "lucide-react";
 
 const NavigationHeader: React.FC = () => {
 	const { user, logout } = useAuth();
@@ -38,17 +38,45 @@ const NavigationHeader: React.FC = () => {
 		return location.pathname === path;
 	};
 
-	const navItems = [
-		{ href: "/", label: "Koti" },
+	const mainNavItems = [
 		{ href: "/calculator", label: "Laskuri" },
 		{ href: "/debt-strategies", label: "Strategiat" },
+	];
+
+	const contentDropdowns = [
+		{
+			label: "Oppaat",
+			icon: <BookOpen className="h-4 w-4" />,
+			items: [
+				{ href: "/oppaat", label: "Kaikki oppaat" },
+				{ href: "/oppaat/velkajarjestely", label: "Velkajärjestely" },
+				{ href: "/oppaat/ulosotto", label: "Ulosotto" },
+				{ href: "/oppaat/maksuhairio", label: "Maksuhäiriö" },
+				{ href: "/oppaat/perinta", label: "Perintä" },
+			],
+		},
+		{
+			label: "Vinkit",
+			icon: <Lightbulb className="h-4 w-4" />,
+			items: [
+				{ href: "/vinkit", label: "Kaikki vinkit" },
+				{ href: "/vinkit/budjetointi", label: "Budjetointi" },
+				{ href: "/vinkit/saastaminen", label: "Säästäminen" },
+				{ href: "/vinkit/velkojen-maksu", label: "Velkojen maksu" },
+			],
+		},
+	];
+
+	const secondaryNavItems = [
+		{ href: "/tarinat", label: "Tarinat", icon: <Heart className="h-4 w-4" /> },
+		{ href: "/apua", label: "Apua", icon: <HandHeart className="h-4 w-4" /> },
 		{ href: "/blog", label: "Blogi" },
-		{ href: "/contact", label: "Yhteystiedot" },
 	];
 
 	const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
 		<>
-			{navItems.map((item) => (
+			{/* Main nav items */}
+			{mainNavItems.map((item) => (
 				<Link
 					key={item.href}
 					to={item.href}
@@ -59,6 +87,67 @@ const NavigationHeader: React.FC = () => {
 							: "text-muted-foreground"
 					} ${mobile ? "block py-2" : ""}`}
 				>
+					{item.label}
+				</Link>
+			))}
+
+			{/* Content dropdowns - Desktop only */}
+			{!mobile && contentDropdowns.map((dropdown) => (
+				<DropdownMenu key={dropdown.label}>
+					<DropdownMenuTrigger className="flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
+						{dropdown.icon}
+						{dropdown.label}
+						<ChevronDown className="h-3 w-3" />
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						{dropdown.items.map((item) => (
+							<DropdownMenuItem key={item.href} asChild>
+								<Link to={item.href}>{item.label}</Link>
+							</DropdownMenuItem>
+						))}
+					</DropdownMenuContent>
+				</DropdownMenu>
+			))}
+
+			{/* Mobile: Flat list for content sections */}
+			{mobile && contentDropdowns.map((dropdown) => (
+				<div key={dropdown.label} className="py-2">
+					<Link
+						to={dropdown.items[0].href}
+						onClick={handleLinkClick}
+						className="flex items-center gap-2 font-medium text-foreground"
+					>
+						{dropdown.icon}
+						{dropdown.label}
+					</Link>
+					<div className="ml-6 mt-1 space-y-1">
+						{dropdown.items.slice(1).map((item) => (
+							<Link
+								key={item.href}
+								to={item.href}
+								onClick={handleLinkClick}
+								className="block text-sm text-muted-foreground hover:text-primary py-1"
+							>
+								{item.label}
+							</Link>
+						))}
+					</div>
+				</div>
+			))}
+
+			{/* Secondary nav items */}
+			{secondaryNavItems.map((item) => (
+				<Link
+					key={item.href}
+					to={item.href}
+					onClick={mobile ? handleLinkClick : undefined}
+					className={`transition-colors hover:text-primary flex items-center gap-1 ${
+						isActive(item.href)
+							? "text-primary font-medium"
+							: "text-muted-foreground"
+					} ${mobile ? "py-2" : ""}`}
+				>
+					{"icon" in item && item.icon}
 					{item.label}
 				</Link>
 			))}

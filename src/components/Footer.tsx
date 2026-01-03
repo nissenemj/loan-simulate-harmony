@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import CookieSettingsButton from "./CookieSettingsButton";
+import CrisisHelp from "./CrisisHelp";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 
 const Footer = () => {
@@ -20,6 +21,9 @@ const Footer = () => {
 	return (
 		<footer className="py-12 bg-accent/80 border-t dark:bg-bg-secondary dark:border-bg-highlight">
 			<div className="container mx-auto max-w-6xl px-4">
+				{/* Kriisiapu - PAKOLLINEN jokaisella sivulla */}
+				<CrisisHelp variant="compact" className="mb-8" />
+
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
 					{/* About Us Column */}
 					<div>
@@ -116,10 +120,10 @@ const Footer = () => {
 						</ul>
 					</div>
 
-					{/* Legal Column */}
+					{/* Help Column */}
 					<div>
 						<h3 className="font-bold text-lg mb-4">
-							Laillisuus
+							Apua
 						</h3>
 						<ul className="space-y-2">
 							<li>
@@ -128,7 +132,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/privacy-policy">Tietosuoja</Link>
+									<a href="tel:0295660123">Velkaneuvonta: 0295 660 123</a>
 								</Button>
 							</li>
 							<li>
@@ -137,7 +141,7 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/terms-of-service">Käyttöehdot</Link>
+									<a href="tel:0925250111">Kriisipuhelin: 09 2525 0111</a>
 								</Button>
 							</li>
 							<li>
@@ -146,14 +150,37 @@ const Footer = () => {
 									className="p-0 h-auto text-muted-foreground hover:text-foreground"
 									asChild
 								>
-									<Link to="/cookie-policy">Evästeet</Link>
+									<a href="tel:080098009">Takuusäätiö: 0800 9 8009</a>
 								</Button>
-							</li>
-							<li>
-								<CookieSettingsButton className="p-0 h-auto text-muted-foreground hover:text-foreground" />
 							</li>
 						</ul>
 					</div>
+				</div>
+
+				{/* Legal Links Row */}
+				<div className="flex flex-wrap gap-4 mb-8 text-sm">
+					<Button
+						variant="link"
+						className="p-0 h-auto text-muted-foreground hover:text-foreground"
+						asChild
+					>
+						<Link to="/privacy-policy">Tietosuoja</Link>
+					</Button>
+					<Button
+						variant="link"
+						className="p-0 h-auto text-muted-foreground hover:text-foreground"
+						asChild
+					>
+						<Link to="/terms-of-service">Käyttöehdot</Link>
+					</Button>
+					<Button
+						variant="link"
+						className="p-0 h-auto text-muted-foreground hover:text-foreground"
+						asChild
+					>
+						<Link to="/cookie-policy">Evästeet</Link>
+					</Button>
+					<CookieSettingsButton className="p-0 h-auto text-muted-foreground hover:text-foreground" />
 				</div>
 
 				{/* Social Media */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { listFiles } from "@/utils/firebase";
+import { listFiles } from "@/utils/supabaseStorage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Table,

@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calculator, TrendingDown, Shield, Users, CheckCircle, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LandingPageDemo from '@/components/landing/LandingPageDemo';
+import CrisisHelp from '@/components/CrisisHelp';
+import { ProcessFlow, StatCard, StatCardGrid, ComparisonTable } from '@/components/infographics';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -83,7 +85,11 @@ const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Valitse strategia</h3>
               <p className="text-muted-foreground">
-                Vertaile lumipallo- ja lumivyöry-menetelmiä. Näe välittömästi kumpi sopii sinulle paremmin.
+                Vertaile kahta tapaa maksaa velkoja:
+                <br />
+                <strong>Lumipallo</strong> = pienin velka ensin (pikavoittoja!)
+                <br />
+                <strong>Lumivyöry</strong> = korkein korko ensin (säästät eniten)
               </p>
             </div>
             
@@ -100,8 +106,71 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Sosiaalinen todiste */}
+      {/* Infografiikat - Velkavapauden matka */}
       <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Matka velkavapauteen
+          </h2>
+          <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Näin prosessi etenee – askel kerrallaan kohti taloudellista vapautta
+          </p>
+
+          <ProcessFlow
+            title="Velkavapauden 5 askelta"
+            steps={[
+              { emoji: "📋", title: "Listaa", description: "Kokoa kaikki velkasi yhteen" },
+              { emoji: "🧮", title: "Laske", description: "Käytä laskuriamme" },
+              { emoji: "📊", title: "Vertaa", description: "Valitse paras strategia" },
+              { emoji: "💪", title: "Toteuta", description: "Seuraa suunnitelmaa" },
+              { emoji: "🎉", title: "Vapaudu", description: "Nauti velattomasta elämästä" },
+            ]}
+          />
+
+          {/* Tilastokortit */}
+          <StatCardGrid>
+            <StatCard
+              emoji="💰"
+              number={2300}
+              unit="€"
+              label="Keskimääräinen säästö"
+              description="korkokuluja vähemmän"
+              variant="success"
+            />
+            <StatCard
+              emoji="📅"
+              number={18}
+              unit="kk"
+              label="Nopeammin velaton"
+              description="oikealla strategialla"
+              variant="info"
+            />
+            <StatCard
+              emoji="👥"
+              number={5000}
+              unit="+"
+              label="Käyttäjää"
+              description="on jo löytänyt avun"
+              variant="default"
+            />
+          </StatCardGrid>
+
+          {/* Strategiavertailu */}
+          <ComparisonTable
+            title="Kumpi strategia sopii sinulle?"
+            headers={["🏔️ Lumivyöry", "❄️ Lumipallo"]}
+            rows={[
+              { label: "Periaate", values: ["Korkein korko ensin", "Pienin velka ensin"] },
+              { label: "Säästät rahaa", values: ["✅ Eniten", "Vähemmän"] },
+              { label: "Motivaatio", values: ["Hitaampi alku", "✅ Nopeita voittoja"] },
+              { label: "Sopii kun", values: ["Haluat säästää", "Tarvitset motivaatiota"] },
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Sosiaalinen todiste */}
+      <section className="py-16 bg-white dark:bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">
@@ -246,21 +315,28 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Kriisiapu-osio */}
+      <section className="py-12 bg-white dark:bg-muted/5">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <CrisisHelp variant="default" />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Aloita matkasi velkavapauteen tänään
+            Ensimmäinen askel on usein helpoin
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Älä anna velkojen hallita elämääsi. Ota ensimmäinen askel kohti taloudellista vapautta.
+            Monet ovat jo löytäneet tien velkavapauteen. Sinäkin voit – ja me autamme sinua matkalla.
           </p>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             onClick={() => navigate('/calculator')}
             className="text-lg px-8 py-3"
           >
-            Laske oma säästösi nyt
+            Kokeile ilmaista laskuria
           </Button>
         </div>
       </section>
