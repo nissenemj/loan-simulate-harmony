@@ -20,37 +20,37 @@ import { toast } from "sonner";
 
 // Yksinkertaiset validaattorit suoraan komponentissa
 const createRequiredValidator = (errorMessage: string = "Tämä kenttä on pakollinen") => {
-  return (value: string) => {
-    const isValid = value.trim().length > 0;
-    return { isValid, message: isValid ? undefined : errorMessage };
-  };
+	return (value: string) => {
+		const isValid = value.trim().length > 0;
+		return { isValid, message: isValid ? undefined : errorMessage };
+	};
 };
 
 const createEmailValidator = (errorMessage: string = "Syötä kelvollinen sähköpostiosoite") => {
-  return (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(value);
-    return { isValid, message: isValid ? undefined : errorMessage };
-  };
+	return (value: string) => {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		const isValid = emailRegex.test(value);
+		return { isValid, message: isValid ? undefined : errorMessage };
+	};
 };
 
 const createMinLengthValidator = (minLength: number, errorMessage: string) => {
-  return (value: string) => {
-    const isValid = value.trim().length >= minLength;
-    return { isValid, message: isValid ? undefined : errorMessage };
-  };
+	return (value: string) => {
+		const isValid = value.trim().length >= minLength;
+		return { isValid, message: isValid ? undefined : errorMessage };
+	};
 };
 
 const combineValidators = (...validators: ((value: string) => { isValid: boolean; message?: string })[]) => {
-  return (value: string) => {
-    for (const validator of validators) {
-      const result = validator(value);
-      if (!result.isValid) {
-        return result;
-      }
-    }
-    return { isValid: true };
-  };
+	return (value: string) => {
+		for (const validator of validators) {
+			const result = validator(value);
+			if (!result.isValid) {
+				return result;
+			}
+		}
+		return { isValid: true };
+	};
 };
 
 interface ContactFormEnhancedProps {
@@ -133,11 +133,20 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 		setIsSubmitting(true);
 
 		try {
-			// Simuloidaan lähettämistä
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			// Construct mailto link
+			const subject = formData.subject || "Yhteydenotto Velkavapaus.fi";
+			const body = `Nimi: ${formData.firstName} ${formData.lastName}\n` +
+				`Sähköposti: ${formData.email}\n` +
+				`Puhelin: ${formData.phone}\n\n` +
+				`Viesti:\n${formData.message}`;
 
-			toast("Viesti lähetetty!", {
-				description: "Otamme sinuun yhteyttä pian.",
+			const mailtoLink = `mailto:support@velkavapaus.fi?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+			// Open email client
+			window.location.href = mailtoLink;
+
+			toast("Sähköpostiohjelma avattu", {
+				description: "Lähetä viesti sähköpostiohjelmastasi.",
 			});
 
 			// Reset form
@@ -254,9 +263,8 @@ const ContactFormEnhanced: React.FC<ContactFormEnhancedProps> = ({
 								value={formData.message}
 								onChange={handleChange}
 								disabled={isSubmitting}
-								className={`min-h-[120px] resize-none ${
-									errors.message ? "border-destructive" : ""
-								}`}
+								className={`min-h-[120px] resize-none ${errors.message ? "border-destructive" : ""
+									}`}
 								required
 								aria-label="Viestisi"
 							/>
