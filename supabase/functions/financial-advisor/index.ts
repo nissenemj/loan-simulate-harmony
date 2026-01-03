@@ -173,7 +173,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error in financial-advisor function:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", message: error.message }),
+      JSON.stringify({ error: "Internal server error", message: error instanceof Error ? error.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
