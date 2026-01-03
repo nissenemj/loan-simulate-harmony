@@ -1,33 +1,27 @@
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import React, { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const Auth = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [loading, setLoading] = useState(false);
-	const { toast } = useToast();
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const { toast } = useToast();
+	const [searchParams] = useSearchParams();
+	const redirect = searchParams.get('redirect') || '/dashboard';
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setLoading(true);
-		console.log("Attempting login with email:", email);
+		setIsLoading(true);
 
 		try {
 			const { error } = await supabase.auth.signInWithPassword({
@@ -37,163 +31,139 @@ const Auth = () => {
 
 			if (error) throw error;
 
-			toast({
-				title: "Kirjautuminen onnistui",
-				description: "Tervetuloa takaisin!",
-			});
-
-			// Check if there's an intended path stored
-			const intendedPath = sessionStorage.getItem("intendedPath");
-			if (intendedPath) {
-				sessionStorage.removeItem("intendedPath");
-				navigate(intendedPath);
-			} else {
-				navigate("/");
-			}
+			navigate(redirect);
 		} catch (error: any) {
-			console.error("Login error:", error);
 			toast({
-				title: "Kirjautumisvirhe",
-				description: error.message,
+				title: "Kirjautuminen epäonnistui",
+				description: error.message === "Invalid login credentials"
+					? "Virheellinen sähköposti tai salasana"
+					: error.message,
 				variant: "destructive",
 			});
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
-	const handleSignup = async (e: React.FormEvent) => {
+	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setLoading(true);
+		setIsLoading(true);
 
 		try {
-			const { error } = await supabase.auth.signUp({
+			const { error, data } = await supabase.auth.signUp({
 				email,
 				password,
+				options: {
+					data: {
+						// Add default profile data here if needed
+					}
+				}
 			});
 
 			if (error) throw error;
 
-			toast({
-				title: "Rekisteröityminen onnistui",
-				description: "Tarkista sähköpostisi vahvistaaksesi tilisi.",
-			});
+			if (data.session) {
+				navigate(redirect);
+			} else {
+				toast({
+					title: "Tarkista sähköpostisi",
+					description: "Lähetimme sinulle vahvistuslinkin.",
+				});
+			}
+
 		} catch (error: any) {
 			toast({
-				title: "Rekisteröitymisvirhe",
+				title: "Rekisteröinti epäonnistui",
 				description: error.message,
 				variant: "destructive",
 			});
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div className="container mx-auto flex items-center justify-center min-h-[80vh]">
+		<div className="container flex items-center justify-center min-h-[calc(100vh-200px)] py-10">
+			<Helmet>
+				<title>Kirjaudu | Velkavapaus</title>
+			</Helmet>
+
 			<Card className="w-full max-w-md">
-				<CardHeader>
-					<CardTitle className="text-2xl">Tervetuloa</CardTitle>
-					<CardDescription>Kirjaudu sisään tai luo uusi tili</CardDescription>
+				<CardHeader className="text-center">
+					<CardTitle>Tervetuloa takaisin</CardTitle>
+					<CardDescription>
+						Kirjaudu sisään tallentaaksesi laskelmasi
+					</CardDescription>
 				</CardHeader>
+				<CardContent>
+					<Tabs defaultValue="login" className="w-full">
+						<TabsList className="grid w-full grid-cols-2 mb-4">
+							<TabsTrigger value="login">Kirjaudu</TabsTrigger>
+							<TabsTrigger value="register">Rekisteröidy</TabsTrigger>
+						</TabsList>
 
-				<Tabs defaultValue="login" className="w-full">
-					<TabsList className="grid w-full grid-cols-2">
-						<TabsTrigger value="login">Kirjaudu</TabsTrigger>
-						<TabsTrigger value="signup">Rekisteröidy</TabsTrigger>
-					</TabsList>
-
-					<TabsContent value="login">
-						<form onSubmit={handleLogin}>
-							<CardContent className="space-y-4 pt-4">
+						<TabsContent value="login">
+							<form onSubmit={handleLogin} className="space-y-4">
 								<div className="space-y-2">
-									<Label htmlFor="email" className="flex items-center">
-										<Mail className="h-4 w-4 mr-2" />
-										Sähköposti
-									</Label>
+									<Label htmlFor="email-login">Sähköposti</Label>
 									<Input
-										id="email"
+										id="email-login"
 										type="email"
-										placeholder="nimi@esimerkki.fi"
+										placeholder="matti@esimerkki.fi"
+										required
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										required
-										className="border rounded-md"
-										aria-label="Sähköposti"
 									/>
 								</div>
 								<div className="space-y-2">
-									<Label htmlFor="password" className="flex items-center">
-										<Lock className="h-4 w-4 mr-2" />
-										Salasana
-									</Label>
+									<Label htmlFor="password-login">Salasana</Label>
 									<Input
-										id="password"
+										id="password-login"
 										type="password"
+										required
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
-										required
-										className="border rounded-md"
-										aria-label="Salasana"
 									/>
 								</div>
-							</CardContent>
-							<CardFooter>
-								<Button type="submit" className="w-full" disabled={loading}>
-									{loading ? "Kirjaudutaan..." : "Kirjaudu"}
-									<ArrowRight className="ml-2 h-4 w-4" />
+								<Button type="submit" className="w-full" disabled={isLoading}>
+									{isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+									Kirjaudu sisään
 								</Button>
-							</CardFooter>
-						</form>
-					</TabsContent>
+							</form>
+						</TabsContent>
 
-					<TabsContent value="signup">
-						<form onSubmit={handleSignup}>
-							<CardContent className="space-y-4 pt-4">
+						<TabsContent value="register">
+							<form onSubmit={handleRegister} className="space-y-4">
 								<div className="space-y-2">
-									<Label htmlFor="signup-email" className="flex items-center">
-										<Mail className="h-4 w-4 mr-2" />
-										Sähköposti
-									</Label>
+									<Label htmlFor="email-register">Sähköposti</Label>
 									<Input
-										id="signup-email"
+										id="email-register"
 										type="email"
-										placeholder="nimi@esimerkki.fi"
+										placeholder="matti@esimerkki.fi"
+										required
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										required
-										className="border rounded-md"
-										aria-label="Sähköposti"
 									/>
 								</div>
 								<div className="space-y-2">
-									<Label
-										htmlFor="signup-password"
-										className="flex items-center"
-									>
-										<Lock className="h-4 w-4 mr-2" />
-										Salasana
-									</Label>
+									<Label htmlFor="password-register">Salasana</Label>
 									<Input
-										id="signup-password"
+										id="password-register"
 										type="password"
+										required
+										minLength={6}
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
-										required
-										className="border rounded-md"
-										aria-label="Salasana"
 									/>
 								</div>
-							</CardContent>
-							<CardFooter>
-								<Button type="submit" className="w-full" disabled={loading}>
-									{loading ? "Rekisteröidään..." : "Rekisteröidy"}
-									<ArrowRight className="ml-2 h-4 w-4" />
+								<Button type="submit" className="w-full" disabled={isLoading}>
+									{isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+									Luo tili
 								</Button>
-							</CardFooter>
-						</form>
-					</TabsContent>
-				</Tabs>
+							</form>
+						</TabsContent>
+					</Tabs>
+				</CardContent>
 			</Card>
 		</div>
 	);
