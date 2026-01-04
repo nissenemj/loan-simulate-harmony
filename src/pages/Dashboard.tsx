@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Calculator, CreditCard as CreditCardIcon, TrendingUp, PlusCircle } from 'lucide-react';
 import { DebtPlanning } from '@/components/dashboard/DebtPlanning';
 import { OnboardingTour } from '@/components/onboarding/OnboardingTour';
+import { DebtAnalytics } from '@/components/dashboard/DebtAnalytics';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -129,15 +130,7 @@ const Dashboard: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="analysis" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Velkatilanteen analyysi</CardTitle>
-                  <CardDescription>Syvempi analyysi velkatilanteestasi</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>Tässä näkyy yksityiskohtainen analyysi velkatilanteestasi.</p>
-                </CardContent>
-              </Card>
+              <DebtAnalytics loans={loans} />
             </TabsContent>
 
             <TabsContent value="planning" className="space-y-4">

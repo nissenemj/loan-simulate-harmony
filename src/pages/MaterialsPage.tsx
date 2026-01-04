@@ -50,6 +50,24 @@ const MaterialsPage: React.FC = () => {
         return formatted;
     };
 
+    const getDescription = (filename: string) => {
+        const descriptions: Record<string, string> = {
+            'velkavapaus-budjettipohja.xlsx': 'Kattava Excel-pohja kuukausibudjetin ja kulujen seurantaan. Sisältää kategoriat asumiselle, ruoalle ja viihteelle.',
+            'lumipallo-laskuri.xlsx': 'Suunnittele velkojen takaisinmaksu lumipallo- tai lumivyörymenetelmällä. Näe kuinka nopeasti voit vapautua veloista.',
+            'talouden-vuosikello.pdf': 'Opas talouden suunnitteluun vuoden ympäri. Tärkeät päivämäärät ja muistilistat.',
+            'velkajarjestely-opas.pdf': 'Tietopaketti velkajärjestelyyn hakeutumisesta ja sen vaiheista.',
+            'puskurirahasto-laskuri.xlsx': 'Laske sopiva puskurirahaston koko omien menojesi perusteella.',
+        };
+        // Try exact match or partial match
+        const exact = descriptions[filename.toLowerCase()];
+        if (exact) return exact;
+
+        // Generic fallback based on extension
+        if (filename.endsWith('.xlsx') || filename.endsWith('.xls')) return 'Laskuripohja talouden hallintaan.';
+        if (filename.endsWith('.pdf')) return 'Ladattava opas tai tietopaketti.';
+        return 'Hyödyllinen materiaali taloutesi tueksi.';
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
             <Helmet>
@@ -100,10 +118,15 @@ const MaterialsPage: React.FC = () => {
                                 </div>
                             </CardHeader>
                             <CardContent className="flex-grow pt-4">
-                                <p className="text-sm text-muted-foreground">
-                                    Tyyppi: {file.name.split('.').pop()?.toUpperCase()}
-                                    {file.size ? ` • ${(file.size / 1024).toFixed(0)} KB` : ''}
-                                </p>
+                                <div className="space-y-2">
+                                    <p className="text-sm text-foreground/80">
+                                        {getDescription(file.name)}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Tyyppi: {file.name.split('.').pop()?.toUpperCase()}
+                                        {file.size ? ` • ${(file.size / 1024).toFixed(0)} KB` : ''}
+                                    </p>
+                                </div>
                             </CardContent>
                             <CardFooter className="pt-0">
                                 <Button className="w-full" asChild>
