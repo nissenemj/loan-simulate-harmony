@@ -44,7 +44,10 @@ const MaterialsPage: React.FC = () => {
         // Remove extension
         const nameWithoutExt = name.replace(/\.[^/.]+$/, "");
         // Replace underscores and hyphens with spaces
-        return nameWithoutExt.replace(/[_-]/g, " ");
+        let formatted = nameWithoutExt.replace(/[_-]/g, " ");
+        // Add space before capital letters (camelCase/PascalCase separation)
+        formatted = formatted.replace(/([a-zäöå])([A-ZÄÖÅ])/g, "$1 $2");
+        return formatted;
     };
 
     return (
