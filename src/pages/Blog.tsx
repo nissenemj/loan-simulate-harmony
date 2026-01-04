@@ -3,10 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { supabase } from "@/integrations/supabase/client";
-import AdSenseBanner from "@/components/AdSenseBanner";
-import { affiliateRecommendations } from "@/utils/affiliateData";
-import AffiliateRecommendation from "@/components/affiliate/AffiliateRecommendation";
-import { useIsMobile } from "@/hooks/use-mobile";
 import CategoryTabs from "@/components/blog/CategoryTabs";
 import BlogPostList from "@/components/blog/BlogPostList";
 import AdminLink from "@/components/blog/AdminLink";
@@ -28,11 +24,6 @@ const Blog = () => {
 	const [categories, setCategories] = useState<string[]>([]);
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
 	const [loading, setLoading] = useState(true);
-	const isMobile = useIsMobile();
-
-	const educationRecommendations = affiliateRecommendations.filter(
-		(rec) => rec.category === "education"
-	);
 
 	useEffect(() => {
 		const fetchPosts = async () => {
@@ -102,24 +93,13 @@ const Blog = () => {
 
 				<AdminLink />
 
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-					<div className="md:col-span-3">
-						<CategoryTabs
-							categories={categories}
-							selectedCategory={selectedCategory}
-							setSelectedCategory={setSelectedCategory}
-						/>
-					</div>
-
-					<div className="hidden md:block">
-						{educationRecommendations.map((recommendation) => (
-							<AffiliateRecommendation
-								key={recommendation.id}
-								recommendation={recommendation}
-							/>
-						))}
-					</div>
-				</div>
+			<div className="mb-8">
+				<CategoryTabs
+					categories={categories}
+					selectedCategory={selectedCategory}
+					setSelectedCategory={setSelectedCategory}
+				/>
+			</div>
 
 				{loading ? (
 					<Card className="w-full p-8">
@@ -146,21 +126,10 @@ const Blog = () => {
 					</>
 				)}
 
-				<div className="mb-12">
-					<NewsletterSignup />
-				</div>
-
-				<div className="md:hidden mb-8">
-					{educationRecommendations.map((recommendation) => (
-						<AffiliateRecommendation
-							key={recommendation.id}
-							recommendation={recommendation}
-						/>
-					))}
-				</div>
-
-
-			</main >
+			<div className="mb-12">
+				<NewsletterSignup />
+			</div>
+		</main>
 		</>
 	);
 };
