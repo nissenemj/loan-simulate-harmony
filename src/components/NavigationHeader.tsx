@@ -160,10 +160,17 @@ const NavigationHeader: React.FC = () => {
 				{/* Logo */}
 				{/* Logo */}
 				<Link to="/" className="flex items-center space-x-2">
+					{/* light mode logo */}
 					<img
-						src="/images/logo-full.png"
+						src="/images/logo-full-light.png"
 						alt="Velkavapaus.fi"
-						className="h-10 w-auto" // Adjust height as essential
+						className="h-10 w-auto dark:hidden"
+					/>
+					{/* dark mode logo */}
+					<img
+						src="/images/logo-full-dark.png"
+						alt="Velkavapaus.fi"
+						className="h-10 w-auto hidden dark:block"
 					/>
 				</Link>
 
@@ -233,10 +240,17 @@ const NavigationHeader: React.FC = () => {
 									onClick={handleLinkClick}
 									className="block"
 								>
+									{/* light mode logo */}
 									<img
-										src="/images/logo-full.png"
+										src="/images/logo-full-light.png"
 										alt="Velkavapaus.fi"
-										className="h-8 w-auto"
+										className="h-8 w-auto dark:hidden"
+									/>
+									{/* dark mode logo */}
+									<img
+										src="/images/logo-full-dark.png"
+										alt="Velkavapaus.fi"
+										className="h-8 w-auto hidden dark:block"
 									/>
 								</Link>
 
