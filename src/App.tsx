@@ -37,6 +37,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const MaterialsPage = lazy(() => import("./pages/MaterialsPage"));
 
 // Oppaat (Guides)
 const OppaatIndex = lazy(() => import("./pages/oppaat/index"));
@@ -148,6 +149,7 @@ function App() {
 											<Route path="/privacy-policy" element={<PrivacyPolicy />} />
 											<Route path="/terms-of-service" element={<TermsOfService />} />
 											<Route path="/cookie-policy" element={<CookiePolicy />} />
+											<Route path="/materiaalit" element={<MaterialsPage />} />
 											{/* Oppaat (Guides) */}
 											<Route path="/oppaat" element={<OppaatIndex />} />
 											<Route path="/oppaat/velkajarjestely" element={<VelkajarjestelyOpas />} />

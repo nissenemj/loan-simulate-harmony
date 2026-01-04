@@ -159,17 +159,8 @@ const Blog = () => {
 					))}
 				</div>
 
-				<div className="my-8 flex justify-center">
-					<div
-						dangerouslySetInnerHTML={{
-							__html:
-								'<a href="https://go.adt267.com/t/t?a=1538795918&as=1962325200&t=2&tk=1"><img src="https://track.adtraction.com/t/t?a=1538795918&as=1962325200&t=1&tk=1&i=1" width="300" height="100" border="0"></a>',
-						}}
-					/>
-				</div>
 
-				<AdSenseBanner adSlot="1234567890" className="mt-8" />
-			</main>
+			</main >
 		</>
 	);
 };

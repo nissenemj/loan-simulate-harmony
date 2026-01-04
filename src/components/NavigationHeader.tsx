@@ -13,17 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, User, LogOut, Settings, Calculator, BookOpen, Lightbulb, Heart, HandHeart, ChevronDown } from "lucide-react";
+import { Menu, User, LogOut, Settings, Calculator, BookOpen, Lightbulb, Heart, HandHeart, ChevronDown, Download } from "lucide-react";
+
 
 const NavigationHeader: React.FC = () => {
-	const { user, logout } = useAuth();
+	const { user, signOut } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 
 	const handleLogout = async () => {
 		try {
-			await logout();
+			await signOut();
 			navigate("/");
 		} catch (error) {
 			console.error("Logout error:", error);
@@ -68,6 +69,7 @@ const NavigationHeader: React.FC = () => {
 	];
 
 	const secondaryNavItems = [
+		{ href: "/materiaalit", label: "Materiaalit", icon: <Download className="h-4 w-4" /> },
 		{ href: "/tarinat", label: "Tarinat", icon: <Heart className="h-4 w-4" /> },
 		{ href: "/apua", label: "Apua", icon: <HandHeart className="h-4 w-4" /> },
 		{ href: "/blog", label: "Blogi" },
@@ -81,11 +83,10 @@ const NavigationHeader: React.FC = () => {
 					key={item.href}
 					to={item.href}
 					onClick={mobile ? handleLinkClick : undefined}
-					className={`transition-colors hover:text-primary ${
-						isActive(item.href)
-							? "text-primary font-medium"
-							: "text-muted-foreground"
-					} ${mobile ? "block py-2" : ""}`}
+					className={`transition-colors hover:text-primary ${isActive(item.href)
+						? "text-primary font-medium"
+						: "text-muted-foreground"
+						} ${mobile ? "block py-2" : ""}`}
 				>
 					{item.label}
 				</Link>
@@ -141,11 +142,10 @@ const NavigationHeader: React.FC = () => {
 					key={item.href}
 					to={item.href}
 					onClick={mobile ? handleLinkClick : undefined}
-					className={`transition-colors hover:text-primary flex items-center gap-1 ${
-						isActive(item.href)
-							? "text-primary font-medium"
-							: "text-muted-foreground"
-					} ${mobile ? "py-2" : ""}`}
+					className={`transition-colors hover:text-primary flex items-center gap-1 ${isActive(item.href)
+						? "text-primary font-medium"
+						: "text-muted-foreground"
+						} ${mobile ? "py-2" : ""}`}
 				>
 					{"icon" in item && item.icon}
 					{item.label}
@@ -172,7 +172,7 @@ const NavigationHeader: React.FC = () => {
 				{/* Desktop Actions */}
 				<div className="hidden md:flex items-center space-x-4">
 					<ThemeToggle />
-					
+
 					{user ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -232,7 +232,7 @@ const NavigationHeader: React.FC = () => {
 								>
 									Velkavapaus
 								</Link>
-								
+
 								<nav className="flex flex-col space-y-3">
 									<NavItems mobile />
 								</nav>
