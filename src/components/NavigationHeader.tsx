@@ -159,9 +159,11 @@ const NavigationHeader: React.FC = () => {
 			<div className="container flex h-16 items-center justify-between">
 				{/* Logo */}
 				<Link to="/" className="flex items-center space-x-2">
-					<span className="text-xl font-bold text-primary">
-						Velkavapaus
-					</span>
+					<img
+						src="/images/logo-full.png"
+						alt="Velkavapaus.fi"
+						className="h-10 w-auto" // Adjust height as essential
+					/>
 				</Link>
 
 				{/* Desktop Navigation */}
@@ -228,9 +230,13 @@ const NavigationHeader: React.FC = () => {
 								<Link
 									to="/"
 									onClick={handleLinkClick}
-									className="text-lg font-semibold"
+									className="block"
 								>
-									Velkavapaus
+									<img
+										src="/images/logo-full.png"
+										alt="Velkavapaus.fi"
+										className="h-8 w-auto"
+									/>
 								</Link>
 
 								<nav className="flex flex-col space-y-3">
