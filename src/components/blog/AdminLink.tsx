@@ -1,20 +1,18 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { PenSquare } from "lucide-react";
-
-const AUTHORIZED_EMAIL = "nissenemj@gmail.com";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const AdminLink: React.FC = () => {
-  const { user } = useAuth();
-  
+  const { isAdmin, loading } = useAdmin();
+
   // Only show admin link for authorized user
-  if (user?.email !== AUTHORIZED_EMAIL) {
+  if (loading || !isAdmin) {
     return null;
   }
-  
+
   return (
     <div className="mb-6">
       <Link to="/blog-admin">
