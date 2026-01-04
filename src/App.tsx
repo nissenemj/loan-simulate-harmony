@@ -84,6 +84,8 @@ function App() {
 											<Route path="/" element={<LandingPage />} />
 											<Route path="/about" element={<AboutPage />} />
 											<Route path="/calculator" element={<Index />} />
+											<Route path="/laskuri" element={<Navigate to="/calculator" replace />} />
+											<Route path="/strategiat" element={<Navigate to="/debt-strategies" replace />} />
 											<Route path="/blog" element={<Blog />} />
 											<Route path="/blog/:postId" element={<BlogPost />} />
 											<Route
