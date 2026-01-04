@@ -68,6 +68,47 @@ export type Database = {
         }
         Relationships: []
       }
+      debts: {
+        Row: {
+          balance: number
+          created_at: string | null
+          id: string
+          interest_rate: number
+          minimum_payment: number
+          name: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          balance: number
+          created_at?: string | null
+          id?: string
+          interest_rate: number
+          minimum_payment: number
+          name: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string | null
+          id?: string
+          interest_rate?: number
+          minimum_payment?: number
+          name?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedback: {
         Row: {
           created_at: string
@@ -157,6 +198,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string | null
+          monthly_budget: number | null
+          selected_strategy: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          monthly_budget?: number | null
+          selected_strategy?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          monthly_budget?: number | null
+          selected_strategy?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

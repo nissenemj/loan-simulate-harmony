@@ -206,7 +206,13 @@ const BlogAdmin: React.FC = () => {
         });
       } else {
         // Create
-        const { error } = await supabase.from("blog_posts").insert([values]);
+        const { error } = await supabase.from("blog_posts").insert([{
+          title: values.title,
+          content: values.content,
+          author: values.author,
+          category: values.category,
+          image_url: values.image_url || null,
+        }]);
 
         if (error) throw error;
 
